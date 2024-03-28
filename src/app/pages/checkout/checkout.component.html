@@ -1,6 +1,6 @@
 <mat-stepper #horizontalStepper [orientation]="stepperOrientation" linear="true" class="mat-elevation-z2">
   <mat-step [stepControl]="billingForm" label="Billing address">
-    <form [formGroup]="billingForm">     
+    <form [formGroup]="billingForm">
       <div fxLayout="row wrap" class="py-3">
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
@@ -81,7 +81,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1"> 
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
         <button mat-mini-fab matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after"><mat-icon>navigate_next</mat-icon></button>
       </div>
     </form>
@@ -90,8 +90,8 @@
     <form [formGroup]="deliveryForm" class="p-2">
       <mat-radio-group formControlName="deliveryMethod" fxLayout="column" fxLayoutAlign="center" required name="methods">
         <mat-radio-button *ngFor="let method of deliveryMethods" color="primary" [value]="method" class="mt-1"><b>{{method.name}}</b> {{method.desc}}</mat-radio-button>
-      </mat-radio-group> 
-      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1"> 
+      </mat-radio-group>
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
         <button mat-mini-fab matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
         <button mat-mini-fab matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after"><mat-icon>navigate_next</mat-icon></button>
       </div>
@@ -103,7 +103,7 @@
         <div fxFlex="100" fxLayout="column" fxLayoutAlign="start start" class="py-3 px-1">
           <span class="text-muted">Credit Card</span>
           <img src="assets/images/others/card-icon.png" alt="">
-        </div>        
+        </div>
         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Card holder name</mat-label>
@@ -148,13 +148,13 @@
           </mat-form-field>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1"> 
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
         <button mat-mini-fab matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
-        <button mat-mini-fab matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after"><mat-icon>navigate_next</mat-icon></button>       
+        <button mat-mini-fab matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after"><mat-icon>navigate_next</mat-icon></button>
       </div>
     </form>
   </mat-step>
-  <mat-step label="Review Order">    
+  <mat-step label="Review Order">
     <div fxLayout="row wrap">
       <div fxFlex="100" class="p-1">
         <h3 class="text-muted">Shopping Cart</h3>
@@ -163,19 +163,19 @@
           <div class="mat-mdc-header-row">
             <div class="mat-mdc-header-cell">Product</div>
             <div class="mat-mdc-header-cell">Name</div>
-            <div class="mat-mdc-header-cell">Unit Price</div>      
+            <div class="mat-mdc-header-cell">Unit Price</div>
             <div class="mat-mdc-header-cell">Quantity</div>
             <div class="mat-mdc-header-cell">Total</div>
           </div>
           <div *ngFor="let product of appService.Data.cartList" class="mat-mdc-row">
-            <div class="mat-mdc-cell"><img [src]="product.images[0].small"></div>
-            <div class="mat-mdc-cell">{{product.name}}</div>
-            <div class="mat-mdc-cell">${{product.newPrice | number : '1.2-2'}}</div>      
+            <div class="mat-mdc-cell"><img [src]="product.image1[0].small"></div>
+            <div class="mat-mdc-cell">{{product.nom}}</div>
+            <div class="mat-mdc-cell">${{product.newPrice | number : '1.2-2'}}</div>
             <div class="mat-mdc-cell text-muted"> {{product.cartCount}} </div>
             <div class="mat-mdc-cell">${{ (product.newPrice*product.cartCount) | number : '1.2-2'}}</div>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
     <div fxLayout="row wrap">
       <div fxFlex="100" class="p-2">
@@ -229,23 +229,23 @@
         <p class="py-2"><span class="text-muted mr-1">Card number:</span><span>XXX-XXX-XXX-7224</span></p>
       </div>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center" class="p-2"> 
-       <h2><span class="text-muted mr-1">Total Price:</span><span>${{grandTotal | number : '1.2-2'}}</span></h2>    
+    <div fxLayout="row" fxLayoutAlign="center center" class="p-2">
+       <h2><span class="text-muted mr-1">Total Price:</span><span>${{grandTotal | number : '1.2-2'}}</span></h2>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center" class="mt-3 p-2"> 
+    <div fxLayout="row" fxLayoutAlign="center center" class="mt-3 p-2">
       <button mat-mini-fab matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
-      <button mat-raised-button matStepperNext color="primary" (click)="placeOrder()">Place order now</button>       
-    </div>     
+      <button mat-raised-button matStepperNext color="primary" (click)="placeOrder()">Place order now</button>
+    </div>
   </mat-step>
   <mat-step label="Confirmation">
-    <div fxLayout="column" fxLayoutAlign="center center" class="p-2 text-center"> 
+    <div fxLayout="column" fxLayoutAlign="center center" class="p-2 text-center">
       <button mat-fab color="primary"><mat-icon>check</mat-icon></button>
       <h2 class="py-3">Congratulation! Your order has been processed</h2>
       <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempus dolor ante, ut luctus mi faucibus a. Ut eu tincidunt neque. Proin porttitor id ligula id placerat. Integer nec nulla varius, dapibus libero quis, semper eros. Aliquam erat volutpat. Proin volutpat tellus vel purus interdum euismod.</p>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center" class="mt-3 p-2"> 
-      <a [routerLink]="['/']" mat-raised-button color="primary">Return to Shop</a>       
+    <div fxLayout="row" fxLayoutAlign="center center" class="mt-3 p-2">
+      <a [routerLink]="['/']" mat-raised-button color="primary">Return to Shop</a>
     </div>
-     
+
   </mat-step>
 </mat-stepper>

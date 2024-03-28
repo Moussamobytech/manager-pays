@@ -5,12 +5,12 @@
                 <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <h4>Categories</h4>
+                            <h4>Categories :</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div class="categories-wrapper categories-dropdown">
                         <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false">
-                            <app-category-list [categories]="categories" [categoryParentId]="0" (change)="onChangeCategory($event)"></app-category-list>
+                            <app-category-list [categories]="tous" [categoryParentId]="0" (change)="onChangeCategory($event)"></app-category-list>
                         </ng-scrollbar>
                     </div>
                 </mat-expansion-panel>
@@ -53,7 +53,7 @@
                     </mat-expansion-panel-header>
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
                         <button mat-raised-button *ngFor="let size of sizes" (click)="size.selected = !size.selected" [class.selected]="size.selected">
-                            {{size.name}}                      
+                            {{size.name}}
                         </button>
                     </div>
                 </mat-expansion-panel>
@@ -77,7 +77,7 @@
                             <h4>Brands</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-brands">                  
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-brands">
                         <button mat-raised-button *ngFor="let brand of brands" (click)="brand.selected = !brand.selected" [class.selected]="brand.selected">
                             <img [src]="brand.image"/>
                         </button>
@@ -144,12 +144,12 @@
                     <mat-chip-listbox *ngIf="product.discount">
                         <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
                     </mat-chip-listbox>
-                    <a [routerLink]="['/products', product.id, product.name]" class="image-link">
-                        <img [src]="product.images[0].medium" alt="">
+                    <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
+                        <img [src]="product.image1" alt="">
                     </a>
-                    <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categoryId )?.name }}</h4>                                                                     
-                    <a [routerLink]="['/products', product.id, product.name]" class="title text-truncate">
-                        {{product.name}}
+                    <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
+                    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
+                        {{product.nom}}
                     </a>
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                         <div fxLayout="column" fxLayoutAlign="center start">
@@ -157,7 +157,7 @@
                             <p class="new-price">${{product.newPrice | number : '1.2-2'}}</p>
                         </div>
                         <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue" [direction]="'column'"></app-rating>
-                    </div>                            
+                    </div>
                     <div class="divider mt-2"></div>
                     <div class="icons">
                         <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)"></app-controls>
@@ -174,14 +174,14 @@
                             <mat-chip-listbox *ngIf="product.discount" class="list-view">
                                 <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
                             </mat-chip-listbox>
-                            <a [routerLink]="['/products', product.id, product.name]" class="image-link">
-                                <img [src]="product.images[0].medium" alt="">
+                            <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
+                                <img [src]="product.image1[0].medium" alt="">
                             </a>
                         </div>
                         <div fxFlex="100" fxFlex.gt-xs="60" class="p-2">
-                            <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categoryId )?.name }}</h4>                                                                     
-                            <a [routerLink]="['/products', product.id, product.name]" class="title">
-                                {{product.name}}
+                            <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
+                            <a [routerLink]="['/products', product.id, product.nom]" class="title">
+                                {{product.nom}}
                             </a>
                             <p class="py-1 text-muted lh">{{product.description}}</p>
                             <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
@@ -190,7 +190,7 @@
                                     <p class="new-price">${{product.newPrice | number : '1.2-2'}}</p>
                                 </div>
                                 <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue" [direction]="'column'"></app-rating>
-                            </div>                            
+                            </div>
                             <div class="divider"></div>
                             <div class="icons">
                                 <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)"></app-controls>
@@ -202,12 +202,12 @@
         </div>
 
         <div *ngIf="products.length > 0" fxLayout="row wrap">
-            <div fxFlex="100"> 
-                <mat-card class="p-0 text-center">           
+            <div fxFlex="100">
+                <mat-card class="p-0 text-center">
                     <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
                 </mat-card>
             </div>
         </div>
-        
+
     </mat-sidenav-content>
 </mat-sidenav-container>

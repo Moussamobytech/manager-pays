@@ -1,14 +1,18 @@
 export class Category {
-  constructor(public id: number, 
-              public name:string, 
+  constructor(public id: number,
+              public nom:string,
               public hasSubCategory: boolean,
               public parentId: number){ }
 }
 
 export class Product {
   constructor(public id: number,
-              public name: string,
-              public images: Array<any>,
+              public nom: string,
+              public image1: Array<any>,
+              public image2: Array<any>,
+              public image3: Array<any>,
+              public prix : number,
+              public quantite: number,
               public oldPrice: number,
               public newPrice: number,
               public discount: number,
@@ -20,5 +24,5 @@ export class Product {
               public color: Array<string>,
               public size: Array<string>,
               public weight: number,
-              public categoryId: number){ }
+              public categorie: Category){ }
 }

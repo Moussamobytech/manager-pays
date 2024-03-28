@@ -18,15 +18,15 @@
       </div>
     </div>
     <div *ngFor="let product of appService.Data.wishList" class="mat-mdc-row">
-      <div class="mat-mdc-cell"><img [src]="product.images[0].small"></div>
-      <div class="mat-mdc-cell"><a [routerLink]="['/products', product.id, product.name]" class="product-name">{{product.name}}</a></div>
+      <div class="mat-mdc-cell"><img [src]="product.image1[0].small"></div>
+      <div class="mat-mdc-cell"><a [routerLink]="['/products', product.id, product.nom]" class="product-name">{{product.nom}}</a></div>
       <div class="mat-mdc-cell">${{product.newPrice | number : '1.2-2'}}</div>
       <div class="mat-mdc-cell">{{ (product.availibilityCount > 0) ? 'In stock':'Unavailable'}}</div>
       <div class="mat-mdc-cell text-muted">
         <app-controls [product]="product" [type]="'wish'" (onQuantityChange)="getQuantity($event)"></app-controls>
       </div>
       <div class="mat-mdc-cell">
-        <div class="p-2">          
+        <div class="p-2">
           <button mat-mini-fab color="primary" (click)="addToCart(product)" matTooltip="Add to cart">
               <mat-icon>add_shopping_cart</mat-icon>
           </button>
@@ -35,7 +35,7 @@
           </button>
         </div>
       </div>
-      
+
     </div>
   </div>
 
