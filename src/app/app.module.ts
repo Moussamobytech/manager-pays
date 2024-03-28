@@ -31,6 +31,9 @@ import { CustomOverlayContainer } from './theme/utils/custom-overlay-container';
 import { MAT_MENU_SCROLL_STRATEGY } from '@angular/material/menu';
 import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 import { AppInterceptor } from './theme/utils/app-interceptor';  
+import { AuthenticationService } from './service/auth.service';
+import { ApiService } from './service/api.service';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,7 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
     HttpClientModule,
     NgxSpinnerModule,
     GoogleMapsModule,
+    ToastrModule.forRoot(), // ToastrModule added
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -63,6 +67,8 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
   providers: [ 
     // provideClientHydration(),
     // provideHttpClient(withFetch()), 
+    AuthenticationService,
+    ApiService,
     AppSettings,
     AppService,   
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
