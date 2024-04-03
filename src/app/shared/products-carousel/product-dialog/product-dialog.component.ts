@@ -12,8 +12,10 @@ import { Product } from '../../../app.models';
 })
 export class ProductDialogComponent implements OnInit {
   public config: SwiperConfigInterface = {};
-  constructor(public appService:AppService, 
+
+  constructor(public appService:AppService,
               public dialogRef: MatDialogRef<ProductDialogComponent>,
+
               @Inject(MAT_DIALOG_DATA) public product: Product) { }
 
   ngOnInit() { }
@@ -21,14 +23,14 @@ export class ProductDialogComponent implements OnInit {
   ngAfterViewInit(){
     this.config = {
       slidesPerView: 1,
-      spaceBetween: 0,         
+      spaceBetween: 0,
       keyboard: true,
       navigation: true,
       pagination: false,
-      grabCursor: true,        
+      grabCursor: true,
       loop: false,
       preloadImages: false,
-      lazy: true, 
+      lazy: true,
       effect: "fade",
       fadeEffect: {
         crossFade: true

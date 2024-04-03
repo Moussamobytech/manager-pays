@@ -1,6 +1,7 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav [opened]="sidenavOpen" [mode]="sidenavOpen ? 'side' : 'over'" class="filter-sidenav">
         <ng-scrollbar pointerEventsMethod="scrollbar" visibility="hover">
+
             <mat-accordion displayMode="flat" multi="true">
                 <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
@@ -8,10 +9,12 @@
                             <h4>Categories :</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div class="categories-wrapper categories-dropdown">
-                        <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false">
-                            <app-category-list [categories]="tous" [categoryParentId]="0" (change)="onChangeCategory($event)"></app-category-list>
+                    <div class="categories-wrapper categories-dropdown" >
+                        <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false" >
+                            <app-category-list [categories]="Allcategories"  [categoryParentId]="0" (change)="onChangeCategory($event)"></app-category-list>
                         </ng-scrollbar>
+
+
                     </div>
                 </mat-expansion-panel>
 
@@ -147,16 +150,16 @@
                     <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
                         <img [src]="product.image1" alt="">
                     </a>
-                    <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
+                    <h4 class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
                     <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
                         {{product.nom}}
                     </a>
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                         <div fxLayout="column" fxLayoutAlign="center start">
-                            <p class="old-price text-muted"><span *ngIf="product.oldPrice">${{product.oldPrice | number : '1.2-2'}}</span></p>
-                            <p class="new-price">${{product.newPrice | number : '1.2-2'}}</p>
+                            <p class=" text-muted"><span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
+                            <p class="new-pricePromotion">{{product.pricePromotion | number : '1.2-2'}}</p>
                         </div>
-                        <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue" [direction]="'column'"></app-rating>
+                        <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
                     </div>
                     <div class="divider mt-2"></div>
                     <div class="icons">
@@ -175,7 +178,7 @@
                                 <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
                             </mat-chip-listbox>
                             <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
-                                <img [src]="product.image1[0].medium" alt="">
+                                <img [src]="product.image1" alt="" class="card-image">
                             </a>
                         </div>
                         <div fxFlex="100" fxFlex.gt-xs="60" class="p-2">
@@ -186,10 +189,10 @@
                             <p class="py-1 text-muted lh">{{product.description}}</p>
                             <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                                 <div fxLayout="column" fxLayoutAlign="center start">
-                                    <p class="old-price text-muted"><span *ngIf="product.oldPrice">${{product.oldPrice | number : '1.2-2'}}</span></p>
-                                    <p class="new-price">${{product.newPrice | number : '1.2-2'}}</p>
+                                    <p class="old-price text-muted"><span *ngIf="product.oldPrice">${{product.priceBasic | number : '1.2-2'}}</span></p>
+                                    <p class="new-price">${{product.pricePromotion | number : '1.2-2'}}</p>
                                 </div>
-                                <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue" [direction]="'column'"></app-rating>
+                                <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
                             </div>
                             <div class="divider"></div>
                             <div class="icons">

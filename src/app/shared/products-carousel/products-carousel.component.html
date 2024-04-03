@@ -6,21 +6,21 @@
                     <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
                 </mat-chip-listbox>
                 <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
-                    <img [attr.data-src]="product.image2" class="swiper-lazy"/>
+                    <img [attr.data-src]="product.image1" class="swiper-lazy"/>
                     <!-- <img [src]="product.image1" class="swiper-lazy"/> -->
 
                     <div class="swiper-lazy-preloader"></div>
                 </a>
-                <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
+                <h4 class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
                 <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
                     {{product.nom}}
                 </a>
                 <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                     <div fxLayout="column" fxLayoutAlign="center start">
-                        <p class="old-price text-muted"><span *ngIf="product.prix">{{product.prix | number : '1.2-2'}} FCFA</span></p>
-                        <p class="new-price">{{product.prix | number : '1.2-2'}} FCFA</p>
+                        <p class="old-price text-muted"><span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
+                        <p class="new-price" *ngIf="product.pricePromotion">{{product.pricePromotion | number : '1.2-2'}} FCFA</p>
                     </div>
-                    <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue" [direction]="'column'"></app-rating>
+                    <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
                 </div>
                 <div class="divider mt-2"></div>
                 <div class="icons">

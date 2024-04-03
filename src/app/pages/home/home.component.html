@@ -46,13 +46,26 @@
     <mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
 
 
-      <mat-tab label="All Products">
+      <mat-tab label="Tous">
         <app-products-carousel [products]="produit"></app-products-carousel>
        </mat-tab>
 
-       <mat-tab *ngFor="let items of categories" label="{{ items.nom }}">
+       <!-- <mat-tab *ngFor="let items of categories" label="{{ items.nom }}">
         <app-products-carousel [idCat]="items.id"></app-products-carousel>
-    </mat-tab>
+        </mat-tab> -->
+
+        <mat-tab label="Featured">
+            <app-products-carousel [products]="produit"></app-products-carousel>
+         </mat-tab>
+         <mat-tab label="On Sale">
+            <app-products-carousel [products]="produit"></app-products-carousel>
+         </mat-tab>
+         <mat-tab label="Top Rated">
+             <app-products-carousel [products]="produit"></app-products-carousel>
+         </mat-tab>
+         <mat-tab label="New Arrivals">
+             <app-products-carousel [products]="produit"></app-products-carousel>
+         </mat-tab>
 
 
 

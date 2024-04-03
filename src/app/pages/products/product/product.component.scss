@@ -12,7 +12,7 @@
     }
     .mat-mdc-chip-listbox {
         position: absolute;
-        top: 10px; 
+        top: 10px;
         left: 10px;
         pointer-events: none;
     }
@@ -25,14 +25,14 @@
         .swiper-slide{
             text-align: center;
             .mat-mdc-card {
-                display: block; 
+                display: block;
             }
             img{
                 max-width: 100%;
             }
         }
     }
-    .swiper-button-next.swiper-button-disabled, 
+    .swiper-button-next.swiper-button-disabled,
     .swiper-button-prev.swiper-button-disabled{
         opacity: 0;
     }
@@ -62,7 +62,7 @@
     margin-left: 6px;
 }
 
-.mat-mdc-list.reviews { 
+.mat-mdc-list.reviews {
     .mat-mdc-list-item .mat-mdc-list-item-avatar.review-author{
         width: 80px;
         height: 80px;
@@ -79,9 +79,51 @@
 }
 
 
-@media (min-width: 1280px) {  
+@media (min-width: 1280px) {
     .mat-mdc-card.product-image img{
         cursor: zoom-in;
         cursor:url('../../../../assets/images/others/zoom.svg') 10 10, zoom-in;
     }
+}
+.carousel-image {
+  width: 100px; /* Définissez la largeur souhaitée */
+  height: 110px; /* Définissez la hauteur souhaitée */
+}
+
+.card-image{
+  width: 300px;
+  height: 220px;
+
+}
+.card-content {
+  display: flex;
+  align-items: center; /* Aligner les éléments verticalement au centre */
+  justify-content: space-between; /* Espacer les éléments horizontalement */
+}
+// .contact-icons {
+// display: grid;
+// justify-content: space-between;
+// }
+
+.contact-icons {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+ // align-items: center; /* Pour centrer les icônes horizontalement */
+}
+
+.contact-icon {
+  margin-bottom: 10px; /* Espacement entre chaque icône */
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px; /* Espacement entre l'icône et le texte */
+}
+
+.contact-icon a {
+  text-decoration: none; /* Supprime le soulignement du lien */
+}
+
+.contact-icon p {
+  margin: 0; /* Supprime les marges par défaut des paragraphes */
+  font-size: large;
 }

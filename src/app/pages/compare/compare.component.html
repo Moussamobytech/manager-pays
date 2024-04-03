@@ -47,7 +47,7 @@
         rating
       </div>
       <div class="mat-mdc-cell" *ngFor="let product of appService.Data.compareList">
-        <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue"></app-rating>
+        <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate"></app-rating>
       </div>
     </div>
 

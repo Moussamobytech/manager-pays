@@ -64,6 +64,12 @@ export class ProductsComponent implements OnInit {
   public page:any;
   public settings: Settings;
   tous:any;
+  idCat:any;
+  Allcategories:any;
+  selectedCategoryId: any;
+
+  categoryId: string;
+
   constructor(public appSettings:AppSettings,
               private activatedRoute: ActivatedRoute,
               public appService:AppService,
@@ -87,19 +93,18 @@ export class ProductsComponent implements OnInit {
     };
 
     this.getCategories();
-    this.getBrands();
-    this.getAllProducts();
+    // this.getBrands();
+    this.getProductsByCetegorie(this.selectedCategoryId);
     this.getCategorie();
   }
 
-  public getAllProducts(){
-    this.appService.getProducts("pc").subscribe(data=>{
+  public getProductsByCetegorie(categoryId: string){
+    this.appService.getProductByCategorie(categoryId).subscribe(data=>{
       this.products = data;
       //for show more product
-      for (var index = 0; index < 3; index++) {
-        this.products = this.products.concat(this.products);
-      }
-      console.log("Produits categorie :",this.products)
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
     });
   }
 
@@ -108,21 +113,33 @@ export class ProductsComponent implements OnInit {
       this.appService.getCategories().subscribe(data => {
         this.categories = data;
         this.appService.Data.categories = data;
-
-
+        console.log("Les 11111 categories "+JSON.stringify(this.categories))
 
       });
     }
     else{
       this.categories = this.appService.Data.categories;
+      console.log("Les 2222222222222 categories "+JSON.stringify(this.categories))
+
+
     }
   }
 
 
+  // public getCategorie(){
+  //   this.appService.getCategories().subscribe(data =>{
+
+  //     this.tous = data;
+  //     console.log("Mes tous :" ,data)
+
+  //   })
+  // }
+
   public getCategorie(){
     this.appService.getCategories().subscribe(data =>{
-
-      this.tous = data;
+      this.Allcategories = data;
+      console.log("Les categories "+JSON.stringify(this.Allcategories))
+      console.log("Les categories id "+this.Allcategories[0].id)
     })
   }
 
@@ -144,7 +161,7 @@ export class ProductsComponent implements OnInit {
 
   public changeCount(count){
     this.count = count;
-    this.getAllProducts();
+    this.getProductsByCetegorie(this.selectedCategoryId);
   }
 
   public changeSorting(sort){
@@ -164,21 +181,46 @@ export class ProductsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(product => {
       if(product){
-        this.router.navigate(['/products', product.id, product.name]);
+        this.router.navigate(['/products', product.id, product.nom]);
       }
     });
   }
 
   public onPageChanged(event){
     this.page = event;
-    this.getAllProducts();
+    this.getProductsByCetegorie(this.selectedCategoryId);
     this.domHandlerService.winScroll(0,0);
   }
 
-  public onChangeCategory(event){
-    if(event.target){
-      this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
-    }
-  }
+  // public onChangeCategory(categoryId: string){
+  //   this.selectedCategoryId = categoryId;
+  //   this.getProductsByCetegorie(categoryId);
 
+  //   console.log("Logggggggg  ",categoryId)
+  //     // Recherche du texte de la catégorie en fonction de son ID
+  // const selectedCategory = this.Allcategories.find(category => category.id === categoryId);
+  // if (selectedCategory) {
+  //   this.router.navigate(['/products', selectedCategory.name.toLowerCase()]);
+  // }
+  //   // if(event.target){
+  //   //   this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
+  //   // }
+//   // }
+  public onChangeCategory(categoryId: string) {
+    this.selectedCategoryId = categoryId;
+    this.getProductsByCetegorie(categoryId); // Vérifiez cette ligne pour vous assurer que categoryId est correctement passé
+
+    console.log("Logggggggg  ", categoryId);
+
+    // Recherche du texte de la catégorie en fonction de son ID
+    const selectedCategory = this.Allcategories.find(category => category.id === categoryId);
+    if (selectedCategory) {
+        this.router.navigate(['/products', selectedCategory.nom.toLowerCase()]); // Assurez-vous d'utiliser la propriété correcte pour le nom de la catégorie (probablement nom, plutôt que name)
+    }
+}
+// public onChangeCategory(event){
+//   if(event.target){
+//     this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
+//   }
+// }
 }

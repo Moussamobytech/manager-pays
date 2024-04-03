@@ -30,26 +30,24 @@ export class AppService {
     constructor(public http:HttpClient, public snackBar: MatSnackBar) { }
 
     public getCategories(): Observable<Category[]>{
-        return this.http.get<Category[]>(this.url + 'categorie/liste');
+        return this.http.get<Category[]>(this.url + 'categorie/list');
 
     }
+
+
 
     public getProducts(type): Observable<Product[]>{
-        return this.http.get<Product[]>(this.url + 'produit/listeCategorie/' + type );
+        return this.http.get<Product[]>(this.url + 'produit/list-by-category/' + type );
     }
     public getProductByCategorie(categorie: string): Observable<Product[]> {
-      return this.http.get<Product[]>(this.url + 'produit/listeCategorie/' + categorie);
+      return this.http.get<Product[]>(this.url + 'produit/list-by-category/' + categorie);
     }
     public getAllProducts(): Observable<Product[]>{
-      return this.http.get<Product[]>(this.url + 'produit/liste');
+      return this.http.get<Product[]>(this.url + 'produit/list');
   }
     public getProductById(id): Observable<Product>{
-        return this.http.get<Product>(this.url + 'produit/' + id );
+        return this.http.get<Product>(this.url + 'produit/find/' + id );
     }
-
-    public getImage(id): Observable<any>{
-      return this.http.get<any>(this.url + 'produit/images/download/'+ id );
-  }
 
 
     public getBanners(): Observable<any[]>{

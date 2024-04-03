@@ -18,7 +18,7 @@ export class ReviewsComponent implements OnInit {
     { id: 6, statusId: 1, image: 'assets/images/profile/ashley.jpg', author: 'Ashley Ahlberg', comment: 'lorem ipsum', ratingsCount: 5, ratingsValue: 300, storeId: 1, date: new Date(2020,6,18,12,30) },
     { id: 7, statusId: 1, image: 'assets/images/avatars/avatar-5.png', author: 'Michelle Ormond', comment: 'lorem ipsum', ratingsCount: 4, ratingsValue: 300, storeId: 1, date: new Date(2020,6,28,17,23) }
   ];
-  public statuses = [ 
+  public statuses = [
     { id: 1, name: 'Approved' },
     { id: 2, name: 'Pending' }
   ];
@@ -35,34 +35,34 @@ export class ReviewsComponent implements OnInit {
   }
 
   public onPageChanged(event){
-    this.page = event; 
-    this.domHandlerService.winScroll(0, 0); 
+    this.page = event;
+    this.domHandlerService.winScroll(0, 0);
   }
 
-  public unApprove(review:any){ 
+  public unApprove(review:any){
     const index: number = this.reviews.findIndex(x => x.id == review.id);
     if(index !== -1){
       review.statusId = 2;
       this.reviews[index] = review;
-    } 
+    }
   }
 
-  public remove(review:any){  
+  public remove(review:any){
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
         message: "Are you sure you want remove this review?"
       }
-    }); 
-    dialogRef.afterClosed().subscribe(dialogResult => { 
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
         const index: number = this.reviews.indexOf(review);
         if (index !== -1) {
-          this.reviews.splice(index, 1);  
-        } 
-      } 
-    }); 
+          this.reviews.splice(index, 1);
+        }
+      }
+    });
   }
 
 

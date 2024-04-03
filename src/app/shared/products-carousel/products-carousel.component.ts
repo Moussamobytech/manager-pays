@@ -15,25 +15,24 @@ import { Settings, AppSettings } from 'src/app/app.settings';
 export class ProductsCarouselComponent implements OnInit {
 
   @Input('idCat') idCat: string;
-  @Input('images') images: string;
   @Input('products') products: Array<Product> = [];
   public config: SwiperConfigInterface = {};
   public settings: Settings;
+  imageData: string | ArrayBuffer | null = null;
   constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog, private router: Router) {
     this.settings = this.appSettings.settings;
   }
 
   ngOnInit() {
     this.getProductByCategorie(this.idCat);
-    this.getImage("548939ee-c5ff-4460-af04-9e5ed5dbdfe1");
    }
 
   public getProductByCategorie(categorie: string){
-    console.log("cateeeeeee ",categorie);
     this.appService.getProductByCategorie(categorie).subscribe(
       data => {
         this.products= data
         console.log("cateeeeeee ",data);
+        console.log("1 cateeeeeee ",categorie);
 
 
       }
@@ -85,11 +84,5 @@ export class ProductsCarouselComponent implements OnInit {
     });
   }
 
-  public getImage(id: string) {
-    this.appService.getImage(id).subscribe(data=>{
-      this.images = data;
-      console.log('this.images');
-      console.log(this.images)
-    });
-  }
+
 }

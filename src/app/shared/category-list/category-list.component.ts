@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Category } from 'src/app/app.models';
+import { Category, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 
@@ -11,20 +11,27 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
 export class CategoryListComponent {
 
   @Input() categories;
+  @Input() ('categorieA') categorieA;
   @Input() tous;
   @Input() categoryParentId;
+  @Input('products') products: Array<Product> = [];
+  @Input('idCat') idCat: string;
+
+
   @Output() change: EventEmitter<any> = new EventEmitter();
   mainCategories;
+
   public categorie:Category[];
 
+  categoryId: string;
 
   constructor(public domHandlerService: DomHandlerService, public appService:AppService) { }
 
   public ngDoCheck() {
     if(this.categories && !this.mainCategories) {
-      this.mainCategories = this.categories.filter(category => category.parentId == this.categoryParentId);
-      console.log("Categorie :"+this.categories.id)
+      this.categorie = this.categories.filter(category => category.parentId == this.categoryParentId);
     }
+
   }
 
   public stopClickPropagate(event: any){
@@ -39,10 +46,13 @@ export class CategoryListComponent {
   }
 
   public getCategories(){
+
     if(this.appService.Data.categories.length == 0) {
       this.appService.getCategories().subscribe(data => {
+
         this.categorie= data;
         this.appService.Data.categories = data;
+
 
       });
     }
@@ -52,12 +62,25 @@ export class CategoryListComponent {
   }
 
   public getCategorie(){
-    console.log("Categorie tous :"+JSON.stringify(this.tous))
 
     this.appService.getCategories().subscribe(data =>{
 
       this.tous = data;
-      console.log("Categorie tous :"+JSON.stringify(this.tous))
     })
+  }
+
+
+  public getProductByCategorie(categorie: string){
+    this.appService.getProductByCategorie(categorie).subscribe(
+      data => {
+        this.products= data
+
+
+      }
+    )
+  }
+
+  selectCategory(categoryId: string) {
+    this.change.emit({ categoryId: categoryId });
   }
 }

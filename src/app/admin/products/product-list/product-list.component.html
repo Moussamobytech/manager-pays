@@ -14,7 +14,7 @@
                     <p class="old-price text-muted"><span *ngIf="product.oldPrice">${{product.oldPrice | number : '1.2-2'}}</span></p>
                     <p class="new-price">${{product.newPrice | number : '1.2-2'}}</p>
                 </div>
-                <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue" [direction]="'column'"></app-rating>
+                <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
             </div>
             <div class="divider mt-2"></div>
             <div class="icons">
