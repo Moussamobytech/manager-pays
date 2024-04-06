@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "emporium": {
+    "fidelity": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
         },
         "@schematics/angular:guard": {
           "skipTests": true
-        }, 
+        },
         "@schematics/angular:pipe": {
           "skipTests": true
         },
@@ -46,16 +46,22 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ],
             "allowedCommonJsDependencies": [
               "clone-deep",
               "rfdc",
               "bezier-easing"
             ],
-            "server": "src/main.server.ts",            
+            "server": "src/main.server.ts",
             "prerender": false,
             "ssr": false
           },
@@ -95,10 +101,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "emporium:build:production"
+              "buildTarget": "fidelity:build:production"
             },
             "development": {
-              "buildTarget": "emporium:build:development"
+              "buildTarget": "fidelity:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -106,7 +112,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "emporium:build"
+            "buildTarget": "fidelity:build"
           }
         },
         "test": {

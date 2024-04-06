@@ -19,7 +19,7 @@ export class ApiService {
   msisdn: any;
   headers: HttpHeaders = new HttpHeaders();
 
-  url = environment.url;
+  url = environment.api;
 
   constructor(public http: HttpClient) {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
