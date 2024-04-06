@@ -22,6 +22,7 @@ export class InformationComponent implements OnInit {
       'firstname': [(this.currentUser.firstname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
       'lastname': [(this.currentUser.lastname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
       'phoneNumber': [this.currentUser.phoneNumber, Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(8)])],
+      'profiles': [this.currentUser.profiles || null],
       'adresse': [this.currentUser.adresse || null]
     });
 
@@ -35,10 +36,11 @@ export class InformationComponent implements OnInit {
   public async onInfoFormSubmit(values:Object):Promise<void> {
     if (this.infoForm.valid) {
       let data : any = values;
-      data.type = this.currentProfile(values["roles"])
-      let res = await this.auth.updateUserInfo(data)
+      data.type = this.currentProfile(values["profiles"])
+      let res = await this.auth.updateUserInfo(this.currentUser.id, data)
       if(res == "OK"){
         this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
+        window.location.reload()
       }else{
         this.snackBar.open('Une erreur est intervenu lors de la mises à jour de vos informations !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
       }
@@ -53,9 +55,9 @@ export class InformationComponent implements OnInit {
   }
 
   currentProfile(roles){
-    // console.log("roles :::::::: ",roles)
-    let key = roles.name
-    // console.log("key :::::::: ",key)
+    console.log("roles :::::::: ",roles)
+    let key = roles[0].name
+    console.log("key :::::::: ",key)
     let profil = ""
     switch (key) {
       case "ROLE_PARTICULIER":

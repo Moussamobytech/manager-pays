@@ -13,6 +13,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AddProductComponent } from './add-product/add-product.component';
 import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
+import { AuthGuard } from 'src/app/helpers/auth.guard';
 const config: InputFileConfig = {
   fileAccept: '*'
 };
@@ -20,6 +21,8 @@ const config: InputFileConfig = {
 export const routes: Routes = [
   { 
       path: '', 
+      canActivate: [AuthGuard],
+      canLoad: [AuthGuard],
       component: AccountComponent, children: [
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'dashboard', component: DashboardComponent, data: {  breadcrumb: 'Dashboard' } },
