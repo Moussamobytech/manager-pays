@@ -1,0 +1,115 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
+import { ApiService } from './api.service';
+import { CommonMessageService } from './common-message.service';
+import { User } from '../models/user.models';
+import { TokenStorageService } from './token-storage.service';
+
+
+@Injectable({ providedIn: 'root' })
+export class AuthenticationService {
+    user: User | null = null;
+
+    constructor (private utility: CommonMessageService, private tokenStorage: TokenStorageService,
+        private api: ApiService) {
+    }
+
+    public async updateUserInfo(data : any){
+        this.utility.pleaseWaitLoading();
+        try {
+        
+            let res : any = await this.api.post('admin/update-user-info',data).toPromise()
+            console.log("res updateUserInfo :::: ",res);
+            if (res) {
+                sessionStorage.setItem('currentUser', JSON.stringify(res));
+            }
+            this.utility.closeLoading()
+            this.utility.successToast("Mise à jour effectué avec succès")
+            
+            return "OK"
+        } catch (error : any) {
+            console.log(error);
+            this.utility.closeLoading()
+            this.utility.errorToast(error);
+            return "KO"
+        }
+    }
+
+   
+    
+    /**
+     * Returns the current user
+     */
+    public currentUser(): User | null {
+        if (!this.user) {
+            this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
+        }
+        return this.user;
+    }
+
+    async info(username: string): Promise<any> {
+        try {
+            let currentUser = await this.api.get(`/users/info-user-by-username?username=`+username).toPromise();
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            return currentUser;
+        } catch (error) {
+            console.log(error)
+            return null;
+        }
+        
+    }
+
+    /**
+     * Performs the login auth
+     * @param username username of user
+     * @param password password of user
+     */
+    login(username: string, password: string): any {
+
+        return this.api.post(`/users/login`, { username, password })
+            .pipe(map((user :any)=> {
+                // login successful if there's a jwt token in the response
+                if (user && user.token) {
+                    
+                    let roles = user.authorities[0].authority
+                    console.log("roles :: ", roles);
+                    // store user details and jwt in session
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                    sessionStorage.setItem('auth-token', JSON.stringify(user.token));
+                    sessionStorage.setItem('auth-roles', roles);
+                }
+                return user;
+            }));
+    }
+
+    /**
+     * Performs the signup auth
+     * @param firstname firstname of user
+     * @param lastname lastname of user
+     * @param phoneNumber phoneNumber of user
+     * @param role role of user
+     * @param email email of user
+     * @param addresse addresse of user
+     * @param username username of user
+     * @param password password of user
+     */
+    signup(formData: any): any {
+        return this.api.post(`/users/register`, formData);
+
+    }
+
+
+
+    /**
+     * Logout the user
+     */
+    logout(): void {
+        // remove user from session storage to log user out
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('auth-token');
+        this.user = null;
+    }
+}
+
