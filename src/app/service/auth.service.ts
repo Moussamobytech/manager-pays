@@ -16,9 +16,9 @@ export class AuthenticationService {
         private api: ApiService) {
     }
 
-    public async updateUserInfo(data : any){
+    public async updateUserInfo(id : any, data : any){
         try {
-            let res : any = await this.api.post('/users/update-user',data).toPromise()
+            let res : any = await this.api.put('/users/update-user?id='+id,data).toPromise()
             console.log("res updateUserInfo :::: ",res);
             if (res) {
                 sessionStorage.setItem('currentUser', JSON.stringify(res));

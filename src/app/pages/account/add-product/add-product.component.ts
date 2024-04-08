@@ -57,7 +57,7 @@ export class AddProductComponent implements OnInit {
     // this.appService.getCategories().subscribe(data => {
       console.log(data)
       this.categories = data; 
-      this.categories.shift();
+      // this.categories.shift();
     }); 
   }
 
@@ -160,7 +160,8 @@ export class AddProductComponent implements OnInit {
         this.form.value.images.forEach(item=>{
           console.log(item)
           console.log(typeof(item))
-          if (typeof(item) != "string") {
+          // if (typeof(item) != "string") {
+          if (item.file) {
             data.append('image'+i, item.file);
           }
           // data.append('images', item.file);

@@ -36,6 +36,7 @@ import { ApiService } from './service/api.service';
 import { ToastrModule } from 'ngx-toastr';
 import { ProductService } from './service/product.service';
 import { CategoryService } from './service/category.service';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { CategoryService } from './service/category.service';
     AppSettings,
     AppService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
   ],
