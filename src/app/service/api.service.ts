@@ -8,6 +8,7 @@ import {
 import { throwError, from } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class ApiService {
 
   url = environment.api;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, private ngxSpinnerService: NgxSpinnerService) {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
     // this.username = sessionStorage.getItem('username')!;
     console.log('this.user ::::: ', this.user);
@@ -242,6 +243,9 @@ export class ApiService {
   }
 
   private handleError(error: HttpErrorResponse) {
+    // console.log(error);
+    // console.log(error.error);
+    
     if (error.status <= 0 || (error.error && error.error.status <= 0)) {
       // this.commonMessager.showNoNetworkFail();
     }
@@ -255,10 +259,12 @@ export class ApiService {
         )}, ` + `body was: ${JSON.stringify(error.error)}`
       );
     }
+    
+    this.ngxSpinnerService.hide();
     // return an observable with a user-facing error message
     // return throwError((error.error && error.error.message) ||
     //   'Erreur d\'accès au serveur');
-    return throwError(error || "Erreur d'accès au serveur");
+    return throwError(error.error || "Erreur d'accès au serveur");
   }
 
   getImg(

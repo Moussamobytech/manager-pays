@@ -34,6 +34,8 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
 import { AuthenticationService } from './service/auth.service';
 import { ApiService } from './service/api.service';
 import { ToastrModule } from 'ngx-toastr';
+import { ProductService } from './service/product.service';
+import { CategoryService } from './service/category.service';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,8 @@ import { ToastrModule } from 'ngx-toastr';
     // provideHttpClient(withFetch()),
     // provideHttpClient(withFetch()), 
     AuthenticationService,
+    ProductService,
+    CategoryService,
     ApiService,
     AppSettings,
     AppService,

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common'
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class CommonMessageService {
 
-  constructor(private router: Router, private location: Location, private toastr: ToastrService) { }
+  constructor(private router: Router, private location: Location, private toastr: ToastrService, public snackBar: MatSnackBar) { }
   
   
   async backToHome() {
@@ -53,21 +54,15 @@ export class CommonMessageService {
   }
 
   warnToast(message : string) {
-    this.toastr.warning(message, 'Warning', {
-      timeOut: 3000,
-    });
+    this.snackBar.open(message, '×', { panelClass: 'warning', verticalPosition: 'top', duration: 3000 });
   }
 
   errorToast(message : string) {
-      this.toastr.error(message, 'Error', {
-        timeOut: 3000,
-      });
+    this.snackBar.open(message, '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
   }
 
   successToast(message : string) {
-    this.toastr.success(message, 'Success', {
-      timeOut: 3000,
-    });
+    this.snackBar.open(message, '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
   }
   
   currentPath() {
