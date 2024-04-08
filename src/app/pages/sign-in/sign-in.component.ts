@@ -22,6 +22,7 @@ export class SignInComponent implements OnInit {
     public router:Router, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
+    this.authenticationService.logout();
     this.loginForm = this.formBuilder.group({
       'email': ['', Validators.compose([Validators.required, emailValidator])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])] 

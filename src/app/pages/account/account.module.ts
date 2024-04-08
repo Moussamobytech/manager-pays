@@ -8,6 +8,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { InformationComponent } from './information/information.component';
 import { AddressesComponent } from './addresses/addresses.component';
 import { OrdersComponent } from './orders/orders.component';
+import { ProductsComponent } from './products/products.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { AddProductComponent } from './add-product/add-product.component';
+import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
+import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
+const config: InputFileConfig = {
+  fileAccept: '*'
+};
 
 export const routes: Routes = [
   { 
@@ -16,8 +24,12 @@ export const routes: Routes = [
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'dashboard', component: DashboardComponent, data: {  breadcrumb: 'Dashboard' } },
           { path: 'information', component: InformationComponent, data: {  breadcrumb: 'Information' } },
-          { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
-          { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } }
+          { path: 'products-seller', component: ProductsComponent, data: {  breadcrumb: 'Produits' } },
+          { path: 'add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
+          { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
+
+          { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } }, 
+          { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
       ]
   }
 ];
@@ -27,13 +39,19 @@ export const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    NgxPaginationModule,
+    SwiperModule,
+    InputFileModule.forRoot(config),
+    InputFileModule,
   ],
   declarations: [
     AccountComponent,
     DashboardComponent,
     InformationComponent,
     AddressesComponent,
+    AddProductComponent,
+    ProductsComponent,
     OrdersComponent
   ]
 })

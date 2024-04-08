@@ -17,22 +17,15 @@ export class AuthenticationService {
     }
 
     public async updateUserInfo(data : any){
-        this.utility.pleaseWaitLoading();
         try {
-        
-            let res : any = await this.api.post('admin/update-user-info',data).toPromise()
+            let res : any = await this.api.post('/users/update-user',data).toPromise()
             console.log("res updateUserInfo :::: ",res);
             if (res) {
                 sessionStorage.setItem('currentUser', JSON.stringify(res));
             }
-            this.utility.closeLoading()
-            this.utility.successToast("Mise à jour effectué avec succès")
-            
             return "OK"
         } catch (error : any) {
             console.log(error);
-            this.utility.closeLoading()
-            this.utility.errorToast(error);
             return "KO"
         }
     }
@@ -43,9 +36,11 @@ export class AuthenticationService {
      * Returns the current user
      */
     public currentUser(): User | null {
-        if (!this.user) {
+        if (this.user == null || this.user == undefined) {
             this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
         }
+        console.log(this.user);
+        
         return this.user;
     }
 
@@ -108,6 +103,7 @@ export class AuthenticationService {
     logout(): void {
         // remove user from session storage to log user out
         sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('auth-roles');
         sessionStorage.removeItem('auth-token');
         this.user = null;
     }
