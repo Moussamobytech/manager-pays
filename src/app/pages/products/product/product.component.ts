@@ -86,7 +86,7 @@ export class ProductComponent implements OnInit {
 
   public selectImage(image){
     this.image = image.medium;
-    this.zoomImage = image.big;
+    this.zoomImage = image.image2;
   }
 
   public onMouseMove(e){

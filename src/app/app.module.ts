@@ -7,11 +7,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GoogleMapsModule } from '@angular/google-maps';
- 
+
 import { environment } from 'src/environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-export function HttpLoaderFactory(httpClient: HttpClient) { 
+export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, environment.url +'/assets/i18n/', '.json');
 }
 
@@ -30,7 +30,8 @@ import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { CustomOverlayContainer } from './theme/utils/custom-overlay-container';
 import { MAT_MENU_SCROLL_STRATEGY } from '@angular/material/menu';
 import { menuScrollStrategy } from './theme/utils/scroll-strategy';
-import { AppInterceptor } from './theme/utils/app-interceptor';  
+import { AppInterceptor } from './theme/utils/app-interceptor';
+import { FaqComponent } from './theme/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -42,12 +43,13 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent  
+    FooterComponent,
+    // FaqComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule, 
+    BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
     GoogleMapsModule,
@@ -58,17 +60,17 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
         deps: [HttpClient]
       }
     }),
-    SharedModule 
+    SharedModule
   ],
-  providers: [ 
+  providers: [
     // provideClientHydration(),
-    // provideHttpClient(withFetch()), 
+    // provideHttpClient(withFetch()),
     AppSettings,
-    AppService,   
+    AppService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
-  ], 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

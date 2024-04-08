@@ -11,7 +11,7 @@
                     </mat-expansion-panel-header>
                     <div class="categories-wrapper categories-dropdown" >
                         <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false" >
-                            <app-category-list [categories]="Allcategories"  [categoryParentId]="0" (change)="onChangeCategory($event)"></app-category-list>
+                            <app-category-list [categories]="Allcategories"  [categoryParentId]="0"  (change)="onChangeCategory($event)"></app-category-list>
                         </ng-scrollbar>
 
 
@@ -159,7 +159,7 @@
                             <p class=" text-muted"><span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
                             <p class="new-pricePromotion">{{product.pricePromotion | number : '1.2-2'}}</p>
                         </div>
-                        <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
+                        <!-- <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating> -->
                     </div>
                     <div class="divider mt-2"></div>
                     <div class="icons">
@@ -186,13 +186,15 @@
                             <a [routerLink]="['/products', product.id, product.nom]" class="title">
                                 {{product.nom}}
                             </a>
-                            <p class="py-1 text-muted lh">{{product.description}}</p>
+                            <p class="py-1 text-muted lh">{{product.description| translate}}</p>
                             <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                                 <div fxLayout="column" fxLayoutAlign="center start">
-                                    <p class="old-price text-muted"><span *ngIf="product.oldPrice">${{product.priceBasic | number : '1.2-2'}}</span></p>
-                                    <p class="new-price">${{product.pricePromotion | number : '1.2-2'}}</p>
+                                  <p class="old-price text-muted" [ngClass]="{'old-price': product.pricePromotion}">
+                                    <span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span>
+                                </p>
+                                <p class="new-price">${{product.pricePromotion | number : '1.2-2'}}</p>
                                 </div>
-                                <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
+                                <!-- <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating> -->
                             </div>
                             <div class="divider"></div>
                             <div class="icons">

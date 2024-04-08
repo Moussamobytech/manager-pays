@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService, Data } from '../../app.service';
 import { Product } from "../../app.models";
+import { json } from 'stream/consumers';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,10 @@ export class HomeComponent implements OnInit {
   public newArrivalsProducts: Array<Product>;
   cate:any;
   categories: any;
+  promotion:any;
+  best:any;
+  newArrivals:any;
+  topRate:any;
 
 
   constructor(public appService:AppService) { }
@@ -37,6 +42,12 @@ export class HomeComponent implements OnInit {
     this.getAllProduit();
     this.getBrands();
     this.getCategorie();
+    this.getProduitByPromotion();
+    this.getProduitByBest();
+    this.getNewArrivals();
+    this.getTopRate();
+
+
 
   }
 
@@ -47,13 +58,13 @@ export class HomeComponent implements OnInit {
 
 
   public getProducts(type){
-    if(type == "pc"){
-      this.appService.getProducts("pc").subscribe(data=>{
+    if(type == "Les meilleurs produits"){
+      this.appService.getProducts("featured").subscribe(data=>{
         this.featuredProducts = data;
         console.log("PCcccccccc  :",this.featuredProducts)
       })
     }
-    if(type == "Chaussure" && !this.onSaleProducts){
+    if(type == "En promotion" && !this.onSaleProducts){
       this.appService.getProducts("on-sale").subscribe(data=>{
         this.onSaleProducts = data;
       })
@@ -70,6 +81,7 @@ export class HomeComponent implements OnInit {
     }
 
   }
+
 
 
 
@@ -97,5 +109,31 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  public getProduitByPromotion() {
+    this.appService.getProductByPromotion().subscribe(data => {
+      this.promotion = data;
+      console.log("Promotion : ", JSON.stringify);
+
+    });
+  }
+  public getProduitByBest() {
+    this.appService.getProductByBest().subscribe(data => {
+      this.best = data;
+
+    });
+  }
+
+  public getNewArrivals() {
+    this.appService.getProductByNewArrival().subscribe(data => {
+      this.newArrivals = data;
+
+    });
+  }
+  public getTopRate() {
+    this.appService.getProductByTop().subscribe(data => {
+      this.topRate = data;
+
+    });
+  }
 
 }

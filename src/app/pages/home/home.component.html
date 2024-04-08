@@ -46,7 +46,7 @@
     <mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
 
 
-      <mat-tab label="Tous">
+      <mat-tab label="{{'Tous' | translate}}">
         <app-products-carousel [products]="produit"></app-products-carousel>
        </mat-tab>
 
@@ -55,16 +55,16 @@
         </mat-tab> -->
 
         <mat-tab label="Les meilleurs produits">
-            <app-products-carousel [products]="produit"></app-products-carousel>
+            <app-products-carousel [products]="best"></app-products-carousel>
          </mat-tab>
          <mat-tab label="En promotion">
-            <app-products-carousel [products]="produit"></app-products-carousel>
+            <app-products-carousel [products]="promotion"></app-products-carousel>
          </mat-tab>
          <mat-tab label="Les plus visités">
-             <app-products-carousel [products]="produit"></app-products-carousel>
+             <app-products-carousel [products]="topRate"></app-products-carousel>
          </mat-tab>
          <mat-tab label="Nouvelle arrivés">
-             <app-products-carousel [products]="produit"></app-products-carousel>
+             <app-products-carousel [products]="newArrivals"></app-products-carousel>
          </mat-tab>
 
 

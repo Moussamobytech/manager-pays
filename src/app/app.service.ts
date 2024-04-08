@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Category, Product } from './app.models';
+import { Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
 
 export class Data {
@@ -25,32 +25,52 @@ export class AppService {
         0 //totalCartCount
     )
 
-    public url = environment.url ;
+    public url = "http://localhost:8590/ecommerce/api/v1" ;
 
     constructor(public http:HttpClient, public snackBar: MatSnackBar) { }
 
     public getCategories(): Observable<Category[]>{
-        return this.http.get<Category[]>(this.url + 'categorie/list');
+        return this.http.get<Category[]>(this.url + '/categorie/list');
 
     }
 
 
 
     public getProducts(type): Observable<Product[]>{
-        return this.http.get<Product[]>(this.url + 'produit/list-by-category/' + type );
+        return this.http.get<Product[]>(this.url + '/produit/list-by-category/' + type );
     }
     public getProductByCategorie(categorie: string): Observable<Product[]> {
-      return this.http.get<Product[]>(this.url + 'produit/list-by-category/' + categorie);
+      return this.http.get<Product[]>(this.url + '/produit/list-by-category/' + categorie);
     }
     public getAllProducts(): Observable<Product[]>{
-      return this.http.get<Product[]>(this.url + 'produit/list');
-  }
+      return this.http.get<Product[]>(this.url + '/produit/list');
+    }
     public getProductById(id): Observable<Product>{
-        return this.http.get<Product>(this.url + 'produit/find/' + id );
+        return this.http.get<Product>(this.url + '/produit/find/' + id );
+    }
+    public getProductByNewArrival(): Observable<Product>{
+      return this.http.get<Product>(this.url + '/produit/new-arrivals/');
+    }
+
+      public getProductByPromotion(): Observable<Product>{
+        return this.http.get<Product>(this.url + '/produit/promotions/');
+    }
+
+    public getProductByBest(): Observable<Product>{
+      return this.http.get<Product>(this.url + '/produit/best-produits/');
     }
 
 
-    public getBanners(): Observable<any[]>{
+    public getProductByTop(): Observable<Product>{
+      return this.http.get<Product>(this.url + '/produit/top-rates/');
+    }
+
+
+
+   public addContact(contact: Contact): Observable<Contact> {
+    return this.http.post<Contact>(this.url + '/contact/add', contact);
+   }
+   public getBanners(): Observable<any[]>{
         return this.http.get<any[]>(this.url + 'banners.json');
     }
 
