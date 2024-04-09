@@ -9,11 +9,12 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username: FormControl | undefined;
+  username: FormControl | String | undefined;
   password: FormControl | undefined;
   loginForm: FormGroup | undefined;
   hide: boolean= true;
   loading: boolean;
+  loginFormValue: any;
 
   constructor(private commonService:CommonService, private auth: AuthService) { }
 
@@ -31,10 +32,10 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  async login() {
+  async login(loginFormValue:any) {
     if(this.loginForm.valid){
       try{
-        const log = await this.auth.login(this.username,this.password);
+        const log = await this.auth.login(loginFormValue.username,loginFormValue.password);
         this.commonService.openSuccessSnackBar("Connexion Reussie avec succes...");
       } catch(error){
         this.commonService.open("acces incorrect")
