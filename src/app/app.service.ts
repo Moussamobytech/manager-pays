@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Category, Product } from './app.models';
+import { Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
 
 export class Data {
@@ -25,35 +25,64 @@ export class AppService {
         0 //totalCartCount
     )
 
-    public url = environment.api + '/assets/data/';
+    public url = "http://localhost:8590/ecommerce/api/v1" ;
 
     constructor(public http:HttpClient, public snackBar: MatSnackBar) { }
 
     public getCategories(): Observable<Category[]>{
-        return this.http.get<Category[]>(this.url + 'categories.json');
+        return this.http.get<Category[]>(this.url + '/categorie/list');
+
     }
+
+
 
     public getProducts(type): Observable<Product[]>{
-        return this.http.get<Product[]>(this.url + type + '-products.json');
+        return this.http.get<Product[]>(this.url + '/produit/list-by-category/' + type );
     }
-
+    public getProductByCategorie(categorie: string): Observable<Product[]> {
+      return this.http.get<Product[]>(this.url + '/produit/list-by-category/' + categorie);
+    }
+    public getAllProducts(): Observable<Product[]>{
+      return this.http.get<Product[]>(this.url + '/produit/list');
+    }
     public getProductById(id): Observable<Product>{
-        return this.http.get<Product>(this.url + 'product-' + id + '.json');
+        return this.http.get<Product>(this.url + '/produit/find/' + id );
+    }
+    public getProductByNewArrival(): Observable<Product>{
+      return this.http.get<Product>(this.url + '/produit/new-arrivals/');
     }
 
-    public getBanners(): Observable<any[]>{
+      public getProductByPromotion(): Observable<Product>{
+        return this.http.get<Product>(this.url + '/produit/promotions/');
+    }
+
+    public getProductByBest(): Observable<Product>{
+      return this.http.get<Product>(this.url + '/produit/best-produits/');
+    }
+
+
+    public getProductByTop(): Observable<Product>{
+      return this.http.get<Product>(this.url + '/produit/top-rates/');
+    }
+
+
+
+   public addContact(contact: Contact): Observable<Contact> {
+    return this.http.post<Contact>(this.url + '/contact/add', contact);
+   }
+   public getBanners(): Observable<any[]>{
         return this.http.get<any[]>(this.url + 'banners.json');
     }
 
     public addToCompare(product:Product){
         let message, status;
         if(this.Data.compareList.filter(item=>item.id == product.id)[0]){
-            message = 'The product ' + product.name + ' already added to comparison list.';
+            message = 'The product ' + product.nom + ' already added to comparison list.';
             status = 'error';
         }
         else{
             this.Data.compareList.push(product);
-            message = 'The product ' + product.name + ' has been added to comparison list.';
+            message = 'The product ' + product.nom + ' has been added to comparison list.';
             status = 'success';
         }
         this.snackBar.open(message, '×', { panelClass: [status], verticalPosition: 'top', duration: 3000 });
@@ -62,12 +91,12 @@ export class AppService {
     public addToWishList(product:Product){
         let message, status;
         if(this.Data.wishList.filter(item=>item.id == product.id)[0]){
-            message = 'The product ' + product.name + ' already added to wish list.';
+            message = 'The product ' + product.nom + ' already added to wish list.';
             status = 'error';
         }
         else{
             this.Data.wishList.push(product);
-            message = 'The product ' + product.name + ' has been added to wish list.';
+            message = 'The product ' + product.nom + ' has been added to wish list.';
             status = 'success';
         }
         this.snackBar.open(message, '×', { panelClass: [status], verticalPosition: 'top', duration: 3000 });
@@ -91,7 +120,7 @@ export class AppService {
             this.Data.totalCartCount = this.Data.totalCartCount + product.cartCount;
         });
 
-        message = 'The product ' + product.name + ' has been added to cart.';
+        message = 'The product ' + product.nom + ' has been added to cart.';
         status = 'success';
         this.snackBar.open(message, '×', { panelClass: [status], verticalPosition: 'top', duration: 3000 });
     }

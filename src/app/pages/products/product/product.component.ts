@@ -25,35 +25,35 @@ export class ProductComponent implements OnInit {
   public form: UntypedFormGroup;
   public relatedProducts: Array<Product>;
 
-  constructor(public appService:AppService, 
-              private activatedRoute: ActivatedRoute, 
-              public dialog: MatDialog, 
+  constructor(public appService:AppService,
+              private activatedRoute: ActivatedRoute,
+              public dialog: MatDialog,
               public formBuilder: UntypedFormBuilder,
               public domHandlerService: DomHandlerService) {  }
 
-  ngOnInit() {      
-    this.sub = this.activatedRoute.params.subscribe(params => { 
-      this.getProductById(params['id']); 
-    }); 
-    this.form = this.formBuilder.group({ 
-      'review': [null, Validators.required],            
+  ngOnInit() {
+    this.sub = this.activatedRoute.params.subscribe(params => {
+      this.getProductById(params['id']);
+    });
+    this.form = this.formBuilder.group({
+      'review': [null, Validators.required],
       'name': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'email': [null, Validators.compose([Validators.required, emailValidator])]
-    }); 
-    this.getRelatedProducts();    
+    });
+    this.getRelatedProducts();
   }
 
   ngAfterViewInit(){
     this.config = {
       observer: false,
       slidesPerView: 4,
-      spaceBetween: 10,      
+      spaceBetween: 10,
       keyboard: true,
       navigation: true,
-      pagination: false,       
-      loop: false, 
+      pagination: false,
+      loop: false,
       preloadImages: false,
-      lazy: true, 
+      lazy: true,
       breakpoints: {
         480: {
           slidesPerView: 2
@@ -68,9 +68,10 @@ export class ProductComponent implements OnInit {
   public getProductById(id){
     this.appService.getProductById(id).subscribe(data=>{
       this.product = data;
-      this.image = data.images[0].medium;
-      this.zoomImage = data.images[0].big;
-      setTimeout(() => { 
+      console.log("Produit :", this.product)
+      this.image = data.image1;
+      this.zoomImage = data.image2;
+      setTimeout(() => {
         this.config.observer = true;
        // this.directiveRef.setIndex(0);
       });
@@ -85,13 +86,13 @@ export class ProductComponent implements OnInit {
 
   public selectImage(image){
     this.image = image.medium;
-    this.zoomImage = image.big;
+    this.zoomImage = image.image2;
   }
 
   public onMouseMove(e){
     if(this.domHandlerService.window?.innerWidth >= 1280){
       var image, offsetX, offsetY, x, y, zoomer;
-      image = e.currentTarget; 
+      image = e.currentTarget;
       offsetX = e.offsetX;
       offsetY = e.offsetY;
       x = offsetX/image.offsetWidth*100;
@@ -119,7 +120,7 @@ export class ProductComponent implements OnInit {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  } 
+  }
 
   public onSubmit(values:Object):void {
     if (this.form.valid) {

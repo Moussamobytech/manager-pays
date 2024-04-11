@@ -32,7 +32,8 @@ export class PagesComponent implements OnInit {
     this.getCategories();
     this.sidenavMenuItems = this.sidenavMenuService.getSidenavMenuItems();
     setTimeout(() => {
-      this.settings.theme = 'green';
+      this.settings.theme = 'purple';
+      // this.settings.theme = 'green';
     });
   }
 
@@ -46,7 +47,7 @@ export class PagesComponent implements OnInit {
 
   public changeCategory(event){
     if(event.target){
-      this.category = this.categories.filter(category => category.name == event.target.innerText)[0];
+      this.category = this.categories.filter(category => category.nom == event.target.innerText)[0];
     }
     if(this.domHandlerService.window?.innerWidth < 960){
       this.stopClickPropagate(event);

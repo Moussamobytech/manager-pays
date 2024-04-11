@@ -42,7 +42,11 @@
     "ngx-spinner": "16.0.2",
     "npm": "^10.5.0",
     "perfect-scrollbar": "^1.5.5",
+    "ngx-toastr": "^18.0.0",
     "rxjs": "7.8.1",
+    "sweetalert2": "^11.10.7",
+    "crypto-js": "^4.1.1",
+    "secure-web-storage": "^1.0.2",
     "swiper": "6.6.1",
     "tslib": "2.6.2",
     "zone.js": "0.14.2"

@@ -24,40 +24,40 @@ export class ProductDetailComponent implements OnInit {
   private sub: any;
   public form: UntypedFormGroup;
 
-  constructor(public appService:AppService, 
-              private activatedRoute: ActivatedRoute, 
-              public dialog: MatDialog, 
+  constructor(public appService:AppService,
+              private activatedRoute: ActivatedRoute,
+              public dialog: MatDialog,
               public formBuilder: UntypedFormBuilder,
               public domHandlerService: DomHandlerService) { }
 
   ngOnInit(): void {
     this.getCategories();
-    this.sub = this.activatedRoute.params.subscribe(params => {  
+    this.sub = this.activatedRoute.params.subscribe(params => {
       if(params['id']){
-        this.getProductById(params['id']); 
-      } 
-      else{
-        this.getProductById(1); 
+        this.getProductById(params['id']);
       }
-    }); 
-    this.form = this.formBuilder.group({ 
-      'review': [null, Validators.required],            
+      else{
+        this.getProductById(1);
+      }
+    });
+    this.form = this.formBuilder.group({
+      'review': [null, Validators.required],
       'name': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'email': [null, Validators.compose([Validators.required, emailValidator])]
-    }); 
+    });
   }
 
   ngAfterViewInit(){
     this.config = {
       observer: false,
       slidesPerView: 4,
-      spaceBetween: 10,      
+      spaceBetween: 10,
       keyboard: true,
       navigation: true,
-      pagination: false,       
-      loop: false, 
+      pagination: false,
+      loop: false,
       preloadImages: false,
-      lazy: true, 
+      lazy: true,
       breakpoints: {
         480: {
           slidesPerView: 2
@@ -72,9 +72,9 @@ export class ProductDetailComponent implements OnInit {
   public getProductById(id){
     this.appService.getProductById(id).subscribe(data=>{
       this.product = data;
-      this.image = data.images[0].medium;
-      this.zoomImage = data.images[0].big;
-      setTimeout(() => { 
+      this.image = data.image1[0].medium;
+      this.zoomImage = data.image1[0].big;
+      setTimeout(() => {
         this.config.observer = true;
        // this.directiveRef.setIndex(0);
       });
@@ -89,7 +89,7 @@ export class ProductDetailComponent implements OnInit {
   public onMouseMove(e){
     if(this.domHandlerService.window?.innerWidth >= 1280){
       var image, offsetX, offsetY, x, y, zoomer;
-      image = e.currentTarget; 
+      image = e.currentTarget;
       offsetX = e.offsetX;
       offsetY = e.offsetY;
       x = offsetX/image.offsetWidth*100;
@@ -117,20 +117,20 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  } 
-  
-  public onSubmit(){ 
+  }
+
+  public onSubmit(){
     if(this.form.valid){
       console.log(this.form.value);
     }
   }
 
-  public getCategories(){  
-    if(this.appService.Data.categories.length == 0) { 
-      this.appService.getCategories().subscribe(data => { 
+  public getCategories(){
+    if(this.appService.Data.categories.length == 0) {
+      this.appService.getCategories().subscribe(data => {
         this.appService.Data.categories = data;
       });
-    } 
+    }
   }
 
 }

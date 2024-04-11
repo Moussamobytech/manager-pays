@@ -13,14 +13,14 @@ export class AppComponent {
   public settings: Settings;
   isServer: boolean = true;
 
-  constructor(public appSettings: AppSettings, 
-              public router: Router, 
+  constructor(public appSettings: AppSettings,
+              public router: Router,
               public translate: TranslateService,
               public domHandlerService: DomHandlerService){
     this.settings = this.appSettings.settings;
     translate.addLangs(['en','de','fr','ru','tr']);
-    translate.setDefaultLang('en'); 
-    translate.use('en');
+    translate.setDefaultLang('fr');
+    translate.use('fr');
   }
 
   ngOnInit() {
@@ -28,14 +28,14 @@ export class AppComponent {
       setTimeout(() => {
         this.isServer = false;
       })
-    }  
+    }
   }
 
   ngAfterViewInit(){
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.domHandlerService.winScroll(0, 0); 
+        this.domHandlerService.winScroll(0, 0);
       }
-    })  
+    })
   }
 }

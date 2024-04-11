@@ -27,30 +27,30 @@
                     <mat-icon class="mat-icon-md mr-0">menu</mat-icon>
                 </button>
             </span>
-            <span fxShow="false" fxShow.gt-xs fxLayoutAlign="center center"><mat-icon class="mat-icon-sm">call</mat-icon>  Hotline: (+100) 123 456 7890 </span>
-            <!-- <span fxShow="false" fxShow.gt-sm>{{ 'WELCOME' | translate }}</span> -->
+            <span fxShow="false" fxShow.gt-xs fxLayoutAlign="center center"><mat-icon class="mat-icon-sm">Appel</mat-icon>  Fixe: (+100) 123 456 7890 </span>
+            <span fxShow="false" fxShow.gt-sm>{{ 'WELCOME' | translate }}</span>
             <app-top-menu></app-top-menu>
         </mat-toolbar-row>
         <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar theme-container">
 
             <div fxFlex="20">
-                <a class="logo" routerLink="/" (click)="closeSubMenus()">fidelity</a>
+                <a class="logo" routerLink="/" (click)="closeSubMenus()">Fidelity</a>
             </div>
             <div fxFlex fxShow="false" fxShow.gt-sm>
                 <form method="get" class="search-form" fxLayout="row">
-                    <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-truncate text-muted">{{category?.name}}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
+                    <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-truncate text-muted">{{category?.nom}}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
                     <mat-menu #categoriesMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="categories-dropdown">
                         <span (mouseleave)="categoriesMenuTrigger.closeMenu()">
                             <app-category-list [categories]="categories" [categoryParentId]="0" (change)="changeCategory($event)"></app-category-list>
                         </span>
                     </mat-menu>
-                    <input type="text" placeholder="Type to search..." fxFlex>
+                    <input type="text" placeholder="{{'Tapez pour rechercher' | translate}}..." fxFlex>
                     <button mat-mini-fab (click)="search()" type="button" class="search-btn mat-elevation-z0 text-muted">
                         <mat-icon>search</mat-icon>
                     </button>
                 </form>
             </div>
-            <div fxFlex="20" fxLayout="row" fxLayoutAlign="end center">
+            <!-- <div fxFlex="20" fxLayout="row" fxLayoutAlign="end center">
                 <div fxLayoutAlign="center center" [@.disabled]="true">
                     <button mat-button [matMenuTriggerFor]="cartMenu" #cartMenuTrigger="matMenuTrigger" class="shopping-cart-btn">
                         <mat-icon class="mat-icon-lg" [matBadgeHidden]="appService.Data.totalCartCount == 0" [matBadge]="appService.Data.totalCartCount" matBadgeColor="warn" aria-hidden="false">shopping_cart</mat-icon>
@@ -77,10 +77,10 @@
                                 <ng-container *ngFor="let product of appService.Data.cartList">
                                     <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted list-item">
                                         <div>
-                                            <h3>{{product.name}}</h3>
+                                            <h3>{{product.nom}}</h3>
                                             <p><bdi>{{product.cartCount}} x ${{product.newPrice | number : '1.2-2'}}</bdi></p>
                                         </div>
-                                        <img [src]="product.images[0].small" alt="image">
+                                        <img [src]="product.image1[0].small" alt="image">
                                         <button mat-icon-button color="warn" class="remove" (click)="remove(product);stopClickPropagate($event)" matTooltip="Remove" matTooltipPosition="before">
                                             <mat-icon class="mat-icon-sm">close</mat-icon>
                                         </button>
@@ -112,9 +112,9 @@
                     </button>
                     <mat-menu #searchMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="search-dropdown mat-elevation-z8">
                         <ng-template matMenuContent>
-                            <form method="get" fxFlex class="search-form">
-                                <button mat-raised-button [matMenuTriggerFor]="categories2Menu" #categories2MenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-muted" (click)="stopClickPropagate($event)">
-                                    {{category?.name}}<mat-icon iconPositionEnd class="m-0">arrow_drop_down</mat-icon>
+                            <form method="get" fxFlex class="search-form" >
+                                <button  mat-raised-button [matMenuTriggerFor]="categories2Menu" #categories2MenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-muted" (click)="stopClickPropagate($event)">
+                                    {{category?.nom}}<mat-icon iconPositionEnd class="m-0">arrow_drop_down</mat-icon>
                                 </button>
                                 <mat-menu #categories2Menu="matMenu" [overlapTrigger]="false" xPosition="before" class="categories-dropdown">
                                     <ng-template matMenuContent>
@@ -131,7 +131,7 @@
                         </ng-template>
                     </mat-menu>
                 </div>
-            </div>
+            </div> -->
         </mat-toolbar-row>
     </mat-toolbar>
 

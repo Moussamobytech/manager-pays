@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
 import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.module';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
@@ -14,27 +14,43 @@ import { Settings, AppSettings } from 'src/app/app.settings';
 })
 export class ProductsCarouselComponent implements OnInit {
 
+  @Input('idCat') idCat: string;
   @Input('products') products: Array<Product> = [];
   public config: SwiperConfigInterface = {};
   public settings: Settings;
-  constructor(public appSettings:AppSettings, public appService:AppService, public dialog: MatDialog, private router: Router) { 
+  imageData: string | ArrayBuffer | null = null;
+  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog, private router: Router) {
     this.settings = this.appSettings.settings;
   }
 
-  ngOnInit() { }
-  
-  ngAfterViewInit(){
+  ngOnInit() {
+    this.getProductByCategorie(this.idCat);
+   }
+
+  public getProductByCategorie(categorie: string){
+    this.appService.getProductByCategorie(categorie).subscribe(
+      data => {
+        this.products= data
+        console.log("cateeeeeee ",data);
+        console.log("1 cateeeeeee ",categorie);
+
+
+      }
+    )
+  }
+
+  ngAfterViewInit() {
     this.config = {
       observer: true,
       slidesPerView: 1,
-      spaceBetween: 16,       
+      spaceBetween: 16,
       keyboard: true,
       navigation: true,
       pagination: false,
-      grabCursor: true,        
+      grabCursor: true,
       loop: false,
       preloadImages: false,
-      lazy: true,  
+      lazy: true,
       breakpoints: {
         480: {
           slidesPerView: 1
@@ -55,17 +71,18 @@ export class ProductsCarouselComponent implements OnInit {
     }
   }
 
-  public openProductDialog(product){   
+  public openProductDialog(product) {
     let dialogRef = this.dialog.open(ProductDialogComponent, {
-        data: product,
-        panelClass: 'product-dialog',
-        direction: (this.settings.rtl) ? 'rtl' : 'ltr'
+      data: product,
+      panelClass: 'product-dialog',
+      direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
     dialogRef.afterClosed().subscribe(product => {
-      if(product){
-        this.router.navigate(['/products', product.id, product.name]); 
+      if (product) {
+        this.router.navigate(['/products', product.id, product.nom]);
       }
     });
   }
+
 
 }

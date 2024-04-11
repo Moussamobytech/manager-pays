@@ -8,6 +8,7 @@ import {
 import { throwError, from } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root',
@@ -16,20 +17,20 @@ export class ApiService {
   outdateAlert: any = null;
   timeoutTime = 60000;
   user: any;
-  msisdn: any;
+  // username: any;
   headers: HttpHeaders = new HttpHeaders();
 
   url = environment.api;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, private ngxSpinnerService: NgxSpinnerService) {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
-    this.msisdn = sessionStorage.getItem('msisdn')!;
+    // this.username = sessionStorage.getItem('username')!;
     console.log('this.user ::::: ', this.user);
-    console.log('this.msisdn ::::: ', this.msisdn);
+    // console.log('this.username ::::: ', this.username);
   }
 
   appendAccessToken(headers: HttpHeaders) {
-    let token = JSON.parse(sessionStorage.getItem('token')!);
+    let token = JSON.parse(sessionStorage.getItem('auth-token')!);
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -41,8 +42,8 @@ export class ApiService {
 
     // return (this.storeService.currentUser && this.storeService.currentUser.user && (this.storeService.currentUser.user.nom + ' ' + this.storeService.currentUser.user.prenom)) || this.storeService.currentUser.login;
     return (
-      (this.user && this.user?.nom + ' ' + this.user?.prenom) ||
-      this.user?.msisdn
+      (this.user && this.user?.firstname + ' ' + this.user?.lastname) ||
+      this.user?.username
     );
   }
   get userna() {
@@ -50,14 +51,14 @@ export class ApiService {
     // let user =  this.sessionService.getItem("currentUser")
     let user = JSON.parse(sessionStorage.getItem('currentUser')!);
     // return (this.storeService.currentUser && this.storeService.currentUser.user && (this.storeService.currentUser.user.nom + ' ' + this.storeService.currentUser.user.prenom)) || this.storeService.currentUser.login;
-    return user?.msisdn;
+    return user?.username;
   }
 
   addCommonHeaders(headers: HttpHeaders) {
     // headers = headers.set('Accept-Charset', 'utf-8');
     console.log('user ::::::: ', this.user);
     headers = headers.set('Content-Type', 'application/json');
-    headers = headers.set('__username__', this.user?.msisdn || '');
+    headers = headers.set('__username__', this.user?.username || '');
     headers = headers.set('__agent__', window.navigator.userAgent);
     headers = headers.set('__vendor__', window.navigator.vendor);
     headers = headers.set('__platform__', window.navigator.platform);
@@ -77,7 +78,7 @@ export class ApiService {
     headers = headers.set('__language__', window.navigator.language);
 
     // headers = headers.set('Content-Type', 'multipart/form-data');
-    headers = headers.set('__username__', this.user?.msisdn || '');
+    headers = headers.set('__username__', this.user?.username || '');
 
     return headers;
   }
@@ -242,6 +243,9 @@ export class ApiService {
   }
 
   private handleError(error: HttpErrorResponse) {
+    // console.log(error);
+    // console.log(error.error);
+    
     if (error.status <= 0 || (error.error && error.error.status <= 0)) {
       // this.commonMessager.showNoNetworkFail();
     }
@@ -255,10 +259,12 @@ export class ApiService {
         )}, ` + `body was: ${JSON.stringify(error.error)}`
       );
     }
+    
+    this.ngxSpinnerService.hide();
     // return an observable with a user-facing error message
     // return throwError((error.error && error.error.message) ||
     //   'Erreur d\'accès au serveur');
-    return throwError(error || "Erreur d'accès au serveur");
+    return throwError(error.error || "Erreur d'accès au serveur");
   }
 
   getImg(

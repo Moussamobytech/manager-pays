@@ -7,20 +7,20 @@
   <div class="mat-mdc-table compare-table">
     <div class="mat-mdc-row">
       <div class="mat-mdc-cell">
-          product       
+          product
       </div>
       <div class="mat-mdc-cell" *ngFor="let product of appService.Data.compareList">
         <button mat-icon-button color="accent" class="remove" (click)="remove(product)"><mat-icon>close</mat-icon></button>
-        <img [src]="product.images[0].small" alt="">
+        <img [src]="product.image1[0].small" alt="">
       </div>
     </div>
 
     <div class="mat-mdc-row">
       <div class="mat-mdc-cell">
-        name
+        nom
       </div>
       <div class="mat-mdc-cell" *ngFor="let product of appService.Data.compareList">
-        <a [routerLink]="['/products', product.id, product.name]" class="product-name">{{product.name}}</a>
+        <a [routerLink]="['/products', product.id, product.nom]" class="product-name">{{product.nom}}</a>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
         rating
       </div>
       <div class="mat-mdc-cell" *ngFor="let product of appService.Data.compareList">
-        <app-rating [ratingsCount]="product.ratingsCount" [ratingsValue]="product.ratingsValue"></app-rating>
+        <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate"></app-rating>
       </div>
     </div>
 
@@ -65,7 +65,7 @@
         color
       </div>
       <div class="mat-mdc-cell" *ngFor="let product of appService.Data.compareList">
-        <button mat-raised-button *ngFor="let color of product.color" [style.background]="color" class="color">&nbsp;</button>              
+        <button mat-raised-button *ngFor="let color of product.color" [style.background]="color" class="color">&nbsp;</button>
       </div>
     </div>
 
@@ -98,5 +98,5 @@
     </div>
 
   </div>
-  
+
 </mat-card>

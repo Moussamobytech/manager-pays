@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../../shared/products-carousel/product-dialog/product-dialog.component';
 import { AppService } from '../../app.service';
 import { Product, Category } from "../../app.models";
-import { Settings, AppSettings } from 'src/app/app.settings'; 
+import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 
 @Component({
@@ -60,13 +60,21 @@ export class ProductsComponent implements OnInit {
     { name: "17\"", selected: false },
     { name: "21\"", selected: false },
     { name: "23.4\"", selected: false }
-  ]; 
+  ];
   public page:any;
   public settings: Settings;
-  constructor(public appSettings:AppSettings, 
-              private activatedRoute: ActivatedRoute, 
-              public appService:AppService, 
-              public dialog: MatDialog, 
+  tous:any;
+  idCat:any;
+  Allcategories:any;
+  selectedCategoryId: any;
+
+
+  categoryId: string;
+
+  constructor(public appSettings:AppSettings,
+              private activatedRoute: ActivatedRoute,
+              public appService:AppService,
+              public dialog: MatDialog,
               private router: Router,
               public domHandlerService: DomHandlerService) {
     this.settings = this.appSettings.settings;
@@ -86,31 +94,54 @@ export class ProductsComponent implements OnInit {
     };
 
     this.getCategories();
-    this.getBrands();
-    this.getAllProducts();   
+    // this.getBrands();
+    this.getProductsByCetegorie(this.selectedCategoryId);
+    this.getCategorie();
+
+
   }
 
-  public getAllProducts(){
-    this.appService.getProducts("featured").subscribe(data=>{
-      this.products = data; 
-      //for show more product  
-      for (var index = 0; index < 3; index++) {
-        this.products = this.products.concat(this.products);        
-      }
+  public getProductsByCetegorie(categoryId: string){
+    this.appService.getProductByCategorie(categoryId).subscribe(data=>{
+      this.products = data;
+      //for show more product
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
     });
   }
 
-  public getCategories(){  
-    if(this.appService.Data.categories.length == 0) { 
+  public getCategories(){
+    if(this.appService.Data.categories.length == 0) {
       this.appService.getCategories().subscribe(data => {
         this.categories = data;
         this.appService.Data.categories = data;
+
       });
     }
     else{
       this.categories = this.appService.Data.categories;
+
+
     }
   }
+
+
+  // public getCategorie(){
+  //   this.appService.getCategories().subscribe(data =>{
+
+  //     this.tous = data;
+  //     console.log("Mes tous :" ,data)
+
+  //   })
+  // }
+
+  public getCategorie(){
+    this.appService.getCategories().subscribe(data =>{
+      this.Allcategories = data;
+    })
+  }
+
 
   public getBrands(){
     this.brands = this.appService.getBrands();
@@ -129,7 +160,7 @@ export class ProductsComponent implements OnInit {
 
   public changeCount(count){
     this.count = count;
-    this.getAllProducts(); 
+    this.getProductsByCetegorie(this.selectedCategoryId);
   }
 
   public changeSorting(sort){
@@ -141,7 +172,7 @@ export class ProductsComponent implements OnInit {
     this.viewCol = viewCol;
   }
 
-  public openProductDialog(product){   
+  public openProductDialog(product){
     let dialogRef = this.dialog.open(ProductDialogComponent, {
         data: product,
         panelClass: 'product-dialog',
@@ -149,21 +180,45 @@ export class ProductsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(product => {
       if(product){
-        this.router.navigate(['/products', product.id, product.name]); 
+        this.router.navigate(['/products', product.id, product.nom]);
       }
     });
   }
 
   public onPageChanged(event){
     this.page = event;
-    this.getAllProducts(); 
-    this.domHandlerService.winScroll(0,0); 
+    this.getProductsByCetegorie(this.selectedCategoryId);
+    this.domHandlerService.winScroll(0,0);
   }
 
-  public onChangeCategory(event){
-    if(event.target){
-      this.router.navigate(['/products', event.target.innerText.toLowerCase()]); 
-    }   
-  }
+  // public onChangeCategory(categoryId: string){
+  //   this.selectedCategoryId = categoryId;
+  //   this.getProductsByCetegorie(categoryId);
 
+  //   console.log("Logggggggg  ",categoryId)
+  //     // Recherche du texte de la catégorie en fonction de son ID
+  // const selectedCategory = this.Allcategories.find(category => category.id === categoryId);
+  // if (selectedCategory) {
+  //   this.router.navigate(['/products', selectedCategory.name.toLowerCase()]);
+  // }
+  //   // if(event.target){
+  //   //   this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
+  //   // }
+//   // }
+  public onChangeCategory(categoryId: string) {
+    this.selectedCategoryId = categoryId;
+    this.getProductsByCetegorie(categoryId); // Vérifiez cette ligne pour vous assurer que categoryId est correctement passé
+
+
+    // Recherche du texte de la catégorie en fonction de son ID
+    const selectedCategory = this.Allcategories.find(category => category.id === categoryId);
+    if (selectedCategory) {
+        this.router.navigate(['/products', selectedCategory.nom.toLowerCase()]); // Assurez-vous d'utiliser la propriété correcte pour le nom de la catégorie (probablement nom, plutôt que name)
+    }
+}
+// public onChangeCategory(event){
+//   if(event.target){
+//     this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
+//   }
+// }
 }

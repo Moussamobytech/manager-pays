@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   loading: boolean;
   loginFormValue: any;
 
-  constructor(private commonService:CommonService, private auth: AuthService) { }
+  constructor(private commonService:CommonService, private auth: AuthenticationService) { }
 
   ngOnInit(): void {
     this.username = new FormControl('',Validators.required);

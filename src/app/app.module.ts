@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient,'/assets/i18n/', '.json');
+  return new TranslateHttpLoader(httpClient, environment.url +'/assets/i18n/', '.json');
 }
 
 import { SharedModule } from './shared/shared.module';
@@ -33,6 +33,13 @@ import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 import { AppInterceptor } from './theme/utils/app-interceptor';
 import { UserSessionService } from './services/user-session.service';
 import { CommonService } from './services/common.service';
+import { AppInterceptor } from './theme/utils/app-interceptor';
+import { AuthenticationService } from './service/auth.service';
+import { ApiService } from './service/api.service';
+import { ToastrModule } from 'ngx-toastr';
+import { ProductService } from './service/product.service';
+import { CategoryService } from './service/category.service';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -44,7 +51,8 @@ import { CommonService } from './services/common.service';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent
+    FooterComponent,
+    // FaqComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +61,7 @@ import { CommonService } from './services/common.service';
     HttpClientModule,
     NgxSpinnerModule,
     GoogleMapsModule,
+    ToastrModule.forRoot(), // ToastrModule added
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -69,7 +78,13 @@ import { CommonService } from './services/common.service';
     AppService,
     CommonService,
     UserSessionService,
+    // provideHttpClient(withFetch()),
+    AuthenticationService,
+    ProductService,
+    CategoryService,
+    ApiService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
   ],
