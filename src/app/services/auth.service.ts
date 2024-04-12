@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { environment as envProd } from "../../environments/environment.prod";
 import { environment as env } from "../../environments/environment";
-import { Observable, map, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
 import { User } from '../models/user.models';
@@ -64,20 +64,21 @@ export class AuthenticationService {
      */
     login(username: string, password: string): any {
 
-        return this.api.post(`/users/login`, { username, password })
-            .pipe(map((user :any)=> {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-
-                    let roles = user.authorities[0].authority
-                    console.log("roles :: ", roles);
-                    // store user details and jwt in session
-                    sessionStorage.setItem('currentUser', JSON.stringify(user));
-                    sessionStorage.setItem('auth-token', JSON.stringify(user.token));
-                    sessionStorage.setItem('auth-roles', roles);
-                }
-                return user;
-            }));
+      return this.api.post(`/users/login`, { username, password })
+          .pipe(map(
+            (user :any)=> {
+              // login successful if there's a jwt token in the response
+              if (user && user.token) {
+                  let roles = user.authorities[0].authority
+                  console.log("roles :: ", roles);
+                  // store user details and jwt in session
+                  sessionStorage.setItem('currentUser', JSON.stringify(user));
+                  sessionStorage.setItem('auth-token', JSON.stringify(user.token));
+                  sessionStorage.setItem('auth-roles', roles);
+              }
+              return user;
+            }
+          ));
     }
 
     /**
@@ -92,8 +93,18 @@ export class AuthenticationService {
      * @param password password of user
      */
     signup(formData: any): any {
-        return this.api.post(`/users/register`, formData);
-
+      let data = {
+        role : ["admin"],
+        username : (formData.email || formData.phone),
+        firstname : formData.prenom,
+        lastname : formData.name,
+        email : formData.email,
+        phoneNumber :  formData.phone,
+        adresse : formData.addresse,
+        password : formData.password2,
+        typeofUser : (formData.email)? 'email'  : 'tel'
+      }
+        return this.api.post(`/users/register`, data);
     }
 
 
@@ -108,5 +119,6 @@ export class AuthenticationService {
         sessionStorage.removeItem('auth-token');
         this.user = null;
     }
+
 }
 

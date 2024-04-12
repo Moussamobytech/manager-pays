@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.models';
-import { AuthenticationService } from 'src/app/service/auth.service';
-import { ProductService } from 'src/app/service/product.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { ProductService } from 'src/app/services/product.service';
+// import { ProductService } from 'src/app/service/product.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -45,7 +46,7 @@ export class DashboardComponent implements OnInit {
       case "ROLE_USER":
         profil = "Utilisateur"
         break;
-    
+
       default:
         profil = "N/A"
         break;

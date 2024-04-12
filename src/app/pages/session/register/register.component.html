@@ -40,6 +40,13 @@
             </mat-form-field>
 
             <mat-form-field class="full-width">
+              <input matInput placeholder="*Adresse" formControlName="adresse" required>
+              <mat-error *ngIf="registerFormControl.adresse.hasError('required')">
+                L'adressse est <strong>obligatoire</strong>
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
               <input matInput placeholder="*Mot de passe" [type]="hide ? 'password' : 'text'"
               formControlName="password1" required>
               <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :

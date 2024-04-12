@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService } from 'src/app/service/category.service';
-import { AuthenticationService } from 'src/app/service/auth.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user.models';
 import { Category } from 'src/app/models/category.models';
-import { ProductService } from 'src/app/service/product.service';
-import { CommonMessageService } from 'src/app/service/common-message.service';
+import { ProductService } from 'src/app/services/product.service';
+import { CategoryService } from 'src/app/services/category.service';
+import { CommonMessageService } from 'src/app/services/common-message.service';
 
 @Component({
   selector: 'app-add-product',
@@ -17,7 +17,7 @@ import { CommonMessageService } from 'src/app/service/common-message.service';
 export class AddProductComponent implements OnInit {
   public form: UntypedFormGroup;
   public colors = ["#5C6BC0","#66BB6A","#EF5350","#BA68C8","#FF4081","#9575CD","#90CAF9","#B2DFDB","#DCE775","#FFD740","#00E676","#FBC02D","#FF7043","#F5F5F5","#696969"];
-  public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""]; 
+  public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""];
   public selectedColors:string;
   public categories:Category[];
   private sub: any;
@@ -30,35 +30,35 @@ export class AddProductComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
     console.log("currentUser :::::::: ",this.currentUser)
-    this.form = this.formBuilder.group({ 
+    this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
       "pricePromotion": null,
       "priceBasic": [null, Validators.required ],
       "description": null,
-      "weight": "5", 
+      "weight": "5",
       "user": this.currentUser.username,
-      "categorie": [null, Validators.required ]  
-      // "discount": null, 
+      "categorie": [null, Validators.required ]
+      // "discount": null,
       // "color": null,
-      // "size": null, 
-    }); 
+      // "size": null,
+    });
     this.getCategories();
-    this.sub = this.activatedRoute.params.subscribe(params => {  
+    this.sub = this.activatedRoute.params.subscribe(params => {
       if(params['id']){
         this.id = params['id'];
-        this.getProductById(); 
-      }  
-    }); 
+        this.getProductById();
+      }
+    });
   }
 
-  public getCategories(){   
+  public getCategories(){
     this.category.categories().subscribe(data => {
     // this.appService.getCategories().subscribe(data => {
       console.log(data)
-      this.categories = data; 
+      this.categories = data;
       // this.categories.shift();
-    }); 
+    });
   }
 
   public getProductById(){
@@ -77,13 +77,13 @@ export class AddProductComponent implements OnInit {
         }
         images.push(image);
       })
-      this.form.controls.images.setValue(images); 
+      this.form.controls.images.setValue(images);
     })
 
-    // this.appService.getProductById(this.id).subscribe((data:any)=>{ 
-     
-    //   this.form.patchValue(data); 
-    //   this.selectedColors = data.color; 
+    // this.appService.getProductById(this.id).subscribe((data:any)=>{
+
+    //   this.form.patchValue(data);
+    //   this.selectedColors = data.color;
     //   const images: any[] = [];
     //   data.images.forEach(item=>{
     //     let image = {
@@ -92,7 +92,7 @@ export class AddProductComponent implements OnInit {
     //     }
     //     images.push(image);
     //   })
-    //   this.form.controls.images.setValue(images); 
+    //   this.form.controls.images.setValue(images);
     // });
   }
 
@@ -107,7 +107,7 @@ export class AddProductComponent implements OnInit {
   }
 
   async save(){
-    
+
     try {
       if (this.form.valid) {
         var data = new FormData();
@@ -144,7 +144,7 @@ export class AddProductComponent implements OnInit {
   }
 
   async edit(){
-    
+
     try {
       if (this.form.valid) {
         var data = new FormData();
@@ -182,20 +182,20 @@ export class AddProductComponent implements OnInit {
         this.commonService.warnToast("Merci de vérifier si les champs sont toutes remplis")
       }
 
-      
+
     } catch (error) {
       console.log(error)
     }
   }
 
-  public onColorSelectionChange(event:any){  
+  public onColorSelectionChange(event:any){
     if(event.value){
       this.selectedColors = event.value.join();
-    } 
-  }  
+    }
+  }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  } 
+  }
 
 }

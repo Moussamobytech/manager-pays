@@ -25,7 +25,7 @@ export class ApiService {
   constructor(public http: HttpClient, private ngxSpinnerService: NgxSpinnerService) {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
     // this.username = sessionStorage.getItem('username')!;
-    console.log('this.user ::::: ', this.user);
+    // console.log('this.user ::::: ', this.user);
     // console.log('this.username ::::: ', this.username);
   }
 
@@ -56,7 +56,7 @@ export class ApiService {
 
   addCommonHeaders(headers: HttpHeaders) {
     // headers = headers.set('Accept-Charset', 'utf-8');
-    console.log('user ::::::: ', this.user);
+    // console.log('user ::::::: ', this.user);
     headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('__username__', this.user?.username || '');
     headers = headers.set('__agent__', window.navigator.userAgent);
@@ -69,7 +69,7 @@ export class ApiService {
 
   addCommonHeadersForFile(headers: HttpHeaders) {
     // headers = headers.set('Accept-Charset', 'utf-8');
-    console.log('user ::::::: ', this.user);
+    // console.log('user ::::::: ', this.user);
 
     // headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('__agent__', window.navigator.userAgent);
@@ -245,7 +245,7 @@ export class ApiService {
   private handleError(error: HttpErrorResponse) {
     // console.log(error);
     // console.log(error.error);
-    
+
     if (error.status <= 0 || (error.error && error.error.status <= 0)) {
       // this.commonMessager.showNoNetworkFail();
     }
@@ -259,7 +259,7 @@ export class ApiService {
         )}, ` + `body was: ${JSON.stringify(error.error)}`
       );
     }
-    
+
     this.ngxSpinnerService.hide();
     // return an observable with a user-facing error message
     // return throwError((error.error && error.error.message) ||

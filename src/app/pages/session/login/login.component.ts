@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { error } from 'console';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 
@@ -35,9 +36,16 @@ export class LoginComponent implements OnInit {
   async login(loginFormValue:any) {
     if(this.loginForm.valid){
       try{
-        const log = await this.auth.login(loginFormValue.username,loginFormValue.password);
-        this.commonService.openSuccessSnackBar("Connexion Reussie avec succes...");
+        let res = await this.auth.login(loginFormValue.username,loginFormValue.password).toPromise();
+        console.log("data ::::::: ", res);
+        this.loading =false;
+        if(res){
+          this.commonService.goTo('/')
+          this.commonService.openSuccessSnackBar("Connexion Reussie avec succes...");
+        }
       } catch(error){
+        this.loading =false;
+        console.log("error ::::::: ", error);
         this.commonService.open("acces incorrect")
       }
     }else{

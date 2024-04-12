@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { emailValidator, matchingPasswords } from '../../theme/utils/app-validators';
-import { AuthenticationService } from 'src/app/service/auth.service';
 import { validateEmail } from 'src/app/helpers';
+import { emailValidator, matchingPasswords } from 'src/app/theme/utils/app-validators';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sign-in',

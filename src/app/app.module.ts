@@ -33,13 +33,12 @@ import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 import { AppInterceptor } from './theme/utils/app-interceptor';
 import { UserSessionService } from './services/user-session.service';
 import { CommonService } from './services/common.service';
-import { AppInterceptor } from './theme/utils/app-interceptor';
-import { AuthenticationService } from './service/auth.service';
-import { ApiService } from './service/api.service';
 import { ToastrModule } from 'ngx-toastr';
-import { ProductService } from './service/product.service';
-import { CategoryService } from './service/category.service';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AuthenticationService } from './services/auth.service';
+import { ProductService } from './services/product.service';
+import { CategoryService } from './services/category.service';
+import { ApiService } from './services/api.service';
 
 @NgModule({
   declarations: [

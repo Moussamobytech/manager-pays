@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { emailValidator, matchingPasswords } from '../../theme/utils/app-validators';
-import { AuthenticationService } from 'src/app/service/auth.service';
+import { AuthenticationService } from '../../services/auth.service';
 import { validateEmail } from 'src/app/helpers';
 
 @Component({
@@ -12,18 +12,18 @@ import { validateEmail } from 'src/app/helpers';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-  
+
   registerForm: UntypedFormGroup;
   formSubmitted: boolean = false;
   toSubmit: boolean = false;
   loading: boolean = false;
   profil : string = null;
 
-  constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder, 
+  constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder,
     public router:Router, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    
+
     this.registerForm = this.formBuilder.group({
       'firstname': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'lastname': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
@@ -66,7 +66,7 @@ export class SignUpComponent implements OnInit {
 
   reset($event : Event){
     console.log("resetting process ::::::::");
-    
+
     this.formValues.email.setValue("")
     this.formValues.password.setValue("")
     this.toSubmit = false;
@@ -98,7 +98,7 @@ export class SignUpComponent implements OnInit {
       console.log(error)
       this.snackBar.open('Une erreur s\'est produite lors de la création du compte !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
     }
-    
+
   }
 
 }
