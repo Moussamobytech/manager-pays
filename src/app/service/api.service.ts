@@ -19,7 +19,7 @@ export class ApiService {
   msisdn: any;
   headers: HttpHeaders = new HttpHeaders();
 
-  url = environment.url;
+  url = "http://localhost:8590/ecommerce/api/v1";
 
   constructor(public http: HttpClient) {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);

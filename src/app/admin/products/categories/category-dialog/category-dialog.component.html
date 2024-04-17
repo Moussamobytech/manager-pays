@@ -1,33 +1,124 @@
-<h1 mat-dialog-title>Category</h1>
+<!-- <h1 mat-dialog-title>Category</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
     <div mat-dialog-content>
         <div fxLayout="row wrap">
             <div fxFlex="100">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Name</mat-label>
-                    <input matInput formControlName="name" required>
-                    <mat-error *ngIf="form.controls.name.errors?.required">Name is required</mat-error> 
+                    <mat-label>Nom</mat-label>
+                    <input matInput formControlName="nom" required>
+                    <mat-error *ngIf="form.get('nom').hasError('required')">Nom est obligatoire</mat-error>
                 </mat-form-field>
-            </div> 
-            <div fxFlex="100">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Parent category</mat-label>
-                    <mat-select formControlName="parentId">
-                        <mat-option *ngFor="let cat of data.categories" [value]="cat.id">
-                            <span>{{cat.name}}</span>
-                        </mat-option>
-                    </mat-select> 
-                </mat-form-field>
-            </div> 
-            <div fxFlex="100" class="py-1">    
-                <mat-checkbox formControlName="hasSubCategory" color="primary">Has SubCategory</mat-checkbox>
-            </div> 
+            </div>
+            <div fxFlex="100" class="py-1" >
+                <mat-label>Image</mat-label>
+                <input type="file" formControlName="image">
+                <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+            </div>
         </div>
     </div>
     <div mat-dialog-actions>
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100"> 
-            <button mat-raised-button color="warn" type="button" mat-dialog-close>Close</button>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
             <button mat-raised-button color="primary" type="submit">Save</button>
-        </div> 
+        </div>
+    </div>
+</form> -->
+<!-- <h1 mat-dialog-title>Categorie</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="nom" required>
+            <mat-error *ngIf="form.get('nom').hasError('required')">Nom est obligatoire</mat-error>
+        </mat-form-field>
+
+        <div class="py-1">
+            <mat-label>Image</mat-label>
+            <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
+            <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+        </div>
+      </div>
+    </div>
+
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
+            <button mat-raised-button color="primary" type="submit">Ajouter</button>
+        </div>
     </div>
 </form>
+
+<mat-dialog-content *ngIf="showConfirmation">
+  <p>La catégorie a été ajoutée avec succès.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="showConfirmation">
+  <button mat-button (click)="closeConfirmation()">OK</button>
+</mat-dialog-actions> -->
+<!-- <h1 mat-dialog-title>Categorie</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div fxLayout="row wrap">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="nom" required>
+                <mat-error *ngIf="form.get('nom').hasError('required')">Nom est obligatoire</mat-error>
+            </mat-form-field>
+
+            <div class="py-1">
+                <mat-label>Image</mat-label>
+                <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
+                <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+            </div>
+        </div>
+    </div>
+
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
+            <button mat-raised-button color="primary" type="submit">Ajouter</button>
+        </div>
+    </div>
+</form> -->
+<h1 mat-dialog-title>{{ isUpdateMode ? 'Modifier la catégorie' : 'Ajouter une catégorie' }}</h1>
+
+<!-- Affichage du message de succès -->
+
+
+<!-- Formulaire -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div fxLayout="row wrap">
+            <!-- Champ caché pour l'ID de la catégorie -->
+            <input type="hidden" formControlName="id">
+
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="nom" required>
+                <mat-error *ngIf="form.get('nom').hasError('required')">Nom est obligatoire</mat-error>
+            </mat-form-field>
+            <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
+              <p>{{ isUpdateMode ? 'Catégorie modifiée avec succès' : 'Catégorie ajoutée avec succès' }}</p>
+          </mat-dialog-content>
+            <div class="py-1">
+                <mat-label>Image</mat-label>
+                <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
+                <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+            </div>
+        </div>
+    </div>
+
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
+            <button mat-raised-button color="primary" type="submit">{{ isUpdateMode ? 'Modifier' : 'Ajouter' }}</button>
+        </div>
+    </div>
+</form>
+
+<!-- <mat-dialog-content *ngIf="showSuccessMessage">
+  <p>Catégorie ajoutée avec succès</p>
+</mat-dialog-content> -->

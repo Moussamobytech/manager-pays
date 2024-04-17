@@ -1,8 +1,10 @@
 export class Category {
-  constructor(public id: number,
+  constructor(public id: string,
               public nom:string,
               public hasSubCategory: boolean,
-              public parentId: number){ }
+              public parentId: number,
+              public image: File,
+              public status : string){ }
 }
 
 export class Product {

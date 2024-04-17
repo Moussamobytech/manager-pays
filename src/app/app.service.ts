@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
+import { ApiService } from './service/api.service';
 
 export class Data {
     constructor(public categories: Category[],
@@ -25,55 +26,176 @@ export class AppService {
         0 //totalCartCount
     )
 
-    public url = "http://localhost:8590/ecommerce/api/v1" ;
+    // public url = "http://localhost:8590/ecommerce/api/v1" ;
+    public url = environment.url ;
 
-    constructor(public http:HttpClient, public snackBar: MatSnackBar) { }
+    constructor(public http:HttpClient, public snackBar: MatSnackBar, public apiService:ApiService) { }
 
-    public getCategories(): Observable<Category[]>{
-        return this.http.get<Category[]>(this.url + '/categorie/list');
+    public getCategories(): Observable<any>{
+        return this.apiService.get('/categorie/list');
 
+    }
+
+    public getCategorieById(id: string): Observable<any>{
+      return this.apiService.get('/categorie/' +id);
+
+  }
+
+    public getProducts(type): Observable<any>{
+        return this.apiService.get('/produit/list-by-category/' + type );
+    }
+    public getProductByCategorie(id: string): Observable<any> {
+      return this.apiService.get('/produit/list-by-category/' + id);
+    }
+    public getAllProducts(): Observable<any>{
+      return this.apiService.get('/produit/list');
+    }
+    public getProductById(id): Observable<any>{
+        return this.apiService.get('/produit/find/' + id );
+    }
+    public getProductByNewArrival(): Observable<any>{
+      return this.apiService.get('/produit/new-arrivals/');
+    }
+
+      public getProductByPromotion(): Observable<any>{
+        return this.apiService.get( '/produit/promotions/');
+    }
+
+    public getProductByBest(): Observable<any>{
+      return this.apiService.get('/produit/best-produits/');
+    }
+
+
+    public getProductByTop(): Observable<any>{
+      return this.apiService.get('/produit/top-rates/');
     }
 
 
 
-    public getProducts(type): Observable<Product[]>{
-        return this.http.get<Product[]>(this.url + '/produit/list-by-category/' + type );
-    }
-    public getProductByCategorie(categorie: string): Observable<Product[]> {
-      return this.http.get<Product[]>(this.url + '/produit/list-by-category/' + categorie);
-    }
-    public getAllProducts(): Observable<Product[]>{
-      return this.http.get<Product[]>(this.url + '/produit/list');
-    }
-    public getProductById(id): Observable<Product>{
-        return this.http.get<Product>(this.url + '/produit/find/' + id );
-    }
-    public getProductByNewArrival(): Observable<Product>{
-      return this.http.get<Product>(this.url + '/produit/new-arrivals/');
-    }
-
-      public getProductByPromotion(): Observable<Product>{
-        return this.http.get<Product>(this.url + '/produit/promotions/');
-    }
-
-    public getProductByBest(): Observable<Product>{
-      return this.http.get<Product>(this.url + '/produit/best-produits/');
-    }
-
-
-    public getProductByTop(): Observable<Product>{
-      return this.http.get<Product>(this.url + '/produit/top-rates/');
-    }
-
-
-
-   public addContact(contact: Contact): Observable<Contact> {
-    return this.http.post<Contact>(this.url + '/contact/add', contact);
+   public addContact(contact: Contact): Observable<any> {
+    return this.apiService.post('/contact/add', contact);
    }
+
+  //  public addCategorie(categorie: Category): Observable<Category> {
+  //   return this.http.post<Category>(this.url + '/categorie/add', categorie);
+  //  }
+
+  // public addCategorie(categorie: Category): Observable<Category> {
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json'
+  //   });
+
+  //   return this.http.post<Category>(this.url + '/categorie/add', categorie, { headers: headers });
+  // }
+
+//   public addCategorie(categorie: Category, image: File): Observable<any> {
+//     const formData = new FormData();
+//     formData.append('nom', categorie.nom);
+//     formData.append('image', image);
+//     const headers = new HttpHeaders();
+//     return this.apiService.post('/categorie/add', formData, { headers: headers });
+// }
+
+// public addCategories(categorie: Category, image: File): Observable<any> {
+//   const formData = new FormData();
+//   formData.append('nom', categorie.nom);
+//   if (image) {
+//       formData.append('image', image);
+//   }
+//   const headers = new HttpHeaders();
+//   return this.http.post<any>(this.url + '/categorie/add', formData, { headers: headers });
+// }
+
+// public addCategory(formData: FormData): Observable<Category> {
+//   return this.http.post<Category>(this.url + '/categorie/add', formData);
+// }
+
+  // public addCategory(categorie: Category): Observable<Category> {
+  //   return this.http.post<Category>(this.url + '/categorie/add', categorie);
+  // }
+  public addCategory(categorie: Category, image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('nom', categorie.nom);
+    formData.append('image', image);
+
+    // const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+
+    return this.apiService.postFile(`/categorie/add`, formData, Headers);
+  }
+
+  // public updateCategory(id: number, nom: string): Observable<Category> {
+  //   const category = { id, nom };
+  //   return this.http.put<Category>(`${this.url}/categorie/update{id}`, category);
+  //  }
+  public updateCategory(id: string, nom: string, image: File): Observable<any> {
+    // Créer un objet FormData pour envoyer à l'API
+    const formData: FormData = new FormData();
+    // Ajouter les valeurs à l'objet FormData
+    formData.append('id', id.toString());
+    formData.append('nom', nom);
+    formData.append('image', image);
+
+    // Envoyer la requête PUT à l'API avec l'objet FormData
+    return this.apiService.putFile(`/categorie/update/${id}`, formData, Headers);
+  }
+
+public setStatus (id : string , status : string ) : Observable<any> {
+  const formData: FormData = new FormData();
+  formData.append ('status', status );
+
+return this.apiService.put(`/categorie/status/${id}`,formData) ;
+}
+
+  // public updateCategory(id: number, nom: string, image: File): Observable<Category> {
+  //   // Créer un objet FormData pour envoyer à l'API
+  //   const formData: FormData = new FormData();
+  //   // Ajouter les valeurs à l'objet FormData
+  //   formData.append('id', id.toString());
+  //   formData.append('nom', nom);
+  //   formData.append('image', image);
+
+  //   // Envoyer la requête PUT à l'API avec l'objet FormData
+  //   return this.http.put<Category>(`${this.url}/categorie/update/${id}`, formData);
+  // }
+
+  // public addProduit(produit: Product, images: File): Observable<Product> {
+  //   const formData = new FormData();
+  //   formData.append('nom', produit.nom);
+  //   formData.append('description', produit.description);
+  //   formData.append('priceBasic', produit.priceBasic);
+  //   formData.append('weight', produit.weight.toString() );
+  //   formData.append('pricePromotion', produit.pricePromotion);
+  //   formData.append('user', produit.user.toString());
+  //   formData.append('categorie', produit.categorie.toString());
+  //   formData.append('images', images);
+
+  //   const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+
+  //   return this.http.post<Product>(`${this.url}/produit/add`, formData, { headers });
+  // }
+  public addProduit(produit: Product, images: File): Observable<Product> {
+    const formData = new FormData();
+    formData.append('nom', produit.nom || ''); // Vérifier si produit.nom est null ou undefined
+    formData.append('description', produit.description || ''); // Vérifier si produit.description est null ou undefined
+    formData.append('priceBasic', (produit.priceBasic !== null && produit.priceBasic !== undefined) ? produit.priceBasic.toString() : ''); // Vérifier si produit.priceBasic est null ou undefined
+    formData.append('weight', (produit.weight !== null && produit.weight !== undefined) ? produit.weight.toString() : ''); // Vérifier si produit.weight est null ou undefined
+    formData.append('pricePromotion', (produit.pricePromotion !== null && produit.pricePromotion !== undefined) ? produit.pricePromotion.toString() : ''); // Vérifier si produit.pricePromotion est null ou undefined
+    formData.append('user', (produit.user !== null && produit.user !== undefined) ? produit.user.toString() : ''); // Vérifier si produit.user est null ou undefined
+    formData.append('categorie', (produit.categorie !== null && produit.categorie !== undefined) ? produit.categorie.toString() : ''); // Vérifier si produit.categorie est null ou undefined
+    formData.append('images', images);
+
+    const headers = new HttpHeaders();
+
+    return this.http.post<Product>(`${this.url}/produit/add`, formData, { headers });
+}
+
    public getBanners(): Observable<any[]>{
         return this.http.get<any[]>(this.url + 'banners.json');
     }
 
+    public supprimerCategorie(id: string): Observable<any> {
+      return  this.apiService.delete(`/categorie/supprimer/${id}`);
+    }
     public addToCompare(product:Product){
         let message, status;
         if(this.Data.compareList.filter(item=>item.id == product.id)[0]){

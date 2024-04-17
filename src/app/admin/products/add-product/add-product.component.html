@@ -6,42 +6,42 @@
         <mat-card-content class="pt-3">
             <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
                 <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
-                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 8 images)</span></p>
-                    <input-file formControlName="images" [fileLimit]="8" fileAccept="image/*"></input-file>
+                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 5 images)</span></p>
+                    <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
                     <div fxLayout="row wrap">
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Name</mat-label>
-                                <input matInput formControlName="name" required>
-                                <mat-error *ngIf="form.controls.name.errors?.required">Name is required</mat-error>
-                                <mat-error *ngIf="form.controls.name.hasError('minlength')">Name isn't long enough, minimum of 4 characters</mat-error>
+                                <mat-label>Nom</mat-label>
+                                <input matInput formControlName="nom" required>
+                                <mat-error *ngIf="form.controls.nom.errors?.required">Name is required</mat-error>
+                                <mat-error *ngIf="form.controls.nom.hasError('minlength')">Name isn't long enough, minimum of 4 characters</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Category</mat-label>
-                                <mat-select formControlName="categoryId" required>
+                                <mat-select formControlName="categorie" required>
                                     <mat-option *ngFor="let cat of categories" [value]="cat.id">
                                         <span>{{cat.nom}}</span>
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="form.controls.categoryId.errors?.required">Category is required</mat-error>
+                                <mat-error *ngIf="form.controls.categorie.errors?.required">Category is required</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Old Price</mat-label>
-                                <input matInput formControlName="oldPrice">
-                                <mat-error *ngIf="form.controls.oldPrice.errors?.required">Old Price is required</mat-error>
+                                <mat-label> priceBasic</mat-label>
+                                <input matInput formControlName="priceBasic">
+                                <mat-error *ngIf="form.controls.priceBasic.errors?.required">Old Price is required</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>New Price</mat-label>
-                                <input matInput formControlName="newPrice" required>
-                                <mat-error *ngIf="form.controls.newPrice.errors?.required">New Price is required</mat-error>
+                                <mat-label>pricePromotion</mat-label>
+                                <input matInput formControlName="pricePromotion" required>
+                                <mat-error *ngIf="form.controls.pricePromotion.errors?.required">New Price is required</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">

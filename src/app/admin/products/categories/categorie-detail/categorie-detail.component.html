@@ -1,0 +1,24 @@
+<div fxLayout="row wrap" class="p-2">
+  <div fxFlex="100" fxFlex.gt-md="45">
+      <mat-card class="product-image d-block">
+          <mat-chip-listbox *ngIf="cate?.discount">
+              <mat-chip-option color="warn" highlighted selectable="false">{{cate?.discount}}% OFF</mat-chip-option>
+          </mat-chip-listbox>
+          <img *ngIf="cate.image" [src]="cate.image" class="image-card" />
+      </mat-card>
+
+  </div>
+  <div fxFlex="100" fxFlex.gt-md="55" ngClass.gt-sm="px-4 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2">
+
+      <h2>Nom : {{cate?.nom}}</h2>
+      <div class="py-2 lh">
+          <p><span class="text-muted fw-500">Libelle : </span></p>
+      </div>
+
+      <p class="py-2 text-muted lh">{{cate?.description}}</p>
+
+      <div class="divider my-2"></div>
+
+
+  </div>
+</div>

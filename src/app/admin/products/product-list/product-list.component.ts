@@ -22,54 +22,55 @@ export class ProductListComponent implements OnInit {
       this.viewCol = 33.3;
     };
     this.getCategories();
-    this.getAllProducts(); 
+    this.getAllProducts();
   }
 
   public getAllProducts(){
-    this.appService.getProducts("featured").subscribe(data=>{
-      this.products = data; 
-      //for show more product  
+    this.appService.getAllProducts().subscribe(data=>{
+      this.products = data;
+
+      //for show more product
       for (var index = 0; index < 3; index++) {
-        this.products = this.products.concat(this.products);        
+        this.products = this.products.concat(this.products);
       }
     });
   }
 
   public onPageChanged(event){
-    this.page = event; 
-    this.domHandlerService.winScroll(0, 0); 
+    this.page = event;
+    this.domHandlerService.winScroll(0, 0);
   }
 
   @HostListener('window:resize')
-  public onWindowResize():void { 
+  public onWindowResize():void {
     (this.domHandlerService.window?.innerWidth < 1280) ? this.viewCol = 33.3 : this.viewCol = 25;
   }
- 
 
-  public remove(product:any){  
+
+  public remove(product:any){
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
         message: "Are you sure you want delete this product?"
       }
-    }); 
-    dialogRef.afterClosed().subscribe(dialogResult => { 
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
         const index: number = this.products.indexOf(product);
         if (index !== -1) {
-          this.products.splice(index, 1);  
-        } 
-      } 
-    }); 
+          this.products.splice(index, 1);
+        }
+      }
+    });
   }
 
-  public getCategories(){  
-    if(this.appService.Data.categories.length == 0) { 
-      this.appService.getCategories().subscribe(data => { 
+  public getCategories(){
+    if(this.appService.Data.categories.length == 0) {
+      this.appService.getCategories().subscribe(data => {
         this.appService.Data.categories = data;
       });
-    } 
+    }
   }
 
 }

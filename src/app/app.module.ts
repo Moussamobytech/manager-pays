@@ -31,7 +31,6 @@ import { CustomOverlayContainer } from './theme/utils/custom-overlay-container';
 import { MAT_MENU_SCROLL_STRATEGY } from '@angular/material/menu';
 import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 import { AppInterceptor } from './theme/utils/app-interceptor';
-import { FaqComponent } from './theme/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +43,6 @@ import { FaqComponent } from './theme/faq/faq.component';
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
-    // FaqComponent
   ],
   imports: [
     BrowserModule,
