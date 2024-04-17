@@ -76,16 +76,16 @@ export class AddProductComponent implements OnInit {
     const imageFile: File = this.form.get('images').value;
 
     // Vérifier si un fichier image a été sélectionné
-    if (imageFile) {
-        // Appeler la fonction addProduit avec l'objet produit et le fichier image
-        this.appService.addProduit(produit, imageFile).subscribe(() => {
-            alert("Le produit a été ajouté avec succès");
-            // this._router.navigate(['/products']);
-        }, err => alert('Erreur :' + err));
-    } else {
-        // Gérer le cas où aucun fichier image n'a été sélectionné
-        alert("Veuillez sélectionner une image pour le produit.");
-    }
+    // if (imageFile) {
+    //     // Appeler la fonction addProduit avec l'objet produit et le fichier image
+    //     this.appService.addProduit(produit, imageFile).subscribe(() => {
+    //         alert("Le produit a été ajouté avec succès");
+    //         // this._router.navigate(['/products']);
+    //     }, err => alert('Erreur :' + err));
+    // } else {
+    //     // Gérer le cas où aucun fichier image n'a été sélectionné
+    //     alert("Veuillez sélectionner une image pour le produit.");
+    // }
 }
 
 

@@ -76,43 +76,7 @@ export class AppService {
     return this.apiService.post('/contact/add', contact);
    }
 
-  //  public addCategorie(categorie: Category): Observable<Category> {
-  //   return this.http.post<Category>(this.url + '/categorie/add', categorie);
-  //  }
 
-  // public addCategorie(categorie: Category): Observable<Category> {
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json'
-  //   });
-
-  //   return this.http.post<Category>(this.url + '/categorie/add', categorie, { headers: headers });
-  // }
-
-//   public addCategorie(categorie: Category, image: File): Observable<any> {
-//     const formData = new FormData();
-//     formData.append('nom', categorie.nom);
-//     formData.append('image', image);
-//     const headers = new HttpHeaders();
-//     return this.apiService.post('/categorie/add', formData, { headers: headers });
-// }
-
-// public addCategories(categorie: Category, image: File): Observable<any> {
-//   const formData = new FormData();
-//   formData.append('nom', categorie.nom);
-//   if (image) {
-//       formData.append('image', image);
-//   }
-//   const headers = new HttpHeaders();
-//   return this.http.post<any>(this.url + '/categorie/add', formData, { headers: headers });
-// }
-
-// public addCategory(formData: FormData): Observable<Category> {
-//   return this.http.post<Category>(this.url + '/categorie/add', formData);
-// }
-
-  // public addCategory(categorie: Category): Observable<Category> {
-  //   return this.http.post<Category>(this.url + '/categorie/add', categorie);
-  // }
   public addCategory(categorie: Category, image: File): Observable<any> {
     const formData = new FormData();
     formData.append('nom', categorie.nom);
@@ -123,10 +87,7 @@ export class AppService {
     return this.apiService.postFile(`/categorie/add`, formData, Headers);
   }
 
-  // public updateCategory(id: number, nom: string): Observable<Category> {
-  //   const category = { id, nom };
-  //   return this.http.put<Category>(`${this.url}/categorie/update{id}`, category);
-  //  }
+
   public updateCategory(id: string, nom: string, image: File): Observable<any> {
     // Créer un objet FormData pour envoyer à l'API
     const formData: FormData = new FormData();
@@ -146,48 +107,22 @@ public setStatus (id : string , status : string ) : Observable<any> {
 return this.apiService.put(`/categorie/status/${id}`,formData) ;
 }
 
-  // public updateCategory(id: number, nom: string, image: File): Observable<Category> {
-  //   // Créer un objet FormData pour envoyer à l'API
-  //   const formData: FormData = new FormData();
-  //   // Ajouter les valeurs à l'objet FormData
-  //   formData.append('id', id.toString());
-  //   formData.append('nom', nom);
-  //   formData.append('image', image);
 
-  //   // Envoyer la requête PUT à l'API avec l'objet FormData
-  //   return this.http.put<Category>(`${this.url}/categorie/update/${id}`, formData);
-  // }
+//   public addProduit(produit: Product, images: File): Observable<Product> {
+//     const formData = new FormData();
+//     formData.append('nom', produit.nom || ''); // Vérifier si produit.nom est null ou undefined
+//     formData.append('description', produit.description || ''); // Vérifier si produit.description est null ou undefined
+//     formData.append('priceBasic', (produit.priceBasic !== null && produit.priceBasic !== undefined) ? produit.priceBasic.toString() : ''); // Vérifier si produit.priceBasic est null ou undefined
+//     formData.append('weight', (produit.weight !== null && produit.weight !== undefined) ? produit.weight.toString() : ''); // Vérifier si produit.weight est null ou undefined
+//     formData.append('pricePromotion', (produit.pricePromotion !== null && produit.pricePromotion !== undefined) ? produit.pricePromotion.toString() : ''); // Vérifier si produit.pricePromotion est null ou undefined
+//     formData.append('user', (produit.user !== null && produit.user !== undefined) ? produit.user.toString() : ''); // Vérifier si produit.user est null ou undefined
+//     formData.append('categorie', (produit.categorie !== null && produit.categorie !== undefined) ? produit.categorie.toString() : ''); // Vérifier si produit.categorie est null ou undefined
+//     formData.append('images', images);
 
-  // public addProduit(produit: Product, images: File): Observable<Product> {
-  //   const formData = new FormData();
-  //   formData.append('nom', produit.nom);
-  //   formData.append('description', produit.description);
-  //   formData.append('priceBasic', produit.priceBasic);
-  //   formData.append('weight', produit.weight.toString() );
-  //   formData.append('pricePromotion', produit.pricePromotion);
-  //   formData.append('user', produit.user.toString());
-  //   formData.append('categorie', produit.categorie.toString());
-  //   formData.append('images', images);
+//     const headers = new HttpHeaders();
 
-  //   const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
-
-  //   return this.http.post<Product>(`${this.url}/produit/add`, formData, { headers });
-  // }
-  public addProduit(produit: Product, images: File): Observable<Product> {
-    const formData = new FormData();
-    formData.append('nom', produit.nom || ''); // Vérifier si produit.nom est null ou undefined
-    formData.append('description', produit.description || ''); // Vérifier si produit.description est null ou undefined
-    formData.append('priceBasic', (produit.priceBasic !== null && produit.priceBasic !== undefined) ? produit.priceBasic.toString() : ''); // Vérifier si produit.priceBasic est null ou undefined
-    formData.append('weight', (produit.weight !== null && produit.weight !== undefined) ? produit.weight.toString() : ''); // Vérifier si produit.weight est null ou undefined
-    formData.append('pricePromotion', (produit.pricePromotion !== null && produit.pricePromotion !== undefined) ? produit.pricePromotion.toString() : ''); // Vérifier si produit.pricePromotion est null ou undefined
-    formData.append('user', (produit.user !== null && produit.user !== undefined) ? produit.user.toString() : ''); // Vérifier si produit.user est null ou undefined
-    formData.append('categorie', (produit.categorie !== null && produit.categorie !== undefined) ? produit.categorie.toString() : ''); // Vérifier si produit.categorie est null ou undefined
-    formData.append('images', images);
-
-    const headers = new HttpHeaders();
-
-    return this.http.post<Product>(`${this.url}/produit/add`, formData, { headers });
-}
+//     return this.http.post<Product>(`${this.url}/produit/add`, formData, { headers });
+// }
 
    public getBanners(): Observable<any[]>{
         return this.http.get<any[]>(this.url + 'banners.json');
