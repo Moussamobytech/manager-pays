@@ -18,13 +18,10 @@ export class SignInComponent implements OnInit {
   toSubmit: boolean = false;
   loading: boolean = false;
 
-<<<<<<< HEAD
-=======
   countries : any[] = [{id : "mali", nom: "Mali"}, {id:"civ", nom:"Côte d'ivoire"}];
   mask = '00 00 00 00'
   maskPlaceholder = 'XX XX XX XX'
 
->>>>>>> develop
   constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder, 
     public router:Router, public snackBar: MatSnackBar) { }
 
@@ -36,19 +33,6 @@ export class SignInComponent implements OnInit {
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])] 
     });
 
-<<<<<<< HEAD
-    this.registerForm = this.formBuilder.group({
-      'firstname': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      'lastname': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      'username': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      'email': ['', Validators.compose([Validators.required, emailValidator])],
-      'addresse': [''],
-      'password': ['', Validators.required],
-      'confirmPassword': ['', Validators.required]
-
-      
-    },{validator: matchingPasswords('password', 'confirmPassword')});
-=======
 
   }
 
@@ -63,19 +47,11 @@ export class SignInComponent implements OnInit {
     if ($event.value == 'civ') {
       this.maskPlaceholder = 'XX XX XX XXXX'
     }
->>>>>>> develop
 
   }
 
   public onLoginFormSubmit(values:Object):void {
     console.log("values ::::::: ",values)
-<<<<<<< HEAD
-    console.log("values ::::::: ",values["email"])
-    console.log("values ::::::: ",values["password"])
-    if (values["email"] != '' && values["password"] != '') {
-      // this.loading = true;
-      this.authenticationService.login(this.formValues.email?.value, this.formValues.password?.value)
-=======
     console.log("values ::::::: ",values["phone"])
     console.log("values ::::::: ",values["password"])
     if (values["phone"] != '' && values["password"] != '') {
@@ -84,7 +60,6 @@ export class SignInComponent implements OnInit {
       let pwd = this.formValues.password?.value
       // this.formValues.phone.setValue( ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'] )
       this.authenticationService.login(phone, pwd)
->>>>>>> develop
         .subscribe(
           async (data: any) => {
             console.log("data ::::::: ",data)
@@ -93,10 +68,7 @@ export class SignInComponent implements OnInit {
             console.log("userInfo ::::::: ",userInfo)
             if (userInfo == null) {
               this.snackBar.open('Impossible de récuperer les informations du client, merci de réessayer à nouveau', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-<<<<<<< HEAD
-=======
               return;
->>>>>>> develop
             }
             this.router.navigate(["/account/dashboard"]);
           },
@@ -124,11 +96,7 @@ export class SignInComponent implements OnInit {
     this.formSubmitted = true;
     if (this.loginForm.valid) {
       this.loading = true;
-<<<<<<< HEAD
-      this.authenticationService.login(this.formValues.email?.value, this.formValues.password?.value)
-=======
       this.authenticationService.login(this.formValues.phone?.value, this.formValues.password?.value)
->>>>>>> develop
         .subscribe(
           (data: any) => {
             console.log("data ::::::: ",data)
@@ -144,11 +112,7 @@ export class SignInComponent implements OnInit {
   reset($event : Event){
     console.log("resetting process ::::::::");
     
-<<<<<<< HEAD
-    this.formValues.email.setValue("")
-=======
     this.formValues.phone.setValue("")
->>>>>>> develop
     this.formValues.password.setValue("")
     this.toSubmit = false;
   }
