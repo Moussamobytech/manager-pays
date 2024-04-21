@@ -24,7 +24,7 @@ export class ProductListComponent implements OnInit {
       this.viewCol = 33.3;
     };
     this.getCategories();
-    this.getAllProducts(); 
+    this.getAllProducts();
   }
 
   public async getAllProducts(){
@@ -41,32 +41,32 @@ export class ProductListComponent implements OnInit {
   }
 
   public onPageChanged(event){
-    this.page = event; 
-    this.domHandlerService.winScroll(0, 0); 
+    this.page = event;
+    this.domHandlerService.winScroll(0, 0);
   }
 
   @HostListener('window:resize')
-  public onWindowResize():void { 
+  public onWindowResize():void {
     (this.domHandlerService.window?.innerWidth < 1280) ? this.viewCol = 33.3 : this.viewCol = 25;
   }
- 
 
-  public remove(product:any){  
+
+  public remove(product:any){
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
         message: "Are you sure you want delete this product?"
       }
-    }); 
-    dialogRef.afterClosed().subscribe(dialogResult => { 
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
         const index: number = this.products.indexOf(product);
         if (index !== -1) {
-          this.products.splice(index, 1);  
-        } 
-      } 
-    }); 
+          this.products.splice(index, 1);
+        }
+      }
+    });
   }
 
   
@@ -76,7 +76,7 @@ export class ProductListComponent implements OnInit {
       this.appService.getCategories().subscribe(data => { 
         this.appService.Data.categories = data;
       });
-    } 
+    }
   }
 
   

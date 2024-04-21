@@ -1,0 +1,53 @@
+<div class="p-2">
+  <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h2>Withdrawal Requests</h2>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mat-mdc-table admin-table">
+          <div class="mat-mdc-header-row">
+              <div class="mat-mdc-header-cell">Libelle</div>
+              <div class="mat-mdc-header-cell">Type</div>
+              <div class="mat-mdc-header-cell">Username</div>
+              <div class="mat-mdc-header-cell">Date Debut</div>
+              <div class="mat-mdc-header-cell">Date Fin</div>
+              <div class="mat-mdc-header-cell"></div>
+          </div>
+          <div *ngFor="let item of campagne | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+              <div class="mat-mdc-cell">{{item.libelle}}</div>
+              <!-- <div class="mat-mdc-cell">
+                  <span class="primary-text" *ngFor="let order of item.orderIds; let last=last">{{order}}<span *ngIf="!last">, </span></span>
+              </div> -->
+              <div class="mat-mdc-cell">{{item.type }}</div>
+              <div class="mat-mdc-cell">{{item.username}}</div>
+              <div class="mat-mdc-cell">{{item.dateDebut | date:"dd MMMM, yyyy 'at' HH:mm"}}</div>
+              <div class="mat-mdc-cell">{{item.dateFin | date:"dd MMMM, yyyy 'at' HH:mm"}}</div>
+              <!-- <div class="mat-mdc-cell">{{item.date | date:"dd MMMM, yyyy 'at' HH:mm"}}</div> -->
+              <div class="mat-mdc-cell">
+                <div class="p-2 actions">
+                    <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openCampagneDialog(item)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                  <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(item)">
+                      <mat-icon>delete</mat-icon>
+                  </button>
+                  <a [routerLink]="['/admin/campagne/campagne-detail', item.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+
+                  <!-- <button mat-mini-fab color="warn" matTooltip="Deactivate" class="mx-1"  (click)="setStatus(cat.id, 'inactif')" >
+                    <mat-icon>{{ cat.status === 'inactif' ? 'check_circle' : 'block' }}</mat-icon>
+                </button> -->
+
+              </div>
+          </div>
+          </div>
+      </div>
+  </mat-card>
+
+  <!-- <div *ngIf="withdrawal.length > 0" fxLayout="row wrap">
+      <div fxFlex="100">
+          <mat-card class="text-center">
+              <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+          </mat-card>
+      </div>
+  </div> -->
+</div>

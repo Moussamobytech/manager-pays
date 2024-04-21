@@ -17,7 +17,7 @@ import { User } from 'src/app/models/user.models';
 export class AddProductComponent implements OnInit {
   public form: UntypedFormGroup;
   public colors = ["#5C6BC0","#66BB6A","#EF5350","#BA68C8","#FF4081","#9575CD","#90CAF9","#B2DFDB","#DCE775","#FFD740","#00E676","#FBC02D","#FF7043","#F5F5F5","#696969"];
-  public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""]; 
+  public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""];
   public selectedColors:string;
   public categories:Category[];
   public users:User[];
@@ -52,9 +52,9 @@ export class AddProductComponent implements OnInit {
     this.sub = this.activatedRoute.params.subscribe(params => {  
       if(params['id']){
         this.id = params['id'];
-        this.getProductById(); 
-      }  
-    }); 
+        this.getProductById();
+      }
+    });
   }
   
 
@@ -73,6 +73,7 @@ export class AddProductComponent implements OnInit {
       this.form.controls.images.setValue(images); 
     })
   }
+  
 
   
 
@@ -185,14 +186,20 @@ export class AddProductComponent implements OnInit {
 
   }
 
-  public onColorSelectionChange(event:any){  
+
+
+
+
+
+
+  public onColorSelectionChange(event:any){
     if(event.value){
       this.selectedColors = event.value.join();
-    } 
-  }  
+    }
+  }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  } 
+  }
 
 }

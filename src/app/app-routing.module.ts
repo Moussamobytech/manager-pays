@@ -20,7 +20,8 @@ const routes: Routes = [
           { path: 'sign-up', loadChildren: () => import('./pages/sign-up/sign-up.module').then(m => m.SignUpModule), data: { breadcrumb: 'S\'inscrire ' } },
           { path: 'brands', loadChildren: () => import('./pages/brands/brands.module').then(m => m.BrandsModule), data: { breadcrumb: 'Brands' } },
           { path: 'products', loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule), data: { breadcrumb: 'All Products' } },
-          { path: 'faq', loadChildren: () => import('./theme/faq/faq.module').then(m => m.FaqModule), data: { breadcrumb: 'FAQ' } }
+          { path: 'faq', loadChildren: () => import('./theme/faq/faq.module').then(m => m.FaqModule), data: { breadcrumb: 'FAQ' } },
+
       ]
   },
   { path: 'landing', loadChildren: () => import('./landing/landing.module').then(m => m.LandingModule) },
@@ -35,7 +36,8 @@ const routes: Routes = [
       },
     ]
   },
-  { path: 'sign-in', loadChildren: () => import('./pages/session/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Sign In ' } },,
+  { path: 'sign-in', loadChildren: () => import('./pages/session/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Sign In ' } },
+  { path: 'campagne', loadChildren: () => import('./admin/campagne/campagne.module').then(m => m.CampagneModule)},
   { path: '**', component: NotFoundComponent }
 ];
 
