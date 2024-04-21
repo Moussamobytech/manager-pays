@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Campagne, Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
-import { ApiService } from './service/api.service';
+import { ApiService } from './services/api.service';
 
 export class Data {
     constructor(public categories: Category[],
