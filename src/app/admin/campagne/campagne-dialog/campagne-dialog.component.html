@@ -1,0 +1,77 @@
+<h1 mat-dialog-title>{{ isUpdateMode ? 'Modifier la campagne' : 'Ajouter une campagne' }}</h1>
+
+<!-- Affichage du message de succès -->
+
+
+<!-- Formulaire -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div mat-dialog-content>
+        <div fxLayout="row wrap">
+            <!-- Champ caché pour l'ID de la catégorie -->
+            <input type="hidden" formControlName="id">
+
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Libelle</mat-label>
+                <input matInput formControlName="libelle" required>
+                <mat-error *ngIf="form.get('libelle').hasError('required')">Libelle est obligatoire</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Username</mat-label>
+              <input matInput formControlName="username" required>
+              <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Type</mat-label>
+            <input matInput formControlName="type" required>
+            <mat-error *ngIf="form.get('type').hasError('required')">Type est obligatoire</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Date debut</mat-label>
+          <input matInput formControlName="dateDebut" required>
+          <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date debut est obligatoire</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Date fin</mat-label>
+        <input matInput formControlName="dateFin" required>
+        <mat-error *ngIf="form.get('dateFin').hasError('required')">Date fin est obligatoire</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Produit</mat-label>
+      <input matInput formControlName="dateDebut" required>
+      <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date debut est obligatoire</mat-error>
+  </mat-form-field>
+
+
+  <div fxFlex="100">
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Produit</mat-label>
+        <mat-select formControlName="parentId">
+            <mat-option *ngFor="let produit of products" [value]="produit.id">
+                <span>{{produit.nom}}</span>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+            <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
+              <p>{{ isUpdateMode ? 'Campagne modifiée avec succès' : 'Campagne ajoutée avec succès' }}</p>
+          </mat-dialog-content>
+            <div class="py-1">
+                <mat-label>Image</mat-label>
+                <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
+                <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+            </div>
+        </div>
+    </div>
+
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
+            <button mat-raised-button color="primary" type="submit">{{ isUpdateMode ? 'Modifier' : 'Ajouter' }}</button>
+        </div>
+    </div>
+</form>
+

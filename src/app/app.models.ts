@@ -51,13 +51,26 @@ export class  User {
 
 
 export class  Contact {
-  constructor (public name: string,
+  constructor (
+    public id: string,
+             public name: string,
                public email: string,
                public phoneNumber: number,
                public message : string,
                ) {}
+}
 
 
 
-
+export class  Campagne {
+  constructor (
+    public id: string,
+    public libelle: string,
+               public username: string,
+               public type: string,
+               public dateDebut : Date,
+               public dateFin : Date,
+               public produit : Product,
+               public image : File,
+               ) {}
 }

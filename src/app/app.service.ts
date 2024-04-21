@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Category, Contact, Product } from './app.models';
+import { Campagne, Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
 import { ApiService } from './service/api.service';
 
@@ -71,6 +71,11 @@ export class AppService {
     }
 
 
+    public getCampagne(): Observable<any>{
+      return this.apiService.get('/campagne/liste');
+
+  }
+
 
    public addContact(contact: Contact): Observable<any> {
     return this.apiService.post('/contact/add', contact);
@@ -87,6 +92,21 @@ export class AppService {
     return this.apiService.postFile(`/categorie/add`, formData, Headers);
   }
 
+  public addCampagne(campagne: Campagne, image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('libelle', campagne.libelle);
+    formData.append('username', campagne.username);
+    formData.append('type', campagne.type);
+    formData.append('dateDebut', campagne.dateDebut.toISOString());
+    formData.append('dateFin', campagne.dateFin.toISOString());
+    formData.append('produit', campagne.produit.nom);
+    formData.append('image', image);
+
+    // const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+
+    return this.apiService.postFile(`/camapgne/add`, formData, Headers);
+  }
+
 
   public updateCategory(id: string, nom: string, image: File): Observable<any> {
     // Créer un objet FormData pour envoyer à l'API
@@ -98,6 +118,22 @@ export class AppService {
 
     // Envoyer la requête PUT à l'API avec l'objet FormData
     return this.apiService.putFile(`/categorie/update/${id}`, formData, Headers);
+  }
+
+  public updateCampagne(id: string, libelle: string, username: string, type:string, dateDebut: Date, dateFin: Date, produit:Product, image: File): Observable<any> {
+    // Créer un objet FormData pour envoyer à l'API
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('libelle', libelle);
+    formData.append('username', username);
+    formData.append('type', type);
+    formData.append('dateDebut', dateDebut.toISOString());
+    formData.append('dateFin', dateFin.toISOString());
+    formData.append('produit', produit.nom);
+    formData.append('image', image);
+
+    // Envoyer la requête PUT à l'API avec l'objet FormData
+    return this.apiService.putFile(`/campagne/update/${id}`, formData, Headers);
   }
 
 public setStatus (id : string , status : string ) : Observable<any> {
