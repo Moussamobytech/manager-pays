@@ -1,15 +1,26 @@
 {  
   "WELCOME": "Bienvenue sur notre marché!",  
   "LOGIN": "S'identifier", 
+  "LOGIN_IN": "Connectez vous", 
   "LOGOUT": "Se déconnecter",
   "REGISTER": "S'inscrire", 
+  "REGISTER_IN": "S'inscrire maintenant!", 
   "ACCOUNT": "Compte", 
+  "NO_ACCOUNT": "Vous n'avez pas de compte ?", 
   "COMPARE": "Comparer",
   "WISHLIST": "Liste de souhaits",
+  "CHOOSE": "Choissisez le type de profil",
+  "RECHOOSE": "Choissisez à nouveau le profil",
+  "FORM_SIGNUP": "Formulaire d'inscription",
+  "STORE": "Boutique",
+  "PARTICULAR": "Particulier",
+  "ACCOUNT_INFO": "Information sur le compte",
+  "STATS": "Statistiques",
   "NAV": {  
     "HOME": "Accueil",  
     "PAGES": "Des pages",  
     "SHOP": "Boutique",
+    "SETTING": "Paramètres",
     "ALL_PRODUCTS": "Tous les produits",
     "PRODUCT_DETAIL": "Détail du produit",
     "CART": "Chariot",
@@ -49,6 +60,7 @@
   },
   "BTN": {
     "ADD": "Ajouter",
+    "EDIT": "Modifier",
     "SAVE": "Sauvegarder",
     "SUBMIT": "Soumettre",
     "CANCEL": "Annuler",
@@ -63,7 +75,17 @@
     "FILE_SIZE": "La taille du fichier ne peut pas dépasser {{param}} ko."
   },
   "FIELD": { 
-    "NAME": "Nom" 
+    "USERNAME": "Nom d'utilisateur", 
+    "FIRSTNAME": "Prénom", 
+    "LASTNAME": "Nom", 
+    "PASSWORD": "Mot de passe", 
+    "PASSWORD_CONFIRM": "Confirmer mot de passe", 
+    "EMAIL": "Email", 
+    "CONTACT": "Numéro de contact", 
+    "ADD": "Adresse", 
+    "RCCM": "RCCM", 
+    "COUNTRY": "Pays", 
+    "STATE": "Ville" 
   },
   "PAGINATION":{
     "ITEMS_PER_PAGE": "Objets par page:",
@@ -71,5 +93,29 @@
     "PREV_PAGE": "Page précédente",
     "FIRST_PAGE": "Première page",
     "LAST_PAGE": "Dernière page"
+  },
+  "PRODUCTS": {  
+    "LIST": "Liste",
+    "LAST": "Derniers produits",
+    "LIBELLE": "Libelle",  
+    "PRICE": "Prix", 
+    "PRICE_PROMOTION": "Prix promotion", 
+    "DESC": "Description", 
+    "IMAGE": "Image",
+    "STATE": "Etat",
+    "WEIGHT": "Priorisation",
+    "START": "Date de début",
+    "END": "Date de fin",
+    "USER": "Vendeur",
+    "CATEGORY": "Categorie",
+    "CREATED": "Date de création",
+    "ENDED": "Date de fin"
+
+  },
+
+  "ERROR":{
+    "USERNAME_REQUIRED":"Le nom d'utilisateur est obligatoire",
+    "PASSWORD_REQUIRED":"Le mot de passe est obligatoire",
+    "PASSWORD_LENGTH":"Le mot de passe n'est pas assez long, minimum 6 caractères"
   }
 }

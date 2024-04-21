@@ -68,6 +68,7 @@ export class ProductsComponent implements OnInit {
   Allcategories:any;
   selectedCategoryId: any;
 
+
   categoryId: string;
 
   constructor(public appSettings:AppSettings,
@@ -96,6 +97,8 @@ export class ProductsComponent implements OnInit {
     // this.getBrands();
     this.getProductsByCetegorie(this.selectedCategoryId);
     this.getCategorie();
+
+
   }
 
   public getProductsByCetegorie(categoryId: string){
@@ -113,13 +116,11 @@ export class ProductsComponent implements OnInit {
       this.appService.getCategories().subscribe(data => {
         this.categories = data;
         this.appService.Data.categories = data;
-        console.log("Les 11111 categories "+JSON.stringify(this.categories))
 
       });
     }
     else{
       this.categories = this.appService.Data.categories;
-      console.log("Les 2222222222222 categories "+JSON.stringify(this.categories))
 
 
     }
@@ -138,8 +139,6 @@ export class ProductsComponent implements OnInit {
   public getCategorie(){
     this.appService.getCategories().subscribe(data =>{
       this.Allcategories = data;
-      console.log("Les categories "+JSON.stringify(this.Allcategories))
-      console.log("Les categories id "+this.Allcategories[0].id)
     })
   }
 
@@ -210,7 +209,6 @@ export class ProductsComponent implements OnInit {
     this.selectedCategoryId = categoryId;
     this.getProductsByCetegorie(categoryId); // Vérifiez cette ligne pour vous assurer que categoryId est correctement passé
 
-    console.log("Logggggggg  ", categoryId);
 
     // Recherche du texte de la catégorie en fonction de son ID
     const selectedCategory = this.Allcategories.find(category => category.id === categoryId);

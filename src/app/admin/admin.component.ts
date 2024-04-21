@@ -28,7 +28,8 @@ export class AdminComponent implements OnInit {
       this.settings.adminSidenavIsPinned = false;
     }; 
     setTimeout(() => {
-      this.settings.theme = 'blue'; 
+      this.settings.theme = 'purple'; 
+      // this.settings.theme = 'blue'; 
     });
     this.menuItems = this.menuService.getMenuItems();    
   }

@@ -37,31 +37,35 @@
 
         <h2>{{product?.nom}}</h2>
         <div class="py-1 lh">
-            <p><span class="text-muted fw-500">Categoriess:  </span> <span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
-            <p><span class="text-muted fw-500">Availibility: </span><span>{{ (product?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p>
+            <p><span class="text-muted fw-500">Categorie :  </span> <span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
+            <!-- <p><span class="text-muted fw-500">Availibility: </span><span>{{ (product?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p> -->
         </div>
-        <div class="py-3">
+        <!-- <div class="py-3">
             <app-rating [ratingsCount]="product?.ratingsCount" [rate]="product?.rate" [direction]="'row'"></app-rating>
-        </div>
-        <p class="py-1 text-muted lh">Prix : {{product?.priceBasic}} FCFA</p>
-        <!-- <p class="py-1 text-muted lh">Quantite disponible : {{product?.quantite}}</p> -->
-        <p class="py-1 text-muted lh">{{product?.description}}</p>
+        </div> -->
+        <p class="py-1 text-muted lh" [ngClass]="{'old-price': product?.pricePromotion}">
+          Prix : {{product?.priceBasic}} FCFA
+      </p>
+      <p class="new-price" *ngIf="product?.pricePromotion">
+          Prix promo : {{product?.pricePromotion}} FCFA
+      </p>
+      <p class="py-1 text-muted lh">{{product?.description }}</p>
+
         <div class="divider mt-1"></div>
         <div class="py-2">
           <h2>Contacter le vendeur</h2>
-          <div class="contact-icons">
+          <!-- <div class="contact-icons">
             <div class="contact-icon">
-                <a [href]="'tel:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix"><i class="fas fa-phone fa-lg"></i>    {{product?.contact}}</a>
-                <!-- <p>{{product?.contact}}</p> -->
+                <a [href]="'tel:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix"> <i class="fas fa-phone-volume"></i>  {{product?.contact}}</a>
             </div>
               <div class="contact-icon">
                   <a *ngIf="product?.contact" href="https://wa.me/{{product?.contact}}" target="_blank" class="ml-2"><i class="fab fa-whatsapp fa-lg"></i>     WhatsApp</a>
               </div>
 
               <div class="contact-icon">
-                  <a [href]="'sms:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix"><i class="fas fa-sms fa-lg"></i>     SMS</a>
+                  <a [href]="'sms:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix"><i class="fas fa-sms fa-lg"></i>  SMS</a>
               </div>
-          </div>
+          </div> -->
       </div>
 
 

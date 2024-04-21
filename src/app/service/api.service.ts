@@ -56,7 +56,7 @@ export class ApiService {
 
   addCommonHeaders(headers: HttpHeaders) {
     // headers = headers.set('Accept-Charset', 'utf-8');
-    console.log('user ::::::: ', this.user);
+    // console.log('user ::::::: ', this.user);
     headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('__username__', this.user?.username || '');
     headers = headers.set('__agent__', window.navigator.userAgent);

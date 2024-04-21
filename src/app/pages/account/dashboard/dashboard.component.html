@@ -1,17 +1,17 @@
-<p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
-   À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p>
+<!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
+   À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
 
 <div fxLayout="row wrap" class="flex-wrapper">
     <div fxFlex="50" fxFlex.sm="50" fxFlex.xs="100" class="col">
         <mat-card>
           <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>Account Information</h3></mat-card-title>
+              <mat-card-title class="m-0"><h3>{{'ACCOUNT_INFO' | translate}}</h3></mat-card-title>
               <a mat-icon-button routerLink="/account/information"><mat-icon class="text-muted">edit</mat-icon></a>
           </mat-card-header>
           <div class="divider"></div>
           <mat-card-content class="pb-5 text-muted account-card-content">
               <p>Nom complet : <b>{{currentUser.firstname + " "+ currentUser.lastname}}</b></p>
-              <p>Email : <b>{{currentUser.email}}</b></p>
+              <p>Email : <b>{{currentUser.email || 'N/A'}}</b></p>
               <p>Numéro de contact :  <b>{{currentUser.phoneNumber}}</b></p>
               <p>Adresse :  <b>{{currentUser.adresse || 'N/A'}}</b></p>
               <p>Date de création : <b>{{currentUser.createdAt | date}}</b></p>
@@ -23,7 +23,7 @@
     <div fxFlex="50" fxFlex.sm="50" fxFlex.xs="100" class="col">
         <mat-card>
           <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>Statistiques</h3></mat-card-title>
+              <mat-card-title class="m-0"><h3>{{'STATS' | translate}}</h3></mat-card-title>
               <a mat-icon-button routerLink="/account/addresses"><mat-icon class="text-muted">edit</mat-icon></a>
           </mat-card-header>
           <div class="divider"></div>

@@ -12,13 +12,22 @@
     </div>
     <div fxFlex="100" fxFlex.gt-md="25" fxFlex.gt-xs="50">
         <mat-card class="light-block p-3" fxLayout="row"  fxLayoutAlign="start center">
-            <mat-icon class="mat-icon-xlg text-muted m-0">expédition_locale</mat-icon>
+            <mat-icon class="mat-icon-xlg text-muted m-0">card_giftcard</mat-icon>
+            <div class="content">
+                <p>BONUS PLUS</p>
+                <span class="text-muted m-0">Make fun of shopping and collect bonuses</span>
+            </div>
+        </mat-card>
+    </div>
+    <!-- <div fxFlex="100" fxFlex.gt-md="25" fxFlex.gt-xs="50">
+        <mat-card class="light-block p-3" fxLayout="row"  fxLayoutAlign="start center">
+            <mat-icon class="mat-icon-xlg text-muted m-0">expedition_locale</mat-icon>
             <div class="content">
                 <p>FREE </p>
                 <span class="text-muted m-0">Free shipping on all orders over $99</span>
             </div>
         </mat-card>
-    </div>
+    </div> -->
     <div fxFlex="100" fxFlex.gt-md="25" fxFlex.gt-xs="50">
         <mat-card class="light-block p-3" fxLayout="row"  fxLayoutAlign="start center">
             <mat-icon class="mat-icon-xlg text-muted m-0">monetization_on</mat-icon>
@@ -46,7 +55,7 @@
     <mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
 
 
-      <mat-tab label="Tous">
+      <mat-tab label="{{'Tous' | translate}}">
         <app-products-carousel [products]="produit"></app-products-carousel>
        </mat-tab>
 
@@ -55,19 +64,17 @@
         </mat-tab> -->
 
         <mat-tab label="Les meilleurs produits">
-            <app-products-carousel [products]="produit"></app-products-carousel>
+            <app-products-carousel [products]="best"></app-products-carousel>
          </mat-tab>
          <mat-tab label="En promotion">
-            <app-products-carousel [products]="produit"></app-products-carousel>
+            <app-products-carousel [products]="promotion"></app-products-carousel>
          </mat-tab>
          <mat-tab label="Les plus visités">
-             <app-products-carousel [products]="produit"></app-products-carousel>
+             <app-products-carousel [products]="topRate"></app-products-carousel>
          </mat-tab>
          <mat-tab label="Nouvelle arrivés">
-             <app-products-carousel [products]="produit"></app-products-carousel>
+             <app-products-carousel [products]="newArrivals"></app-products-carousel>
          </mat-tab>
-
-
 
     </mat-tab-group>
 
