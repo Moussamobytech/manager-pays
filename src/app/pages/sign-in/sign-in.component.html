@@ -2,19 +2,26 @@
     <div fxLayout="row wrap">
         
         <div fxFlex="100" fxFlex.gt-sm="50" class="p-3">
-            <h2 class="text-muted text-center mb-3">Connectez vous</h2>
+            <h2 class="text-muted text-center mb-3">{{'LOGIN_IN' | translate}}</h2>
             <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit(loginForm.value)">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'FIELD.COUNTRY' | translate}}</mat-label>
+                    <mat-select formControlName="country" (selectionChange)="handleChange($event)" required>
+                        <mat-option *ngFor="let country of countries" [value]="country.id">
+                            <span>{{country.nom}}</span>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100 mt-2">
-                    <mat-label>Nom d'utilisateur</mat-label>
-                    <input matInput placeholder="Nom d'utilisateur" formControlName="email" required>
-                    <mat-error *ngIf="loginForm.controls.email.errors?.required">Le nom d'utilisateur est obligatoire</mat-error>
-                    <mat-error *ngIf="loginForm.controls.email.hasError('invalidEmail')">Invalid email address</mat-error>
+                    <mat-label>{{'FIELD.USERNAME' | translate}} ({{maskPlaceholder}})</mat-label>
+                    <input matInput [placeholder]="maskPlaceholder" formControlName="phone" [mask]="mask" required>
+                    <mat-error *ngIf="loginForm.controls.phone.errors?.required">{{'ERROR.USERNAME_REQUIRED' | translate}}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100 mt-1">
-                    <mat-label>Mot de passe</mat-label>
+                    <mat-label>{{'FIELD.PASSWORD' | translate}}</mat-label>
                     <input matInput placeholder="Mot de passe" formControlName="password" required>
-                    <mat-error *ngIf="loginForm.controls.password.errors?.required">Le Mot de passe est obligatoire</mat-error>
-                    <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">Le mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
+                    <mat-error *ngIf="loginForm.controls.password.errors?.required">{{'ERROR.PASSWORD_REQUIRED' | translate}}</mat-error>
+                    <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">{{'ERROR.PASSWORD_LENGTH' | translate}}</mat-error>
                 </mat-form-field> 
                 <div class="text-center mt-2">
                     <button mat-fab color="primary" class="mat-elevation-z6">
@@ -24,7 +31,7 @@
 
                 <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-3">
                     <div class="divider w-100"></div>
-                    <h3 class="text-muted auth">Vous n'avez pas de compte ? <a routerLink="/sign-up"> S'inscrire maintenant!</a></h3>
+                    <h3 class="text-muted auth">{{'NO_ACCOUNT'  | translate}} <a routerLink="/sign-up">{{'REGISTER_IN'  | translate}}</a></h3>
                     <div class="divider w-100"></div>
                 </div>               
                 

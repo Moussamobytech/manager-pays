@@ -1,9 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { AppService } from 'src/app/app.service';
-import { Product } from 'src/app/app.models';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { ProductService } from 'src/app/service/product.service';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-product-list',
@@ -15,7 +16,8 @@ export class ProductListComponent implements OnInit {
   public viewCol: number = 25;
   public page: any;
   public count = 12;
-  constructor(public appService:AppService, public dialog: MatDialog, public domHandlerService: DomHandlerService) { }
+  constructor(public appService:AppService, public dialog: MatDialog, public produitService: ProductService,
+    public domHandlerService: DomHandlerService) { }
 
   ngOnInit(): void {
     if(this.domHandlerService.window?.innerWidth < 1280){
@@ -25,14 +27,17 @@ export class ProductListComponent implements OnInit {
     this.getAllProducts(); 
   }
 
-  public getAllProducts(){
-    this.appService.getProducts("featured").subscribe(data=>{
-      this.products = data; 
-      //for show more product  
-      for (var index = 0; index < 3; index++) {
-        this.products = this.products.concat(this.products);        
-      }
-    });
+  public async getAllProducts(){
+    let res : Array<Product> = await this.produitService.products()
+    console.log("res product :::::::: ",res)
+    this.products = res
+    // this.appService.getProducts("featured").subscribe(data=>{
+    //   this.products = data; 
+    //   //for show more product  
+    //   for (var index = 0; index < 3; index++) {
+    //     this.products = this.products.concat(this.products);        
+    //   }
+    // });
   }
 
   public onPageChanged(event){
@@ -64,6 +69,8 @@ export class ProductListComponent implements OnInit {
     }); 
   }
 
+  
+
   public getCategories(){  
     if(this.appService.Data.categories.length == 0) { 
       this.appService.getCategories().subscribe(data => { 
@@ -72,4 +79,30 @@ export class ProductListComponent implements OnInit {
     } 
   }
 
+  
+  // public edit(id){
+  //   this.router.navigate(["/account/add-product/"+id])
+  // }  
+
+  public etat(key){
+    let res = ""
+    switch (key) {
+      case "ACTIF":
+        res = "Actif"
+        break;
+      
+      case "INACTIF":
+        res = "Inactif"
+        break;
+    
+      case "PENDING":
+        res = "En attente de validation"
+        break;
+    
+      default:
+        res = "N/A"
+        break;
+    }
+    return res
+  }
 }

@@ -56,6 +56,11 @@ export class AuthenticationService {
         
     }
 
+    list() {
+        return this.api.get(`/users/list`).toPromise();
+    }
+    
+
     /**
      * Performs the login auth
      * @param username username of user

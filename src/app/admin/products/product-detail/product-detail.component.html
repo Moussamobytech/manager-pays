@@ -10,9 +10,9 @@
         <div class="small-carousel">
             <div class="swiper-container" [swiper]="config">
                 <div class="swiper-wrapper">
-                    <div *ngFor="let image of product?.image1" class="swiper-slide">
+                    <div *ngFor="let image of product?.images" class="swiper-slide">
                         <mat-card (click)="selectImage(image)" class="p-2">
-                            <img [attr.data-src]="image.small" class="swiper-lazy"/>
+                            <img [attr.data-src]="image" class="swiper-lazy"/>
                             <div class="swiper-lazy-preloader"></div>
                         </mat-card>
                     </div>
@@ -30,21 +30,22 @@
 
         <h2>{{product?.nom}}</h2>
         <div class="py-2 lh">
-            <p><span class="text-muted fw-500">Category: </span><span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
-            <p><span class="text-muted fw-500">Availibility: </span><span>{{ (product?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p>
+            <p><span class="text-muted fw-500">{{ 'PRODUCTS.CATEGORY' | translate }} </span><span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
+            <!-- <p><span class="text-muted fw-500">Availibility: </span><span>{{ (product?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p> -->
         </div>
-        <div class="py-3">
+        <!-- <div class="py-3">
             <app-rating [ratingsCount]="product?.ratingsCount" [rate]="product?.rate" [direction]="'row'"></app-rating>
-        </div>
+        </div> -->
         <p class="py-2 text-muted lh">{{product?.description}}</p>
 
         <div class="divider my-2"></div>
         <div class="py-2">
-            <h3 class="old-price text-muted"><span *ngIf="product?.oldPrice">${{product?.oldPrice | number : '1.2-2'}}</span></h3>
-            <h2 class="new-price">${{product?.newPrice}}</h2>
+            <h3 class="old-price text-muted"><span *ngIf="product?.pricePromotion != null && product?.pricePromotion != '0'">FCFA {{product?.priceBasic | number : '1.2-2'}}</span></h3>
+            <h2 class="new-price" *ngIf="product?.pricePromotion == null || product?.pricePromotion == '0'">FCFA {{product?.priceBasic}}</h2>
+            <h2 class="new-price" *ngIf="product?.pricePromotion != null && product?.pricePromotion != '0'">FCFA {{product?.pricePromotion}}</h2>
         </div>
 
-        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-2">
+        <!-- <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-2">
             <div *ngIf="product?.color" class="color">
                 <span class="fw-500">Select Color:</span>
                 <button mat-raised-button *ngFor="let color of product?.color" [style.background]="color">&nbsp;</button>
@@ -53,10 +54,10 @@
                 <span class="fw-500">Select Size:</span>
                 <button mat-raised-button *ngFor="let size of product?.size">{{size}}</button>
             </div>
-        </div>
+        </div> -->
 
         <div class="py-2">
-            <app-controls [product]="product" [type]="'all'"></app-controls>
+            <!-- <app-controls [product]="product" [type]="'all'"></app-controls> -->
         </div>
 
         <div class="divider"></div>

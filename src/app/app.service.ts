@@ -71,7 +71,7 @@ export class AppService {
     return this.http.post<Contact>(this.url + '/contact/add', contact);
    }
    public getBanners(): Observable<any[]>{
-        return this.http.get<any[]>(this.url + 'banners.json');
+        return this.http.get<any[]>('assets/data/banners.json');
     }
 
     public addToCompare(product:Product){
