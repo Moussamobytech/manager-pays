@@ -1,12 +1,12 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-
+import { environment as envProd } from "../../environments/environment.prod";
+import { environment as env } from "../../environments/environment";
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
-import { User } from '../models/user.models';
 import { TokenStorageService } from './token-storage.service';
-
+import { User } from '../models/user.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -30,8 +30,19 @@ export class AuthenticationService {
         }
     }
 
-   
-    
+    public async updateUser(id : any, data : any){
+      try {
+        console.log(data)
+          let res : any = await this.api.put('/users/update-user?id='+id,data).toPromise()
+          return "OK"
+      } catch (error : any) {
+          console.log(error);
+          return "KO"
+      }
+  }
+
+
+
     /**
      * Returns the current user
      */
@@ -40,7 +51,7 @@ export class AuthenticationService {
             this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
         }
         console.log(this.user);
-        
+
         return this.user;
     }
 
@@ -53,7 +64,17 @@ export class AuthenticationService {
             console.log(error)
             return null;
         }
-        
+
+    }
+
+    getAllUsers():Observable<User[]> {
+      try{
+        let users:Observable<User[]> = this.api.get("users/list");
+        return users;
+      }catch(error){
+        console.log("getAllusers() error: "+error)
+        return null;
+      }
     }
 
     list() {
@@ -68,20 +89,21 @@ export class AuthenticationService {
      */
     login(username: string, password: string): any {
 
-        return this.api.post(`/users/login`, { username, password })
-            .pipe(map((user :any)=> {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    
-                    let roles = user.authorities[0].authority
-                    console.log("roles :: ", roles);
-                    // store user details and jwt in session
-                    sessionStorage.setItem('currentUser', JSON.stringify(user));
-                    sessionStorage.setItem('auth-token', JSON.stringify(user.token));
-                    sessionStorage.setItem('auth-roles', roles);
-                }
-                return user;
-            }));
+      return this.api.post(`/users/login`, { username, password })
+          .pipe(map(
+            (user :any)=> {
+              // login successful if there's a jwt token in the response
+              if (user && user.token) {
+                  let roles = user.authorities[0].authority
+                  console.log("roles :: ", roles);
+                  // store user details and jwt in session
+                  sessionStorage.setItem('currentUser', JSON.stringify(user));
+                  sessionStorage.setItem('auth-token', JSON.stringify(user.token));
+                  sessionStorage.setItem('auth-roles', roles);
+              }
+              return user;
+            }
+          ));
     }
 
     /**
@@ -96,8 +118,8 @@ export class AuthenticationService {
      * @param password password of user
      */
     signup(formData: any): any {
+      console.log(formData)
         return this.api.post(`/users/register`, formData);
-
     }
 
 
@@ -112,5 +134,6 @@ export class AuthenticationService {
         sessionStorage.removeItem('auth-token');
         this.user = null;
     }
+
 }
 

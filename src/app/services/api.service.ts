@@ -5,7 +5,7 @@ import {
   HttpParams,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { throwError, from } from 'rxjs';
+import { throwError, from, Observable } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -25,12 +25,13 @@ export class ApiService {
   constructor(public http: HttpClient, private ngxSpinnerService: NgxSpinnerService) {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
     // this.username = sessionStorage.getItem('username')!;
-    console.log('this.user ::::: ', this.user);
+    // console.log('this.user ::::: ', this.user);
     // console.log('this.username ::::: ', this.username);
   }
 
   appendAccessToken(headers: HttpHeaders) {
     let token = JSON.parse(sessionStorage.getItem('auth-token')!);
+    // console.log(token)
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -69,7 +70,7 @@ export class ApiService {
 
   addCommonHeadersForFile(headers: HttpHeaders) {
     // headers = headers.set('Accept-Charset', 'utf-8');
-    console.log('user ::::::: ', this.user);
+    // console.log('user ::::::: ', this.user);
 
     // headers = headers.set('Content-Type', 'application/json');
     headers = headers.set('__agent__', window.navigator.userAgent);
@@ -83,7 +84,7 @@ export class ApiService {
     return headers;
   }
 
-  get(endpoint: string, params?: any, reqOpts?: any, secure: boolean = true) {
+  get(endpoint: string, params?: any, reqOpts?: any, secure: boolean = true):any {
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams(),
@@ -245,7 +246,7 @@ export class ApiService {
   private handleError(error: HttpErrorResponse) {
     // console.log(error);
     // console.log(error.error);
-    
+
     if (error.status <= 0 || (error.error && error.error.status <= 0)) {
       // this.commonMessager.showNoNetworkFail();
     }
@@ -259,7 +260,7 @@ export class ApiService {
         )}, ` + `body was: ${JSON.stringify(error.error)}`
       );
     }
-    
+
     this.ngxSpinnerService.hide();
     // return an observable with a user-facing error message
     // return throwError((error.error && error.error.message) ||

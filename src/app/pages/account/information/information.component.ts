@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { emailValidator, matchingPasswords } from '../../../theme/utils/app-validators';
 import { User } from 'src/app/models/user.models';
-import { AuthenticationService } from 'src/app/service/auth.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-information',
@@ -49,7 +49,7 @@ export class InformationComponent implements OnInit {
 
   public async onPasswordFormSubmit(values:Object):Promise<void> {
     if (this.passwordForm.valid) {
-      
+
       this.snackBar.open('Your password changed successfully!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
     }
   }
@@ -72,7 +72,7 @@ export class InformationComponent implements OnInit {
       case "ROLE_USER":
         profil = "Utilisateur"
         break;
-    
+
       default:
         profil = "N/A"
         break;

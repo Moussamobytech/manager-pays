@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { User } from 'src/app/models/user.models';
-import { AuthenticationService } from 'src/app/service/auth.service';
-import { ProductService } from 'src/app/service/product.service';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -49,8 +49,8 @@ export class ProductsComponent implements OnInit {
   }
 
   public onPageChanged(event){
-    this.page = event; 
-    this.domHandlerService.winScroll(0, 0);  
+    this.page = event;
+    this.domHandlerService.winScroll(0, 0);
   }
 
   async loadData(){
@@ -62,11 +62,11 @@ export class ProductsComponent implements OnInit {
 
   public add(){
     this.router.navigate(["/account/add-product"])
-  }  
+  }
 
   public edit(id){
     this.router.navigate(["/account/add-product/"+id])
-  }  
+  }
 
   public etat(key){
     let res = ""
@@ -74,15 +74,15 @@ export class ProductsComponent implements OnInit {
       case "ACTIF":
         res = "Actif"
         break;
-      
+
       case "INACTIF":
         res = "Inactif"
         break;
-    
+
       case "PENDING":
         res = "En attente de validation"
         break;
-    
+
       default:
         res = "N/A"
         break;
@@ -95,21 +95,21 @@ export class ProductsComponent implements OnInit {
       console.log(data)
     })
   }
-  public remove(follower:any){  
+  public remove(follower:any){
     // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
     //   maxWidth: "400px",
     //   data: {
     //     title: "Confirm Action",
     //     message: "Are you sure you want remove this follower?"
     //   }
-    // }); 
-    // dialogRef.afterClosed().subscribe(dialogResult => { 
+    // });
+    // dialogRef.afterClosed().subscribe(dialogResult => {
     //   if(dialogResult){
     //     const index: number = this.followers.indexOf(follower);
     //     if (index !== -1) {
-    //       this.followers.splice(index, 1);  
-    //     } 
-    //   } 
-    // }); 
+    //       this.followers.splice(index, 1);
+    //     }
+    //   }
+    // });
   }
 }

@@ -30,13 +30,15 @@ import { Overlay, OverlayContainer } from '@angular/cdk/overlay';
 import { CustomOverlayContainer } from './theme/utils/custom-overlay-container';
 import { MAT_MENU_SCROLL_STRATEGY } from '@angular/material/menu';
 import { menuScrollStrategy } from './theme/utils/scroll-strategy';
-import { AppInterceptor } from './theme/utils/app-interceptor';  
-import { AuthenticationService } from './service/auth.service';
-import { ApiService } from './service/api.service';
+import { AppInterceptor } from './theme/utils/app-interceptor';
+import { UserSessionService } from './services/user-session.service';
+import { CommonService } from './services/common.service';
 import { ToastrModule } from 'ngx-toastr';
-import { ProductService } from './service/product.service';
-import { CategoryService } from './service/category.service';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AuthenticationService } from './services/auth.service';
+import { ProductService } from './services/product.service';
+import { CategoryService } from './services/category.service';
+import { ApiService } from './services/api.service';
 
 @NgModule({
   declarations: [
@@ -71,13 +73,15 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
   providers: [
     // provideClientHydration(),
     // provideHttpClient(withFetch()),
-    // provideHttpClient(withFetch()), 
+    AppSettings,
+    AppService,
+    CommonService,
+    UserSessionService,
+    // provideHttpClient(withFetch()),
     AuthenticationService,
     ProductService,
     CategoryService,
     ApiService,
-    AppSettings,
-    AppService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },

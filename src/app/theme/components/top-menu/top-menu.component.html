@@ -37,15 +37,15 @@
     </a>
     <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown account">
         <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
-            <a mat-menu-item routerLink="/sign-in"> 
+            <a mat-menu-item routerLink="/sign-in">
                 <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>
-                <span>{{ 'LOGIN' | translate }}</span> 
+                <span>{{ 'LOGIN' | translate }}</span>
             </a>
         </span>
         <span *ngIf="user != null && user != undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
-            <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">                   
+            <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">
                 <img src="assets/images/others/user.jpg" alt="user-image" width="50">
-                <p>{{user.firstname + " "+ user.lastname}} <br> <small>{{user.username}} 
+                <p>{{user.firstname + " "+ user.lastname}} <br> <small>{{user.username}}
                     <!-- <span *ngIf="settings.rtl">&rlm;</span>(152<mat-icon class="mat-icon-xs">star</mat-icon>) -->
                 </small></p>
             </div>

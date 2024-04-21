@@ -152,9 +152,9 @@ import { LangComponent } from './lang/lang.component';
     CategoryListComponent,
     ConfirmDialogComponent,
     LangComponent
-  ], 
-  // providers:[
-  //   { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
-  // ]
+  ],
+  providers:[
+    // { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
+  ]
 })
 export class SharedModule { }

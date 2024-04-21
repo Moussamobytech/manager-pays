@@ -32,8 +32,8 @@ export class PagesComponent implements OnInit {
     this.getCategories();
     this.sidenavMenuItems = this.sidenavMenuService.getSidenavMenuItems();
     setTimeout(() => {
-      this.settings.theme = 'purple'; 
-      // this.settings.theme = 'green'; 
+      this.settings.theme = 'purple';
+      // this.settings.theme = 'green';
     });
   }
 
