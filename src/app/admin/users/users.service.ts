@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from './user.model';
+import { User } from '../../models/user.models';
 
 @Injectable()
 export class UsersService {
     public url = "api/users";
     constructor(public http:HttpClient) { }
-    
+
     getUsers(): Observable<User[]> {
         return this.http.get<User[]>(this.url);
     }
 
-    addUser(user:User){	    
+    addUser(user:User){
         return this.http.post(this.url, user);
     }
 
@@ -22,5 +22,5 @@ export class UsersService {
 
     deleteUser(id: number) {
         return this.http.delete(this.url + "/" + id);
-    } 
-} 
+    }
+}

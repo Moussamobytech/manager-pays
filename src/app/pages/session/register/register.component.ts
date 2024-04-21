@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from '../../../shared/confirmed.validator';
+import { StringMatchValidators } from '../../../shared/confirmed.validator';
 import { CommonService } from 'src/app/services/common.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
 
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
       adresse : this.adresse,
       password1 : this.password1,
       password2 : this.password2,
-    }, [CustomValidators.MatchValidator('password1','password2')]);
+    }, [StringMatchValidators.MatchValidator('password1','password2')]);
 
   }
 
@@ -53,8 +53,21 @@ export class RegisterComponent implements OnInit {
   async register () {
     if(this.registerForm.valid){
 
+      let data = this.registerForm.value;
+      let formData = {
+        role : ["particulier"],
+        username : (data.email || data.phone),
+        firstname : data.prenom,
+        lastname : data.name,
+        email : data.email,
+        phoneNumber : data.phone,
+        adresse : data.adresse,
+        password : data.password2,
+        typeofUser : (data.email)? 'email'  : 'tel'
+      }
+
       try{
-        let res = await this.auth.signup(this.registerForm.value).toPromise();
+        let res = await this.auth.signup(formData).toPromise();
         if(res){
           console.log('results are in: ',res)
           this.commonService.goTo( 'authentication/login' );

@@ -16,6 +16,8 @@ import { UserAuthSessionComponent } from './user-auth-session/user-auth-session.
 import { RegisterComponent } from './register/register.component';
 import { CommonService } from 'src/app/services/common.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -31,12 +33,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatRadioModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatToolbarModule
+    MatToolbarModule,
+    NgxPaginationModule,
+    SharedModule,
   ],
   declarations: [
     LoginComponent,
     RegisterComponent,
-    UserAuthSessionComponent,
+    UserAuthSessionComponent
   ],
   providers:[
   ]

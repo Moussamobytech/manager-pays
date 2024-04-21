@@ -25,7 +25,7 @@ export const routes: Routes = [
     InMemoryWebApiModule.forRoot(UsersData, { delay: 500 }),
     NgxPaginationModule,
     SharedModule,
-    PipesModule    
+    PipesModule,
   ],
   declarations: [
     UsersComponent,

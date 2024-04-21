@@ -5,9 +5,8 @@ import { environment as env } from "../../environments/environment";
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
-import { User } from '../models/user.models';
 import { TokenStorageService } from './token-storage.service';
-
+import { User } from '../models/user.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -30,6 +29,17 @@ export class AuthenticationService {
             return "KO"
         }
     }
+
+    public async updateUser(id : any, data : any){
+      try {
+        console.log(data)
+          let res : any = await this.api.put('/users/update-user?id='+id,data).toPromise()
+          return "OK"
+      } catch (error : any) {
+          console.log(error);
+          return "KO"
+      }
+  }
 
 
 
@@ -55,6 +65,16 @@ export class AuthenticationService {
             return null;
         }
 
+    }
+
+    getAllUsers():Observable<User[]> {
+      try{
+        let users:Observable<User[]> = this.api.get("users/list");
+        return users;
+      }catch(error){
+        console.log("getAllusers() error: "+error)
+        return null;
+      }
     }
 
     /**
@@ -93,18 +113,8 @@ export class AuthenticationService {
      * @param password password of user
      */
     signup(formData: any): any {
-      let data = {
-        role : ["admin"],
-        username : (formData.email || formData.phone),
-        firstname : formData.prenom,
-        lastname : formData.name,
-        email : formData.email,
-        phoneNumber :  formData.phone,
-        adresse : formData.addresse,
-        password : formData.password2,
-        typeofUser : (formData.email)? 'email'  : 'tel'
-      }
-        return this.api.post(`/users/register`, data);
+      console.log(formData)
+        return this.api.post(`/users/register`, formData);
     }
 
 

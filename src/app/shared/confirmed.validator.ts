@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export class CustomValidators {
+export class StringMatchValidators {
   static MatchValidator(source: string, target: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const sourceCtrl = control.get(source);

@@ -5,7 +5,7 @@ import {
   HttpParams,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { throwError, from } from 'rxjs';
+import { throwError, from, Observable } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -31,6 +31,7 @@ export class ApiService {
 
   appendAccessToken(headers: HttpHeaders) {
     let token = JSON.parse(sessionStorage.getItem('auth-token')!);
+    // console.log(token)
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -83,7 +84,7 @@ export class ApiService {
     return headers;
   }
 
-  get(endpoint: string, params?: any, reqOpts?: any, secure: boolean = true) {
+  get(endpoint: string, params?: any, reqOpts?: any, secure: boolean = true):any {
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams(),
