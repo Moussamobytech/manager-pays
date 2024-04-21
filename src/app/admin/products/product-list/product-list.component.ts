@@ -3,7 +3,7 @@ import { AppService } from 'src/app/app.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DomHandlerService } from 'src/app/dom-handler.service';
-import { ProductService } from 'src/app/service/product.service';
+import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.models';
 
 @Component({

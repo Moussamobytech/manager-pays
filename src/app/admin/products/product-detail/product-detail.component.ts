@@ -8,7 +8,7 @@ import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators } from '@
 import { emailValidator } from 'src/app/theme/utils/app-validators';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { Product } from 'src/app/models/product.models';
-import { ProductService } from 'src/app/service/product.service';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-product-detail',

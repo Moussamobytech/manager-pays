@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService, Data } from '../../app.service';
 import { Product } from "../../app.models";
 import { json } from 'stream/consumers';
-import { ProductService } from 'src/app/service/product.service';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-home',

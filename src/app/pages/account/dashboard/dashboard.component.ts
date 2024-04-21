@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { ProductService } from 'src/app/services/product.service';
-// import { ProductService } from 'src/app/service/product.service';
+// import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-dashboard',

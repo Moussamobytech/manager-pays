@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from 'src/app/service/auth.service';
-import { CategoryService } from 'src/app/service/category.service';
-import { CommonMessageService } from 'src/app/service/common-message.service';
-import { ProductService } from 'src/app/service/product.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { CategoryService } from 'src/app/services/category.service';
+import { CommonMessageService } from 'src/app/services/common-message.service';
+import { ProductService } from 'src/app/services/product.service';
 import { Category } from 'src/app/models/category.models';
 import { User } from 'src/app/models/user.models';
 
