@@ -148,7 +148,7 @@
                         <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
                     </mat-chip-listbox>
                     <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
-                        <img [src]="product.image1" alt="">
+                        <img [src]="product.image1" alt="" class="card-image">
                     </a>
                     <h4 class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
                     <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
@@ -178,7 +178,7 @@
                                 <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
                             </mat-chip-listbox>
                             <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
-                                <img [src]="product.image1" alt="" class="card-image">
+                                <img [src]="product.image1" alt="" >
                             </a>
                         </div>
                         <div fxFlex="100" fxFlex.gt-xs="60" class="p-2">

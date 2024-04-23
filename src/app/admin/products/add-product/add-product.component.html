@@ -1,104 +1,80 @@
 <div class="p-2">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>{{(id) ? 'Edit' : 'Add New'}} Product</mat-card-title>
+            <mat-card-title>{{(id) ? ('BTN.EDIT' | translate) : ('BTN.ADD' | translate)}} {{ 'ADMIN_NAV.PRODUCTS' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content class="pt-3">
             <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
                 <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
-                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 8 images)</span></p>
-                    <input-file formControlName="images" [fileLimit]="8" fileAccept="image/*"></input-file>
+                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 5 images)</span></p>
+                    <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
                     <div fxLayout="row wrap">
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Name</mat-label>
-                                <input matInput formControlName="name" required>
-                                <mat-error *ngIf="form.controls.name.errors?.required">Name is required</mat-error>
-                                <mat-error *ngIf="form.controls.name.hasError('minlength')">Name isn't long enough, minimum of 4 characters</mat-error>
+                                <mat-label>{{'PRODUCTS.LIBELLE' | translate}}</mat-label>
+                                <input matInput formControlName="nom" required>
+                                <!-- <mat-error *ngIf="form.controls.nom.errors?.required">nom est obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.nom.hasError('minlength')">nom isn't long enough, minimum of 4 characters</mat-error> -->
                             </mat-form-field>
-                        </div>
+                        </div> 
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Category</mat-label>
-                                <mat-select formControlName="categoryId" required>
+                                <mat-label>{{'PRODUCTS.CATEGORY' | translate}}</mat-label>
+                                <mat-select formControlName="categorie" required>
                                     <mat-option *ngFor="let cat of categories" [value]="cat.id">
                                         <span>{{cat.nom}}</span>
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="form.controls.categoryId.errors?.required">Category is required</mat-error>
+                                <!-- <mat-error *ngIf="form.controls.categorie.errors?.required">categorie est obligatoire</mat-error> -->
                             </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Old Price</mat-label>
-                                <input matInput formControlName="oldPrice">
-                                <mat-error *ngIf="form.controls.oldPrice.errors?.required">Old Price is required</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>New Price</mat-label>
-                                <input matInput formControlName="newPrice" required>
-                                <mat-error *ngIf="form.controls.newPrice.errors?.required">New Price is required</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Discount</mat-label>
-                                <input matInput formControlName="discount" type="number">
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Availibility Count</mat-label>
-                                <input matInput formControlName="availibilityCount" type="number">
-                            </mat-form-field>
-                        </div>
+                        </div> 
 
-                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Color</mat-label>
-                                <mat-select formControlName="color" multiple  (selectionChange)="onColorSelectionChange($event)">
-                                    <mat-select-trigger>{{selectedColors}}</mat-select-trigger>
-                                    <mat-option *ngFor="let color of colors" [value]="color">
-                                        <div fxLayout="row" fxLayoutAlign="space-between center">
-                                            <span>{{color}}</span>
-                                            <mat-icon [style.color]="color">fiber_manual_record</mat-icon>
-                                        </div>
+                                <mat-label>{{'PRODUCTS.PRICE' | translate}}</mat-label>
+                                <input matInput formControlName="priceBasic" required>
+                                <!-- <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error> -->
+                            </mat-form-field>
+                        </div> 
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{'PRODUCTS.PRICE_PROMOTION' | translate}}</mat-label>
+                                <input matInput formControlName="pricePromotion">
+                                <!-- <mat-error *ngIf="form.controls.pricePromotion.errors?.required">Prix promo est obligatoire</mat-error> -->
+                            </mat-form-field>
+                        </div> 
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{'PRODUCTS.WEIGHT' | translate}}</mat-label>
+                                <input matInput type="number" max="5" formControlName="weight">
+                                <!-- <mat-error *ngIf="form.controls.pricePromotion.errors?.required">Prix promo est obligatoire</mat-error> -->
+                            </mat-form-field>
+                        </div> 
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{'PRODUCTS.USER' | translate}}</mat-label>
+                                <mat-select formControlName="user" required>
+                                    <mat-option *ngFor="let user of users" [value]="user.username">
+                                        <span>{{user.firstname+ ' '+user.lastname }}</span>
                                     </mat-option>
                                 </mat-select>
+                                <!-- <mat-error *ngIf="form.controls.categorie.errors?.required">categorie est obligatoire</mat-error> -->
                             </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Size</mat-label>
-                                <mat-select formControlName="size" multiple>
-                                    <mat-option *ngFor="let size of sizes" [value]="size">
-                                        <span>{{size}}</span>
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Weight</mat-label>
-                                <input matInput formControlName="weight" type="number">
-                            </mat-form-field>
-                        </div>
-
+                        </div> 
+                       
                         <div fxFlex="100" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Description</mat-label>
-                                <textarea matInput formControlName="description" rows="7"></textarea>
-                            </mat-form-field>
-                        </div>
-
+                                <mat-label>{{'PRODUCTS.DESC' | translate}}</mat-label> 
+                                <textarea matInput formControlName="description" rows="7"></textarea> 
+                            </mat-form-field> 
+                        </div> 
+                       
 
 
                         <div fxFlex="100" class="mt-2 text-center w-100">
-                            <button mat-raised-button color="primary" type="submit">SUBMIT</button>
+                            <button mat-raised-button color="primary" type="submit">{{'BTN.SAVE' | translate}}</button>
                         </div>
                     </div>
                 </div>

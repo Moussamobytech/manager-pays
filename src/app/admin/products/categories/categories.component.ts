@@ -13,7 +13,8 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
   styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
-  public categories:Category[] = []; 
+  public categories:Category[] = [];
+  public tous:any
   public page: any;
   public count = 6;
   domHandlerService = inject(DomHandlerService);
@@ -26,16 +27,17 @@ export class CategoriesComponent implements OnInit {
     this.getCategories();
   }
 
-  public getCategories(){   
+  public getCategories(){
     this.appService.getCategories().subscribe(data => {
-      this.categories = data; 
-      this.categories.shift();
-    }); 
+      this.categories = data;
+      // this.categories.shift();
+      console.log('Categories ', this.categories);
+    });
   }
 
   public onPageChanged(event){
-    this.page = event; 
-    this.domHandlerService.winScroll(0, 0);  
+    this.page = event;
+    this.domHandlerService.winScroll(0, 0);
   }
 
   public openCategoryDialog(data:any){
@@ -48,37 +50,94 @@ export class CategoriesComponent implements OnInit {
       autoFocus: false,
       direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
-    dialogRef.afterClosed().subscribe(category => { 
-      if(category){    
+    dialogRef.afterClosed().subscribe(category => {
+      if(category){
         const index: number = this.categories.findIndex(x => x.id == category.id);
         if(index !== -1){
           this.categories[index] = category;
-        } 
-        else{ 
-          let last_category = this.categories[this.categories.length - 1]; 
+        }
+        else{
+          let last_category = this.categories[this.categories.length - 1];
           category.id = last_category.id + 1;
-          this.categories.push(category);  
-        }          
+          this.categories.push(category);
+        }
       }
     });
+
+
   }
 
-  public remove(category:any){  
+
+
+
+  public remove(category: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
-        message: "Are you sure you want remove this category?"
+        message: "Are you sure you want to remove this category?"
       }
-    }); 
-    dialogRef.afterClosed().subscribe(dialogResult => { 
-      if(dialogResult){
-        const index: number = this.categories.indexOf(category);
-        if (index !== -1) {
-          this.categories.splice(index, 1);  
-        } 
-      } 
-    }); 
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        // Si l'utilisateur confirme la suppression dans la boîte de dialogue
+        this.appService.supprimerCategorie(category.id).subscribe(
+          () => {
+            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+            const index: number = this.categories.findIndex((cat: any) => cat.id === category.id);
+            if (index !== -1) {
+              this.categories.splice(index, 1);
+            }
+            console.log("Category successfully deleted.");
+          },
+          (error) => {
+            console.error("Error deleting category:", error);
+            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+          }
+        );
+      }
+    });
+  }
+  // dialogRef.componentInstance.categoryAdded.subscribe(() => {
+  //   // Actualiser la liste des catégories ici
+  //   this.refreshCategoryList();
+  // });
+
+  refreshCategoryList() {
+
+    this.appService.getCategories().subscribe(data => {
+      this.tous = data;
+      // this.categories.shift();
+      console.log('Categoriesss ', this.tous);
+    });
+    // Appeler le service ou effectuer toute autre opération pour récupérer à nouveau la liste des catégories
   }
 
+
+  public setStatus(id: string, status: string): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: {
+        title: "Confirm Action",
+        message: `Are you sure you want to set the status of this category to ${status}?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        // Si l'utilisateur confirme dans la boîte de dialogue
+        this.appService.setStatus(id, status).subscribe(
+          () => {
+            console.log(`Status of category successfully set to ${status}.`);
+            // Mettre à jour l'état de la catégorie dans votre application si nécessaire
+          },
+          error => {
+            console.error("Error setting category status:", error);
+            // Traiter les erreurs éventuelles lors de la modification du statut de la catégorie
+          }
+        );
+      }
+    });
+  }
 }

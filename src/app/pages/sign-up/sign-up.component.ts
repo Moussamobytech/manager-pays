@@ -18,6 +18,9 @@ export class SignUpComponent implements OnInit {
   toSubmit: boolean = false;
   loading: boolean = false;
   profil : string = null;
+  countries : any[] = [{id : "mali", nom: "Mali"}, {id:"civ", nom:"Côte d'ivoire"}];
+  mask = '00 00 00 00'
+  maskPlaceholder = 'XX XX XX XX'
 
   constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder,
     public router:Router, public snackBar: MatSnackBar) { }
@@ -29,9 +32,12 @@ export class SignUpComponent implements OnInit {
       'lastname': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       // 'username': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       // 'email': ['', Validators.compose([Validators.required, emailValidator])],
-      'email': ['', Validators.compose([Validators.required])],
-      'addresse': [''],
-      'phone': ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(8)])],
+      'email': [null],
+      'addresse': [null],
+      'country': ['mali'],
+      'state': [null],
+      'rccm': [null],
+      'phone': ['', Validators.compose([Validators.required])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       'confirmPassword': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
 
@@ -51,7 +57,7 @@ export class SignUpComponent implements OnInit {
       this.authenticationService.login(this.formValues.email?.value, this.formValues.password?.value)
         .subscribe(
           (data: any) => {
-            this.router.navigate([""]);
+            this.router.navigate(["/sign-in"]);
           },
           (error: any) => {
             console.log(error);
@@ -64,6 +70,20 @@ export class SignUpComponent implements OnInit {
     this.profil = value
   }
 
+
+  handleChange($event){
+    console.log("handleChange :::::::: ", $event);
+    this.formValues.phone.setValue("")
+    if ($event.value == 'mali') {
+      this.mask ='00 00 00 00'
+      this.maskPlaceholder = 'XX XX XX XX'
+    }
+    
+    if ($event.value == 'civ') {
+      this.maskPlaceholder = 'XX XX XX XXXX'
+    }
+
+  }
   reset($event : Event){
     console.log("resetting process ::::::::");
 
@@ -78,25 +98,28 @@ export class SignUpComponent implements OnInit {
     try {
       if (this.registerForm.valid) {
         let formData = {
-          username: values["email"],
+          username: ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'],
           firstname: values["firstname"],
           lastname: values["lastname"],
           password: values["password"],
           phoneNumber: values["phone"],
           addresse: values["addresse"],
+          country: values['country'],
+          state: values['state'],
+          rccm: values['rccm'],
           email: values["email"],
-          role: [this.profil],
-          typeOfUsername: 'email'
-          // typeOfUsername: validateEmail(values["username"]) ? 'email' : 'phone',
+          role: [this.profil], 
+          typeOfUsername: 'phone'
+          // typeOfUsername: validateEmail(values["email"]) ? 'email' : 'phone',
         };
         let res = await this.authenticationService.signup(formData).toPromise();
         console.log("res :::::::: ",res)
         this.snackBar.open(res.message || 'Votre compte a été crée avec succès!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
         this.router.navigate(["/sign-in"]);
       }
-    } catch (error) {
+    } catch (error : any) {
       console.log(error)
-      this.snackBar.open('Une erreur s\'est produite lors de la création du compte !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+      this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
     }
 
   }

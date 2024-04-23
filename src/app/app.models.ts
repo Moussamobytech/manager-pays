@@ -1,8 +1,10 @@
 export class Category {
-  constructor(public id: number,
+  constructor(public id: string,
               public nom:string,
               public hasSubCategory: boolean,
-              public parentId: number){ }
+              public parentId: number,
+              public image: File,
+              public status : string){ }
 }
 
 export class Product {
@@ -49,13 +51,26 @@ export class  User {
 
 
 export class  Contact {
-  constructor (public name: string,
+  constructor (
+    public id: string,
+             public name: string,
                public email: string,
                public phoneNumber: number,
                public message : string,
                ) {}
+}
 
 
 
-
+export class  Campagne {
+  constructor (
+    public id: string,
+    public libelle: string,
+               public username: string,
+               public type: string,
+               public dateDebut : Date,
+               public dateFin : Date,
+               public produit : Product,
+               public image : File,
+               ) {}
 }

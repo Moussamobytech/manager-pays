@@ -51,7 +51,6 @@ import { ApiService } from './services/api.service';
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
-    // FaqComponent
   ],
   imports: [
     BrowserModule,

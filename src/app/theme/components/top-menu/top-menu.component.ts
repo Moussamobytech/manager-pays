@@ -21,7 +21,7 @@ export class TopMenuComponent implements OnInit {
     this.currency = this.currencies[0];  
     this.user  = JSON.parse(sessionStorage.getItem('currentUser')!);
       // this.username = sessionStorage.getItem('username')!;
-      console.log("TopMenuComponent user :::: ",this.user);
+      // console.log("TopMenuComponent user :::: ",this.user);
   }
 
   public changeCurrency(currency){

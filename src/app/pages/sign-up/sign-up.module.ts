@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { SignUpComponent } from './sign-up.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 export const routes: Routes = [
   { path: '', component: SignUpComponent, pathMatch: 'full' }
@@ -14,10 +15,13 @@ export const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   declarations: [
     SignUpComponent
-  ]
+  ],
+  providers:[provideNgxMask()]
 })
 export class SignUpModule { }
