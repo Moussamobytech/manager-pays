@@ -1,10 +1,10 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
     <div fxLayout="row">
         <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
-            <mat-button-toggle value="add" (click)="openUserDialog(null,'add')">
+            <mat-button-toggle value="add" (click)="openUserDialog(null,'add')" [title]="'BTN.ADD'|translate">
                 <mat-icon>person_add</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle value="search">
+            <mat-button-toggle value="search" [title]="'BTN.SEARCH'|translate">
                 <mat-icon>search</mat-icon>
             </mat-button-toggle>
         </mat-button-toggle-group>
@@ -35,22 +35,22 @@
     <div *ngIf="viewType.value == 'grid'" fxLayout="row wrap">
         <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" fxFlex.md="50" fxFlex.gt-md="33.3"  class="p-2">
             <mat-card fxFlex="100">
-                <div class="bg-primary" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="mat-toolbar mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3 *ngIf="user.enabled" class="user-name">{{user.firstname+' '+user.lastname|capitalCase|roundName:(isAboveMdSize$|async)}}</h3>
                     <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
                     <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
                         <mat-icon>more_vert</mat-icon>
                     </button>
-                </div>
+                  </div>
                 <mat-menu #menu="matMenu" xPosition="before" overlapTrigger="true">
                     <span (mouseleave)="menuTrigger.closeMenu()">
                         <button mat-menu-item (click)="openUserDialog(user,'update')">
                             <mat-icon>mode_edit</mat-icon>
-                            <span>Modifier</span>
+                            <span>{{'BTN.EDIT'|translate}}</span>
                         </button>
                         <button mat-menu-item (click)="openUserDialog(user,'delete')">
                             <mat-icon>delete</mat-icon>
-                            <span>Supprimer</span>
+                            <span>{{'BTN.REMOVE'|translate}}</span>
                         </button>
                     </span>
                 </mat-menu>
@@ -80,7 +80,7 @@
                         </p>
                         <p fxLayout="row" fxLayoutAlign="start center">
                             <mat-icon class="text-muted mt-size">date_range</mat-icon>
-                            <span>Membre depuis {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                            <span>{{"USER.FIELD.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
                         </p>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
   <div *ngIf="viewType.value == 'list'" fxLayout="row wrap">
       <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" class="p-2">
           <mat-card>
-              <div class="bg-primary" fxLayout="row" fxLayoutAlign="space-between center">
+              <div class="mat-toolbar mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
                   <h3 *ngIf="user.enabled" class="user-name">{{user.firstname|capitalCase}} {{user.lastname|capitalCase}}</h3>
                   <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
                   <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
@@ -104,11 +104,11 @@
                   <span (mouseleave)="menuTrigger.closeMenu()">
                       <button mat-menu-item (click)="openUserDialog(user,'update')">
                           <mat-icon>mode_edit</mat-icon>
-                          <span>Modifier</span>
+                          <span>{{"BTN.EDIT" |translate}}</span>
                       </button>
                       <button mat-menu-item (click)="openUserDialog(user,'delete')">
                           <mat-icon>delete</mat-icon>
-                          <span>Supprimer</span>
+                          <span>{{"BTN.DELETE" |translate}}</span>
                       </button>
                   </span>
               </mat-menu>
@@ -141,7 +141,7 @@
                           </p>
                           <p fxLayout="row" fxLayoutAlign="start center">
                               <mat-icon class="text-muted">event_available</mat-icon>
-                              <span>Membre depuis {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                              <span>{{"USER.FIELD.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
                           </p>
                       </div>
                       <div fxFlex="26" fxFlex.xs="100" fxLayout="column" fxLayoutAlign=" center">
@@ -161,12 +161,12 @@
     <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
         <div  fxFlex="100"  class="p-2">
           <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row bg-primary">
-                <div class="mat-mdc-header-cell">Prenom</div>
-                <div class="mat-mdc-header-cell">Nom</div>
-                <div class="mat-mdc-header-cell">Username</div>
-                <div class="mat-mdc-header-cell">Type</div>
-                <div class="mat-mdc-header-cell">Membre Depuis</div>
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
+                <div class="mat-mdc-header-cell">{{"USER.FIELD.FIRST_NAME" |translate}}</div>
+                <div class="mat-mdc-header-cell">{{"USER.FIELD.LAST_NAME"|translate}}</div>
+                <div class="mat-mdc-header-cell">{{"USER.FIELD.USERNAME"|translate}}</div>
+                <div class="mat-mdc-header-cell">Type </div>
+                <div class="mat-mdc-header-cell">{{"USER.FIELD.MEMBER_SINCE"|translate}}</div>
                 <div class="mat-mdc-header-cell"></div>
             </div>
             <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="mat-mdc-row">
@@ -174,13 +174,13 @@
                 <div class="mat-mdc-cell">{{ user.lastname|capitalCase }}</div>
                 <div class="mat-mdc-cell">{{ user.username }}</div>
                 <div class="mat-mdc-cell" *ngFor="let profile of user.profiles">{{ profile.name | userType }}</div>
-                <div class="mat-mdc-cell">{{ user.createdAt | date: "'Le' d/m/y" }}</div>
+                <div class="mat-mdc-cell">{{ user.createdAt | date: "d/m/y" }}</div>
                 <div class="mat-mdc-cell">
                     <div class="p-2 actions">
-                        <button mat-mini-fab color="primary" matTooltip="Modifier" (click)="openUserDialog(user,'update')">
+                        <button mat-mini-fab color="primary" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-mini-fab color="warn" matTooltip="Supprimer" class="mx-1" (click)="openUserDialog(user,'delete')">
+                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="openUserDialog(user,'delete')">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
@@ -197,7 +197,7 @@
 <div *ngIf="users" fxLayout="row wrap">
     <div fxFlex="100" class="p-2">
         <mat-card class="text-center">
-            <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
         </mat-card>
     </div>
 </div>

@@ -1,14 +1,14 @@
-{  
-  "WELCOME": "Bienvenue sur notre marché!",  
-  "LOGIN": "S'identifier", 
+{
+  "WELCOME": "Bienvenue sur notre marché!",
+  "LOGIN": "S'identifier",
   "LOGOUT": "Se déconnecter",
-  "REGISTER": "S'inscrire", 
-  "ACCOUNT": "Compte", 
+  "REGISTER": "S'inscrire",
+  "ACCOUNT": "Compte",
   "COMPARE": "Comparer",
   "WISHLIST": "Liste de souhaits",
-  "NAV": {  
-    "HOME": "Accueil",  
-    "PAGES": "Des pages",  
+  "NAV": {
+    "HOME": "Accueil",
+    "PAGES": "Des pages",
     "SHOP": "Boutique",
     "ALL_PRODUCTS": "Tous les produits",
     "PRODUCT_DETAIL": "Détail du produit",
@@ -17,7 +17,7 @@
     "FAQS": "Faqs",
     "PRICING": "Pricing",
     "TERMS_CONDITIONS": "Terms & Conditions",
-    "LANDING": "Page de destination", 
+    "LANDING": "Page de destination",
     "404_PAGE": "404 Page",
     "OTHERS": "Others",
     "EXTERNAL_LINK": "Lien Externe",
@@ -26,34 +26,36 @@
     "ABOUT_US": "Sur",
     "ADMIN": "Admin"
   },
-  "ADMIN_NAV": {  
-    "DASHBOARD": "Tableau de bord",  
-    "PRODUCTS": "Produits", 
+  "ADMIN_NAV": {
+    "DASHBOARD": "Tableau de bord",
+    "PRODUCTS": "Produits",
     "CATEGORIES": "Catégories",
-    "PRODUCT_LIST": "Liste de produit", 
+    "PRODUCT_LIST": "Liste de produit",
     "PRODUCT_DETAIL": "Détail de produit",
     "ADD_PRODUCT": "Ajouter un produit",
     "SALES": "Ventes",
     "ORDERS": "Ordres",
     "TRANSACTIONS": "Transactions",
-    "USERS": "Utilisateurs", 
-    "CUSTOMERS": "Les clients", 
+    "USERS": "Utilisateurs",
+    "CUSTOMERS": "Les clients",
     "COUPONS": "Coupons",
     "WITHDRAWAL": "Retrait",
     "ANALYTICS": "Analytique",
     "REFUND": "Rembourser",
     "FOLLOWERS": "Suiveurs",
     "SUPPORT": "Soutien",
-    "REVIEWS": "Commentaires", 
-    "EXTERNAL_LINK": "Lien Externe" 
+    "REVIEWS": "Commentaires",
+    "EXTERNAL_LINK": "Lien Externe"
   },
   "BTN": {
     "ADD": "Ajouter",
+    "EDIT": "Modifier",
     "SAVE": "Sauvegarder",
     "SUBMIT": "Soumettre",
     "CANCEL": "Annuler",
     "UPLOAD": "Télécharger",
-    "REMOVE": "Retirer",
+    "REMOVE": "Supprimer",
+    "SEARCH": "Recherche",
     "YES": "Oui",
     "NO": "Non",
     "OK": "D'accord"
@@ -62,8 +64,8 @@
     "SURE_DELETE": "Etes-vous sûr que vous voulez supprimer?",
     "FILE_SIZE": "La taille du fichier ne peut pas dépasser {{param}} ko."
   },
-  "FIELD": { 
-    "NAME": "Nom" 
+  "FIELD": {
+    "NAME": "Nom"
   },
   "PAGINATION":{
     "ITEMS_PER_PAGE": "Objets par page:",
@@ -71,5 +73,36 @@
     "PREV_PAGE": "Page précédente",
     "FIRST_PAGE": "Première page",
     "LAST_PAGE": "Dernière page"
+  },
+  "USER":{
+    "FIELD":{
+      "FIRST_NAME":"Prénom",
+      "LAST_NAME":"Nom",
+      "USERNAME":"Identifiant",
+      "PHONE":"Numéro de Téléphone",
+      "ADDRESS":"Addresse",
+      "TYPE":"Type D'utilisateur",
+      "PASS":"Mot de passe",
+      "PASS_CONFIRM":"Confirmation de mot de passe",
+      "MEMBER_SINCE":"Membre Depuis"
+    },
+    "FIELD_ERROR":{
+      "FIRSTNAME_REQUIRED": "Le prénom est obligatoire.",
+      "LASTNAME_REQUIRED": "Le nom est obligatoire.",
+      "EMAIL_INVALID": "L'adresse email n'est pas valide.",
+      "PHONE_REQUIRED": "Le numéro de téléphone est requis.",
+      "PHONE_NOT_NUMERIC": "Le numéro doit être numérique.",
+      "PHONE_MINLENGTH": "Doit inclure 8 caractères ou plus.",
+      "TYPE_REQUIRED": "Le type d'utilisateur est requis.",
+      "PASS_REQUIRED": "Le mot de passe est requis.",
+      "PASS_MINLENGTH": "Doit comporter 8 caractères ou plus.",
+      "PASSCONFIRM_REQUIRED": "Une confirmation est requise.",
+      "PASSCONFIRM_MINLENGTH": "La confirmation doit comporter 8 caractères ou plus."
+    },
+    "ACTION_TITLE":{
+      "ADD":"Ajouter Un Utilisateur",
+      "EDIT":"Modifier Un Utilisateur",
+      "DELETE":"Supprimer Un Utilisateur "
+    }
   }
 }

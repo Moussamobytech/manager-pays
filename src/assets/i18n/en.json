@@ -1,14 +1,14 @@
-{   
-  "WELCOME": "Welcome to our market!", 
-  "LOGIN": "Sign In", 
-  "LOGOUT": "Logout", 
+{
+  "WELCOME": "Welcome to our market!",
+  "LOGIN": "Sign In",
+  "LOGOUT": "Logout",
   "REGISTER": "Register",
-  "ACCOUNT": "Account", 
+  "ACCOUNT": "Account",
   "COMPARE": "Compare",
-  "WISHLIST": "Wishlist", 
-  "NAV": {  
-    "HOME": "Home",  
-    "PAGES": "Pages", 
+  "WISHLIST": "Wishlist",
+  "NAV": {
+    "HOME": "Home",
+    "PAGES": "Pages",
     "SHOP": "Shop",
     "ALL_PRODUCTS": "All products",
     "PRODUCT_DETAIL": "Product detail",
@@ -17,7 +17,7 @@
     "FAQS": "Faqs",
     "PRICING": "Pricing",
     "TERMS_CONDITIONS": "Terms & Conditions",
-    "LANDING": "Landing", 
+    "LANDING": "Landing",
     "404_PAGE": "404 Page",
     "OTHERS": "Others",
     "EXTERNAL_LINK": "External Link",
@@ -26,34 +26,35 @@
     "ABOUT_US": "About Us",
     "ADMIN": "Admin Panel"
   },
-  "ADMIN_NAV": {  
-    "DASHBOARD": "Dashboard",  
-    "PRODUCTS": "Products", 
+  "ADMIN_NAV": {
+    "DASHBOARD": "Dashboard",
+    "PRODUCTS": "Products",
     "CATEGORIES": "Categories",
-    "PRODUCT_LIST": "Products List", 
+    "PRODUCT_LIST": "Products List",
     "PRODUCT_DETAIL": "Product Detail",
     "ADD_PRODUCT": "Add Product",
     "SALES": "Sales",
     "ORDERS": "Orders",
     "TRANSACTIONS": "Transactions",
-    "USERS": "Users", 
-    "CUSTOMERS": "Customers", 
+    "USERS": "Users",
+    "CUSTOMERS": "Customers",
     "COUPONS": "Coupons",
     "WITHDRAWAL": "Withdrawal",
     "ANALYTICS": "Analytics",
     "REFUND": "Refund",
     "FOLLOWERS": "Followers",
     "SUPPORT": "Support",
-    "REVIEWS": "Reviews", 
-    "EXTERNAL_LINK": "External Link" 
+    "REVIEWS": "Reviews",
+    "EXTERNAL_LINK": "External Link"
   },
   "BTN": {
     "ADD": "Add",
+    "EDIT": "Edit",
     "SAVE": "Save",
     "SUBMIT": "Submit",
     "CANCEL": "Cancel",
     "UPLOAD": "Upload",
-    "REMOVE": "Remove",
+    "REMOVE": "Delete",
     "YES": "Yes",
     "NO": "No",
     "OK": "OK"
@@ -62,14 +63,45 @@
     "SURE_DELETE": "Are you sure you want to delete?",
     "FILE_SIZE": "The file size cannot exceed {{param}} kb."
   },
-  "FIELD": { 
-    "NAME": "Name" 
-  }, 
+  "FIELD": {
+    "NAME": "Name"
+  },
   "PAGINATION":{
     "ITEMS_PER_PAGE": "Items per page:",
     "NEXT_PAGE": "Next page",
     "PREV_PAGE": "Previous page",
     "FIRST_PAGE": "First page",
     "LAST_PAGE": "Last page"
+  },
+  "USER":{
+    "FIELD":{
+      "FIRST_NAME":"First Name",
+      "LAST_NAME":"Last Name",
+      "USERNAME":"Username",
+      "PHONE":"Phone number",
+      "ADDRESS":"Addresse",
+      "TYPE":"User type",
+      "PASS":"Password",
+      "PASS_CONFIRM":"Confirm password",
+      "MEMBER_SINCE":"Membre Since"
+    },
+    "FIELD_ERROR":{
+      "FIRSTNAME_REQUIRED":"The first name is required.",
+      "LASTNAME_REQUIRED":"The name is required.",
+      "EMAIL_INVALID":"The email address is invalid.",
+      "PHONE_REQUIRED":"Phone number is required.",
+      "PHONE_NOT_NUMBER":"Phone number must be numeric.",
+      "PHONE_MINLENGTH":"Must be 8 characters or more.",
+      "TYPE_REQUIRED": "User type is required",
+      "PASS_REQUIRED":"The password is required.",
+      "PASS_MINLENGTH":"Must be 8 characters or more.",
+      "PASSCONFIRM_REQUIRED":"Confirmation is required.",
+      "PASSCONFIRM_MINLENGTH":"Must be 8 characters or more."
+    },
+    "ACTION_TITLE":{
+      "ADD":"Add User",
+      "EDIT":"Edit User",
+      "DELETE":"Delete User"
+    }
   }
 }
