@@ -23,7 +23,7 @@ export class AppComponent {
     translate.addLangs(['en','de','fr','ru','tr']);
     let lg = (this.localStorage.getJsonValue("lang-key")) || 'fr';
     translate.setDefaultLang(lg.lang);
-    translate.use('fr');
+    translate.use(lg.lang);
   }
 
   ngOnInit() {
