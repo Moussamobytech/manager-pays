@@ -43,8 +43,8 @@ export class UserDialogComponent implements OnInit {
           address: null,
         }),
         auth: this.fb.group({
-          password1: [null,Validators.compose([Validators.required,Validators.minLength(8)])],
-          password2: [null,Validators.compose([Validators.required,Validators.minLength(8)])]
+          password1: [null,Validators.compose([Validators.required,Validators.minLength(6)])],
+          password2: [null,Validators.compose([Validators.required,Validators.minLength(6)])]
         },[StringMatchValidators.MatchValidator('password1','password2')]),
       });
 

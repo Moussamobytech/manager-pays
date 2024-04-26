@@ -1,38 +1,50 @@
 {
   "WELCOME": "Welcome to our market!",
-  "LOGIN": "Sign In",
-  "LOGOUT": "Logout",
+  "LOGIN": "Log in",
+  "LOGIN_IN": "Log in",
+  "LOGOUT": "Log out",
   "REGISTER": "Register",
+  "REGISTER_IN": "Register now!",
   "ACCOUNT": "Account",
+  "NO_ACCOUNT": "You don't have an account?",
   "COMPARE": "Compare",
-  "WISHLIST": "Wishlist",
+  "WISHLIST": "Wish list",
+  "CHOOSE": "Choose the profile type",
+  "RECHOOSE": "Choose the profile again",
+  "FORM_SIGNUP": "Registration form",
+  "STORE": "Shop",
+  "PARTICULAR": "Particular",
+  "ACCOUNT_INFO": "Account information",
+  "STATS": "Statistics",
   "NAV": {
     "HOME": "Home",
     "PAGES": "Pages",
     "SHOP": "Shop",
+    "SETTING": "Parameters",
     "ALL_PRODUCTS": "All products",
     "PRODUCT_DETAIL": "Product detail",
     "CART": "Cart",
-    "CHECKOUT": "Checkout",
-    "FAQS": "Faqs",
+    "CHECKOUT": "The checkout",
+    "FAQS": "FAQs",
     "PRICING": "Pricing",
     "TERMS_CONDITIONS": "Terms & Conditions",
-    "LANDING": "Landing",
+    "LANDING": "Landing page",
     "404_PAGE": "404 Page",
     "OTHERS": "Others",
     "EXTERNAL_LINK": "External Link",
     "MENU_ITEM": "Menu Item",
     "CONTACT": "Contact",
-    "ABOUT_US": "About Us",
-    "ADMIN": "Admin Panel"
+    "ABOUT_US": "On",
+    "ADMIN": "Admin"
   },
   "ADMIN_NAV": {
     "DASHBOARD": "Dashboard",
     "PRODUCTS": "Products",
     "CATEGORIES": "Categories",
-    "PRODUCT_LIST": "Products List",
-    "PRODUCT_DETAIL": "Product Detail",
-    "ADD_PRODUCT": "Add Product",
+    "CATEGORIE_DETAIL":"Category Details",
+    "PRODUCT_LIST": "Product list",
+    "PRODUCT_DETAIL": "Product detail",
+    "ADD_PRODUCT": "Add a product",
     "SALES": "Sales",
     "ORDERS": "Orders",
     "TRANSACTIONS": "Transactions",
@@ -44,64 +56,96 @@
     "REFUND": "Refund",
     "FOLLOWERS": "Followers",
     "SUPPORT": "Support",
-    "REVIEWS": "Reviews",
+    "REVIEWS": "Comments",
     "EXTERNAL_LINK": "External Link"
   },
   "BTN": {
     "ADD": "Add",
     "EDIT": "Edit",
     "SAVE": "Save",
+    "DEACTIVATE": "Deactivate",
     "SUBMIT": "Submit",
+    "VIEW": "View",
     "CANCEL": "Cancel",
-    "UPLOAD": "Upload",
+    "UPLOAD": "Download",
     "REMOVE": "Delete",
+    "SEARCH": "Search",
     "YES": "Yes",
     "NO": "No",
-    "OK": "OK"
+    "OK": "agreed"
   },
   "MESSAGE": {
     "SURE_DELETE": "Are you sure you want to delete?",
-    "FILE_SIZE": "The file size cannot exceed {{param}} kb."
+    "FILE_SIZE": "File size cannot exceed {{param}} KB."
   },
-  "FIELD": {
-    "NAME": "Name"
-  },
-  "PAGINATION":{
-    "ITEMS_PER_PAGE": "Items per page:",
+  "PAGING":{
+    "ITEMS_PER_PAGE": "Objects per page:",
     "NEXT_PAGE": "Next page",
     "PREV_PAGE": "Previous page",
     "FIRST_PAGE": "First page",
     "LAST_PAGE": "Last page"
   },
-  "USER":{
-    "FIELD":{
-      "FIRST_NAME":"First Name",
-      "LAST_NAME":"Last Name",
-      "USERNAME":"Username",
-      "PHONE":"Phone number",
-      "ADDRESS":"Addresse",
-      "TYPE":"User type",
-      "PASS":"Password",
-      "PASS_CONFIRM":"Confirm password",
-      "MEMBER_SINCE":"Membre Since"
-    },
-    "FIELD_ERROR":{
-      "FIRSTNAME_REQUIRED":"The first name is required.",
-      "LASTNAME_REQUIRED":"The name is required.",
-      "EMAIL_INVALID":"The email address is invalid.",
-      "PHONE_REQUIRED":"Phone number is required.",
-      "PHONE_NOT_NUMBER":"Phone number must be numeric.",
-      "PHONE_MINLENGTH":"Must be 8 characters or more.",
-      "TYPE_REQUIRED": "User type is required",
-      "PASS_REQUIRED":"The password is required.",
-      "PASS_MINLENGTH":"Must be 8 characters or more.",
-      "PASSCONFIRM_REQUIRED":"Confirmation is required.",
-      "PASSCONFIRM_MINLENGTH":"Must be 8 characters or more."
-    },
-    "ACTION_TITLE":{
-      "ADD":"Add User",
-      "EDIT":"Edit User",
-      "DELETE":"Delete User"
-    }
+  "FIELD":{
+    "USERNAME": "Username",
+    "FIRSTNAME": "First name",
+    "LASTNAME": "Name",
+    "PASSWORD": "Password",
+    "PASSWORD_CONFIRM": "Confirm password",
+    "ADDRESS":"Address",
+    "TYPE":"User Type",
+    "EMAIL": "Email",
+    "CONTACT": "Contact number",
+    "ADD": "Address",
+    "RCCM": "RCCM",
+    "COUNTRY": "Country",
+    "STATE": "City",
+    "PHONE": "Phone number"
+  },
+  "USE":{
+    "MEMBER_SINCE": "Member since"
+  },
+
+  "FIELD_ERROR":{
+    "NAME_REQUIRED": "The name is required.",
+    "FIRSTNAME_REQUIRED": "First name is required.",
+    "LASTNAME_REQUIRED": "The name is required.",
+    "USERNAME_REQUIRED": "Username is required.",
+    "EMAIL_INVALID": "The email address is invalid.",
+    "PHONE_REQUIRED": "Phone number is required.",
+    "PHONE_NOT_NUMERIC": "The number must be numeric.",
+    "PHONE_MINLENGTH": "Must include 6 or more characters.",
+    "TYPE_REQUIRED": "The user type is required.",
+    "PASSWORD_REQUIRED": "Password is required.",
+    "PASSWORD_MINLENGTH": "Must be 6 or more characters.",
+    "PASSCONFIRM_REQUIRED": "Confirmation is required.",
+    "PASSCONFIRM_MINLENGTH": "Confirmation must be 6 or more characters long."
+  },
+  "ACTION_TITLE":{
+    "ADD":"Add User",
+    "EDIT":"Edit A User",
+    "DELETE":"Delete A User"
+  },
+  "PRODUCTS": {
+    "LIST": "List",
+    "LAST": "Latest products",
+    "LIBELLE": "Libelle",
+    "PRICE": "Price",
+    "PRICE_PROMOTION": "Promotion price",
+    "DESC": "Description",
+    "IMAGE": "Image",
+    "STATE": "State",
+    "WEIGHT": "Prioritization",
+    "START": "Start date",
+    "END": "End date",
+    "USER": "Seller",
+    "CATEGORY": "Category",
+    "CREATED": "Creation date",
+    "ENDED": "End date"
+  },
+  "CATEGORY":{
+    "NAME": "Name",
+    "IMAGE": "Picture",
+    "PAGE_TITLE": "List of Categories",
+    "ADD_BTN": "Add a Category"
   }
 }

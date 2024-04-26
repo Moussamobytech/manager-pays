@@ -11,19 +11,19 @@
           <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)" autocomplete="off">
 
             <mat-form-field class="full-width">
-              <input matInput placeholder="Username" name="username" formControlName="username" required>
+              <input matInput [placeholder]="'FIELD.USERNAME' | translate" name="username" formControlName="username" required>
               <mat-error *ngIf="loginFormControl.username.hasError('required')">
-                Le nom d'utilisateur est <strong>obligatoire</strong>
+                {{"USERNAME_REQUIRED"|translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field class="full-width">
-              <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'"
+              <input matInput [placeholder]="'FIELD.PASSWORD' | translate" [type]="hide ? 'password' : 'text'"
               formControlName="password" required>
               <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
                 'visibility'}}</mat-icon>
               <mat-error *ngIf="loginFormControl.password.hasError('required')">
-                Le mot de passe est <strong>obligatoire</strong>
+                {{'FIELD_ERROR.PASSWORD_REQUIRED' | translate}}
               </mat-error>
             </mat-form-field>
 

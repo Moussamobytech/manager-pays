@@ -11,39 +11,39 @@
             <mat-form-field class="full-width">
               <input matInput placeholder="*Nom" name="name"  formControlName="name" required >
               <mat-error *ngIf="registerFormControl.name.hasError('required')">
-                Le nom est <strong>obligatoire</strong>
+               {{'FIELD_ERROR.NAME_REQUIRED' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field class="full-width">
               <input matInput placeholder="*Prénom" formControlName="prenom" required>
               <mat-error *ngIf="registerFormControl.prenom.hasError('required')">
-                Le prénom est <strong>obligatoire</strong>
+                {{'FIELD_ERROR.FIRSTNAME_REQUIRED' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field class="full-width">
               <input matInput placeholder="Adresse email" formControlName="email" >
               <mat-error *ngIf="registerFormControl.email.hasError('pattern')">
-                L'email insérée est <strong>invalide</strong>
+                {{'FIELD_ERROR.EMAIL_INVALID' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field class="full-width">
               <input matInput placeholder="*Numero de telephone" formControlName="phone" required>
               <mat-error *ngIf="registerFormControl.phone.hasError('required')">
-                Le numéro de téléphone est <strong>obligatoire</strong>
+                {{'FIELD_ERROR.PHONE_REQUIRED' | translate}}
               </mat-error>
               <mat-error *ngIf=" registerFormControl.phone.hasError('pattern') && (!registerFormControl.phone.hasError('required')) ">
-                Le numéro de téléphone insérée est <strong>invalide</strong>
+                {{'FIELD_ERROR.PHONE_NOT_NUMERIC' | translate}}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field class="full-width">
-              <input matInput placeholder="*Adresse" formControlName="adresse" required>
-              <mat-error *ngIf="registerFormControl.adresse.hasError('required')">
-                L'adressse est <strong>obligatoire</strong>
-              </mat-error>
+              <input matInput placeholder="*Adresse" formControlName="adresse">
+              <!-- <mat-error *ngIf="registerFormControl.adresse.hasError('required')">
+                {{'FIELD_ERROR.PHONE_NOT_NUMERIC' | translate}}
+              </mat-error> -->
             </mat-form-field>
 
             <mat-form-field class="full-width">
@@ -52,10 +52,10 @@
               <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
                 'visibility'}}</mat-icon>
               <mat-error *ngIf="registerFormControl.password1.hasError('required')">
-                Le mot de passe est <strong>obligatoire</strong>
+                {{'FIELD_ERROR.PASSWORD_REQUIRED' | translate}}
               </mat-error>
               <mat-error *ngIf="registerFormControl.password1.hasError('minlength')">
-                Le mot de passe est <strong>8</strong> caractères minimum
+                {{'FIELD_ERROR.PASSWORD_MINLENGTH' | translate}}
               </mat-error>
             </mat-form-field>
 
@@ -65,10 +65,10 @@
               <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility_off' :
                 'visibility'}}</mat-icon>
               <mat-error *ngIf="registerFormControl.password2.hasError('required')">
-                Le mot de passe de confirmation est <strong>obligatoire</strong>
+                {{'FIELD_ERROR.PASSCONFIRM_REQUIRED' | translate}}
               </mat-error>
               <mat-error *ngIf="registerFormControl.password2.hasError('minlength')">
-                Le mot de passe de confirmation est <strong>8</strong> caractères minimum
+                {{'FIELD_ERROR.PASSCONFIRM_MINLENGTH' | translate}}
               </mat-error>
             </mat-form-field>
 

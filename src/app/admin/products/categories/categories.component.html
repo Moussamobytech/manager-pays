@@ -2,16 +2,16 @@
     <mat-card>
 
         <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-            <h2>Category List</h2>
-            <button mat-raised-button color="primary" (click)="openCategoryDialog(null)">Add Category</button>
+            <h2>{{"CATEGORY.PAGE_TITLE"|translate}}</h2>
+            <button mat-raised-button color="primary" (click)="openCategoryDialog(null)">{{"CATEGORY.ADD_BTN"|translate}}</button>
         </div>
         <mat-divider></mat-divider>
         <div class="mat-mdc-table admin-table">
             <div class="mat-mdc-header-row">
-                <div class="mat-mdc-header-cell">Nom</div>
+                <div class="mat-mdc-header-cell">{{"CATEGORY.NAME"|translate}}</div>
                 <!-- <div class="mat-mdc-header-cell">Has SubCategory</div>
                 <div class="mat-mdc-header-cell">Parent Category</div> -->
-                  <div class="mat-mdc-header-cell">Image</div>
+                  <div class="mat-mdc-header-cell">{{"CATEGORY.IMAGE"|translate}}</div>
                   <div class="mat-mdc-header-cell"></div>
               </div>
               <div *ngFor="let cat of categories | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
@@ -31,15 +31,15 @@
 
                   <div class="mat-mdc-cell">
                       <div class="p-2 actions">
-                          <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openCategoryDialog(cat)">
+                          <button mat-mini-fab color="primary" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
                               <mat-icon>edit</mat-icon>
                           </button>
-                        <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(cat)">
+                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(cat)">
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                        <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="primary" [matTooltip]="'BTN.VIEW'|translate" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
 
-                        <button mat-mini-fab color="warn" matTooltip="Deactivate" class="mx-1"  (click)="setStatus(cat.id, 'inactif')" >
+                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.DEACTIVATE'|translate" class="mx-1"  (click)="setStatus(cat.id, 'inactif')" >
                           <mat-icon>{{ cat.status === 'inactif' ? 'check_circle' : 'block' }}</mat-icon>
                       </button>
 

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title class="text-center">
-  <span *ngIf=" action=='add' ">{{"USER.ACTION_TITLE.ADD" |translate}}</span>
-  <span *ngIf=" action=='update' ">{{"USER.ACTION_TITLE.EDIT" | translate}}</span>
-  <span *ngIf=" action=='delete' ">{{"USER.ACTION_TITLE.DELETE" |translate}}</span>
+  <span *ngIf=" action=='add' ">{{"ACTION_TITLE.ADD" |translate}}</span>
+  <span *ngIf=" action=='update' ">{{"ACTION_TITLE.EDIT" | translate}}</span>
+  <span *ngIf=" action=='delete' ">{{"ACTION_TITLE.DELETE" |translate}}</span>
 </h1>
 
 <div mat-dialog-content>
@@ -12,57 +12,57 @@
               <mat-tab label="Personnel">
                   <div fxLayout="column" class="form-field-outer">
                       <mat-form-field class="w-100">
-                          <mat-label><mat-icon>person</mat-icon> {{"USER.FIELD.FIRST_NAME"|translate}}</mat-label>
+                          <mat-label><mat-icon>person</mat-icon> {{"FIELD.FIRSTNAME"|translate}}</mat-label>
                           <input matInput formControlName="firstname" required>
-                          <mat-error *ngIf="form.controls.firstname.errors?.required">{{"USER.FIELD_ERROR.FIRSTNAME_REQUIRED"|translate}}</mat-error>
+                          <mat-error *ngIf="form.controls.firstname.errors?.required">{{"FIELD_ERROR.FIRSTNAME_REQUIRED"|translate}}</mat-error>
                       </mat-form-field>
                       <mat-form-field class="w-100">
-                        <mat-label><mat-icon>person</mat-icon> {{"USER.FIELD.LAST_NAME"|translate}}</mat-label>
+                        <mat-label><mat-icon>person</mat-icon> {{"FIELD.LASTNAME"|translate}}</mat-label>
                         <input matInput formControlName="lastname" required>
-                        <mat-error *ngIf="form.controls.lastname.errors?.required">{{"USER.FIELD_ERROR.LASTNAME_REQUIRED"|translate}}</mat-error>
+                        <mat-error *ngIf="form.controls.lastname.errors?.required">{{"FIELD_ERROR.LASTNAME_REQUIRED"|translate}}</mat-error>
                       </mat-form-field>
                   </div>
               </mat-tab>
               <mat-tab label="Type" formGroupName="type">
                   <div fxLayout="column" class="form-field-outer">
                       <mat-form-field class="w-100">
-                          <mat-label>{{"USER.FIELD.TYPE"|translate}}</mat-label>
+                          <mat-label>{{"FIELD.TYPE"|translate}}</mat-label>
                           <mat-select formControlName="name">
                             @for (userType of userTypes; track userType) {
                               <mat-option [value]="userType.value">{{userType.viewValue}}</mat-option>
                             }
                           </mat-select>
-                          <mat-error *ngIf="form.get('type.name').hasError('required')">{{"USER.FIELD_ERROR.TYPE_REQUIRED"|translate}}</mat-error>
+                          <mat-error *ngIf="form.get('type.name').hasError('required')">{{"FIELD_ERROR.TYPE_REQUIRED"|translate}}</mat-error>
                       </mat-form-field>
                   </div>
               </mat-tab>
               <mat-tab label="Authentification" formGroupName="auth">
                   <div fxLayout="column" class="form-field-outer">
                     <mat-form-field class="full-width">
-                      <mat-label><mat-icon>lock</mat-icon> *{{"USER.FIELD.PASS"|translate}}</mat-label>
+                      <mat-label><mat-icon>lock</mat-icon> *{{"FIELD.PASSWORD"|translate}}</mat-label>
                       <input matInput [type]="hide ? 'password' : 'text'"
                       formControlName="password1" required>
                       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
                         'visibility'}}</mat-icon>
                       <mat-error *ngIf="form.get('auth.password1').hasError('required')">
-                        {{"USER.FIELD_ERROR.PASS_REQUIRED"|translate}}
+                        {{"FIELD_ERROR.PASSWORD_REQUIRED"|translate}}
                       </mat-error>
                       <mat-error *ngIf="form.get('auth.password1').hasError('minlength')">
-                        {{"USER.FIELD_ERROR.PASS_MINLENGTH"|translate}}
+                        {{"FIELD_ERROR.PASSWORD_MINLENGTH"|translate}}
                       </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="full-width">
-                      <mat-label><mat-icon>lock</mat-icon> *{{"USER.FIELD.PASS_CONFIRM"|translate}}</mat-label>
+                      <mat-label><mat-icon>lock</mat-icon> *{{"FIELD.PASSWORD_CONFIRM"|translate}}</mat-label>
                       <input matInput [type]="hide2 ? 'password' : 'text'"
                       formControlName="password2" required>
                       <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility_off' :
                         'visibility'}}</mat-icon>
                       <mat-error *ngIf="form.get('auth.password2').hasError('required')">
-                        {{"USER.FIELD_ERROR.PASSCONFIRM_REQUIRED"|translate}}
+                        {{"FIELD_ERROR.PASSCONFIRM_REQUIRED"|translate}}
                       </mat-error>
                       <mat-error *ngIf="form.get('auth.password2').hasError('minlength')">
-                        {{"USER.FIELD_ERROR.PASSCONFIRM_MINLENGTH"|translate}}
+                        {{"FIELD_ERROR.PASSCONFIRM_MINLENGTH"|translate}}
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -72,17 +72,17 @@
                       <mat-form-field class="w-100">
                           <mat-label><mat-icon>mail</mat-icon> Email</mat-label>
                           <input matInput formControlName="email">
-                          <mat-error *ngIf="form.get('contacts.email').hasError('pattern')">{{"USER.FIELD_ERROR.EMAIL_INVALID"|translate}}</mat-error>
+                          <mat-error *ngIf="form.get('contacts.email').hasError('pattern')">{{"FIELD_ERROR.EMAIL_INVALID"|translate}}</mat-error>
                       </mat-form-field>
                       <mat-form-field class="w-100">
-                          <mat-label><mat-icon>local_phone</mat-icon> *{{"USER.FIELD.PHONE"|translate}}</mat-label>
+                          <mat-label><mat-icon>local_phone</mat-icon> *{{"FIELD.PHONE"|translate}}</mat-label>
                           <input matInput formControlName="phoneNumber">
-                          <mat-error *ngIf="form.get('contacts.phoneNumber').errors?.required">{{"USER.FIELD_ERROR.PHONE_REQUIRED"|translate}}</mat-error>
-                          <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('pattern')">{{"USER.FIELD_ERROR.PHONE_NOT_NUMERIC"|translate}}</mat-error>
-                          <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('minlength')">{{"USER.FIELD_ERROR.PHONE_MINLENGTH"|translate}}</mat-error>
+                          <mat-error *ngIf="form.get('contacts.phoneNumber').errors?.required">{{"FIELD_ERROR.PHONE_REQUIRED"|translate}}</mat-error>
+                          <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('pattern')">{{"FIELD_ERROR.PHONE_NOT_NUMERIC"|translate}}</mat-error>
+                          <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('minlength')">{{"FIELD_ERROR.PHONE_MINLENGTH"|translate}}</mat-error>
                       </mat-form-field>
                       <mat-form-field class="w-100">
-                          <mat-label><mat-icon>location_on</mat-icon> {{"USER.FIELD.ADDRESS"|translate}}</mat-label>
+                          <mat-label><mat-icon>location_on</mat-icon> {{"FIELD.ADDRESS"|translate}}</mat-label>
                           <input matInput formControlName="address">
                       </mat-form-field>
                   </div>
@@ -98,14 +98,14 @@
             <mat-tab label="Personnel">
                 <div fxLayout="column" class="form-field-outer">
                     <mat-form-field class="w-100">
-                        <mat-label><mat-icon>person</mat-icon> {{"USER.FIELD.FIRST_NAME"|translate}}</mat-label>
+                        <mat-label><mat-icon>person</mat-icon> {{"FIELD.FIRSTNAME"|translate}}</mat-label>
                         <input matInput formControlName="firstname" required>
-                        <mat-error *ngIf="form.controls.firstname.errors?.required">{{"USER.FIELD_ERROR.FIRSTNAME_REQUIRED"|translate}}</mat-error>
+                        <mat-error *ngIf="form.controls.firstname.errors?.required">{{"FIELD_ERROR.FIRSTNAME_REQUIRED"|translate}}</mat-error>
                     </mat-form-field>
                     <mat-form-field class="w-100">
-                      <mat-label><mat-icon>person</mat-icon> {{"USER.FIELD.LAST_NAME"|translate}}</mat-label>
+                      <mat-label><mat-icon>person</mat-icon> {{"FIELD.LASTNAME"|translate}}</mat-label>
                       <input matInput formControlName="lastname" required>
-                      <mat-error *ngIf="form.controls.lastname.errors?.required">{{"USER.FIELD_ERROR.LASTNAME_REQUIRED"|translate}}</mat-error>
+                      <mat-error *ngIf="form.controls.lastname.errors?.required">{{"FIELD_ERROR.LASTNAME_REQUIRED"|translate}}</mat-error>
                     </mat-form-field>
                     <!-- <mat-form-field class="w-100">
                       <mat-label><mat-icon *ngIf=" usernameType=='phone' ">local_phone</mat-icon><mat-icon *ngIf=" usernameType=='email' ">mail</mat-icon> Identifiant</mat-label>
@@ -117,7 +117,7 @@
             <mat-tab label="Type" formGroupName="type">
                 <div fxLayout="column" class="form-field-outer">
                     <mat-form-field class="w-100">
-                        <mat-label>{{"USER.FIELD.TYPE"|translate}}</mat-label>
+                        <mat-label>{{"FIELD.TYPE"|translate}}</mat-label>
                         <mat-select formControlName="name">
                           @for (userType of userTypes; track userType) {
                             <mat-option [value]="userType.value">{{userType.viewValue}}</mat-option>
@@ -161,17 +161,17 @@
                   <mat-form-field class="w-100">
                       <mat-label><mat-icon>mail</mat-icon> Email</mat-label>
                       <input matInput formControlName="email">
-                      <mat-error *ngIf="form.get('contacts.email').hasError('pattern')">{{"USER.FIELD_ERROR.EMAIL_INVALID"|translate}}</mat-error>
+                      <mat-error *ngIf="form.get('contacts.email').hasError('pattern')">{{"FIELD_ERROR.EMAIL_INVALID"|translate}}</mat-error>
                   </mat-form-field>
                   <mat-form-field class="w-100">
-                      <mat-label><mat-icon>local_phone</mat-icon> *{{"USER.FIELD.PHONE"|translate}}</mat-label>
+                      <mat-label><mat-icon>local_phone</mat-icon> *{{"FIELD.PHONE"|translate}}</mat-label>
                       <input matInput formControlName="phoneNumber" >
-                      <mat-error *ngIf="form.get('contacts.phoneNumber').errors?.required">{{"USER.FIELD_ERROR.PHONE_REQUIRED"|translate}}</mat-error>
-                      <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('pattern')">{{"USER.FIELD_ERROR.PHONE_NOT_NUMERIC"|translate}}</mat-error>
-                      <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('minlength')">{{"USER.FIELD_ERROR.PHONE_MINLENGTH"|translate}}</mat-error>
+                      <mat-error *ngIf="form.get('contacts.phoneNumber').errors?.required">{{"FIELD_ERROR.PHONE_REQUIRED"|translate}}</mat-error>
+                      <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('pattern')">{{"FIELD_ERROR.PHONE_NOT_NUMERIC"|translate}}</mat-error>
+                      <mat-error *ngIf="form.get('contacts.phoneNumber').hasError('minlength')">{{"FIELD_ERROR.PHONE_MINLENGTH"|translate}}</mat-error>
                   </mat-form-field>
                   <mat-form-field class="w-100">
-                      <mat-label><mat-icon>location_on</mat-icon> {{"USER.FIELD.ADDRESS"|translate}}</mat-label>
+                      <mat-label><mat-icon>location_on</mat-icon> {{"FIELD.ADDRESS"|translate}}</mat-label>
                       <input matInput formControlName="address">
                   </mat-form-field>
               </div>
