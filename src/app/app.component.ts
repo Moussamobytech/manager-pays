@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Settings, AppSettings } from './app.settings';
 import { TranslateService } from '@ngx-translate/core';
 import { DomHandlerService } from './dom-handler.service';
+import { LocalService } from './services/local.service';
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,12 @@ export class AppComponent {
   constructor(public appSettings: AppSettings,
               public router: Router,
               public translate: TranslateService,
+              private localStorage: LocalService,
               public domHandlerService: DomHandlerService){
     this.settings = this.appSettings.settings;
     translate.addLangs(['en','de','fr','ru','tr']);
-    translate.setDefaultLang('fr');
+    let lg = (this.localStorage.getJsonValue("lang-key")) || 'fr';
+    translate.setDefaultLang(lg.lang);
     translate.use('fr');
   }
 

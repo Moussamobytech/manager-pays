@@ -115,6 +115,7 @@
     "PHONE_NOT_NUMERIC": "Le numéro doit être numérique.",
     "PHONE_MINLENGTH": "Doit inclure 6 caractères ou plus.",
     "TYPE_REQUIRED": "Le type d'utilisateur est requis.",
+    "IMAGE_REQUIRED": "L'image est obligatoire.",
     "PASSWORD_REQUIRED": "Le mot de passe est requis.",
     "PASSWORD_MINLENGTH": "Doit comporter 6 caractères ou plus.",
     "PASSCONFIRM_REQUIRED": "Une confirmation est requise.",
