@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.module';
+import { Brand } from 'src/app/app.models';
+import { ApiService } from 'src/app/service/api.service';
 
 @Component({
   selector: 'app-brands-carousel',
@@ -8,23 +10,23 @@ import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.modu
 })
 export class BrandsCarouselComponent {
 
-  @Input('brands') brands: Array<any> = [];
+  @Input('brands') brands: Array<Brand> = [];
 
   public config: SwiperConfigInterface = { };
-  
-  constructor() { }
+
+  constructor( public apiService: ApiService) { }
 
   ngAfterViewInit(){
     this.config = {
       slidesPerView: 7,
-      spaceBetween: 16,         
+      spaceBetween: 16,
       keyboard: true,
       navigation: true,
       pagination: false,
-      grabCursor: true,  
+      grabCursor: true,
       loop: true,
       preloadImages: false,
-      lazy: true,     
+      lazy: true,
       autoplay: {
         delay: 6000,
         disableOnInteraction: false
@@ -53,5 +55,6 @@ export class BrandsCarouselComponent {
       }
     }
   }
+
 
 }

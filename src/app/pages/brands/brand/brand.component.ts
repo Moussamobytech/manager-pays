@@ -60,13 +60,13 @@ export class BrandComponent implements OnInit {
     { name: "17\"", selected: false },
     { name: "21\"", selected: false },
     { name: "23.4\"", selected: false }
-  ]; 
+  ];
   public page:any;
   public settings: Settings;
-  constructor(public appSettings:AppSettings, 
-              private activatedRoute: ActivatedRoute, 
-              public appService:AppService, 
-              public dialog: MatDialog, 
+  constructor(public appSettings:AppSettings,
+              private activatedRoute: ActivatedRoute,
+              public appService:AppService,
+              public dialog: MatDialog,
               private router: Router,
               public domHandlerService: DomHandlerService) {
     this.settings = this.appSettings.settings;
@@ -86,21 +86,21 @@ export class BrandComponent implements OnInit {
     };
 
     this.getCategories();
-    this.getAllProducts();  
+    this.getAllProducts();
   }
 
   public getAllProducts(){
     this.appService.getProducts("brand").subscribe(data=>{
-      this.products = data; 
-      //for show more product  
+      this.products = data;
+      //for show more product
       for (var index = 0; index < 3; index++) {
-        this.products = this.products.concat(this.products);        
+        this.products = this.products.concat(this.products);
       }
     });
   }
 
-  public getCategories(){  
-    if(this.appService.Data.categories.length == 0) { 
+  public getCategories(){
+    if(this.appService.Data.categories.length == 0) {
       this.appService.getCategories().subscribe(data => {
         this.categories = data;
         this.appService.Data.categories = data;
@@ -123,7 +123,7 @@ export class BrandComponent implements OnInit {
 
   public changeCount(count){
     this.count = count;
-    this.getAllProducts(); 
+    this.getAllProducts();
   }
 
   public changeSorting(sort){
@@ -135,7 +135,7 @@ export class BrandComponent implements OnInit {
     this.viewCol = viewCol;
   }
 
-  public openProductDialog(product){   
+  public openProductDialog(product){
     let dialogRef = this.dialog.open(ProductDialogComponent, {
         data: product,
         panelClass: 'product-dialog',
@@ -143,21 +143,21 @@ export class BrandComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(product => {
       if(product){
-        this.router.navigate(['/products', product.id, product.name]); 
+        this.router.navigate(['/products', product.id, product.nom]);
       }
     });
   }
 
   public onPageChanged(event){
     this.page = event;
-    this.getAllProducts(); 
-    this.domHandlerService.winScroll(0,0); 
+    this.getAllProducts();
+    this.domHandlerService.winScroll(0,0);
   }
 
   public onChangeCategory(event){
     if(event.target){
-      this.router.navigate(['/products', event.target.innerText.toLowerCase()]); 
-    }   
+      this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
+    }
   }
 
 }

@@ -24,7 +24,7 @@ const routes: Routes = [
   },
   { path: 'landing', loadChildren: () => import('./landing/landing.module').then(m => m.LandingModule) },
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
-  { path: 'campagne', loadChildren: () => import('./admin/campagne/campagne.module').then(m => m.CampagneModule)},
+  // { path: 'campagne', loadChildren: () => import('./admin/campagne/campagne.module').then(m => m.CampagneModule)},
 
   { path: '**', component: NotFoundComponent }
 ];

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../../shared/products-carousel/product-dialog/product-dialog.component';
 import { AppService } from '../../app.service';
-import { Product, Category } from "../../app.models";
+import { Product, Category, Brand } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 
@@ -24,7 +24,7 @@ export class ProductsComponent implements OnInit {
   public sort:any;
   public products: Array<Product> = [];
   public categories:Category[];
-  public brands = [];
+  public brands : any;
   public priceFrom: number = 750;
   public priceTo: number = 1599;
   public colors = [
@@ -94,7 +94,7 @@ export class ProductsComponent implements OnInit {
     };
 
     this.getCategories();
-    // this.getBrands();
+     this.getBrands();
     this.getProductsByCetegorie(this.selectedCategoryId);
     this.getCategorie();
 
@@ -144,8 +144,12 @@ export class ProductsComponent implements OnInit {
 
 
   public getBrands(){
-    this.brands = this.appService.getBrands();
-    this.brands.forEach(brand => { brand.selected = false });
+    this.appService.getBrands().subscribe(data=>{
+      this.brands =data;
+      this.brands.forEach(brand => { brand.selected = false });
+      console.log("Brands ",data);
+    });
+    // this.brands.forEach(brand => { brand.selected = false });
   }
 
   ngOnDestroy() {

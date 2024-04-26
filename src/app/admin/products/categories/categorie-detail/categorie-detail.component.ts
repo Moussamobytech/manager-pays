@@ -42,7 +42,6 @@ this.settings = this.appSettings.settings;
     this.getProductsByCetegorie(this.selectedCategoryId);
     this.getCategorieById(this.categoryId);
     this.getCategorie();
-    console.log('category detail:' ,this.selectedCategoryId);
 
     this.sub = this.activatedRoute.params.subscribe(params => {
       if(params['id']){

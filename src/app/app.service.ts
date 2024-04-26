@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Campagne, Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
@@ -41,6 +41,14 @@ export class AppService {
 
   }
 
+  public getCampagneById(id: string): Observable<any>{
+    return this.apiService.get('/campagne/' +id);
+
+}
+public getBrandById(id: string): Observable<any>{
+  return this.apiService.get('/brand/' +id);
+
+}
     public getProducts(type): Observable<any>{
         return this.apiService.get('/produit/list-by-category/' + type );
     }
@@ -72,7 +80,7 @@ export class AppService {
 
 
     public getCampagne(): Observable<any>{
-      return this.apiService.get('/campagne/liste');
+      return this.apiService.get('/campagne/liste/');
 
   }
 
@@ -92,21 +100,34 @@ export class AppService {
     return this.apiService.postFile(`/categorie/add`, formData, Headers);
   }
 
-  public addCampagne(campagne: Campagne, image: File): Observable<any> {
+
+  public addCampagne(campagne: any, image: File): Observable<any> {
+
     const formData = new FormData();
     formData.append('libelle', campagne.libelle);
     formData.append('username', campagne.username);
     formData.append('type', campagne.type);
-    formData.append('dateDebut', campagne.dateDebut.toISOString());
-    formData.append('dateFin', campagne.dateFin.toISOString());
-    formData.append('produit', campagne.produit.nom);
+    formData.append('dateDebut', campagne.dateDebut.toUTCString()); // Convertir la date en chaîne de caractères UTC
+    formData.append('dateFin', campagne.dateFin.toUTCString()); // Convertir la date en chaîne de caractères UTC
+    formData.append('produit', campagne.produit);
     formData.append('image', image);
 
     // const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
 
-    return this.apiService.postFile(`/camapgne/add`, formData, Headers);
+    return this.apiService.postFile(`/campagne/add`, formData, Headers);
   }
 
+  public addBrand(brand: any, logo: File): Observable<any> {
+
+    const formData = new FormData();
+    formData.append('libelle', brand.libelle);
+    formData.append('description', brand.description);
+    formData.append('logo', logo);
+
+    // const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
+
+    return this.apiService.postFile(`/brand/add`, formData, Headers);
+  }
 
   public updateCategory(id: string, nom: string, image: File): Observable<any> {
     // Créer un objet FormData pour envoyer à l'API
@@ -120,29 +141,56 @@ export class AppService {
     return this.apiService.putFile(`/categorie/update/${id}`, formData, Headers);
   }
 
-  public updateCampagne(id: string, libelle: string, username: string, type:string, dateDebut: Date, dateFin: Date, produit:Product, image: File): Observable<any> {
+  public updateCampagne(id: string, libelle: string, username: string, type:string, dateDebut: Date, dateFin: Date, produit:any, image: File): Observable<any> {
     // Créer un objet FormData pour envoyer à l'API
     const formData = new FormData();
-    formData.append('id', id.toString());
+    formData.append('id', id);
     formData.append('libelle', libelle);
     formData.append('username', username);
     formData.append('type', type);
-    formData.append('dateDebut', dateDebut.toISOString());
-    formData.append('dateFin', dateFin.toISOString());
-    formData.append('produit', produit.nom);
+    formData.append('dateDebut', dateDebut.toUTCString());
+    formData.append('dateFin', dateFin.toUTCString());
+
+
+    formData.append('produit', produit);
     formData.append('image', image);
 
     // Envoyer la requête PUT à l'API avec l'objet FormData
     return this.apiService.putFile(`/campagne/update/${id}`, formData, Headers);
   }
 
-public setStatus (id : string , status : string ) : Observable<any> {
-  const formData: FormData = new FormData();
-  formData.append ('status', status );
+  public updateBrand(id: string, libelle: string, description: string,  logo: File): Observable<any> {
+    // Créer un objet FormData pour envoyer à l'API
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('libelle', libelle);
+    formData.append('description', description);
+    formData.append('logo', logo);
 
-return this.apiService.put(`/categorie/status/${id}`,formData) ;
+    // Envoyer la requête PUT à l'API avec l'objet FormData
+    return this.apiService.putFile(`/brand/update/${id}`, formData, Headers);
+  }
+
+  // public setStatus(id: string, status: string): Observable<any> {
+  //   return this.apiService.put(`/categorie/status/${id}`, { params: status  });
+  // }
+
+
+public setStatus (id : string , status : string ) : Observable<any> {
+  // const formData: FormData = new FormData();
+  // formData.append ('status', status.toString() );
+
+return this.apiService.put(`/categorie/status/${id}?status=${status}`, null) ;
 }
 
+public setStatusCampagne (id : string , etat : boolean ) : Observable<any> {
+
+return this.apiService.put(`/campagne/etat/${id}/${etat}`, null ).pipe() ;
+}
+public setEtatBrand (id : string , etat : boolean ) : Observable<any> {
+
+  return this.apiService.put(`/brand/etat/${id}/${etat}`, null ).pipe() ;
+  }
 
 //   public addProduit(produit: Product, images: File): Observable<Product> {
 //     const formData = new FormData();
@@ -160,13 +208,18 @@ return this.apiService.put(`/categorie/status/${id}`,formData) ;
 //     return this.http.post<Product>(`${this.url}/produit/add`, formData, { headers });
 // }
 
+public supprimerCategorie(id: string): Observable<any> {
+  return  this.apiService.delete(`/categorie/supprimer/${id}`);
+}
+
+public supprimerCampagne(id: string): Observable<any> {
+  return  this.apiService.delete(`/campagne/supprimer/${id}`);
+}
    public getBanners(): Observable<any[]>{
         return this.http.get<any[]>(this.url + 'banners.json');
     }
 
-    public supprimerCategorie(id: string): Observable<any> {
-      return  this.apiService.delete(`/categorie/supprimer/${id}`);
-    }
+
     public addToCompare(product:Product){
         let message, status;
         if(this.Data.compareList.filter(item=>item.id == product.id)[0]){
@@ -230,23 +283,26 @@ return this.apiService.put(`/categorie/status/${id}`,formData) ;
         };
     }
 
-    public getBrands(){
-        return [
-            { name: 'aloha', image: 'assets/images/brands/aloha.png' },
-            { name: 'dream', image: 'assets/images/brands/dream.png' },
-            { name: 'congrats', image: 'assets/images/brands/congrats.png' },
-            { name: 'best', image: 'assets/images/brands/best.png' },
-            { name: 'original', image: 'assets/images/brands/original.png' },
-            { name: 'retro', image: 'assets/images/brands/retro.png' },
-            { name: 'king', image: 'assets/images/brands/king.png' },
-            { name: 'love', image: 'assets/images/brands/love.png' },
-            { name: 'the', image: 'assets/images/brands/the.png' },
-            { name: 'easter', image: 'assets/images/brands/easter.png' },
-            { name: 'with', image: 'assets/images/brands/with.png' },
-            { name: 'special', image: 'assets/images/brands/special.png' },
-            { name: 'bravo', image: 'assets/images/brands/bravo.png' }
-        ];
+    public getBrands(): Observable<any>{
+      return this.apiService.get('/brand/liste');
     }
+    // public getBrands(){
+    //     return [
+    //         { name: 'aloha', image: 'assets/images/brands/aloha.png' },
+    //         { name: 'dream', image: 'assets/images/brands/dream.png' },
+    //         { name: 'congrats', image: 'assets/images/brands/congrats.png' },
+    //         { name: 'best', image: 'assets/images/brands/best.png' },
+    //         { name: 'original', image: 'assets/images/brands/original.png' },
+    //         { name: 'retro', image: 'assets/images/brands/retro.png' },
+    //         { name: 'king', image: 'assets/images/brands/king.png' },
+    //         { name: 'love', image: 'assets/images/brands/love.png' },
+    //         { name: 'the', image: 'assets/images/brands/the.png' },
+    //         { name: 'easter', image: 'assets/images/brands/easter.png' },
+    //         { name: 'with', image: 'assets/images/brands/with.png' },
+    //         { name: 'special', image: 'assets/images/brands/special.png' },
+    //         { name: 'bravo', image: 'assets/images/brands/bravo.png' }
+    //     ];
+    // }
 
     public getCountries(){
         return [

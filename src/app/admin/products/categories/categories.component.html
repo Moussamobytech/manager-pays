@@ -38,10 +38,17 @@
                             <mat-icon>delete</mat-icon>
                         </button>
                         <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                        <!-- <mat-slide-toggle [color]="cat.status ? 'primary' : 'warn'" [checked]="cat.status" (change)="setStatus(cat.id, $event)">
+                          {{ cat.status ? 'Actif' : 'Inactif' }}
+                      </mat-slide-toggle> -->
+                        <button mat-mini-fab color="warn" matTooltip="Deactivate" class="mx-1"  (click)="setStatus(cat.id, cat.status==='INACTIF'? 'actif': 'inactif')" >
+                          <mat-icon>{{ cat.status === 'INACTIF' ? 'check_circle' : 'block' }}</mat-icon>
 
-                        <button mat-mini-fab color="warn" matTooltip="Deactivate" class="mx-1"  (click)="setStatus(cat.id, 'inactif')" >
-                          <mat-icon>{{ cat.status === 'inactif' ? 'check_circle' : 'block' }}</mat-icon>
+
                       </button>
+                      <!-- <button mat-mini-fab [color]="cat.status ? 'primary' : 'warn'" matTooltip="{{ cat.status ? 'Activater' : 'Desactivater' }}" class="mx-1" (click)="setStatus(cat.id, 'inactif')">
+                        <mat-icon>{{cat.status  === 'inactif' ? 'check_circle' : 'cancel' }}</mat-icon>
+                    </button> -->
 
                     </div>
                 </div>

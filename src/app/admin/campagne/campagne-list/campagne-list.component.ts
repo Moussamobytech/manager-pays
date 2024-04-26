@@ -7,6 +7,8 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
 import { CategoryDialogComponent } from '../../products/categories/category-dialog/category-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { CampagneDialogComponent } from '../campagne-dialog/campagne-dialog.component';
+import { FormBuilder } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-campagne-list',
@@ -16,17 +18,23 @@ import { CampagneDialogComponent } from '../campagne-dialog/campagne-dialog.comp
 
 export class CampagneListComponent implements OnInit {
   public viewCol: number = 25;
-  public campagne : Campagne[];
+  public campagne : Campagne[]= [];
   public page: any;
-  public count = 6;
+  public count = 5;
   public settings:Settings;
-
-  constructor(public appService:AppService, public domHandlerService: DomHandlerService, public dialog: MatDialog, public appSettings:AppSettings) {
+  public id : string;
+  form = this.fb.group({
+    etat : [null]
+  })
+  constructor(public appService:AppService,  public fb : FormBuilder,public domHandlerService: DomHandlerService, public dialog: MatDialog, public appSettings:AppSettings) {
     this.settings = this.appSettings.settings;
 
    }
 
   ngOnInit(): void {
+
+
+
     if(this.domHandlerService.window?.innerWidth < 1280){
       this.viewCol = 33.3;
     };
@@ -45,66 +53,140 @@ export class CampagneListComponent implements OnInit {
   public getCampagne(){
     this.appService.getCampagne().subscribe(data =>{
       this.campagne = data;
-      console.log("Camapgne :"+ this.campagne);
+      console.log("Camapagne :"+ this.campagne);
     })
   }
-
-  public openCampagneDialog(data:any){
+  public openCampagneDialog(data: any) {
     const dialogRef = this.dialog.open(CampagneDialogComponent, {
       data: {
-        campagnes: data,
-        campagne: this.campagne
+        campagne: data,
+        campagnes: this.campagne // Assurez-vous que la propriété s'appelle campagnes, pas campagne
       },
       panelClass: ['theme-dialog'],
       autoFocus: false,
       direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
-    dialogRef.afterClosed().subscribe(campagnes => {
-      if(campagnes){
-        const index: number = this.campagne.findIndex(x => x.id == campagnes.id);
-        if(index !== -1){
-          this.campagne[index] = campagnes;
-        }
-        else{
-          let last_campagne = this.campagne[this.campagne.length - 1];
-          campagnes.id = last_campagne.id + 1;
-          this.campagne.push(campagnes);
+    dialogRef.afterClosed().subscribe(campagne => {
+      if (campagne) {
+        const index: number = this.campagne.findIndex(x => x.id === campagne.id);
+        if (index !== -1) {
+          // Si la campagne existe déjà, mettez à jour ses données
+          this.campagne[index] = campagne;
+        } else {
+          // Si la campagne n'existe pas, ajoutez-la à la liste
+          const lastCampagne = this.campagne[this.campagne.length - 1];
+          campagne.id = lastCampagne.id + 1;
+          this.campagne.push(campagne);
         }
       }
     });
-
-
   }
 
 
 
-  public remove(category: any) {
+  public remove(campagne: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
-        message: "Are you sure you want to remove this category?"
+        message: "Êtes-vous sûr de vouloir supprimer cette campagne?"
       }
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
         // Si l'utilisateur confirme la suppression dans la boîte de dialogue
-        // this.appService.supprimerCategorie(category.id).subscribe(
-        //   () => {
-        //     // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
-        //     const index: number = this.categories.findIndex((cat: any) => cat.id === category.id);
-        //     if (index !== -1) {
-        //       this.categories.splice(index, 1);
-        //     }
-        //     console.log("Category successfully deleted.");
-        //   },
-        //   (error) => {
-        //     console.error("Error deleting category:", error);
-        //     // Traiter les erreurs éventuelles lors de la suppression de la catégorie
-        //   }
-        // );
+        this.appService.supprimerCampagne(campagne.id).subscribe(
+          () => {
+            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+            const index: number = this.campagne.findIndex((cat: any) => cat.id === campagne.id);
+            if (index !== -1) {
+              this.campagne.splice(index, 1);
+            }
+            console.log("Category successfully deleted.");
+          },
+          (error) => {
+            console.error("Error deleting category:", error);
+            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+          }
+        );
       }
     });
+ }
+
+  // public setStatusCampagne(id: string, etat: boolean): void {
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //     maxWidth: "400px",
+  //     data: {
+  //       title: "Confirm Action",
+  //       message: `Are you sure you want to set the status of this etat to ${etat}?`
+  //     }
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(dialogResult => {
+  //     if (dialogResult) {
+  //       // Si l'utilisateur confirme dans la boîte de dialogue
+  //       this.appService.setStatusCampagne(id, etat).subscribe(
+  //         () => {
+  //           console.log(`Status of campagne successfully set to ${etat}.`);
+  //           // Mettre à jour l'état de la catégorie dans votre application si nécessaire
+  //         },
+  //         error => {
+  //           console.error("Error setting campagne etat:", error);
+  //           // Traiter les erreurs éventuelles lors de la modification du statut de la catégorie
+  //         }
+  //       );
+  //     }
+  //   });
+
+
+  // public setStatusCampagne(ID: string): void {
+  //   let status = this.form.value;
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //     maxWidth: "400px",
+  //     data: {
+  //       title: "Confirm Action",
+  //       message: `Are you sure you want to set the status of this campagne to ${ID}?`
+  //     }
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(dialogResult => {
+  //     if (dialogResult) {
+  //       // Si l'utilisateur confirme dans la boîte de dialogue
+
+  //       this.appService.setStatusCampagne(ID, status.etat).subscribe(
+  //         () => {
+  //           console.log(`Status of campagne successfully set to ${ID}.`);
+  //           // Mettre à jour l'état de la campagne dans votre application si nécessaire
+  //         },
+  //         error => {
+  //           console.error("Error setting campagne etat:", error);
+  //           // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
+
+  setStatusCampagne(id: string, event: MatSlideToggleChange): void {
+    // Trouver la campagne correspondante dans la liste
+    const campagne = this.campagne.find(c => c.id === id);
+    if (campagne) {
+      // Mettre à jour l'état de la campagne
+      campagne.etat = event.checked;
+      // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
+      this.appService.setStatusCampagne(id, event.checked).subscribe(
+        () => {
+          console.log(`Statut de la campagne ${id} modifié avec succès à ${event.checked}.`);
+          // Mettre à jour l'état de la campagne dans votre application si nécessaire
+        },
+        error => {
+          console.error("Erreur lors du réglage du statut de la campagne:", error);
+          // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
+        }
+      );
+    }
   }
+
+
 }

@@ -1,15 +1,15 @@
 <div class="top-menu">
 
-    <!-- <a mat-button [matMenuTriggerFor]="currencyMenu" #currencyMenuTrigger="matMenuTrigger">
+    <a mat-button [matMenuTriggerFor]="currencyMenu" #currencyMenuTrigger="matMenuTrigger">
         {{currency}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-    </a> -->
-    <!-- <mat-menu #currencyMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown">
+    </a>
+    <mat-menu #currencyMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown">
         <span (mouseleave)="currencyMenuTrigger.closeMenu()">
             <button mat-menu-item *ngFor="let cur of currencies" (click)="changeCurrency(cur)">
                 <span>{{cur}}</span>
             </button>
         </span>
-    </mat-menu> -->
+    </mat-menu>
 
     <a mat-button [matMenuTriggerFor]="langMenu" #langMenuTrigger="matMenuTrigger">
         <img [src]="'assets/images/flags/'+translateService.currentLang+'.svg'" width="18" [alt]="translateService.currentLang">

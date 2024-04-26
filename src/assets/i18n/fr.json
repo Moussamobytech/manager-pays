@@ -1,14 +1,14 @@
-{  
-  "WELCOME": "Bienvenue sur notre marché!",  
-  "LOGIN": "S'identifier", 
+{
+  "WELCOME": "Bienvenue sur notre marché!",
+  "LOGIN": "S'identifier",
   "LOGOUT": "Se déconnecter",
-  "REGISTER": "S'inscrire", 
-  "ACCOUNT": "Compte", 
+  "REGISTER": "S'inscrire",
+  "ACCOUNT": "Compte",
   "COMPARE": "Comparer",
   "WISHLIST": "Liste de souhaits",
-  "NAV": {  
-    "HOME": "Accueil",  
-    "PAGES": "Des pages",  
+  "NAV": {
+    "HOME": "Accueil",
+    "PAGES": "Des pages",
     "SHOP": "Boutique",
     "ALL_PRODUCTS": "Tous les produits",
     "PRODUCT_DETAIL": "Détail du produit",
@@ -17,7 +17,7 @@
     "FAQS": "Faqs",
     "PRICING": "Pricing",
     "TERMS_CONDITIONS": "Terms & Conditions",
-    "LANDING": "Page de destination", 
+    "LANDING": "Page de destination",
     "404_PAGE": "404 Page",
     "OTHERS": "Others",
     "EXTERNAL_LINK": "Lien Externe",
@@ -26,26 +26,29 @@
     "ABOUT_US": "Sur",
     "ADMIN": "Admin"
   },
-  "ADMIN_NAV": {  
-    "DASHBOARD": "Tableau de bord",  
-    "PRODUCTS": "Produits", 
+  "ADMIN_NAV": {
+    "DASHBOARD": "Tableau de bord",
+    "PRODUCTS": "Produits",
     "CATEGORIES": "Catégories",
-    "PRODUCT_LIST": "Liste de produit", 
+    "PRODUCT_LIST": "Liste de produit",
     "PRODUCT_DETAIL": "Détail de produit",
     "ADD_PRODUCT": "Ajouter un produit",
     "SALES": "Ventes",
     "ORDERS": "Ordres",
     "TRANSACTIONS": "Transactions",
-    "USERS": "Utilisateurs", 
-    "CUSTOMERS": "Les clients", 
+    "BRAND": "Marque",
+    "BRAND_LIST": "Marque_list",
+    "BRAND_DETAIL": "Marque_detail",
+    "USERS": "Utilisateurs",
+    "CUSTOMERS": "Les clients",
     "COUPONS": "Coupons",
     "WITHDRAWAL": "Retrait",
     "ANALYTICS": "Analytique",
     "REFUND": "Rembourser",
     "FOLLOWERS": "Suiveurs",
     "SUPPORT": "Soutien",
-    "REVIEWS": "Commentaires", 
-    "EXTERNAL_LINK": "Lien Externe" 
+    "REVIEWS": "Commentaires",
+    "EXTERNAL_LINK": "Lien Externe"
   },
   "BTN": {
     "ADD": "Ajouter",
@@ -62,8 +65,8 @@
     "SURE_DELETE": "Etes-vous sûr que vous voulez supprimer?",
     "FILE_SIZE": "La taille du fichier ne peut pas dépasser {{param}} ko."
   },
-  "FIELD": { 
-    "NAME": "Nom" 
+  "FIELD": {
+    "NAME": "Nom"
   },
   "PAGINATION":{
     "ITEMS_PER_PAGE": "Objets par page:",

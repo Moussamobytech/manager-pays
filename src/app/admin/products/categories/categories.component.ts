@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-categories',
@@ -129,6 +130,7 @@ export class CategoriesComponent implements OnInit {
         // Si l'utilisateur confirme dans la boîte de dialogue
         this.appService.setStatus(id, status).subscribe(
           () => {
+
             console.log(`Status of category successfully set to ${status}.`);
             // Mettre à jour l'état de la catégorie dans votre application si nécessaire
           },
@@ -140,4 +142,27 @@ export class CategoriesComponent implements OnInit {
       }
     });
   }
+
+
+  // public setStatus(id: string, event: MatSlideToggleChange): void {
+  //   // Trouver la categorie correspondant dans la liste
+  //   const categorie = this.categories.find(c => c.id === id);
+  //   if (categorie) {
+  //     // Mettre à jour l'état du brand
+  //     categorie.status = event.checked.toString();
+
+  //     this.appService.setStatus(id, event.checked.toString()).subscribe(
+  //       () => {
+  //         console.log(`État de la catégorie ${id} modifié avec succès à ${event.checked}.`);
+  //         // Mettre à jour l'état de la catégorie dans votre application si nécessaire
+  //       },
+  //       error => {
+  //         console.error("Erreur lors du réglage d'état de la catégorie:", error);
+  //         // Traiter les erreurs éventuelles lors de la modification d'état de la catégorie
+  //       }
+  //     );
+  //   }
+  // }
+
+
 }

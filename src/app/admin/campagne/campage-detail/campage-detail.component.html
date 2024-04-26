@@ -1,1 +1,65 @@
-<p>campage-detail works!</p>
+<div fxLayout="row wrap" class="p-2">
+  <div fxFlex="100" fxFlex.gt-md="45">
+      <mat-card class="product-image d-block">
+          <mat-chip-listbox *ngIf="campagne?.discount">
+              <mat-chip-option color="warn" highlighted selectable="false">{{campagne?.discount}}% OFF</mat-chip-option>
+          </mat-chip-listbox>
+          <img  [src]="campagne.image" class="image-card" />
+      </mat-card>
+
+  </div>
+  <div fxFlex="100" fxFlex.gt-md="55" ngClass.gt-sm="px-4 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2">
+
+      <h2>Libelle : {{campagne.libelle}}</h2>
+
+      <p class="py-2 text-muted lh">Username : {{campagne?.username}}</p>
+      <p class="py-2 text-muted lh"> Type : {{campagne?.type}}</p>
+      <p class="py-2 text-muted lh">Date debut : {{campagne?.dateDebut  }}</p>
+      <p class="py-2 text-muted lh">Date Fin : {{campagne?.dateFin}}</p>
+
+      <div class="divider my-2"></div>
+
+
+  </div>
+</div>
+
+
+
+
+<div fxLayout="row wrap" class="p-2 mt-3">
+  <div fxFlex="100">
+      <mat-card class="product-image d-block">
+          <mat-tab-group [@.disabled]="true" [selectedIndex]="0" mat-stretch-tabs="false" mat-align-tabs="center">
+              <mat-tab label="Produit">
+                  <div class="full-desc lh" >
+                      <div fxLayout="row wrap" class="p-2">
+
+                        <div fxFlex="100" fxFlex.gt-md="45"  *ngFor="let product of campagne.produitList | paginate: { itemsPerPage: count, currentPage: page }"  >
+                          <mat-card class="product-item text-center">
+                            <a [routerLink]="['/admin/products/product-detail', product.id]" class="title text-truncate">
+                              <img [src]="product?.image1" alt="" class="image-campagne" />
+                            </a>
+                              <h4 class="category text-muted">{{ (appService.Data.categories | filterById : product.categorie)?.nom }}</h4>
+                              <div class="title text-truncate">{{product.nom}}</div>
+                              <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
+                                <div fxLayout="column" fxLayoutAlign="center start">
+                                  <p class="old-price text-muted" *ngIf="product.priceBasic">Prix basic : {{product.priceBasic | number : '1.2-2'}} FCFA</p>
+                                  <p class="new-price">Prix Promo : {{product.pricePromotion | number : '1.2-2'}} FCFA</p>
+                                </div>
+                              </div>
+
+
+                            <!-- <div class="divider mt-2"></div> -->
+                          </mat-card>
+                        </div>
+                      </div>
+
+
+ </div>
+              </mat-tab>
+
+
+          </mat-tab-group>
+      </mat-card>
+  </div>
+</div>
