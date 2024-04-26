@@ -37,7 +37,7 @@ const routes: Routes = [
     ]
   },
   { path: 'sign-in', loadChildren: () => import('./pages/session/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Sign In ' } },
-  { path: 'campagne', loadChildren: () => import('./admin/campagne/campagne.module').then(m => m.CampagneModule)},
+
   { path: '**', component: NotFoundComponent }
 ];
 

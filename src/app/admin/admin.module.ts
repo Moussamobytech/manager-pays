@@ -31,7 +31,8 @@ export const routes = [
       { path: 'followers', loadChildren: () => import('./followers/followers.module').then(m => m.FollowersModule), data: { breadcrumb: 'Followers' } },
       { path: 'support', loadChildren: () => import('./support/support.module').then(m => m.SupportModule), data: { breadcrumb: 'Support' } },
       { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule), data: { breadcrumb: 'Reviews' } },
-      { path: 'campagne', loadChildren: () => import('./campagne/campagne.module').then(m => m.CampagneModule), data: { breadcrumb: 'Campagne' } }
+      { path: 'campagne', loadChildren: () => import('./campagne/campagne.module').then(m => m.CampagneModule), data: { breadcrumb: 'Campagne' } },
+      { path: 'brand', loadChildren: () => import('./brands/brand.module').then(m => m.BrandModule), data: { breadcrumb: 'Brand' } }
     ]
   }
 ];

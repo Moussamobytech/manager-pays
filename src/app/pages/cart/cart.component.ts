@@ -34,18 +34,18 @@ export class CartComponent implements OnInit {
       this.cartItemCount.forEach(count=>{
         this.cartItemCountTotal +=count;
       });
-     
+
       this.appService.Data.totalPrice = this.grandTotal;
       this.appService.Data.totalCartCount = this.cartItemCountTotal;
 
       this.appService.Data.cartList.forEach(product=>{
         this.cartItemCount.forEach((count,index)=>{
-          if(product.id == index){
-            product.cartCount = count;
-          }
+          // if(product.id == index){
+          //   product.cartCount = count;
+          // }
         });
       });
-      
+
     }
   }
 
@@ -53,15 +53,15 @@ export class CartComponent implements OnInit {
     const index: number = this.appService.Data.cartList.indexOf(product);
     if (index !== -1) {
       this.appService.Data.cartList.splice(index, 1);
-      this.grandTotal = this.grandTotal - this.total[product.id]; 
-      this.appService.Data.totalPrice = this.grandTotal;       
+      this.grandTotal = this.grandTotal - this.total[product.id];
+      this.appService.Data.totalPrice = this.grandTotal;
       this.total.forEach(val => {
         if(val == this.total[product.id]){
           this.total[product.id] = 0;
         }
       });
 
-      this.cartItemCountTotal = this.cartItemCountTotal - this.cartItemCount[product.id]; 
+      this.cartItemCountTotal = this.cartItemCountTotal - this.cartItemCount[product.id];
       this.appService.Data.totalCartCount = this.cartItemCountTotal;
       this.cartItemCount.forEach(val=>{
         if(val == this.cartItemCount[product.id]){
@@ -69,7 +69,7 @@ export class CartComponent implements OnInit {
         }
       });
       this.appService.resetProductCartCount(product);
-    }     
+    }
   }
 
   public clear(){
@@ -79,6 +79,6 @@ export class CartComponent implements OnInit {
     this.appService.Data.cartList.length = 0;
     this.appService.Data.totalPrice = 0;
     this.appService.Data.totalCartCount = 0;
-  } 
+  }
 
 }

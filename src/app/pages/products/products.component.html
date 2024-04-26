@@ -82,7 +82,7 @@
                     </mat-expansion-panel-header>
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-brands">
                         <button mat-raised-button *ngFor="let brand of brands" (click)="brand.selected = !brand.selected" [class.selected]="brand.selected">
-                            <img [src]="brand.image"/>
+                            <img [src]="brand.logo"/>
                         </button>
                     </div>
                 </mat-expansion-panel>

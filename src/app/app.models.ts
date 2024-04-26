@@ -4,11 +4,11 @@ export class Category {
               public hasSubCategory: boolean,
               public parentId: number,
               public image: File,
-              public status : string){ }
+              public status : string= 'actif'){ }
 }
 
 export class Product {
-  constructor(public id: number,
+  constructor(public id: string,
               public nom: string,
               public image1: Array<any>,
               public image2: Array<any>,
@@ -64,13 +64,26 @@ export class  Contact {
 
 export class  Campagne {
   constructor (
-    public id: string,
-    public libelle: string,
+               public id: string,
+               public libelle: string,
                public username: string,
                public type: string,
+               public etat: boolean,
                public dateDebut : Date,
                public dateFin : Date,
                public produit : Product,
                public image : File,
+               ) {}
+}
+
+
+
+export class  Brand {
+  constructor (
+               public id: string,
+               public libelle: string,
+               public description: string,
+               public etat: boolean,
+               public logo : File,
                ) {}
 }

@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center stretch">
-    <h3 class="py-1 text-center">We've Got The Brands You're Looking For</h3>    
+    <h3 class="py-1 text-center">We've Got The Brands You're Looking For</h3>
     <div fxLayout="row" fxLayoutAlign="center center" class="pt-3">
-        <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="w-100 brand-search"> 
+        <mat-form-field fxFlex="100" fxFlex.gt-sm="50" class="w-100 brand-search">
             <input matInput placeholder="Search For Brands..." [(ngModel)]="searchText">
         </mat-form-field>
     </div>
@@ -19,8 +19,8 @@
 
 <div class="brands-container">
     <div class="brand-block text-center" *ngFor="let brand of brands | brandSearchPipe : searchText  | filterBrands: group.value">
-        <a [routerLink]="['/brands', brand.name]" class="brand mat-elevation-z3">
-            <img [src]="brand.image">
+        <a [routerLink]="['/brands', brand.libelle]" class="brand mat-elevation-z3">
+            <img [src]="brand.logo" class="card-image">
         </a>
     </div>
 </div>

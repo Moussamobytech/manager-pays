@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
     { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner5.jpg' }
   ];
 
-  public brands = [];
+  public brands: any;
   public banners = [];
   public produit: Array<Product>;
   public ProductByCategorie: Array<Product>;
@@ -87,7 +87,11 @@ export class HomeComponent implements OnInit {
   }
 
   public getBrands(){
-    this.brands = this.appService.getBrands();
+    // this.brands = this.appService.getBrands();
+    this.appService.getBrands().subscribe(data => {
+      this.brands=data;
+      console.log('branddddd',this.brands);
+    });
   }
 
   public getCategorie(){

@@ -5,9 +5,25 @@
                 <mat-chip-option color="warn" highlighted selectable="false">{{product?.discount}}% OFF</mat-chip-option>
             </mat-chip-listbox>
             <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
-            <img *ngIf="image" [src]="image" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)"/>
+            <img *ngIf="product?.image1" [src]="product?.image1" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)" class="card-image"/>
         </mat-card>
+
         <div class="small-carousel">
+          <div class="swiper-container" [swiper]="config">
+              <div class="swiper-wrapper">
+                  <div *ngFor="let image of [product?.image1, product?.image2,product?.image3,product?.image4, product?.image5]" class="swiper-slide">
+                      <mat-card (click)="selectImage(image)" class="p-2">
+                          <img [attr.data-src]="image" class="swiper-lazy carousel-image"/>
+                          <div class="swiper-lazy-preloader"></div>
+                      </mat-card>
+                  </div>
+              </div>
+              <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
+              <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
+          </div>
+      </div>
+
+        <!-- <div class="small-carousel">
             <div class="swiper-container" [swiper]="config">
                 <div class="swiper-wrapper">
                     <div *ngFor="let image of product?.images" class="swiper-slide">
@@ -20,12 +36,13 @@
                 <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
                 <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
             </div>
-        </div>
+        </div> -->
     </div>
+
     <div fxFlex="100" fxFlex.gt-md="55" ngClass.gt-sm="px-4 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2">
 
         <div #zoomViewer fxShow="false" fxShow.gt-md>
-            <mat-card *ngIf="zoomImage" class="zoom-viewer mat-elevation-z18" [ngStyle]="{'background-image': 'url(' + zoomImage + ')'}"></mat-card>
+            <mat-card *ngIf="image" class="zoom-viewer mat-elevation-z18" [ngStyle]="{'background-image': 'url(' + zoomImage + ')'}"></mat-card>
         </div>
 
         <h2>{{product?.nom}}</h2>
@@ -36,9 +53,17 @@
         <!-- <div class="py-3">
             <app-rating [ratingsCount]="product?.ratingsCount" [rate]="product?.rate" [direction]="'row'"></app-rating>
         </div> -->
-        <p class="py-2 text-muted lh">{{product?.description}}</p>
+        <!-- <p class="py-2 text-muted lh">{{product?.description}}</p>
 
         <div class="divider my-2"></div>
+        <p class="py-1 text-muted lh" [ngClass]="{'old-price': product?.pricePromotion}">
+            Prix : {{product?.priceBasic}} FCFA
+        </p>
+        <p class="new-price" *ngIf="product?.pricePromotion">
+            Prix promo : {{product?.pricePromotion}} FCFA
+        </p> -->
+        <p class="py-2 text-muted lh">{{product?.description}}</p>
+
         <div class="py-2">
             <h3 class="old-price text-muted"><span *ngIf="product?.pricePromotion != null && product?.pricePromotion != '0'">FCFA {{product?.priceBasic | number : '1.2-2'}}</span></h3>
             <h2 class="new-price" *ngIf="product?.pricePromotion == null || product?.pricePromotion == '0'">FCFA {{product?.priceBasic}}</h2>

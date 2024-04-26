@@ -1,0 +1,47 @@
+<div class="p-2">
+  <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h2>Brand liste</h2>
+          <button mat-raised-button color="primary" (click)="openBrandDialog(null)">Ajouter brand</button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mat-mdc-table admin-table text-center">
+          <div class="mat-mdc-header-row ">
+            <div class="mat-mdc-header-cell" >Logo</div>
+              <div class="mat-mdc-header-cell">Libelle</div>
+              <div class="mat-mdc-header-cell" >Description</div>
+
+              <div class="mat-mdc-header-cell " >Actions</div>
+          </div>
+          <div *ngFor="let item of brand | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+            <div class="mat-mdc-cell">
+              <a [routerLink]="['/admin/brand/brand-detail', item.id]" class="title text-truncate">
+                <img [src]="item.logo" alt="{{item.logo}}" style="max-width: 100px; max-height: 100px;">
+              </a>
+            </div>
+              <div class="mat-mdc-cell" >{{item.libelle}}</div>
+              <div class="mat-mdc-cell">{{item.description }}</div>
+
+
+              <div class="mat-mdc-cell" >
+                  <div class="p-2 actions" style="display: flex; align-items: center;">
+                      <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openBrandDialog(item)">
+                          <mat-icon>edit</mat-icon>
+                      </button>
+                      <a [routerLink]="['/admin/brand/brand-detail', item.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                      <mat-slide-toggle [color]="item.etat ? 'primary' : 'warn'" [checked]="item.etat" (change)="setEtatBrand(item.id, $event)">
+                          {{ item.etat ? 'Activée' : 'Désactivée' }}
+                      </mat-slide-toggle>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div fxLayout="row wrap">
+          <div fxFlex="100">
+              <mat-card class="text-center">
+                  <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+              </mat-card>
+          </div>
+      </div>
+  </mat-card>
+</div>

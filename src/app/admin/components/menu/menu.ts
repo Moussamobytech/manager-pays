@@ -11,7 +11,6 @@ export const menuItems = [
     new Menu (30, 'ADMIN_NAV.SALES', null, null, 'monetization_on', null, true, 0),
     new Menu (31, 'ADMIN_NAV.ORDERS', '/admin/sales/orders', null, 'list_alt', null, false, 30),
     new Menu (32, 'ADMIN_NAV.TRANSACTIONS', '/admin/sales/transactions', null, 'local_atm', null, false, 30),
-
     new Menu (40, 'ADMIN_NAV.USERS', '/admin/users', null, 'group_add', null, false, 0),
     new Menu (50, 'ADMIN_NAV.CUSTOMERS', '/admin/customers', null, 'supervisor_account', null, false, 0),
     new Menu (60, 'ADMIN_NAV.COUPONS', '/admin/coupons', null, 'card_giftcard', null, false, 0),
@@ -21,9 +20,12 @@ export const menuItems = [
     new Menu (100, 'ADMIN_NAV.FOLLOWERS', '/admin/followers', null, 'follow_the_signs', null, false, 0),
     new Menu (110, 'ADMIN_NAV.SUPPORT', '/admin/support', null, 'support', null, false, 0),
     new Menu (120, 'ADMIN_NAV.REVIEWS', '/admin/reviews', null, 'insert_comment', null, false, 0),
+    new Menu (130, 'ADMIN_NAV.BRAND', null, null, 'grid_on', null, true, 0),
+    new Menu (131, 'ADMIN_NAV.BRAND_LIST', '/admin/brand/brand-list', null, 'list_alt', null, false, 130),
+    new Menu (132, 'ADMIN_NAV.BRAND_DETAIL', '/admin/brand/brand-detail', null, 'remove_red_eye', null, false, 130),
     new Menu (140, 'ADMIN_NAV.CAMPAGNE', null, null, 'more_horiz', null, true, 0),
     new Menu (141, 'ADMIN_NAV.CAMPAGNE_LIST', '/admin/campagne/campagne-list', null, 'list_alt', null, false, 140),
-    new Menu (142, 'ADMIN_NAV.CAMPAGNE_DETAIL', '/admin/campagne/campagne-detail', null, 'list_alt', null, false, 140),
+    new Menu (142, 'ADMIN_NAV.CAMPAGNE_DETAIL', '/admin/campagne/campagne-detail', null, 'remove_red_eye', null, false, 140),
 
     // new Menu (142, 'Level 3', null, null, 'folder_open', null, true, 141),
     // new Menu (143, 'Level 4', null, null, 'folder_open', null, true, 142),
