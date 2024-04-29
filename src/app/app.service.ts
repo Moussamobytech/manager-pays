@@ -31,6 +31,7 @@ export class AppService {
 
     constructor(public http:HttpClient, public snackBar: MatSnackBar, public apiService:ApiService) { }
 
+
     public getCategories(): Observable<any>{
         return this.apiService.get('/categorie/list');
 

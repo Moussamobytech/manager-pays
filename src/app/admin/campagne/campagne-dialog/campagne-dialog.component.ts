@@ -4,7 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { AppService } from 'src/app/app.service';
 import { Router } from '@angular/router';
 import { Campagne, Product } from 'src/app/app.models';
-
+import * as moments from  'moment';
 @Component({
   selector: 'app-campagne-dialog',
   templateUrl: './campagne-dialog.component.html',
@@ -41,7 +41,9 @@ export class CampagneDialogComponent implements OnInit {
     //   this.form.patchValue(this.data.campagne);
     // }
     this.isUpdateMode = !!this.data.campagne;
-
+    console.log("data ",this.data.campagne)
+    console.log("Date  ",this.data.campagne.dateDebut)
+    console.log("Date new ",new Date(this.data.campagne.dateDebut))
     this.form = this.fb.group({
       id: [this.isUpdateMode ? this.data.campagne.id : null],
       libelle: [this.isUpdateMode ? this.data.campagne.libelle : null, Validators.required],
@@ -51,8 +53,8 @@ export class CampagneDialogComponent implements OnInit {
       dateFin: [this.isUpdateMode ? new Date(this.data.campagne.dateFin) : null, Validators.required],
       // produit: [this.isUpdateMode ? this.data.campagne.produit : null, Validators.required],
       produit: this.isUpdateMode ? this.data.campagne.produit : 0,
-      // image: null,
-      image: this.isUpdateMode ? this.data.campagne.image : null, // Ajout de la valeur de l'image existante
+      image: null,
+      // image: this.isUpdateMode ? this.data.campagne.image : null, // Ajout de la valeur de l'image existante
 
     });
     if (this.isUpdateMode) {
@@ -88,7 +90,8 @@ onFileSelected(event) {
         console.log("Ma campagne : ",values);
 
         if (values.id) {
-            this.appService.updateCampagne(values.id,values.libelle, values.username, values.type, values.dateDebut , values.dateFin, values.produit, this.selectedImage).subscribe(
+            this.appService.updateCampagne(values.id,values.libelle,
+               values.username, values.type, values.dateDebut , values.dateFin, values.produit, this.selectedImage).subscribe(
                 response => {
                     console.log('Campagne mise à jour avec succès:', response);
                     console.log("Image : ", values.image);
