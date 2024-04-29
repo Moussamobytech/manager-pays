@@ -18,6 +18,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SharedModule } from 'src/app/shared/shared.module';
+// import { SignInComponent } from './sign-in/sign-in.component';
+import { SignInModule } from './sign-in/sign-in.module';
 
 @NgModule({
   imports: [
@@ -36,11 +38,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatToolbarModule,
     NgxPaginationModule,
     SharedModule,
+    SignInModule
   ],
   declarations: [
     LoginComponent,
     RegisterComponent,
-    UserAuthSessionComponent
+    UserAuthSessionComponent,
   ],
   providers:[
   ]

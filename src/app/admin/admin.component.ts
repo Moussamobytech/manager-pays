@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AppSettings, Settings } from '../app.settings';
-import { Router, NavigationEnd } from '@angular/router'; 
+import { Router, NavigationEnd } from '@angular/router';
 import { MenuService } from './components/menu/menu.service';
 import { DomHandlerService } from '../dom-handler.service';
 
@@ -10,44 +10,43 @@ import { DomHandlerService } from '../dom-handler.service';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  @ViewChild('sidenav') sidenav:any;  
-  public userImage = 'assets/images/others/admin.jpg'; 
+  @ViewChild('sidenav') sidenav:any;
+  public userImage = 'assets/images/others/admin.jpg';
   public settings:Settings;
   public menuItems:Array<any>;
   public toggleSearchBar:boolean = false;
-  constructor(public appSettings:AppSettings, 
+  constructor(public appSettings:AppSettings,
               public router:Router,
               private menuService: MenuService,
-              public domHandlerService: DomHandlerService){        
+              public domHandlerService: DomHandlerService){
     this.settings = this.appSettings.settings;
   }
 
-  ngOnInit() { 
-    if(this.domHandlerService.window?.innerWidth <= 960){ 
+  ngOnInit() {
+    if(this.domHandlerService.window?.innerWidth <= 960){
       this.settings.adminSidenavIsOpened = false;
       this.settings.adminSidenavIsPinned = false;
-    }; 
+    };
     setTimeout(() => {
-      this.settings.theme = 'purple'; 
-      // this.settings.theme = 'blue'; 
+      this.settings.theme = 'purple';
     });
-    this.menuItems = this.menuService.getMenuItems();    
+    this.menuItems = this.menuService.getMenuItems();
   }
 
-  ngAfterViewInit(){  
+  ngAfterViewInit(){
     if(this.domHandlerService.winDocument.getElementById('preloader')){
       this.domHandlerService.winDocument.getElementById('preloader').classList.add('hide');
-    } 
+    }
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.scrollToTop();
-      } 
+      }
       if( this.domHandlerService.window?.innerWidth <= 960){
-        this.sidenav.close(); 
-      }                
-    });  
-    this.menuService.expandActiveSubMenu(this.menuService.getMenuItems());  
-  } 
+        this.sidenav.close();
+      }
+    });
+    this.menuService.expandActiveSubMenu(this.menuService.getMenuItems());
+  }
 
   public toggleSidenav(){
     this.sidenav.toggle();
@@ -61,12 +60,12 @@ export class AdminComponent implements OnInit {
         this.domHandlerService.window?.scrollBy(0, scrollStep);
       }
       else{
-        clearInterval(scrollInterval); 
+        clearInterval(scrollInterval);
       }
     },10);
     if(this.domHandlerService.window?.innerWidth <= 768){
-      setTimeout(() => {  
-        this.domHandlerService.window?.scrollTo(0,0); 
+      setTimeout(() => {
+        this.domHandlerService.window?.scrollTo(0,0);
       });
     }
   }
@@ -75,9 +74,9 @@ export class AdminComponent implements OnInit {
   public onWindowResize():void {
     if(this.domHandlerService.window?.innerWidth <= 960){
       this.settings.adminSidenavIsOpened = false;
-      this.settings.adminSidenavIsPinned = false; 
+      this.settings.adminSidenavIsPinned = false;
     }
-    else{ 
+    else{
       this.settings.adminSidenavIsOpened = true;
       this.settings.adminSidenavIsPinned = true;
     }

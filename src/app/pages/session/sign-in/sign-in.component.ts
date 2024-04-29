@@ -22,7 +22,7 @@ export class SignInComponent implements OnInit {
   mask = '00 00 00 00'
   maskPlaceholder = 'XX XX XX XX'
 
-  constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder, 
+  constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder,
     public router:Router, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class SignInComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       'country': ['mali'],
       'phone': ['', Validators.compose([Validators.required])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])] 
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
 
 
@@ -43,7 +43,7 @@ export class SignInComponent implements OnInit {
       this.mask ='00 00 00 00'
       this.maskPlaceholder = 'XX XX XX XX'
     }
-    
+
     if ($event.value == 'civ') {
       this.maskPlaceholder = 'XX XX XX XXXX'
     }
@@ -81,14 +81,14 @@ export class SignInComponent implements OnInit {
             }else{
               this.snackBar.open('Une erreur interne s\'est produite, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
             }
-            
+
             // this.loading = false;
           });
     }
   }
 
   /**
-   * convenience getter for easy access to form fields
+   * convenience getter for easy access of form fields
   */
   get formValues() { return this.loginForm.controls; }
 
@@ -111,12 +111,12 @@ export class SignInComponent implements OnInit {
 
   reset($event : Event){
     console.log("resetting process ::::::::");
-    
+
     this.formValues.phone.setValue("")
     this.formValues.password.setValue("")
     this.toSubmit = false;
   }
 
-  
+
 
 }

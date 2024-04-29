@@ -99,7 +99,7 @@
     <div fxFlex="100">
         <mat-card>
             <mat-tab-group [@.disabled]="true" [selectedIndex]="0" mat-stretch-tabs="false" mat-align-tabs="start">
-                <mat-tab label="Description">
+                <mat-tab [label]="'PRODUCTS.DESC'|translate">
                     <div class="full-desc lh">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id nulla metus. Maecenas commodo turpis dui, porttitor tincidunt enim mollis a. Curabitur eu velit mi. Nullam congue turpis id metus sollicitudin, id cursus nulla laoreet. Proin commodo eu felis at malesuada. Nulla ac facilisis justo, eget vulputate ex. Nulla nec laoreet nulla. Cras auctor leo at diam congue, quis convallis urna pulvinar. Nunc ut mi nulla. Nunc ligula massa, vulputate sed scelerisque sit amet, dapibus semper est. Sed sed blandit turpis. Vestibulum id porttitor ligula, at iaculis ligula. Pellentesque vel tellus sit amet mauris aliquet bibendum id et lorem.</p>
                         <ul class="px-3 mt-2">
@@ -114,7 +114,7 @@
                         <p class="mt-2">Quisque fringilla eros id ligula luctus, a gravida augue sodales. Sed eget augue ut lectus condimentum volutpat. Morbi quis nunc viverra, gravida arcu quis, varius metus. Praesent tincidunt ipsum est, quis molestie ligula efficitur ut. Nunc interdum erat eu tortor maximus suscipit. Vivamus nec laoreet dui. Nullam dignissim laoreet metus quis pretium.</p>
                     </div>
                 </mat-tab>
-                <mat-tab label="Additional information">
+                <mat-tab [label]="'PRODUCTS.ADDITIONAL_INFO'|translate">
                     <div class="full-desc lh">
                         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         <ul class="px-3 mt-2">
@@ -137,7 +137,7 @@
 
 
                 </mat-tab>
-                <mat-tab label="Reviews">
+                <mat-tab [label]="'PRODUCTS.REVIEWS'|translate">
                     <div class="full-desc lh">
                         <mat-list class="reviews">
                             <mat-list-item class="h-100 py-1">

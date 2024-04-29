@@ -39,12 +39,12 @@ export class UserDialogComponent implements OnInit {
         }),
         contacts: this.fb.group({
           email: [null, Validators.compose([Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)])],
-          phoneNumber: [null, Validators.compose([Validators.required, Validators.pattern(/^[0-9]+$/)])],
+          phoneNumber: [null, Validators.compose([Validators.required, Validators.pattern(/^[0-9]+$/),Validators.minLength(8)])],
           address: null,
         }),
         auth: this.fb.group({
-          password1: [null,Validators.compose([Validators.required,Validators.minLength(8)])],
-          password2: [null,Validators.compose([Validators.required,Validators.minLength(8)])]
+          password1: [null,Validators.compose([Validators.required,Validators.minLength(6)])],
+          password2: [null,Validators.compose([Validators.required,Validators.minLength(6)])]
         },[StringMatchValidators.MatchValidator('password1','password2')]),
       });
 

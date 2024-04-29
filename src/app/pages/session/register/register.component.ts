@@ -30,9 +30,9 @@ export class RegisterComponent implements OnInit {
     this.prenom = new FormControl('',[Validators.required]);
     this.email =  new FormControl('', [Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]);
     this.phone = new FormControl('', [Validators.required, Validators.pattern(/^[0-9]+$/)]);
-    this.adresse = new FormControl('',[Validators.required]);
-    this.password1 =  new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.password2 =  new FormControl('', [Validators.required, Validators.minLength(8)]);
+    this.adresse = new FormControl('');
+    this.password1 =  new FormControl('', [Validators.required, Validators.minLength(6)]);
+    this.password2 =  new FormControl('', [Validators.required, Validators.minLength(6)]);
 
     this.registerForm = new FormGroup({
       name : this.name,
