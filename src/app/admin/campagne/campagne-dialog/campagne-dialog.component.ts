@@ -4,7 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { AppService } from 'src/app/app.service';
 import { Router } from '@angular/router';
 import { Campagne, Product } from 'src/app/app.models';
-import * as moments from  'moment';
+import * as moment from  'moment';
 @Component({
   selector: 'app-campagne-dialog',
   templateUrl: './campagne-dialog.component.html',
@@ -41,9 +41,11 @@ export class CampagneDialogComponent implements OnInit {
     //   this.form.patchValue(this.data.campagne);
     // }
     this.isUpdateMode = !!this.data.campagne;
-    console.log("data ",this.data.campagne)
-    console.log("Date  ",this.data.campagne.dateDebut)
-    console.log("Date new ",new Date(this.data.campagne.dateDebut))
+    console.log("data ",this.isUpdateMode)
+    // console.log("Date  ",this.data.campagne.dateDebut)
+    // console.log("moment ",moment(this.data.campagne.dateDebut).format('DD MMM, YYYY'));
+    // console.log("moment ",moment(this.data.campagne.dateDebut).format('LT'));
+    // console.log("Date new ",new Date(this.data.campagne.dateDebut))
     this.form = this.fb.group({
       id: [this.isUpdateMode ? this.data.campagne.id : null],
       libelle: [this.isUpdateMode ? this.data.campagne.libelle : null, Validators.required],

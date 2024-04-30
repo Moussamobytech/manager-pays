@@ -16,6 +16,8 @@ export class BrandsCarouselComponent {
 
   constructor( public apiService: ApiService) { }
 
+  ngOnInit(): void {}
+
   ngAfterViewInit(){
     this.config = {
       slidesPerView: 7,

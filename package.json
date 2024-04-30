@@ -35,6 +35,7 @@
     "flex-layout": "^1.0.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.7.1",
+    "moment": "^2.10.2",
     "ngx-cookie": "^6.0.1",
     "ngx-cookie-service": "^17.1.0",
     "ngx-mask": "^17.0.7",

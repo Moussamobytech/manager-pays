@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getBanners();
     // this.getProducts("PC");
-    this.getAllProduit();
+    // this.getAllProduit();
     this.getBrands();
     this.getCategorie();
     this.getProduitByPromotion();
