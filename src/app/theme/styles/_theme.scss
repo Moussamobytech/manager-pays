@@ -1,11 +1,11 @@
-@use '@angular/material' as mat;  
-@import './variables'; 
-$custom-typography: mat.define-typography-config( 
+@use '@angular/material' as mat;
+@import './variables';
+$custom-typography: mat.define-typography-config(
     $body-1: mat.define-typography-level(14px, 20px, 400, $font-family),
     $button: mat.define-typography-level(14px, 22px, 600, $font-family, $letter-spacing: 0.02em),
 );
-@include mat.all-component-typographies($custom-typography); 
-@include mat.core(); 
+@include mat.all-component-typographies($custom-typography);
+@include mat.core();
 
 @import 'theme-reset';
 .app{
@@ -38,5 +38,10 @@ $custom-typography: mat.define-typography-config(
         @import "skins/grey";
         @include mat.all-component-colors($grey-theme);
         @include theme-reset($grey-theme);
+    }
+    &.fidelity{
+      @import "skins/fidelity";
+      @include mat.all-component-colors($fidelity-theme);
+      @include theme-reset($fidelity-theme);
     }
 }

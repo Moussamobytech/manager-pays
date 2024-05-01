@@ -161,7 +161,7 @@
     <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
         <div  fxFlex="100"  class="p-2">
           <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row mat-toolbar mat-primary">
+            <div class="mat-mdc-header-row bg-primary" >
                 <div class="mat-mdc-header-cell">{{"FIELD.FIRSTNAME" |translate}}</div>
                 <div class="mat-mdc-header-cell">{{"FIELD.LASTNAME"|translate}}</div>
                 <div class="mat-mdc-header-cell">{{"FIELD.USERNAME"|translate}}</div>
@@ -174,7 +174,7 @@
                 <div class="mat-mdc-cell">{{ user.lastname|capitalCase }}</div>
                 <div class="mat-mdc-cell">{{ user.username }}</div>
                 <div class="mat-mdc-cell" *ngFor="let profile of user.profiles">{{ profile.name | userType }}</div>
-                <div class="mat-mdc-cell">{{ user.createdAt | date: "d/m/y" }}</div>
+                <div class="mat-mdc-cell">{{ user.createdAt | date: "dd /MM /yy" }}</div>
                 <div class="mat-mdc-cell">
                     <div class="p-2 actions">
                         <button mat-mini-fab color="primary" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">

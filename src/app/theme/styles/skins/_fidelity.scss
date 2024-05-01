@@ -1,0 +1,11 @@
+$fidelity-primary: mat.define-palette(mat.$indigo-palette, 800);
+$fidelity-accent: mat.define-palette(mat.$grey-palette, 300, 100, 700);
+$fidelity-warn: mat.define-palette(mat.$pink-palette, 600);
+
+$fidelity-theme: mat.define-light-theme((
+    color: (
+        primary: $fidelity-primary,
+        accent: $fidelity-accent,
+        warn: $fidelity-warn,
+    )
+));
