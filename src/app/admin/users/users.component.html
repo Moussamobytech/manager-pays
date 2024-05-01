@@ -11,7 +11,7 @@
     </div>
     <form class="user-search" [class.show]="controls.value == 'search'">
         <mat-form-field class="user-search-input">
-            <input matInput placeholder="Search user by name..." [(ngModel)]="searchText" name="search" autocomplete="off">
+            <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" name="search" autocomplete="off">
         </mat-form-field>
     </form>
     <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -162,11 +162,11 @@
         <div  fxFlex="100"  class="p-2">
           <div class="mat-mdc-table admin-table">
             <div class="mat-mdc-header-row mat-toolbar mat-primary">
-                <div class="mat-mdc-header-cell">{{"USER.FIELD.FIRST_NAME" |translate}}</div>
-                <div class="mat-mdc-header-cell">{{"USER.FIELD.LAST_NAME"|translate}}</div>
-                <div class="mat-mdc-header-cell">{{"USER.FIELD.USERNAME"|translate}}</div>
+                <div class="mat-mdc-header-cell">{{"FIELD.FIRSTNAME" |translate}}</div>
+                <div class="mat-mdc-header-cell">{{"FIELD.LASTNAME"|translate}}</div>
+                <div class="mat-mdc-header-cell">{{"FIELD.USERNAME"|translate}}</div>
                 <div class="mat-mdc-header-cell">Type </div>
-                <div class="mat-mdc-header-cell">{{"USER.FIELD.MEMBER_SINCE"|translate}}</div>
+                <div class="mat-mdc-header-cell">{{"USER.MEMBER_SINCE"|translate}}</div>
                 <div class="mat-mdc-header-cell"></div>
             </div>
             <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="mat-mdc-row">
