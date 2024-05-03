@@ -306,7 +306,8 @@
         padding: 14px 10px;
         .current {
             background: mat.get-color-from-palette($primary);
-            color: mat.get-color-from-palette($primary, default-contrast);
+            color: mat.get-color-from-palette($warn);
+            // color: mat.get-color-from-palette($primary, default-contrast);
         }
         a:hover, button:hover{
             background: rgba(mat.get-color-from-palette($primary), 0.2);
