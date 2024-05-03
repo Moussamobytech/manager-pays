@@ -16,7 +16,7 @@ export class Product {
               public image4: Array<any>,
               public image5: Array<any>,
               public prix : number,
-              public pricePromotion: string,
+              public pricePromotion: number,
               public priceBasic : string,
               public quantite: number,
               public oldPrice: number,

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { AppService } from 'src/app/app.service'; 
+import { AppService } from 'src/app/app.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerDialogComponent } from './customer-dialog/customer-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
@@ -29,12 +29,12 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit(): void {
     this.countries = this.appService.getCountries();
-    this.customers = customers; 
+    this.customers = customers;
   }
 
-  public onPageChanged(event){
-    this.page = event; 
-    this.domHandlerService.winScroll(0, 0); 
+  public onPageChanged(event:any){
+    this.page = event;
+    this.domHandlerService.winScroll(0, 0);
   }
 
   public openCustomerDialog(data:any){
@@ -46,39 +46,39 @@ export class CustomersComponent implements OnInit {
       },
       panelClass: ['theme-dialog'],
       autoFocus: false,
-      direction: (this.settings.rtl) ? 'rtl' : 'ltr' 
+      direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
-    dialogRef.afterClosed().subscribe(customer => { 
-      if(customer){    
+    dialogRef.afterClosed().subscribe(customer => {
+      if(customer){
         const index: number = this.customers.findIndex(x => x.id == customer.id);
         if(index !== -1){
           this.customers[index] = customer;
-        } 
-        else{ 
-          let last_customer= this.customers[this.customers.length - 1]; 
+        }
+        else{
+          let last_customer= this.customers[this.customers.length - 1];
           customer.id = last_customer.id + 1;
-          this.customers.push(customer);  
-        }          
+          this.customers.push(customer);
+        }
       }
     });
   }
 
-  public remove(customer:any){  
+  public remove(customer:any){
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
         message: "Are you sure you want remove this customer?"
       }
-    }); 
-    dialogRef.afterClosed().subscribe(dialogResult => { 
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
         const index: number = this.customers.indexOf(customer);
         if (index !== -1) {
-          this.customers.splice(index, 1);  
-        } 
-      } 
-    }); 
+          this.customers.splice(index, 1);
+        }
+      }
+    });
   }
 
 }

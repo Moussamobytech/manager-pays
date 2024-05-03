@@ -6,8 +6,6 @@ import { Router } from '@angular/router';
 import { Campagne, Product } from 'src/app/app.models';
 import moment from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
-
-
 @Component({
   selector: 'app-campagne-dialog',
   templateUrl: './campagne-dialog.component.html',
@@ -60,6 +58,11 @@ export class CampagneDialogComponent implements OnInit {
     // console.log("DATA 1",moment(this.data.campagne.dateDebut).toDate())
 
     this.isUpdateMode = !!this.data.campagne;
+    console.log("data ",this.isUpdateMode)
+    // console.log("Date  ",this.data.campagne.dateDebut)
+    // console.log("moment ",moment(this.data.campagne.dateDebut).format('DD MMM, YYYY'));
+    // console.log("moment ",moment(this.data.campagne.dateDebut).format('LT'));
+    // console.log("Date new ",new Date(this.data.campagne.dateDebut))
     this.form = this.fb.group({
       id: [this.isUpdateMode ? this.data.campagne.id : null],
       libelle: [this.isUpdateMode ? this.data.campagne.libelle : null, Validators.required],

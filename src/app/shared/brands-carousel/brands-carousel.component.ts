@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.module';
 import { Brand } from 'src/app/app.models';
-import { ApiService } from 'src/app/service/api.service';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-brands-carousel',
@@ -15,6 +15,8 @@ export class BrandsCarouselComponent {
   public config: SwiperConfigInterface = { };
 
   constructor( public apiService: ApiService) { }
+
+  ngOnInit(): void {}
 
   ngAfterViewInit(){
     this.config = {

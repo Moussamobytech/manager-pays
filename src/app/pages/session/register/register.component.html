@@ -1,0 +1,89 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-6">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>S'inscrire</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="*Nom" name="name"  formControlName="name" required >
+              <mat-error *ngIf="registerFormControl.name.hasError('required')">
+               {{'FIELD_ERROR.NAME_REQUIRED' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="*Prénom" formControlName="prenom" required>
+              <mat-error *ngIf="registerFormControl.prenom.hasError('required')">
+                {{'FIELD_ERROR.FIRSTNAME_REQUIRED' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Adresse email" formControlName="email" >
+              <mat-error *ngIf="registerFormControl.email.hasError('pattern')">
+                {{'FIELD_ERROR.EMAIL_INVALID' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="*Numero de telephone" formControlName="phone" required>
+              <mat-error *ngIf="registerFormControl.phone.hasError('required')">
+                {{'FIELD_ERROR.PHONE_REQUIRED' | translate}}
+              </mat-error>
+              <mat-error *ngIf=" registerFormControl.phone.hasError('pattern') && (!registerFormControl.phone.hasError('required')) ">
+                {{'FIELD_ERROR.PHONE_NOT_NUMERIC' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="*Adresse" formControlName="adresse">
+              <!-- <mat-error *ngIf="registerFormControl.adresse.hasError('required')">
+                {{'FIELD_ERROR.PHONE_NOT_NUMERIC' | translate}}
+              </mat-error> -->
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="*Mot de passe" [type]="hide ? 'password' : 'text'"
+              formControlName="password1" required>
+              <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
+                'visibility'}}</mat-icon>
+              <mat-error *ngIf="registerFormControl.password1.hasError('required')">
+                {{'FIELD_ERROR.PASSWORD_REQUIRED' | translate}}
+              </mat-error>
+              <mat-error *ngIf="registerFormControl.password1.hasError('minlength')">
+                {{'FIELD_ERROR.PASSWORD_MINLENGTH' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input matInput placeholder="*Confirmation de mot de passe" [type]="hide2 ? 'password' : 'text'"
+              formControlName="password2" required>
+              <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility_off' :
+                'visibility'}}</mat-icon>
+              <mat-error *ngIf="registerFormControl.password2.hasError('required')">
+                {{'FIELD_ERROR.PASSCONFIRM_REQUIRED' | translate}}
+              </mat-error>
+              <mat-error *ngIf="registerFormControl.password2.hasError('minlength')">
+                {{'FIELD_ERROR.PASSCONFIRM_MINLENGTH' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button [disabled]="loading" color="primary" type="submit" class="full-width">S'inscrire</button>
+
+            <div style="margin: 20px auto;">
+              <p class="mb-10" style="font-family: 'Century Gothic', Arial, sans-serif;font-weight: bold;">Vous
+                avez deja un compte ?
+                <a [routerLink]="['/authentication/login']" class="mat-text-primary">Se Connecter</a>
+              </p>
+            </div>
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

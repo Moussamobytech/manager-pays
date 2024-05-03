@@ -6,7 +6,7 @@
                 <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <h4>Categories :</h4>
+                          <h4>{{'PRODUCTS.CATEGORY' | translate}}</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div class="categories-wrapper categories-dropdown" >
@@ -21,7 +21,7 @@
                 <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <h4>Price</h4>
+                            <h4>{{'PRODUCTS.PRICE' | translate}}</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted">
@@ -34,10 +34,10 @@
                     </div>
                 </mat-expansion-panel>
 
-                <mat-expansion-panel expanded>
+                <!-- <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <h4>Color</h4>
+                            <h4>{{'PRODUCTS.COLOR' | translate}}</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
@@ -51,7 +51,7 @@
                 <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <h4>Size</h4>
+                            <h4>{{'PRODUCTS.SIZE' | translate}}</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
@@ -72,12 +72,12 @@
                         <mat-checkbox color="primary">Used</mat-checkbox>
                         <mat-checkbox color="primary">Not Specified</mat-checkbox>
                     </div>
-                </mat-expansion-panel>
+                </mat-expansion-panel> -->
 
                 <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <h4>Brands</h4>
+                            <h4>{{'PRODUCTS.BRAND' | translate}}</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-brands">
@@ -87,7 +87,7 @@
                     </div>
                 </mat-expansion-panel>
 
-                <mat-expansion-panel expanded>
+                <!-- <mat-expansion-panel expanded>
                     <mat-expansion-panel-header>
                         <mat-panel-title>
                             <h4>Now starting at $1379</h4>
@@ -96,7 +96,7 @@
                     <div fxLayout="row wrap" fxLayoutAlign="center center">
                     <a [routerLink]="['/products/electronics']"><img src="assets/images/products/probook/2-medium.png" alt="" class="mw-100"></a>
                     </div>
-                </mat-expansion-panel>
+                </mat-expansion-panel> -->
 
             </mat-accordion>
         </ng-scrollbar>

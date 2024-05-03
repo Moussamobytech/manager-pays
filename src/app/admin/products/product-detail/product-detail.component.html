@@ -26,9 +26,9 @@
         <!-- <div class="small-carousel">
             <div class="swiper-container" [swiper]="config">
                 <div class="swiper-wrapper">
-                    <div *ngFor="let image of product?.image1" class="swiper-slide">
+                    <div *ngFor="let image of product?.images" class="swiper-slide">
                         <mat-card (click)="selectImage(image)" class="p-2">
-                            <img [attr.data-src]="image.small" class="swiper-lazy"/>
+                            <img [attr.data-src]="image" class="swiper-lazy"/>
                             <div class="swiper-lazy-preloader"></div>
                         </mat-card>
                     </div>
@@ -47,27 +47,30 @@
 
         <h2>{{product?.nom}}</h2>
         <div class="py-2 lh">
-            <p><span class="text-muted fw-500">Category: </span><span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
+            <p><span class="text-muted fw-500">{{ 'PRODUCTS.CATEGORY' | translate }} </span><span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
             <!-- <p><span class="text-muted fw-500">Availibility: </span><span>{{ (product?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p> -->
         </div>
         <!-- <div class="py-3">
             <app-rating [ratingsCount]="product?.ratingsCount" [rate]="product?.rate" [direction]="'row'"></app-rating>
         </div> -->
-        <p class="py-1 text-muted lh" [ngClass]="{'old-price': product?.pricePromotion}">
-          Prix : {{product?.priceBasic}} FCFA
-      </p>
-      <p class="new-price" *ngIf="product?.pricePromotion">
-          Prix promo : {{product?.pricePromotion}} FCFA
-      </p>
-        <p class="py-2 text-muted lh">{{product?.description}}</p>
+        <!-- <p class="py-2 text-muted lh">{{product?.description}}</p>
 
         <div class="divider my-2"></div>
-        <!-- <div class="py-2">
-            <h3 class="old-price text-muted"><span *ngIf="product?.oldPrice">${{product?.oldPrice | number : '1.2-2'}}</span></h3>
-            <h2 class="new-price">${{product?.newPrice}}</h2>
-        </div> -->
+        <p class="py-1 text-muted lh" [ngClass]="{'old-price': product?.pricePromotion}">
+            Prix : {{product?.priceBasic}} FCFA
+        </p>
+        <p class="new-price" *ngIf="product?.pricePromotion">
+            Prix promo : {{product?.pricePromotion}} FCFA
+        </p> -->
+        <p class="py-2 text-muted lh">{{product?.description}}</p>
 
-        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-2">
+        <div class="py-2">
+            <h3 class="old-price text-muted"><span *ngIf="product?.pricePromotion != null && product?.pricePromotion != '0'">FCFA {{product?.priceBasic | number : '1.2-2'}}</span></h3>
+            <h2 class="new-price" *ngIf="product?.pricePromotion == null || product?.pricePromotion == '0'">FCFA {{product?.priceBasic}}</h2>
+            <h2 class="new-price" *ngIf="product?.pricePromotion != null && product?.pricePromotion != '0'">FCFA {{product?.pricePromotion}}</h2>
+        </div>
+
+        <!-- <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-2">
             <div *ngIf="product?.color" class="color">
                 <span class="fw-500">Select Color:</span>
                 <button mat-raised-button *ngFor="let color of product?.color" [style.background]="color">&nbsp;</button>
@@ -76,10 +79,10 @@
                 <span class="fw-500">Select Size:</span>
                 <button mat-raised-button *ngFor="let size of product?.size">{{size}}</button>
             </div>
-        </div>
+        </div> -->
 
         <div class="py-2">
-            <app-controls [product]="product" [type]="'all'"></app-controls>
+            <!-- <app-controls [product]="product" [type]="'all'"></app-controls> -->
         </div>
 
         <div class="divider"></div>
@@ -96,7 +99,7 @@
     <div fxFlex="100">
         <mat-card>
             <mat-tab-group [@.disabled]="true" [selectedIndex]="0" mat-stretch-tabs="false" mat-align-tabs="start">
-                <mat-tab label="Description">
+                <mat-tab [label]="'PRODUCTS.DESC'|translate">
                     <div class="full-desc lh">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id nulla metus. Maecenas commodo turpis dui, porttitor tincidunt enim mollis a. Curabitur eu velit mi. Nullam congue turpis id metus sollicitudin, id cursus nulla laoreet. Proin commodo eu felis at malesuada. Nulla ac facilisis justo, eget vulputate ex. Nulla nec laoreet nulla. Cras auctor leo at diam congue, quis convallis urna pulvinar. Nunc ut mi nulla. Nunc ligula massa, vulputate sed scelerisque sit amet, dapibus semper est. Sed sed blandit turpis. Vestibulum id porttitor ligula, at iaculis ligula. Pellentesque vel tellus sit amet mauris aliquet bibendum id et lorem.</p>
                         <ul class="px-3 mt-2">
@@ -111,7 +114,7 @@
                         <p class="mt-2">Quisque fringilla eros id ligula luctus, a gravida augue sodales. Sed eget augue ut lectus condimentum volutpat. Morbi quis nunc viverra, gravida arcu quis, varius metus. Praesent tincidunt ipsum est, quis molestie ligula efficitur ut. Nunc interdum erat eu tortor maximus suscipit. Vivamus nec laoreet dui. Nullam dignissim laoreet metus quis pretium.</p>
                     </div>
                 </mat-tab>
-                <mat-tab label="Additional information">
+                <mat-tab [label]="'PRODUCTS.ADDITIONAL_INFO'|translate">
                     <div class="full-desc lh">
                         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                         <ul class="px-3 mt-2">
@@ -134,7 +137,7 @@
 
 
                 </mat-tab>
-                <mat-tab label="Reviews">
+                <mat-tab [label]="'PRODUCTS.REVIEWS'|translate">
                     <div class="full-desc lh">
                         <mat-list class="reviews">
                             <mat-list-item class="h-100 py-1">

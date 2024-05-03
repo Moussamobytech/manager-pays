@@ -14,11 +14,11 @@
         </mat-nav-list> -->
     </mat-sidenav>
     <mat-sidenav-content class="account-content" ngClass.gt-sm="p-left">
-        <div fxLayout="row" fxLayoutAlign="space-between center" class="header-row mat-elevation-z1 text-muted">
+        <div fxLayout="row" fxHide.gt-sm fxLayoutAlign="space-between center" class="header-row mat-elevation-z1 text-muted">
             <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()">
                 <mat-icon>more_vert</mat-icon>
             </button>
-            <h3>My Account</h3>
+            <h3>{{'NAV.HOME' | translate}}</h3>
         </div>
         <div class="account-wrapper mat-elevation-z1">
             <router-outlet></router-outlet>

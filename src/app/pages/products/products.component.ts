@@ -6,6 +6,7 @@ import { AppService } from '../../app.service';
 import { Product, Category, Brand } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-products',
@@ -75,6 +76,7 @@ export class ProductsComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               public appService:AppService,
               public dialog: MatDialog,
+              public translate: TranslateService,
               private router: Router,
               public domHandlerService: DomHandlerService) {
     this.settings = this.appSettings.settings;

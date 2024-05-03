@@ -96,17 +96,17 @@
             <input type="hidden" formControlName="id">
 
             <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Nom</mat-label>
+                <mat-label>{{"CATEGORY.NAME"|translate}}</mat-label>
                 <input matInput formControlName="nom" required>
-                <mat-error *ngIf="form.get('nom').hasError('required')">Nom est obligatoire</mat-error>
+                <mat-error *ngIf="form.get('nom').hasError('required')">{{"FIELD_ERROR.NAME_REQUIRED"|translate}}</mat-error>
             </mat-form-field>
             <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
               <p>{{ isUpdateMode ? 'Catégorie modifiée avec succès' : 'Catégorie ajoutée avec succès' }}</p>
           </mat-dialog-content>
             <div class="py-1">
-                <mat-label>Image</mat-label>
+                <mat-label>{{"CATEGORY.IMAGE"|translate}}</mat-label>
                 <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
-                <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+                <mat-error *ngIf="form.get('image').hasError('required')">{{"FIELD_ERROR.IMAGE_REQUIRED"|translate}}</mat-error>
             </div>
         </div>
     </div>

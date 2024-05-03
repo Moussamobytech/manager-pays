@@ -52,18 +52,19 @@ export class BrandListComponent implements OnInit{
       direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
     dialogRef.afterClosed().subscribe(brands => {
-      if (brands) {
-        const index: number = this.brand.findIndex(x => x.id === brands.id);
-        if (index !== -1) {
-          // Si le brand existe déjà, mettez à jour ses données
-          this.brand[index] = brands;
-        } else {
-          // Si le brand n'existe pas, ajoutez-la à la liste
-          const lastBrand = this.brand[this.brand.length - 1];
-          brands.id = lastBrand.id + 1;
-          this.brand.push(brands);
-        }
-      }
+      this.getBrands()
+      // if (brands) {
+      //   const index: number = this.brand.findIndex(x => x.id === brands.id);
+      //   if (index !== -1) {
+      //     // Si le brand existe déjà, mettez à jour ses données
+      //     this.brand[index] = brands;
+      //   } else {
+      //     // Si le brand n'existe pas, ajoutez-la à la liste
+      //     const lastBrand = this.brand[this.brand.length - 1];
+      //     brands.id = lastBrand.id + 1;
+      //     this.brand.push(brands);
+      //   }
+      // }
     });
   }
 

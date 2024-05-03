@@ -1,7 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UntypedFormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
-import { User, UserProfile, UserWork, UserContacts, UserSocial, UserSettings } from '../user.model';
+import { User } from 'src/app/models/user.models';
+import { StringMatchValidators } from 'src/app/shared/confirmed.validator';
+import { UserTypePipe } from 'src/app/theme/pipes/userType.pipe';
 
 @Component({
   selector: 'app-user-dialog',
@@ -10,61 +12,96 @@ import { User, UserProfile, UserWork, UserContacts, UserSocial, UserSettings } f
 })
 export class UserDialogComponent implements OnInit {
   public form:UntypedFormGroup;
-  public passwordHide:boolean = true;
-  constructor(public dialogRef: MatDialogRef<UserDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public user: User,
-              public fb: UntypedFormBuilder) {
-    this.form = this.fb.group({
-      id: null,
-      username: [null, Validators.compose([Validators.required, Validators.minLength(5)])],
-      password: [null, Validators.compose([Validators.required, Validators.minLength(6)])],       
-      profile: this.fb.group({
-        name: null,
-        surname: null,  
-        birthday: null,
-        gender: null,
-        image: null
-      }),
-      work: this.fb.group({
-        company: null,
-        position: null,
-        salary: null
-      }),
-      contacts: this.fb.group({
-        email: null,
-        phone: null,
-        address: null          
-      }),
-      social: this.fb.group({
-        facebook: null,
-        twitter: null,
-        google: null
-      }),
-      settings: this.fb.group({
-        isActive: null,
-        isDeleted: null,
-        registrationDate: null,
-        joinedDate: null
-      })
-    });
+  public user:User;
+  usernameType:string;
+  public action:string;
+  public userTypes:any[]=[
+    {value:'admin',viewValue:'Admin',},
+    {value:'particulier',viewValue:'Particulier'},
+    {value:'boutique',viewValue:'Boutique'}
+  ]
+  public hide:  boolean = true;
+  public hide2: boolean = true;
+  constructor(
+              private dialogRef: MatDialogRef<UserDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public fb: UntypedFormBuilder,
+  ){
+    this.user = data.user;
+    this.action = data.action;
+    if(this.action == "add"){
+      this.form = this.fb.group({
+
+        firstname: [null, Validators.compose([Validators.required])],
+        lastname: [null, Validators.compose([Validators.required])],
+        type: this.fb.group({
+          name: [null, Validators.compose([Validators.required])],
+        }),
+        contacts: this.fb.group({
+          email: [null, Validators.compose([Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)])],
+          phoneNumber: [null, Validators.compose([Validators.required, Validators.pattern(/^[0-9]+$/),Validators.minLength(8)])],
+          address: null,
+        }),
+        auth: this.fb.group({
+          password1: [null,Validators.compose([Validators.required,Validators.minLength(6)])],
+          password2: [null,Validators.compose([Validators.required,Validators.minLength(6)])]
+        },[StringMatchValidators.MatchValidator('password1','password2')]),
+      });
+
+    }else if(this.action == "update"){
+
+      this.form = this.fb.group({
+        firstname: [this.user.firstname, Validators.compose([Validators.required])],
+        lastname: [this.user.lastname, Validators.compose([Validators.required])],
+        // username: [this.user.username, Validators.compose([Validators.required])],
+        type: this.fb.group({
+          name:this.userTypePipe(this.user.profiles[0].name),
+        }),
+        contacts: this.fb.group({
+          email: [this.user.email, Validators.compose([Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)])],
+          phoneNumber: [this.user.phoneNumber, Validators.compose([Validators.required, Validators.pattern(/^[0-9]+$/),Validators.minLength(8)])],
+          address: this.user.adresse,
+        }),
+        // state: this.fb.group({
+          // password1: [null,Validators.compose([Validators.minLength(8)])],
+        //   // password2: [null,Validators.compose([Validators.minLength(8)])],
+        //   isEnabled: this.user.enabled,
+        // },[StringMatchValidators.MatchValidator('password1','password2')]),
+      });
+      // this.usernameType = ((/^[0-9]$/).test(this.form.controls.username.value)) ? 'phone' : 'email';
+
+    }
   }
 
   ngOnInit() {
-    if(this.user){
-      this.form.setValue(this.user);
-    } 
+  }
+  private userTypePipe(value:string){
+    let data:string;
+    if( (/admin/ig).test(value) ){
+      data= ('admin');
+    }
+    else if( (/particulier/ig).test(value) ){
+      data= ('particulier');
+    }
     else{
-      this.user = new User();
-      this.user.profile = new UserProfile();
-      this.user.work = new UserWork();
-      this.user.contacts = new UserContacts();
-      this.user.social = new UserSocial();
-      this.user.settings = new UserSettings();
-    } 
+      data= ('boutique');
+    }
+    return data;
   }
 
   close(): void {
     this.dialogRef.close();
   }
 
+  end(userId:any,formVal?:any){
+    if(this.action =="update"){
+      return [
+        {user:formVal, id:userId}
+      ];
+    }else if(this.action =="add"){
+      return formVal;
+    }else{
+      return userId;
+    }
+  }
 }

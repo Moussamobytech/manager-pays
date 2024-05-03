@@ -1,15 +1,30 @@
 {
   "WELCOME": "Bienvenue sur notre marché!",
   "LOGIN": "S'identifier",
+  "LOGIN_IN": "Connectez vous",
   "LOGOUT": "Se déconnecter",
   "REGISTER": "S'inscrire",
+  "REGISTER_IN": "S'inscrire maintenant!",
   "ACCOUNT": "Compte",
+  "NO_ACCOUNT": "Vous n'avez pas de compte ?",
   "COMPARE": "Comparer",
   "WISHLIST": "Liste de souhaits",
+  "CHOOSE": "Choissisez le type de profil",
+  "RECHOOSE": "Choissisez à nouveau le profil",
+  "FORM_SIGNUP": "Formulaire d'inscription",
+  "STORE": "Boutique",
+  "PARTICULAR": "Particulier",
+  "ACCOUNT_INFO": "Information sur le compte",
+  "STATS": "Statistiques",
+  "PRICE": "Prix",
+  "SHOW_ALL_BRAND":"Toutes les marques",
+
+
   "NAV": {
     "HOME": "Accueil",
     "PAGES": "Des pages",
     "SHOP": "Boutique",
+    "SETTING": "Paramètres",
     "ALL_PRODUCTS": "Tous les produits",
     "PRODUCT_DETAIL": "Détail du produit",
     "CART": "Chariot",
@@ -24,12 +39,15 @@
     "MENU_ITEM": "Menu Item",
     "CONTACT": "Contact",
     "ABOUT_US": "Sur",
-    "ADMIN": "Admin"
+    "ADMIN": "Admin",
+    "PRICE": "Prix"
   },
   "ADMIN_NAV": {
     "DASHBOARD": "Tableau de bord",
     "PRODUCTS": "Produits",
     "CATEGORIES": "Catégories",
+    "CAMPAGNE": "Campagne",
+    "CATEGORIE_DETAIL":"Détail de Catégories",
     "PRODUCT_LIST": "Liste de produit",
     "PRODUCT_DETAIL": "Détail de produit",
     "ADD_PRODUCT": "Ajouter un produit",
@@ -37,11 +55,12 @@
     "ORDERS": "Ordres",
     "TRANSACTIONS": "Transactions",
     "BRAND": "Marque",
-    "BRAND_LIST": "Marque_list",
-    "BRAND_DETAIL": "Marque_detail",
-    "CAMPAGNE":"Campagne",
-    "CAMPAGNE_LIST": "Campagne_list",
-    "CAMPAGNE_DETAIL": "Campagne_detail",
+    "BRAND_LIST": "Liste de marque",
+    "BRAND_DETAIL": "Detail de la marque",
+    "ADD_BRAND": "Ajouter marque",
+    "ADD_CAMPAGNE": "Ajouter campagne",
+    "CAMPAGNE_LIST": "Liste Campagne",
+    "CAMPAGNE_DETAIL": "Detail campagne",
     "USERS": "Utilisateurs",
     "CUSTOMERS": "Les clients",
     "COUPONS": "Coupons",
@@ -51,15 +70,21 @@
     "FOLLOWERS": "Suiveurs",
     "SUPPORT": "Soutien",
     "REVIEWS": "Commentaires",
-    "EXTERNAL_LINK": "Lien Externe"
+    "EXTERNAL_LINK": "Lien Externe",
+    "PRICE": "Prix"
+
   },
   "BTN": {
     "ADD": "Ajouter",
+    "EDIT": "Modifier",
     "SAVE": "Sauvegarder",
+    "DEACTIVATE": "Desactiver",
     "SUBMIT": "Soumettre",
+    "VIEW": "Voir",
     "CANCEL": "Annuler",
     "UPLOAD": "Télécharger",
-    "REMOVE": "Retirer",
+    "REMOVE": "Supprimer",
+    "SEARCH": "Recherche",
     "YES": "Oui",
     "NO": "Non",
     "OK": "D'accord"
@@ -68,14 +93,88 @@
     "SURE_DELETE": "Etes-vous sûr que vous voulez supprimer?",
     "FILE_SIZE": "La taille du fichier ne peut pas dépasser {{param}} ko."
   },
-  "FIELD": {
-    "NAME": "Nom"
-  },
   "PAGINATION":{
     "ITEMS_PER_PAGE": "Objets par page:",
     "NEXT_PAGE": "Page suivante",
     "PREV_PAGE": "Page précédente",
     "FIRST_PAGE": "Première page",
     "LAST_PAGE": "Dernière page"
+  },
+  "FIELD":{
+    "USERNAME": "Nom d'utilisateur",
+    "FIRSTNAME": "Prénom",
+    "LASTNAME": "Nom",
+    "PASSWORD": "Mot de passe",
+    "PASSWORD_CONFIRM": "Confirmer mot de passe",
+    "ADDRESS":"Addresse",
+    "TYPE":"Type D'utilisateur",
+    "EMAIL": "Email",
+    "CONTACT": "Numéro de contact",
+    "ADD": "Adresse",
+    "RCCM": "RCCM",
+    "COUNTRY": "Pays",
+    "STATE": "Ville",
+    "PHONE": "Numero de téléphone"
+  },
+  "USER":{
+    "MEMBER_SINCE": "Membre depuis"
+  },
+
+  "FIELD_ERROR":{
+    "NAME_REQUIRED": "Le nom est obligatoire.",
+    "FIRSTNAME_REQUIRED": "Le prénom est obligatoire.",
+    "LASTNAME_REQUIRED": "Le nom est obligatoire.",
+    "USERNAME_REQUIRED": "Le nom d'utilisateur est obligatoire.",
+    "EMAIL_INVALID": "L'adresse email n'est pas valide.",
+    "PHONE_REQUIRED": "Le numéro de téléphone est requis.",
+    "PHONE_NOT_NUMERIC": "Le numéro doit être numérique.",
+    "PHONE_MINLENGTH": "Doit inclure 6 caractères ou plus.",
+    "TYPE_REQUIRED": "Le type d'utilisateur est requis.",
+    "IMAGE_REQUIRED": "L'image est obligatoire.",
+    "PASSWORD_REQUIRED": "Le mot de passe est requis.",
+    "PASSWORD_MINLENGTH": "Doit comporter 6 caractères ou plus.",
+    "PASSCONFIRM_REQUIRED": "Une confirmation est requise.",
+    "PASSCONFIRM_MINLENGTH": "La confirmation doit comporter 6 caractères ou plus."
+  },
+  "ACTION_TITLE":{
+    "ADD":"Ajouter Un Utilisateur",
+    "EDIT":"Modifier Un Utilisateur",
+    "DELETE":"Supprimer Un Utilisateur "
+  },
+  "PRODUCTS": {
+    "LIST": "Liste",
+    "PAGE_TITLE":"Liste des produits",
+    "LAST": "Derniers produits",
+    "LIBELLE": "Libelle",
+    "PRICE": "Prix",
+    "PRICE_PROMOTION": "Prix promotion",
+    "DESC": "Description",
+    "ADDITIONAL_INFO": "Information additionel",
+    "REVIEWS": "Commentaires",
+    "IMAGE": "Image",
+    "STATE": "Etat",
+    "WEIGHT": "Priorisation",
+    "START": "Date de début",
+    "END": "Date de fin",
+    "USER": "Vendeur",
+    "CATEGORY": "Categorie",
+    "CREATED": "Date de création",
+    "ENDED": "Date de fin",
+    "CALL_USER":"Contacter le vendeur",
+    "BRAND": "Marque",
+    "SHOW_MORE": "Afficher Plus",
+    "HIDE_MORE": "Cacher Plus",
+    "NO_DATA": "Il n'y a aucun produit pour l'instant. Veuillez réessayer ultérieurement.",
+    "SIZE":"La taille",
+    "USED":"Utilité",
+    "NEW":"Nouveau",
+    "NOT_SPECIFIE":"Non spécifié"
+  },
+  "CATEGORY":{
+    "NAME": "Nom",
+    "IMAGE": "Image",
+    "PAGE_TITLE": "Liste des Categories",
+    "ADD_BTN": "Ajouter une Categorie",
+    "PRICE": "Prix"
   }
 }

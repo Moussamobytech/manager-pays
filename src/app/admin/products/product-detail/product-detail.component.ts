@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { SwiperDirective, SwiperConfigInterface } from '../../../theme/components/swiper/swiper.module';
-import { Product } from 'src/app/app.models';
 import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators } from '@angular/forms';
 import { emailValidator } from 'src/app/theme/utils/app-validators';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { Product } from 'src/app/models/product.models';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -24,7 +25,7 @@ export class ProductDetailComponent implements OnInit {
   private sub: any;
   public form: UntypedFormGroup;
 
-  constructor(public appService:AppService,
+  constructor(public appService:AppService, public produitService: ProductService,
               private activatedRoute: ActivatedRoute,
               public dialog: MatDialog,
               public formBuilder: UntypedFormBuilder,
@@ -70,16 +71,26 @@ export class ProductDetailComponent implements OnInit {
   }
 
   public getProductById(id){
-    this.appService.getProductById(id).subscribe(data=>{
+    this.produitService.find(id).then((data : any) =>{
+      console.log(data)
       this.product = data;
-      this.image = data.image1[0].medium;
-      this.zoomImage = data.image1[0].big;
+      this.image = data.image1;
+      this.zoomImage = data.image1;
+      const images: any[] = [];
+      data.images.forEach(item=>{
+        let image = {
+          link: item,
+          preview: item
+        }
+        images.push(image);
+      })
+      // this.form.controls.images.setValue(images); 
       setTimeout(() => {
         this.config.observer = true;
-       // this.directiveRef.setIndex(0);
       });
-    });
+    })
   }
+  
 
   public selectImage(image){
     this.image = image.medium;

@@ -6,6 +6,7 @@ import { ProductDialogComponent } from './product-dialog/product-dialog.componen
 import { AppService } from '../../app.service';
 import { Product } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-products-carousel',
@@ -19,7 +20,8 @@ export class ProductsCarouselComponent implements OnInit {
   public config: SwiperConfigInterface = {};
   public settings: Settings;
   imageData: string | ArrayBuffer | null = null;
-  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog, private router: Router) {
+  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog, 
+    private router: Router,  public produitService : ProductService) {
     this.settings = this.appSettings.settings;
   }
 
@@ -27,16 +29,22 @@ export class ProductsCarouselComponent implements OnInit {
     this.getProductByCategorie(this.idCat);
    }
 
-  public getProductByCategorie(categorie: string){
-    this.appService.getProductByCategorie(categorie).subscribe(
-      data => {
-        this.products= data
-        console.log("cateeeeeee ",data);
-        console.log("1 cateeeeeee ",categorie);
+  public getProductByCategorie(type: string){
+    console.log("cateeeeeee ",type);
 
+    if(type == "best"){
 
-      }
-    )
+      this.getProduitByBest()
+    }
+    if(type == "promotion"){
+      this.getProduitByPromotion()
+    }
+    if(type == "topRate"){
+      this.getTopRate()
+    }
+    if(type == "newArrivals"){
+      this.getTopRate()
+    }
   }
 
   ngAfterViewInit() {
@@ -84,5 +92,23 @@ export class ProductsCarouselComponent implements OnInit {
     });
   }
 
+  public async getProduitByPromotion() {
+    this.products = await this.produitService.getProductByTop()
+    console.log("res promotion :::::::: ",this.products)
+  }
+  public async getProduitByBest() {
+    this.products = await this.produitService.getProductByTop()
+    console.log("res best :::::::: ",this.products)
+  }
+
+  public async getNewArrivals() {
+    this.products = await this.produitService.getProductByNewArrival("yes")
+    console.log("res newArrivals :::::::: ",this.products)
+    
+  }
+  public async getTopRate() {
+    this.products = await this.produitService.getProductByTop()
+    console.log("res topRate :::::::: ",this.products)
+  }
 
 }

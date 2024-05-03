@@ -37,19 +37,13 @@
 
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Date début</mat-label>
-        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" [value]="dateDebut" required>        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" [value]="dateDebut" required>
+        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
         <mat-datepicker #pickerStart></mat-datepicker>
         <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error>
       </mat-form-field>
 
-      <!-- <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Date début</mat-label>
-        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" [value]="dateDebut | date: 'yyyy-MM-dd'" required> -->
-         <!-- <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" required>
-        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-        <mat-datepicker #pickerStart></mat-datepicker>
-        <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error> -->
-      <!-- </mat-form-field> -->
+
 <!--
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Date début</mat-label>
@@ -82,19 +76,7 @@
           </mat-select>
         </mat-form-field>
       </div>
- <!-- <div fxFlex="100">
 
-  <mat-form-field appearance="outline" class="w-100">
-
-    <mat-label>Choisir les produits pour la campagne</mat-label>
-    <mat-select formControlName="produit" multiple >
-      <mat-option *ngFor="let produit of products" [value]="produit.id">{{ produit.nom }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-</div> -->
-
-<!-- <div *ngIf="isUpdateMode">{{data.campagne.produits.user}}</div> -->
 
 
       <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">

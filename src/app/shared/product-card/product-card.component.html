@@ -1,0 +1,34 @@
+<mat-card *ngIf="product != null && product != undefined" class="product-item">
+    <mat-chip-listbox *ngIf="product.discount">
+        <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
+    </mat-chip-listbox>
+    <a [routerLink]="['/products', product.id, product.nom]">
+        <!-- <img [attr.data-src]="product.image1" class="swiper-lazy"/> -->
+        <img [src]="product.image1" class="image-link"/>
+
+        <!-- <div class="swiper-lazy-preloader"></div> -->
+    </a>
+    <h4 *ngIf="cat == 'ok'" class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
+    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
+        {{product.nom}}
+    </a>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
+        <div *ngIf="!onePrice" fxLayout="column" fxLayoutAlign="center start">
+            <p class="old-price text-muted" [ngClass]="{'old-price': product.pricePromotion}">
+                <span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span>
+            </p>
+            <p class="new-price" *ngIf="product.pricePromotion"> Promo : {{product.pricePromotion | number : '1.2-2'}} FCFA</p>
+        </div>
+        <div *ngIf="onePrice" fxLayout="column" fxLayoutAlign="center start">
+            <p *ngIf="!product.pricePromotion" class="old-price text-muted" [ngClass]="{'old-price': product.pricePromotion}">
+                <span>{{product.priceBasic | number : '1.2-2'}} FCFA</span>
+            </p>
+            <p class="old-price text-muted" *ngIf="product.pricePromotion">{{product.pricePromotion | number : '1.2-2'}} FCFA</p>
+        </div>
+
+    </div>
+    <div class="divider mt-2"></div>
+    <div class="icons">
+        <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)"></app-controls>
+    </div>
+</mat-card>

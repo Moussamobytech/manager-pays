@@ -1,35 +1,43 @@
-<p class="text-muted">Hello, <b>Emilio Verdines!</b>
-From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.</p>
+<!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
+   À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
 
 <div fxLayout="row wrap" class="flex-wrapper">
-    <div fxFlex="33.3" fxFlex.sm="50" fxFlex.xs="100" class="col">
+    <div fxFlex="50" fxFlex.sm="50" fxFlex.xs="100" class="col">
         <mat-card>
           <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>Account Information</h3></mat-card-title>
+              <mat-card-title class="m-0"><h3>{{'ACCOUNT_INFO' | translate}}</h3></mat-card-title>
               <a mat-icon-button routerLink="/account/information"><mat-icon class="text-muted">edit</mat-icon></a>
           </mat-card-header>
           <div class="divider"></div>
-          <mat-card-content class="p-2 text-muted account-card-content">
-              <p>Emilio Verdines</p>
-              <p>emilio.verdines&#64;gmail.com</p>
-              <p><a routerLink="/account/information" class="primary-text">Change password</a></p>
+          <mat-card-content class="pb-5 text-muted account-card-content">
+              <p>Nom complet : <b>{{currentUser.firstname + " "+ currentUser.lastname}}</b></p>
+              <p>Email : <b>{{currentUser.email || 'N/A'}}</b></p>
+              <p>Numéro de contact :  <b>{{currentUser.phoneNumber}}</b></p>
+              <p>Adresse :  <b>{{currentUser.adresse || 'N/A'}}</b></p>
+              <p>Date de création : <b>{{currentUser.createdAt | date}}</b></p>
+              <p>Type de compte : <b>{{currentProfile(currentUser.profiles[0])}}</b></p>
+              <p><a routerLink="/account/information" class="primary-text">Change mot de passe</a></p>
           </mat-card-content>
         </mat-card>
     </div>
-    <div fxFlex="33.3" fxFlex.sm="50" fxFlex.xs="100" class="col">
+    <div fxFlex="50" fxFlex.sm="50" fxFlex.xs="100" class="col">
         <mat-card>
           <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>Addresses</h3></mat-card-title>
+              <mat-card-title class="m-0"><h3>{{'STATS' | translate}}</h3></mat-card-title>
               <a mat-icon-button routerLink="/account/addresses"><mat-icon class="text-muted">edit</mat-icon></a>
           </mat-card-header>
           <div class="divider"></div>
           <mat-card-content class="p-2 text-muted account-card-content">
-            <p>Billing address</p>
-            <p>Shipping address</p>
+            <p>Total produits : <b>{{statsNumber.total}}</b></p>
+            <p>Total produits actifs: <b>{{statsNumber.actif}}</b></p>
+            <p>Total produits inactifs: <b>{{statsNumber.inactif}}</b></p>
+            <p>Total produits en attente de validation: <b>{{statsNumber.pending}}</b></p>
+            <p>Nombre de points : <b>{{statsNumber.points || '0'}}</b></p>
+            
           </mat-card-content>
         </mat-card>
     </div>
-    <div fxFlex="33.3" fxFlex.sm="100" fxFlex.xs="100" class="col">
+    <!-- <div fxFlex="33.3" fxFlex.sm="100" fxFlex.xs="100" class="col">
         <mat-card>
           <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
               <mat-card-title class="m-0"><h3>Orders</h3></mat-card-title>
@@ -47,5 +55,5 @@ From your My Account Dashboard you have the ability to view a snapshot of your r
             <mat-progress-bar value="25" color="primary"></mat-progress-bar>
           </mat-card-content>
         </mat-card>
-    </div>
+    </div> -->
 </div>

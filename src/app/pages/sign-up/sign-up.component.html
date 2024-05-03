@@ -1,0 +1,154 @@
+<mat-card class="p-4">
+    <div fxLayout="row wrap">
+        <div fxFlex="100" fxFlex.gt-sm="100" class="p-3">
+            <h2 class="text-muted text-center mb-3">{{'FORM_SIGNUP' | translate}} </h2>
+            <div *ngIf="profil == null" fxLayout="row wrap">
+                <div fxFlex="100" fxFlex.gt-sm="100" class="p-3">
+                    <h3 class="text-muted text-center mb-3"></h3>
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="p-3" (click)="profilType('particulier')">
+                    <div class="text-center mt-2">
+                        <button mat-fab color="primary" class="mat-elevation-z6">
+                            <mat-icon>accessibility</mat-icon>
+                        </button>
+                    </div>
+    
+                    <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-3">
+                        <div class="divider w-100"></div>
+                        <h3 class="text-muted auth">{{'PARTICULAR' | translate}}</h3>
+                        <div class="divider w-100"></div>
+                    </div> 
+                </div>
+                <div fxFlex="100" fxFlex.gt-sm="50" class="p-3" (click)="profilType('boutique')">
+                    <div class="text-center mt-2">
+                        <button mat-fab color="primary" class="mat-elevation-z6">
+                            <mat-icon>store</mat-icon>
+                        </button>
+                    </div>
+    
+                    <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-3">
+                        <div class="divider w-100"></div>
+                        <h3 class="text-muted auth">{{'STORE' | translate}}</h3>
+                        <div class="divider w-100"></div>
+                    </div> 
+                </div>
+            </div>
+            
+            <form  *ngIf="profil != null" [formGroup]="registerForm" (ngSubmit)="onRegisterFormSubmit(registerForm.value)">
+                <div fxLayout="row wrap">
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.FIRSTNAME' | translate}}</mat-label>
+                            <input matInput formControlName="firstname" required>
+                            <mat-error *ngIf="registerForm.controls.firstname.errors?.required">Le prenom d'utilisateur est obligatoire</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.LASTNAME' | translate}}</mat-label>
+                            <input matInput formControlName="lastname" required>
+                            <mat-error *ngIf="registerForm.controls.lastname.errors?.required">Le nom est obligatoire</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.EMAIL' | translate}}</mat-label>
+                            <input matInput formControlName="email">
+                            <mat-error *ngIf="registerForm.controls.email.errors?.required">Le nom est obligatoire</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-1">
+                            <mat-label>{{'FIELD.PASSWORD' | translate}}</mat-label>
+                            <input matInput formControlName="password" required>
+                            <mat-error *ngIf="registerForm.controls.password.errors?.required">Le Mot de passe est obligatoire</mat-error>
+                            <mat-error *ngIf="registerForm.controls.password.hasError('minlength')">Le mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
+                        </mat-form-field> 
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-1">
+                            <mat-label>{{'FIELD.PASSWORD_CONFIRM' | translate}}</mat-label>
+                            <input matInput formControlName="confirmPassword" required>
+                            <mat-error *ngIf="registerForm.controls.confirmPassword.errors?.required">Le Mot de passe est obligatoire</mat-error>
+                            <mat-error *ngIf="registerForm.controls.confirmPassword.hasError('minlength')">Le mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
+                        </mat-form-field> 
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="15" class="px-1">
+                        <!-- <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.COUNTRY' | translate}}</mat-label>
+                            <input matInput formControlName="addresse">
+                        </mat-form-field> -->
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'FIELD.COUNTRY' | translate}}</mat-label>
+                            <mat-select formControlName="country" (selectionChange)="handleChange($event)" required>
+                                <mat-option *ngFor="let country of countries" [value]="country.id">
+                                    <span>{{country.nom}}</span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="35" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-1">
+                            <mat-label>{{'FIELD.CONTACT' | translate}} ({{maskPlaceholder}})</mat-label>
+                            <input matInput [placeholder]="maskPlaceholder" type="text" formControlName="phone"
+                             [mask]="mask" required>
+                            <mat-error *ngIf="registerForm.controls.phone.errors?.required">Le numéro de télephone est obligatoire</mat-error>
+                        </mat-form-field> 
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.ADD' | translate}}</mat-label>
+                            <input matInput formControlName="state">
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.STATE' | translate}}</mat-label>
+                            <input matInput formControlName="state">
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.RCCM' | translate}}</mat-label>
+                            <input matInput formControlName="state">
+                        </mat-form-field>
+                    </div>
+                </div>
+                
+                <!-- <div fxFlex="100" class="mt-2 text-center w-100">
+                    <button mat-raised-button color="primary" type="submit">{{'FIELD.SAVE' | translate}}</button>
+                </div> -->
+                <div class="text-center mt-2">
+                    <button mat-raised-button color="primary" class="mat-elevation-z6">
+                        <mat-icon>person_add</mat-icon> {{'BTN.SAVE' | translate}}
+                    </button>
+                </div> 
+                <!-- <div class="text-center mt-2">
+                    <button mat-fab color="primary" class="mat-elevation-z6" (click)="onRegisterFormSubmit(registerForm.value)">
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+                </div> -->
+
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-3">
+                    <div class="divider w-100"></div>
+                    <h3 class="text-muted auth">{{'RECHOOSE' | translate}}</h3>
+                    <div class="divider w-100"></div>
+                </div>               
+                
+                <div class="text-center py-2">                   
+                    
+                    <div class="text-center">
+                        <button mat-fab color="primary" class="mat-elevation-z6" (click)="profilType(null)">
+                            <mat-icon>settings_backup_restore</mat-icon>
+                        </button>
+                    </div> 
+                </div> 
+
+            </form>
+        </div>
+        <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="p-3" ngClass.sm="mt-3" ngClass.xs="mt-3">
+            <h2 class="text-muted text-center mb-3">Don't have an account? Sign up now!</h2> settings_backup_restore
+            
+        </div> -->
+    </div> 
+</mat-card>

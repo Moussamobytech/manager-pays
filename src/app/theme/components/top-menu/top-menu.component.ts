@@ -9,7 +9,8 @@ import { Settings, AppSettings } from '../../../app.settings';
 })
 export class TopMenuComponent implements OnInit {
   public currencies = ['USD', 'EUR'];
-  public currency:any;
+  public currency:any; 
+  public user:any; 
 
   public settings: Settings;
   constructor(public appSettings:AppSettings, public appService:AppService, public translateService: TranslateService) {
@@ -17,8 +18,10 @@ export class TopMenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currency = this.currencies[0];
-
+    this.currency = this.currencies[0];  
+    this.user  = JSON.parse(sessionStorage.getItem('currentUser')!);
+      // this.username = sessionStorage.getItem('username')!;
+      // console.log("TopMenuComponent user :::: ",this.user);
   }
 
   public changeCurrency(currency){

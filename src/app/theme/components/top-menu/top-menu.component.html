@@ -36,10 +36,18 @@
         <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
     </a>
     <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown account">
-        <span (mouseleave)="accountMenuTrigger.closeMenu()">
+        <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
+            <a mat-menu-item routerLink="/sign-in">
+                <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>
+                <span>{{ 'LOGIN' | translate }}</span>
+            </a>
+        </span>
+        <span *ngIf="user != null && user != undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
             <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">
                 <img src="assets/images/others/user.jpg" alt="user-image" width="50">
-                <p>Emilio Verdines <br> <small>emilio_v <span *ngIf="settings.rtl">&rlm;</span>(152<mat-icon class="mat-icon-xs">star</mat-icon>)</small></p>
+                <p>{{user.firstname + " "+ user.lastname}} <br> <small>{{user.username}}
+                    <!-- <span *ngIf="settings.rtl">&rlm;</span>(152<mat-icon class="mat-icon-xs">star</mat-icon>) -->
+                </small></p>
             </div>
             <div class="divider"></div>
             <a mat-menu-item routerLink="/account">

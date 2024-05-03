@@ -4,7 +4,7 @@ import { Observable, catchError, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Campagne, Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
-import { ApiService } from './service/api.service';
+import { ApiService } from './services/api.service';
 
 export class Data {
     constructor(public categories: Category[],
@@ -230,7 +230,7 @@ public supprimerCampagne(id: string): Observable<any> {
   return  this.apiService.delete(`/campagne/supprimer/${id}`);
 }
    public getBanners(): Observable<any[]>{
-        return this.http.get<any[]>(this.url + 'banners.json');
+        return this.http.get<any[]>('assets/data/banners.json');
     }
 
 

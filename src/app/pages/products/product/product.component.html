@@ -37,23 +37,23 @@
 
         <h2>{{product?.nom}}</h2>
         <div class="py-1 lh">
-            <p><span class="text-muted fw-500">Categorie :  </span> <span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
+            <p><span class="text-muted fw-500">{{'PRODUCTS.CATEGORY'    | translate  }} </span> <span>{{ ( appService.Data.categories | filterById : product?.categorie )?.nom }}</span></p>
             <!-- <p><span class="text-muted fw-500">Availibility: </span><span>{{ (product?.availibilityCount > 0) ? 'In stock':'Unavailable'}}</span></p> -->
         </div>
         <!-- <div class="py-3">
             <app-rating [ratingsCount]="product?.ratingsCount" [rate]="product?.rate" [direction]="'row'"></app-rating>
         </div> -->
         <p class="py-1 text-muted lh" [ngClass]="{'old-price': product?.pricePromotion}">
-          Prix : {{product?.priceBasic}} FCFA
+          {{'PRODUCTS.PRICE' | translate}}: {{product?.priceBasic}} FCFA
       </p>
       <p class="new-price" *ngIf="product?.pricePromotion">
-          Prix promo : {{product?.pricePromotion}} FCFA
+        {{'PRODUCTS.PRICE_PROMOTION' | translate}} : {{product?.pricePromotion}} FCFA
       </p>
       <p class="py-1 text-muted lh">{{product?.description }}</p>
 
         <div class="divider mt-1"></div>
         <div class="py-2">
-          <h2>Contacter le vendeur</h2>
+          <h2>{{'PRODUCTS.CALL_USER'| translate}}</h2>
           <!-- <div class="contact-icons">
             <div class="contact-icon">
                 <a [href]="'tel:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix"> <i class="fas fa-phone-volume"></i>  {{product?.contact}}</a>
@@ -100,7 +100,7 @@
         </div>
 
     </div>
-    <div fxFlex="100" fxFlex.gt-md="20" fxHide fxShow.gt-md>
+    <!-- <div fxFlex="100" fxFlex.gt-md="20" fxHide fxShow.gt-md>
 
         <div fxLayout="row wrap" class="info-bar" ngClass.gt-md="m-0">
             <div fxFlex="100" fxFlex.md="25" fxFlex.sm="50">
@@ -141,7 +141,7 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
 </div>
 
 <div fxLayout="row wrap" class="mt-5">
@@ -266,11 +266,11 @@
             </mat-tab-group>
         </mat-card>
     </div>
-    <div fxFlex="100" fxFlex.gt-md="22" fxFlex.md="26" ngClass.gt-sm="pl-4" fxHide fxShow.gt-sm>
+    <!-- <div fxFlex="100" fxFlex.gt-md="22" fxFlex.md="26" ngClass.gt-sm="pl-4" fxHide fxShow.gt-sm>
         <img src="https://via.placeholder.com/400x310/EEEEEE/9E9E9E/?text=Banner%201" alt="" class="mw-100 d-block">
         <img src="https://via.placeholder.com/400x310/EEEEEE/9E9E9E/?text=Banner%202" alt="" class="mw-100 d-block mt-4">
         <img src="https://via.placeholder.com/400x310/EEEEEE/9E9E9E/?text=Banner%203" alt="" class="mw-100 d-block mt-4">
-    </div>
+    </div> -->
 </div>
 
 <div class="py-3 mt-3">

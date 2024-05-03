@@ -14,7 +14,7 @@ export class Settings {
 export class AppSettings {
     public settings = new Settings(
         'Fidelity',  // theme name
-        'green',     // green, blue, red, pink, purple, grey
+        'purple',     // green, blue, red, pink, purple, grey
         false,       // true = rtl, false = ltr
         true,        // adminSidenavIsOpened
         true,        // adminSidenavIsPinned

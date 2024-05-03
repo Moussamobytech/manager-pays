@@ -1,6 +1,6 @@
 <app-main-carousel [slides]="slides"></app-main-carousel>
 
-<div fxLayout="row wrap" class="info-bar">
+<!-- <div fxLayout="row wrap" class="info-bar">
     <div fxFlex="100" fxFlex.gt-md="25" fxFlex.gt-xs="50">
         <mat-card class="light-block p-3" fxLayout="row"  fxLayoutAlign="start center">
             <mat-icon class="mat-icon-xlg text-muted m-0">card_giftcard</mat-icon>
@@ -12,13 +12,14 @@
     </div>
     <div fxFlex="100" fxFlex.gt-md="25" fxFlex.gt-xs="50">
         <mat-card class="light-block p-3" fxLayout="row"  fxLayoutAlign="start center">
-            <mat-icon class="mat-icon-xlg text-muted m-0">expédition_locale</mat-icon>
+            <mat-icon class="mat-icon-xlg text-muted m-0">card_giftcard</mat-icon>
             <div class="content">
-                <p>FREE </p>
-                <span class="text-muted m-0">Free shipping on all orders over $99</span>
+                <p>BONUS PLUS</p>
+                <span class="text-muted m-0">Make fun of shopping and collect bonuses</span>
             </div>
         </mat-card>
     </div>
+    
     <div fxFlex="100" fxFlex.gt-md="25" fxFlex.gt-xs="50">
         <mat-card class="light-block p-3" fxLayout="row"  fxLayoutAlign="start center">
             <mat-icon class="mat-icon-xlg text-muted m-0">monetization_on</mat-icon>
@@ -37,39 +38,47 @@
             </div>
         </mat-card>
     </div>
-</div>
+</div> -->
 
-<app-banners [banners]="banners"></app-banners>
+<!-- <app-banners [banners]="banners"></app-banners> -->
 
-<div class="products-tabs">
+<div class="grid-list">
+    <div fxLayout="row wrap">
+        <div *ngFor="let product of best" fxFlex="100" fxFlex.md="20" fxFlex.gt-md="33.3" >
+            <div class="p-2">
+                <app-product-card [onePrice]="true" [cat]="'nok'" [cat]="'nok'" [product]="product"></app-product-card>
+            </div>
+            
+        </div>
+    </div>
+    
 
-    <mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
+        
+    <!-- <mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
 
 
       <mat-tab label="{{'Tous' | translate}}">
         <app-products-carousel [products]="produit"></app-products-carousel>
        </mat-tab>
 
-       <!-- <mat-tab *ngFor="let items of categories" label="{{ items.nom }}">
+       <mat-tab *ngFor="let items of categories" label="{{ items.nom }}">
         <app-products-carousel [idCat]="items.id"></app-products-carousel>
-        </mat-tab> -->
+        </mat-tab>
 
         <mat-tab label="Les meilleurs produits">
-            <app-products-carousel [products]="best"></app-products-carousel>
+            <app-products-carousel [idCat]="'best'" [products]="best"></app-products-carousel>
          </mat-tab>
          <mat-tab label="En promotion">
-            <app-products-carousel [products]="promotion"></app-products-carousel>
+            <app-products-carousel [idCat]="'promotion'" [products]="promotion"></app-products-carousel>
          </mat-tab>
          <mat-tab label="Les plus visités">
-             <app-products-carousel [products]="topRate"></app-products-carousel>
+             <app-products-carousel [idCat]="'topRate'" [products]="topRate"></app-products-carousel>
          </mat-tab>
          <mat-tab label="Nouvelle arrivés">
-             <app-products-carousel [products]="newArrivals"></app-products-carousel>
+             <app-products-carousel  [idCat]="'newArrivals'" [products]="newArrivals"></app-products-carousel>
          </mat-tab>
 
-
-
-    </mat-tab-group>
+    </mat-tab-group> -->
 
 </div>
 
