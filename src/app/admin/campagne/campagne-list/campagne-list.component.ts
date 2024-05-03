@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Campagne } from 'src/app/app.models';
+import { Campagne, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
@@ -18,11 +18,13 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 export class CampagneListComponent implements OnInit {
   public viewCol: number = 25;
-  public campagne : Campagne[]= [];
+  public campagne : Array<Campagne> = [];
   public page: any;
   public count = 5;
   public settings:Settings;
   public id : string;
+  public products: Array<Product> = [];
+
   form = this.fb.group({
     etat : [null]
   })
@@ -56,11 +58,23 @@ export class CampagneListComponent implements OnInit {
       console.log("Camapagne :"+ this.campagne);
     })
   }
+
+  public getAllProducts(){
+    this.appService.getAllProducts().subscribe(data=>{
+      this.products = data;
+      console.log("Produit :", this.products)
+      //for show more product
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
+    });
+  }
   public openCampagneDialog(data: any) {
     const dialogRef = this.dialog.open(CampagneDialogComponent, {
       data: {
         campagne: data,
-        campagnes: this.campagne // Assurez-vous que la propriété s'appelle campagnes, pas campagne
+         products : this.products,
+        campagnes: this.campagne
       },
       panelClass: ['theme-dialog'],
       autoFocus: false,

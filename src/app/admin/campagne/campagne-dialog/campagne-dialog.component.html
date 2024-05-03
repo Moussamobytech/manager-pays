@@ -1,4 +1,4 @@
-<h1 mat-dialog-title class="text-center">{{ isUpdateMode ? 'Modifier la campagne' : 'Ajouter une campagne' }}</h1>
+ <h1 mat-dialog-title class="text-center">{{ isUpdateMode ? 'Modifier la campagne' : 'Ajouter une campagne' }}</h1>
 
 <!-- Affichage du message de succès -->
 
@@ -15,11 +15,19 @@
         <input matInput formControlName="libelle" required>
         <mat-error *ngIf="form.get('libelle').hasError('required')">Libelle est obligatoire</mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Username</mat-label>
-        <input matInput formControlName="username" required>
-        <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
-      </mat-form-field>
+
+      <div fxFlex="100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Username</mat-label>
+          <!-- Désactiver le champ indépendamment du mode -->
+          <input matInput formControlName="username" [readonly]="true" >
+          <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
+        </mat-form-field>
+      </div>
+
+
+
+
 
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Type</mat-label>
@@ -29,11 +37,33 @@
 
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Date début</mat-label>
-        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" required>
-        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" [value]="dateDebut" required>        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
         <mat-datepicker #pickerStart></mat-datepicker>
         <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error>
       </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Date début</mat-label>
+        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" [value]="dateDebut | date: 'yyyy-MM-dd'" required> -->
+         <!-- <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" required>
+        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        <mat-datepicker #pickerStart></mat-datepicker>
+        <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error> -->
+      <!-- </mat-form-field> -->
+<!--
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Date début</mat-label>
+
+        <input matInput formControlName="dateDebut" required #dateInput>
+        <input matInput [matDatepicker]="pickerStart" required #pickerInput>
+        <mat-datepicker #pickerStart (selectedChange)="onDateInput($event)"></mat-datepicker>
+
+        <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button (click)="openCalendar()">Open calendar</button> -->
+
+
 
 
       <mat-form-field appearance="outline" class="w-100">
@@ -44,16 +74,28 @@
         <mat-error *ngIf="form.get('dateFin').hasError('required')">Date fin est obligatoire</mat-error>
       </mat-form-field>
 
-      <div fxFlex="100">
-      <mat-form-field  appearance="outline" class="w-100">
-        <mat-label>Choisir les produits pour la campagne</mat-label>
-        <mat-select formControlName="produit" multiple>
-          @for (produits of products; track products) {
-            <mat-option [value]="produits.id">{{produits.nom}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      <div fxFlex="100" fxLayout="row">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Choisir les produits pour la campagne</mat-label>
+          <mat-select formControlName="produit" multiple>
+            <mat-option *ngFor="let produit of products" [value]="produit.id">{{ produit.nom }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
+ <!-- <div fxFlex="100">
+
+  <mat-form-field appearance="outline" class="w-100">
+
+    <mat-label>Choisir les produits pour la campagne</mat-label>
+    <mat-select formControlName="produit" multiple >
+      <mat-option *ngFor="let produit of products" [value]="produit.id">{{ produit.nom }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div> -->
+
+<!-- <div *ngIf="isUpdateMode">{{data.campagne.produits.user}}</div> -->
+
 
       <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
         <p>{{ isUpdateMode ? 'Campagne modifiée avec succès' : 'Campagne ajoutée avec succès' }}</p>
@@ -63,8 +105,12 @@
       <div class="py-1">
         <mat-label>Image</mat-label>
         <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
-        <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error>
+        <!-- <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error> -->
+
       </div>
+
+      <img *ngIf="isUpdateMode" src="{{data.campagne.image}}" alt="" srcset="" class="image">
+
     </div>
   </div>
 
@@ -75,3 +121,23 @@
     </div>
   </div>
 </form>
+
+
+      <!-- <div fxFlex="100">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Username</mat-label>
+          <input matInput [value]="form.get('username').value" [readonly]="true" tabindex="-1">
+          <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
+        </mat-form-field>
+      </div>
+ -->
+<!-- <div fxFlex="100">
+      <mat-form-field  appearance="outline" class="w-100">
+        <mat-label>Choisir les produits pour la campagne</mat-label>
+        <mat-select formControlName="produit" multiple>
+          @for (produits of products; track products) {
+            <mat-option [value]="produits.id">{{produits.nom}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      </div> -->

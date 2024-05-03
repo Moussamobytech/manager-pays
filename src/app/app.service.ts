@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, catchError, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Campagne, Category, Contact, Product } from './app.models';
 import { environment } from 'src/environments/environment';
@@ -30,6 +30,19 @@ export class AppService {
     public url = environment.url ;
 
     constructor(public http:HttpClient, public snackBar: MatSnackBar, public apiService:ApiService) { }
+
+    getImage(fullUrl : any): Observable<any> {
+     let reqOpts:any = {
+        params: new HttpParams(),
+        observe:  'response',
+        responseType : 'blob' as 'json'
+      };
+
+      return this.http
+        .get<Blob>(fullUrl, reqOpts)
+        .pipe(timeout(60000), catchError( (err) => {throw err}));
+
+    }
 
 
     public getCategories(): Observable<any>{
@@ -149,8 +162,8 @@ public getBrandById(id: string): Observable<any>{
     formData.append('libelle', libelle);
     formData.append('username', username);
     formData.append('type', type);
-    formData.append('dateDebut', dateDebut.toUTCString());
-    formData.append('dateFin', dateFin.toUTCString());
+    formData.append('dateDebut', dateDebut.toDateString());
+    formData.append('dateFin', dateFin.toDateString());
 
 
     formData.append('produit', produit);

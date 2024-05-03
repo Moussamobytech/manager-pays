@@ -31,6 +31,7 @@ import { CustomOverlayContainer } from './theme/utils/custom-overlay-container';
 import { MAT_MENU_SCROLL_STRATEGY } from '@angular/material/menu';
 import { menuScrollStrategy } from './theme/utils/scroll-strategy';
 import { AppInterceptor } from './theme/utils/app-interceptor';
+import { MAT_DATE_FORMATS ,} from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,9 @@ import { AppInterceptor } from './theme/utils/app-interceptor';
     AppService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
-    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+
+
   ],
   bootstrap: [AppComponent]
 })

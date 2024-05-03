@@ -18,8 +18,8 @@
               <div class="mat-mdc-cell" style="width: 10%;">{{item.libelle}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.type }}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.username}}</div>
-              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateDebut | date:"dd MMMM, yyyy 'at' HH:mm"}}</div>
-              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateFin | date:"dd MMMM, yyyy 'at' HH:mm"}}</div>
+              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateDebut | date: 'dd-MM-yyyy' }}</div>
+              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateFin | date: 'dd-MM-yyyy' }}</div>
               <div class="mat-mdc-cell" style="width: 40%;">
                   <div class="p-2 actions" style="display: flex; align-items: center;">
                       <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openCampagneDialog(item)">

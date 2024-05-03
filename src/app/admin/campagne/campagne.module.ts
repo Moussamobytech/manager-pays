@@ -9,7 +9,7 @@ import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CampagneDialogComponent } from './campagne-dialog/campagne-dialog.component';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
 export const routes: Routes = [
   { path: '', redirectTo: 'campagne-list', pathMatch: 'full'},
   { path: 'campagne-list', component: CampagneListComponent, data: { breadcrumb: 'Campagne List' } },
@@ -32,7 +32,10 @@ export const routes: Routes = [
     ReactiveFormsModule,
     NgxPaginationModule,
     SwiperModule,
-    InputFileModule
+    InputFileModule,
+    MatDatepickerModule
+
+
 
   ]
 })
