@@ -12,8 +12,8 @@
         left: -36px;
         min-width: 38px;
         z-index: 1;
-        box-shadow: -2px 3px 1px -2px rgba(0,0,0,.2), 
-                    -2px 2px 2px 0 rgba(0,0,0,.14), 
+        box-shadow: -2px 3px 1px -2px rgba(0,0,0,.2),
+                    -2px 2px 2px 0 rgba(0,0,0,.14),
                     -2px 1px 5px 0 rgba(0,0,0,.12);
     }
     .mat-mdc-card{
@@ -28,7 +28,7 @@
     .skin-icon{
         width: 32px;
         height: 32px;
-        cursor: pointer;        
+        cursor: pointer;
         &.green{
             background-color: #689f38;
         }
@@ -43,6 +43,9 @@
         }
         &.purple{
             background-color: #7b1fa2;
+        }
+        &.fidelity{
+          background: linear-gradient(to top,#25224a 33%,#c54896  33% 66%,#7db88a 40% 100%);
         }
         &.grey{
             background-color: #455a64;

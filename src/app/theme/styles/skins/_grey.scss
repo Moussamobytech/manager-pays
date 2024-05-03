@@ -7,5 +7,6 @@ $grey-theme: mat.define-light-theme((
         primary: $grey-primary,
         accent: $grey-accent,
         warn: $grey-warn,
-    )
+    ),
+    name: 'grey'
 ));

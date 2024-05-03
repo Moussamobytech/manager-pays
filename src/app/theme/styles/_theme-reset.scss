@@ -8,6 +8,8 @@
     $warn:          map.get($color-config, 'warn');
     $foreground:    map.get($color-config, 'foreground');
     $background:    map.get($color-config, 'background');
+    $fid_amber: #feb930;
+    $fid_green: #548580;
 
     .bg-primary {
         background: mat.get-color-from-palette($primary);
@@ -33,47 +35,99 @@
     .primary-color{
         color: mat.get-color-from-palette($primary);
     }
+  @if(map-get($theme, 'name') == 'fidelity'){
+    .bg-fid-primary {
+      background: mat.get-color-from-palette($primary);
+      color: mat.get-color-from-palette($warn);
+    }
+    .light_primary-color{
+      color: mat.get-color-from-palette($primary,700);
+    }
+    .fid_green-color{
+      color: $fid_green;
+    }
+    .warn-color{
+      color: mat.get-color-from-palette($warn);
+    }
     /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-
-    .top-navbar,.app-dropdown .mat-mdc-menu-item,
-    .app-dropdown .user-info,
-    .account-sidenav .mat-nav-list .mat-mdc-list-item,
+    .top-navbar,
+    .account-sidenav .mat-nav-list .mat-mdc-list-item,.app-dropdown .user-info,
     .product-item .title,
     .info-bar .mat-mdc-card .content p,
     .filter-sidenav .mat-expansion-panel-header-title,
     .mat-tab-body-content,
     .account-card-title {
-         color: mat.get-color-from-palette($accent, darker) !important;
+        color: mat.get-color-from-palette($accent, darker) !important;
     }
-
+    .app-dropdown, .lang {
+    background-color: mat.get-color-from-palette($primary) !important;
+    }
+    .app-dropdown .mat-icon{
+    color: $fid_green;
+    }
+    .mat-mdc-menu-item{
+    color: mat.get-color-from-palette($warn) !important;
+    }
+    .mat-mdc-menu-item:hover{
+    background-color: rgba($color: mat.get-color-from-palette($warn), $alpha: 0.7) !important;
+    color: mat.get-color-from-palette($primary) !important;
+    }
     .mat-toolbar{
-      background-color: #feb930;
-      color: mat.get-color-from-palette($primary) !important;
+    background-color: $fid_amber;
+    color: mat.get-color-from-palette($primary) !important;
     }
     .mat-toolbar .logo{
-      color: mat.get-color-from-palette($warn) !important;
+    color: mat.get-color-from-palette($warn) !important;
+    }
+    .mat-toolbar .logo:hover img{
+    transform: scale(1.05);
     }
     .mat-mdc-raised-button.mat-primary,.mat-mdc-mini-fab.mat-primary{
-      background-color: mat.get-color-from-palette($primary) !important;
-      color: mat.get-color-from-palette($warn) !important;
+    background-color: mat.get-color-from-palette($primary) !important;
+    color: mat.get-color-from-palette($warn) !important;
+    transition: .3s;
+    }
+    .mat-mdc-raised-button.mat-primary:hover,app-home .mat-mdc-mini-fab.mat-primary:hover{
+    background-color: mat.get-color-from-palette($warn) !important;
+    color: mat.get-color-from-palette($primary) !important;
     }
     .mat-mdc-mini-fab.mat-warn{
-      background-color: mat.get-color-from-palette($warn) !important;
-      color: mat.get-color-from-palette($primary) !important;
+    background-color: mat.get-color-from-palette($warn) !important;
+    color: mat.get-color-from-palette($primary) !important;
+    }
+    app-home .mat-mdc-mini-fab.mat-warn:hover{
+      color: mat.get-color-from-palette($warn) !important;
+      background-color: mat.get-color-from-palette($primary) !important;
+    }
+    .mat-mdc-raised-button.mat-accent{
+    background-color: $fid_green !important;
+    color: mat.get-color-from-palette($warn) !important;
+    }
+    .mat-mdc-raised-button.mat-accent:hover{
+    background-color: mat.get-color-from-palette($warn) !important;
+    color: $fid_green !important;
+    }
+    .mat-mdc-menu-submenu-icon{
+    color: $fid_green;
+    }
+    .mat-divider-horizontal{
+    border-color: rgba($color: $fid_green, $alpha: 0.7) !important;
     }
 
     .top-toolbar.mat-toolbar-row{
         border-bottom: 1px solid mat.get-color-from-palette($primary, lighter, 0.2);
         // color: mat.get-color-from-palette($primary, 100);
-        .top-menu a,
+        .top-menu > a{
+        color: mat.get-color-from-palette($primary);
+        }
         .sidenav-toggle {
             color: mat.get-color-from-palette($primary, 100);
         }
     }
 
     .top-navbar{
-       // background: mat.get-color-from-palette($primary, lighter);
-       background: mat.get-color-from-palette($background, background);
+    // background: mat.get-color-from-palette($primary, lighter);
+    background: mat.get-color-from-palette($background, background);
     }
 
     .border-bottom-mute{
@@ -110,7 +164,7 @@
     }
     .horizontal-active-link,
     .app-dropdown .mat-mdc-menu-item.horizontal-active-link{
-        color: mat.get-color-from-palette($primary) !important;
+      color: $fid_green;
     }
 
     .filter-brands  button.selected,
@@ -159,6 +213,134 @@
         .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
             color: mat.get-color-from-palette($background, card);
         }
+        .mat-mdc-tab:hover{
+        background-color: rgba($color: mat.get-color-from-palette($warn), $alpha: 0.7) !important;
+        }
+        .mat-icon{
+        color: mat.get-color-from-palette($warn) !important;
+        }
+        .mat-mdc-tab:hover .mat-icon{
+        color: mat.get-color-from-palette($primary) !important;
+        }
     }
+    .search-btn .mat-icon{
+    color: mat.get-color-from-palette($primary) !important;
+    transition: all .3s ease;
+    }
+    .search-btn:hover .mat-icon{
+    color: mat.get-color-from-palette($warn) !important;
+    }
+  }@else{
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+    .top-navbar.mat-toolbar,
+    .app-dropdown .mat-mdc-menu-item,
+    .app-dropdown .user-info,
+    .account-sidenav .mat-nav-list .mat-mdc-list-item,
+    .product-item .title,
+    .info-bar .mat-mdc-card .content p,
+    .filter-sidenav .mat-expansion-panel-header-title,
+    .mat-tab-body-content,
+    .account-card-title {
+         color: mat.get-color-from-palette($accent, darker) !important;
+    }
+
+    .top-toolbar.mat-toolbar-row{
+        border-bottom: 1px solid mat.get-color-from-palette($primary, lighter, 0.2);
+        color: mat.get-color-from-palette($primary, 100);
+        .top-menu a,
+        .sidenav-toggle {
+            color: mat.get-color-from-palette($primary, 100);
+        }
+    }
+
+    .top-navbar{
+       // background: mat.get-color-from-palette($primary, lighter);
+       background: mat.get-color-from-palette($background, background);
+    }
+
+    .border-bottom-mute{
+        border-bottom: 1px solid mat.get-color-from-palette($primary, lighter, 0.2);
+    }
+
+
+    .search-dropdown.mat-mdc-menu-panel{
+        background: transparent;
+    }
+
+
+    .mat-mdc-snack-bar-container.success {
+        .mdc-snackbar__surface {
+            background: #388E3C;
+        }
+    }
+    .mat-mdc-snack-bar-container.error {
+        .mdc-snackbar__surface {
+            background: #E53935;
+        }
+    }
+
+    .new-price{
+        color: mat.get-color-from-palette($warn);
+    }
+    .primary-text{
+        color: mat.get-color-from-palette($primary);
+    }
+
+    .active-link{
+        background-color: mat.get-color-from-palette($primary);
+        color: #fff;
+    }
+    .horizontal-active-link,
+    .app-dropdown .mat-mdc-menu-item.horizontal-active-link{
+        color: mat.get-color-from-palette($primary) !important;
+    }
+
+    .filter-brands  button.selected,
+    .filter-buttons button.selected{
+        box-shadow: 0px 0px 1px 2px mat.get-color-from-palette($primary);
+    }
+
+    /* ngx-pagination */
+    .product-pagination .ngx-pagination{
+        margin-bottom: 0;
+        padding: 14px 10px;
+        .current {
+            background: mat.get-color-from-palette($primary);
+            color: mat.get-color-from-palette($primary, default-contrast);
+        }
+        a:hover, button:hover{
+            background: rgba(mat.get-color-from-palette($primary), 0.2);
+            color: mat.get-color-from-palette($foreground, base);
+        }
+    }
+
+
+    // admin styles
+    .breadcrumb{
+        a{
+            color: mat.get-color-from-palette($primary);
+        }
+        .breadcrumb-item+.breadcrumb-item:before{
+            color: mat.get-color-from-palette($foreground, text);
+        }
+    }
+    .user-block{
+        border-bottom: 1px solid mat.get-color-from-palette($foreground, divider);
+    }
+
+    .menu-item .mat-mdc-button:not(.active-link) .menu-icon{
+        color: mat.get-color-from-palette($primary);
+    }
+
+
+    .messages{
+        .mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab__text-label {
+            color: rgba(mat.get-color-from-palette($background, card), 0.6);
+        }
+        .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+            color: mat.get-color-from-palette($background, card);
+        }
+    }
+  }
 
 }

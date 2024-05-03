@@ -7,17 +7,17 @@
             <button mat-icon-button matTooltip="Add" (click)="increment()"><mat-icon>add</mat-icon></button>
         </bdi>
     </div>
-    <div *ngIf="type!='wish'" class="d-flex flex-nowrap overflow-auto">
-      <a [href]="'tel:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix" class="text-sm">
+    <div *ngIf="type!='wish'" class="product-contact d-flex flex-nowrap overflow-auto">
+      <a [href]="'tel:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix" class="light_primary-color text-sm">
           <i class="fas fa-phone-volume fa-lg me-2"></i>
       </a>
-      <a *ngIf="product?.contact" href="https://wa.me/{{product?.contact}}" target="_blank" class="ml-2 text-sm">
+      <a *ngIf="product?.contact" href="https://wa.me/{{product?.contact}}" target="_blank" class="fid_green-color ml-2 text-sm">
           <i class="fab fa-whatsapp fa-lg me-2"></i>
       </a>
-      <a [href]="'sms:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix" class="ml-2 text-sm">
+      <a [href]="'sms:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.prix" class="warn-color ml-2 text-sm">
           <i class="fas fa-sms fa-lg me-2"></i>
       </a>
-  </div>
+    </div>
 
     <!-- <div *ngIf="type!='wish'"> -->
 

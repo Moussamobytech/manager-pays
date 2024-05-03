@@ -7,5 +7,6 @@ $red-theme: mat.define-light-theme((
         primary: $red-primary,
         accent: $red-accent,
         warn: $red-warn,
-    )
+    ),
+    name: 'red'
 ));

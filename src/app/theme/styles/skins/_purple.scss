@@ -7,5 +7,6 @@ $purple-theme: mat.define-light-theme((
         primary: $purple-primary,
         accent: $purple-accent,
         warn: $purple-warn,
-    )
+    ),
+    name: 'purple'
 ));

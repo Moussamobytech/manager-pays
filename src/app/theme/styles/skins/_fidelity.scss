@@ -7,5 +7,6 @@ $fidelity-theme: mat.define-light-theme((
         primary: $fidelity-primary,
         accent: $fidelity-accent,
         warn: $fidelity-warn,
-    )
+    ),
+    name: 'fidelity'
 ));
