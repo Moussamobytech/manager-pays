@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AppService } from 'src/app/app.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { ActivatedRoute } from '@angular/router';
+import { CampagneService } from 'src/app/services/campagne.service';
 
 @Component({
   selector: 'app-campage-detail',
@@ -19,7 +20,7 @@ export class CampageDetailComponent implements OnInit {
   public count = 6;
   public settings:Settings;
 
-  constructor( public appService : AppService, public appSettings:AppSettings,
+  constructor( public appService : AppService, public campagneService : CampagneService,  public appSettings:AppSettings,
     private activatedRoute: ActivatedRoute){}
   ngOnInit(): void {
     this.getCampagneById(this.campagneId)
@@ -33,11 +34,14 @@ export class CampageDetailComponent implements OnInit {
     });
   }
   public getCampagneById(id){
-    this.appService.getCampagneById(id).subscribe(data=>{
-      this.campagne = data;
+    try {
+      let res = this.campagneService.getCampagneById(id);
+      this.campagne = res;
       console.log('Campagne Id ', this.campagne);
-      console.log('Campagne Id ', this.campagne.produitList
-    );
-    });
+      console.log('Campagne Id ', this.campagne.produitList);
+    } catch (error) {
+      console.log('error Campagne Id ', error);
+    }
+   
   }
 }

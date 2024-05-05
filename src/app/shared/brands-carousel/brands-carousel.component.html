@@ -1,11 +1,12 @@
 <div class="brands-carousel">
     <div class="swiper-container h-100" [swiper]="config">
-        <a mat-button routerLink="/brands">Show All Brands</a>
+        <a mat-button routerLink="/brands">             {{"SHOW_ALL_BRAND" | translate}}
+        </a>
         <div class="swiper-wrapper h-100">
             <div *ngFor="let brand of brands" class="swiper-slide">
                 <div class="p-0">
-                    <a [routerLink]="['/brands', brand.libelle]" class="brand-item">
-                        <!-- <img [attr.data-src]="brand.logo" class="swiper-lazy"> -->
+                    <a class="brand-item">
+                        <!--  [routerLink]="['/brands', brand.libelle]" <img [attr.data-src]="brand.logo" class="swiper-lazy"> -->
                         <img [src]="brand.logo" class="swiper-lazy">
                     </a>
                     <!-- <div class="swiper-lazy-preloader"></div> -->

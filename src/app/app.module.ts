@@ -39,6 +39,7 @@ import { AuthenticationService } from './services/auth.service';
 import { ProductService } from './services/product.service';
 import { CategoryService } from './services/category.service';
 import { ApiService } from './services/api.service';
+import { CampagneService } from './services/campagne.service';
 
 @NgModule({
   declarations: [
@@ -80,11 +81,14 @@ import { ApiService } from './services/api.service';
     AuthenticationService,
     ProductService,
     CategoryService,
+    CampagneService,
     ApiService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
-    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+
+
   ],
   bootstrap: [AppComponent]
 })

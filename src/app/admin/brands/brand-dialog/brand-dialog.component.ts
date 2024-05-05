@@ -28,7 +28,8 @@ export class BrandDialogComponent implements OnInit {
       id: [this.isUpdateMode ? this.data.brand.id : null],
       libelle: [this.isUpdateMode ? this.data.brand.libelle : null, Validators.required],
       description: [this.isUpdateMode ? this.data.brand.description : null, Validators.required],
-      logo: this.isUpdateMode ? this.data.brand.logo : null, // Ajout de la valeur de l'image existante
+     // logo: null
+      logo: this.isUpdateMode ? this.data.brand.logo : null,
 
     });
     if (this.isUpdateMode) {

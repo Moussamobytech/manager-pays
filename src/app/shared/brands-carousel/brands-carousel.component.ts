@@ -20,8 +20,8 @@ export class BrandsCarouselComponent {
 
   ngAfterViewInit(){
     this.config = {
-      slidesPerView: 7,
-      spaceBetween: 16,
+      slidesPerView: 4,
+      spaceBetween: 1,
       keyboard: true,
       navigation: true,
       pagination: false,

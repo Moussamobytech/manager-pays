@@ -2,9 +2,9 @@
     <mat-chip-listbox *ngIf="product.discount">
         <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
     </mat-chip-listbox>
-    <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
+    <a [routerLink]="['/products', product.id, product.nom]">
         <!-- <img [attr.data-src]="product.image1" class="swiper-lazy"/> -->
-        <img [src]="product.image1" class="swiper-lazy"/>
+        <img [src]="product.image1" class="image-link"/>
 
         <!-- <div class="swiper-lazy-preloader"></div> -->
     </a>

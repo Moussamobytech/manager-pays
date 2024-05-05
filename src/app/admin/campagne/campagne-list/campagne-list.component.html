@@ -1,8 +1,8 @@
 <div class="p-2">
   <mat-card>
       <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-          <h2>Campagne liste</h2>
-          <button mat-raised-button color="primary" (click)="openCampagneDialog(null)">Ajouter Campagne</button>
+          <h2>{{"ADMIN_NAV.CAMPAGNE_LIST" | translate}}</h2>
+          <button mat-raised-button color="primary" (click)="openCampagneDialog(null)">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
       </div>
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table">
@@ -15,11 +15,11 @@
               <div class="mat-mdc-header-cell" style="width: 40%;">Actions</div>
           </div>
           <div *ngFor="let item of campagne | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
-              <div class="mat-mdc-cell" style="width: 10%;">{{item.libelle}}</div>
-              <div class="mat-mdc-cell" style="width: 10%;">{{item.type }}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.libelle |translate}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.type |translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.username}}</div>
-              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateDebut | date:"dd MMMM, yyyy 'at' HH:mm"}}</div>
-              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateFin | date:"dd MMMM, yyyy 'at' HH:mm"}}</div>
+              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateDebut | date: 'dd-MM-yyyy' }}</div>
+              <div class="mat-mdc-cell" style="width: 15%;">{{item.dateFin | date: 'dd-MM-yyyy' }}</div>
               <div class="mat-mdc-cell" style="width: 40%;">
                   <div class="p-2 actions" style="display: flex; align-items: center;">
                       <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openCampagneDialog(item)">

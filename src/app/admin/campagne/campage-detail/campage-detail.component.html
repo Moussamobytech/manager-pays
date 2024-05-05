@@ -14,8 +14,8 @@
 
       <p class="py-2 text-muted lh">Username : {{campagne?.username}}</p>
       <p class="py-2 text-muted lh"> Type : {{campagne?.type}}</p>
-      <p class="py-2 text-muted lh">Date debut : {{campagne?.dateDebut  }}</p>
-      <p class="py-2 text-muted lh">Date Fin : {{campagne?.dateFin}}</p>
+      <p class="py-2 text-muted lh">Date debut : {{campagne?.dateDebut | date: 'dd-MM-yyyy'  }}</p>
+      <p class="py-2 text-muted lh">Date Fin : {{campagne?.dateFin | date: 'dd-MM-yyyy'}}</p>
 
       <div class="divider my-2"></div>
 

@@ -84,6 +84,6 @@ export class  Brand {
                public libelle: string,
                public description: string,
                public etat: boolean,
-               public logo : File,
+               public logo : string,
                ) {}
 }

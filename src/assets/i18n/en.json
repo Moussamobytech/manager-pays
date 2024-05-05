@@ -16,6 +16,7 @@
   "PARTICULAR": "Particular",
   "ACCOUNT_INFO": "Account information",
   "STATS": "Statistics",
+  "PRICE":"Price",
   "NAV": {
   "HOME": "Home",
   "PAGES": "Pages",
@@ -35,7 +36,9 @@
   "MENU_ITEM": "Menu Item",
   "CONTACT": "Contact",
   "ABOUT_US": "On",
-  "ADMIN": "Admin"
+  "ADMIN": "Admin",
+  "SHOW_ALL_BRAND":"Show all brands"
+
   },
   "ADMIN_NAV": {
   "DASHBOARD": "Dashboard",
@@ -45,6 +48,14 @@
   "PRODUCT_LIST": "Product list",
   "PRODUCT_DETAIL": "Product detail",
   "ADD_PRODUCT": "Add a product",
+  "BRAND":"Brand",
+  "ADD_BRAND":"Add Brand",
+  "BRAND_LIST":"Brand list",
+  "BRAND_DETAIL":"Brand detail",
+  "CAMPAGNE":"Campaign",
+  "ADD_CAMPAGNE":"Add Campaign",
+  "CAMPAGNE_LIST":"Campaign list",
+  "CAMPAGNE_DETAIL":"Campaign detail",
   "SALES": "Sales",
   "ORDERS": "Orders",
   "TRANSACTIONS": "Transactions",
@@ -101,7 +112,7 @@
   "STATE": "City",
   "PHONE": "Phone number"
   },
-  "USE":{
+  "USER":{
   "MEMBER_SINCE": "Member since"
   },
 
@@ -143,8 +154,32 @@
   "END": "End date",
   "USER": "Seller",
   "CATEGORY": "Category",
+  "CALL_USER":"Contact seller",
   "CREATED": "Creation date",
-  "ENDED": "End date"
+  "ENDED": "End date",
+  "BRAND":"Brand",
+  "COLOR":"Colors",
+  "SIZE":"Size",
+  "NEW":"New",
+  "USED":"Used",
+  "NOT_SPECIFIE":"Not Specified",
+  "SHOW_MORE":"Show more details",
+  "HIDE_MORE":"Hide details",
+  "NO_RESULTS":"No results found for your search. Please try again with different parameters.",
+  "SEARCH_PARAMETERS":"Search parameters:",
+  "LABEL_SEARCH":"Search by product name, brand, category...",
+  "LABEL_ORDERBY":"Order by:",
+  "LABEL_SORT":"Sort:",
+  "LABEL_ASC":"Ascending",
+  "LABEL_DESC":"Descending",
+  "LABEL_DATE":"Date",
+  "LABEL_NAME":"Name",
+  "LABEL_PRICE":"Price",
+  "LABEL_RATING":"Rating",
+  "FILTERS":"Filters",
+  "APPLY_FILTERS":"Apply filters",
+  "CLEAR_FILTERS":"Clear filters"
+
   },
   "CATEGORY":{
   "NAME": "Name",

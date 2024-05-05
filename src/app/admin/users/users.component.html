@@ -141,7 +141,7 @@
                           </p>
                           <p fxLayout="row" fxLayoutAlign="start center">
                               <mat-icon class="text-muted">event_available</mat-icon>
-                              <span>{{"USER.FIELD.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                              <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
                           </p>
                       </div>
                       <div fxFlex="26" fxFlex.xs="100" fxLayout="column" fxLayoutAlign=" center">
@@ -161,7 +161,8 @@
     <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
         <div  fxFlex="100"  class="p-2">
           <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row bg-primary" >
+            <div class="mat-mdc-header-row mat-toolbar mat-primary" >
+            <!-- <div class="mat-mdc-header-row bg-primary" > -->
                 <div class="mat-mdc-header-cell">{{"FIELD.FIRSTNAME" |translate}}</div>
                 <div class="mat-mdc-header-cell">{{"FIELD.LASTNAME"|translate}}</div>
                 <div class="mat-mdc-header-cell">{{"FIELD.USERNAME"|translate}}</div>

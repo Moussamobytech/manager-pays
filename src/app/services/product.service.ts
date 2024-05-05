@@ -95,6 +95,10 @@ export class ProductService {
     return this.api.get('/produit/list-by-category/' + categorie).toPromise();
   }
 
+  public getProductByCategorieName(categorie: string) {
+    return this.api.get('/produit/list-by-category-name/' + categorie).toPromise();
+  }
+
   public getAllProducts() {
     return this.api.get('/produit/list').toPromise();
   }

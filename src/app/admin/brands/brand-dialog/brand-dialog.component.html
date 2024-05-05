@@ -33,6 +33,7 @@
         <mat-error *ngIf="form.get('logo').hasError('required')">Logo est obligatoire</mat-error>
       </div>
     </div>
+    <img *ngIf="isUpdateMode" src="{{data.brand.logo}}" alt="" srcset="" class="image">
   </div>
 
   <div mat-dialog-actions>

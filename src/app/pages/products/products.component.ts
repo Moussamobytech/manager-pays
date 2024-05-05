@@ -6,6 +6,8 @@ import { AppService } from '../../app.service';
 import { Product, Category, Brand } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-products',
@@ -73,8 +75,9 @@ export class ProductsComponent implements OnInit {
 
   constructor(public appSettings:AppSettings,
               private activatedRoute: ActivatedRoute,
-              public appService:AppService,
+              public appService:AppService, private produitService : ProductService,
               public dialog: MatDialog,
+              public translate: TranslateService,
               private router: Router,
               public domHandlerService: DomHandlerService) {
     this.settings = this.appSettings.settings;
@@ -84,7 +87,9 @@ export class ProductsComponent implements OnInit {
     this.count = this.counts[0];
     this.sort = this.sortings[0];
     this.sub = this.activatedRoute.params.subscribe(params => {
-      //console.log(params['name']);
+      console.log(params['name']);
+      this.selectedCategoryId = params['name']
+      this.getProductsByCetegorie(this.selectedCategoryId);
     });
     if(this.domHandlerService.window?.innerWidth < 960){
       this.sidenavOpen = false;
@@ -95,20 +100,24 @@ export class ProductsComponent implements OnInit {
 
     this.getCategories();
      this.getBrands();
-    this.getProductsByCetegorie(this.selectedCategoryId);
+    
     this.getCategorie();
 
 
   }
 
-  public getProductsByCetegorie(categoryId: string){
-    this.appService.getProductByCategorie(categoryId).subscribe(data=>{
-      this.products = data;
-      //for show more product
-      // for (var index = 0; index < 3; index++) {
-      //   this.products = this.products.concat(this.products);
-      // }
-    });
+  public async getProductsByCetegorie(categoryId: string){
+
+    let productName = await this.produitService.getProductByCategorieName(categoryId);
+    console.log("productName ::::::::: ",productName)
+    this.products = productName;
+    // this.appService.getProductByCategorie(categoryId).subscribe(data=>{
+    //   this.products = data;
+    //   //for show more product
+    //   // for (var index = 0; index < 3; index++) {
+    //   //   this.products = this.products.concat(this.products);
+    //   // }
+    // });
   }
 
   public getCategories(){

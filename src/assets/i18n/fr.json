@@ -16,6 +16,21 @@
   "PARTICULAR": "Particulier",
   "ACCOUNT_INFO": "Information sur le compte",
   "STATS": "Statistiques",
+  "PRICE": "Prix",
+  "SHOW_ALL_BRAND":"Toutes les marques",
+  "RELATED_PRODUCTS":"Produits similaires",
+  "SHARE_ZAP":"Partager sur whatsapp",
+  "SUBSCRIBE":"S'abonner",
+  "NEWSLETTER":"Abonnez-vous à notre newsletter",
+  "NEWSLETTER_DESC":"Restez à jour avec nos dernières nouveautés et produits",
+  "LINKS":"Liens utiles",
+  "CONTACT_INFO":"Coordonnées",
+  "FAQ":"FAQ",
+  "CONTACT":"Contact",
+  "CONTACTUS":"Contactez nous",
+  "RIGHT":"Conçu et développé par",
+  "SHOW":"Voir",
+
   "NAV": {
     "HOME": "Accueil",
     "PAGES": "Des pages",
@@ -35,7 +50,8 @@
     "MENU_ITEM": "Menu Item",
     "CONTACT": "Contact",
     "ABOUT_US": "Sur",
-    "ADMIN": "Admin"
+    "ADMIN": "Admin",
+    "PRICE": "Prix"
   },
   "ADMIN_NAV": {
     "DASHBOARD": "Tableau de bord",
@@ -50,8 +66,12 @@
     "ORDERS": "Ordres",
     "TRANSACTIONS": "Transactions",
     "BRAND": "Marque",
-    "BRAND_LIST": "Marque_list",
-    "BRAND_DETAIL": "Marque_detail",
+    "BRAND_LIST": "Liste de marque",
+    "BRAND_DETAIL": "Detail de la marque",
+    "ADD_BRAND": "Ajouter marque",
+    "ADD_CAMPAGNE": "Ajouter campagne",
+    "CAMPAGNE_LIST": "Liste Campagne",
+    "CAMPAGNE_DETAIL": "Detail campagne",
     "USERS": "Utilisateurs",
     "CUSTOMERS": "Les clients",
     "COUPONS": "Coupons",
@@ -61,7 +81,9 @@
     "FOLLOWERS": "Suiveurs",
     "SUPPORT": "Soutien",
     "REVIEWS": "Commentaires",
-    "EXTERNAL_LINK": "Lien Externe"
+    "EXTERNAL_LINK": "Lien Externe",
+    "PRICE": "Prix"
+
   },
   "BTN": {
     "ADD": "Ajouter",
@@ -103,7 +125,8 @@
     "RCCM": "RCCM",
     "COUNTRY": "Pays",
     "STATE": "Ville",
-    "PHONE": "Numero de téléphone"
+    "PHONE": "Numero de téléphone",
+    "MESSAGE": "Message"
   },
   "USER":{
     "MEMBER_SINCE": "Membre depuis"
@@ -123,7 +146,8 @@
     "PASSWORD_REQUIRED": "Le mot de passe est requis.",
     "PASSWORD_MINLENGTH": "Doit comporter 6 caractères ou plus.",
     "PASSCONFIRM_REQUIRED": "Une confirmation est requise.",
-    "PASSCONFIRM_MINLENGTH": "La confirmation doit comporter 6 caractères ou plus."
+    "PASSCONFIRM_MINLENGTH": "La confirmation doit comporter 6 caractères ou plus.",
+    "MESSAGE": "Message est obligatoire"
   },
   "ACTION_TITLE":{
     "ADD":"Ajouter Un Utilisateur",
@@ -148,12 +172,22 @@
     "USER": "Vendeur",
     "CATEGORY": "Categorie",
     "CREATED": "Date de création",
-    "ENDED": "Date de fin"
+    "ENDED": "Date de fin",
+    "CALL_USER":"Contacter le vendeur",
+    "BRAND": "Marque",
+    "SHOW_MORE": "Afficher Plus",
+    "HIDE_MORE": "Cacher Plus",
+    "NO_DATA": "Il n'y a aucun produit pour l'instant. Veuillez réessayer ultérieurement.",
+    "SIZE":"La taille",
+    "USED":"Utilité",
+    "NEW":"Nouveau",
+    "NOT_SPECIFIE":"Non spécifié"
   },
   "CATEGORY":{
     "NAME": "Nom",
     "IMAGE": "Image",
     "PAGE_TITLE": "Liste des Categories",
-    "ADD_BTN": "Ajouter une Categorie"
+    "ADD_BTN": "Ajouter une Categorie",
+    "PRICE": "Prix"
   }
 }

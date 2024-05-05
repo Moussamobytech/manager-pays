@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Campagne } from 'src/app/app.models';
+import { Campagne, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 import { CampagneDialogComponent } from '../campagne-dialog/campagne-dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { CampagneService } from 'src/app/services/campagne.service';
 
 @Component({
   selector: 'app-campagne-list',
@@ -18,15 +19,18 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 export class CampagneListComponent implements OnInit {
   public viewCol: number = 25;
-  public campagne : Campagne[]= [];
+  public campagne : Array<Campagne> = [];
   public page: any;
   public count = 5;
   public settings:Settings;
   public id : string;
+  public products: Array<Product> = [];
+
   form = this.fb.group({
     etat : [null]
   })
-  constructor(public appService:AppService,  public fb : FormBuilder,public domHandlerService: DomHandlerService, public dialog: MatDialog, public appSettings:AppSettings) {
+  constructor(public appService:AppService, public campagneService : CampagneService, public fb : FormBuilder,
+    public domHandlerService: DomHandlerService, public dialog: MatDialog, public appSettings:AppSettings) {
     this.settings = this.appSettings.settings;
 
    }
@@ -51,16 +55,33 @@ export class CampagneListComponent implements OnInit {
   }
 
   public getCampagne(){
-    this.appService.getCampagne().subscribe(data =>{
-      this.campagne = data;
+
+    try {
+      let res = this.campagneService.getCampagne();
+      this.campagne = res;
       console.log("Camapagne :"+ this.campagne);
-    })
+    } catch (error) {
+      console.log('error Campagne Id ', error);
+    }
+   
+  }
+
+  public getAllProducts(){
+    this.appService.getAllProducts().subscribe(data=>{
+      this.products = data;
+      console.log("Produit :", this.products)
+      //for show more product
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
+    });
   }
   public openCampagneDialog(data: any) {
     const dialogRef = this.dialog.open(CampagneDialogComponent, {
       data: {
         campagne: data,
-        campagnes: this.campagne // Assurez-vous que la propriété s'appelle campagnes, pas campagne
+         products : this.products,
+        campagnes: this.campagne
       },
       panelClass: ['theme-dialog'],
       autoFocus: false,

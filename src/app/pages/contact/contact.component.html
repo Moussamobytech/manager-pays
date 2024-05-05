@@ -9,54 +9,54 @@
     <div fxFlex="100" fxFlex.gt-xs="33.3" ngClass.xs="mt-2">
         <div fxLayout="column" fxLayoutAlign="center center">
             <mat-icon color="primary" class="mat-icon-lg">call</mat-icon>
-            <h3 class="primary-text py-2">PHONES :</h3>
-            <span class="text-muted">(212) 457-2308</span>
-            <span class="text-muted">(212) 457-2309</span>
+            <h3 class="primary-text py-2">{{'FIELD.PHONE' | translate}} :</h3>
+            <span class="text-muted">(223) 76 00 79 79</span>
+            <span class="text-muted">(223) 70 70 00 97</span>
         </div>
     </div>
     <div fxFlex="100" fxFlex.gt-xs="33.3" ngClass.xs="mt-2">
         <div fxLayout="column" fxLayoutAlign="center center">
             <mat-icon color="primary" class="mat-icon-lg">mail_outline</mat-icon>
-            <h3 class="primary-text py-2">E-MAIL :</h3>
-            <span class="text-muted">contact&#64;emporium.com</span>
-            <span class="text-muted">info&#64;emporium.com</span>
+            <h3 class="primary-text py-2">{{'FIELD.EMAIL' | translate}} :</h3>
+            <!-- <span class="text-muted">contact&#64;fidelity.io</span> -->
+            <span class="text-muted">info&#64;fidelity.io</span>
         </div>
     </div>
     <div class="divider w-100 mt-3"></div>
-    <h3 class="w-100 text-center py-3">CONTACT US</h3>
+    <h3 class="w-100 text-center py-3">{{'CONTACTUS' | translate}}</h3>
 
     <form [formGroup]="contactForm" (ngSubmit)="onContactFormSubmit()" fxLayout="row wrap">
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-2" ngClass.sm="mt-1" ngClass.xs="mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Nom</mat-label>
+                <mat-label>{{'FIELD.FIRSTNAME' | translate}} & {{'FIELD.LASTNAME' | translate}}</mat-label>
                 <input matInput placeholder="Nom et prenom" formControlName="name" required>
                 <mat-error *ngIf="contactForm.controls.name.errors?.required">Nom est obligatoire</mat-error>
           </mat-form-field>
         </div>
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-2" ngClass.sm="mt-1" ngClass.xs="mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Email</mat-label>
-                <input matInput placeholder="Email" formControlName="email" required>
-                <mat-error *ngIf="contactForm.controls.email.errors?.required">Email est obligatoire</mat-error>
+                <mat-label>{{'FIELD.EMAIL' | translate}}</mat-label>
+                <input matInput [placeholder]="'FIELD.EMAIL' | translate" formControlName="email" required> 
+                <mat-error *ngIf="contactForm.controls.email.errors?.required">{{'FIELD_ERROR.EMAIL_INVALID' | translate}}</mat-error>
                 <mat-error *ngIf="contactForm.controls.email.hasError('invalidEmail')">Invalid email address</mat-error>
           </mat-form-field>
         </div>
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-2" ngClass.sm="mt-1" ngClass.xs="mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Phone</mat-label>
-                <input matInput placeholder="Numero de telephone" formControlName="phoneNumber" required>
-                <mat-error *ngIf="contactForm.controls.phoneNumber.errors?.required">Numero de telephone est obligatoire</mat-error>
+                <mat-label>{{'FIELD.PHONE' | translate}}</mat-label>
+                <input matInput [placeholder]="'FIELD.PHONE' | translate" formControlName="phoneNumber" required>
+                <mat-error *ngIf="contactForm.controls.phoneNumber.errors?.required">{{'FIELD_ERROR.PHONE_REQUIRED' | translate}}</mat-error>
           </mat-form-field>
         </div>
         <div fxFlex="100" class="px-2 mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Message</mat-label>
+                <mat-label>{{'FIELD.MESSAGE' | translate}}</mat-label>
                 <textarea matInput placeholder="Message" formControlName="message" required rows="7"></textarea>
-                <mat-error *ngIf="contactForm.controls.message.errors?.required">Message est obligatoire</mat-error>
+                <mat-error *ngIf="contactForm.controls.message.errors?.required">{{'FIELD_ERROR.MESSAGE' | translate}}</mat-error>
           </mat-form-field>
         </div>
         <div class="w-100 py-2 text-center">
-          <button mat-raised-button color="primary" type="submit" >Envoyer</button>
+          <button mat-raised-button color="primary" type="submit" >{{'BTN.SUBMIT' | translate}}</button>
         </div>
     </form>
 

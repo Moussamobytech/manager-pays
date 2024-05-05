@@ -3,6 +3,7 @@ import { AppService, Data } from '../../app.service';
 import { Product } from "../../app.models";
 import { json } from 'stream/consumers';
 import { ProductService } from 'src/app/services/product.service';
+import { CampagneService } from 'src/app/services/campagne.service';
 
 @Component({
   selector: 'app-home',
@@ -19,8 +20,11 @@ export class HomeComponent implements OnInit {
     { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner5.jpg' }
   ];
 
+
+
   public brands: any;
   public banners = [];
+  public campagnes = [];
   public produit: Array<Product>;
   public ProductByCategorie: Array<Product>;
   public featuredProducts: Array<Product>;
@@ -35,10 +39,11 @@ export class HomeComponent implements OnInit {
   topRate:any;
 
 
-  constructor(public appService:AppService, public produitService : ProductService) { }
+  constructor(public appService:AppService, public produitService : ProductService, public campagneService : CampagneService) { }
 
   ngOnInit() {
     this.getBanners();
+    this.listCampagne();
     // this.getProducts("PC");
     // this.getAllProduit();
     this.getBrands();
@@ -86,12 +91,21 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  // public getBrands(){
+  //   // this.brands = this.appService.getBrands();
+  //   this.appService.getBrands().subscribe(data => {
+  //     this.brands=data;
+  //     console.log('branddddd',this.brands);
+  //   });
+  // }
+
   public getBrands(){
-    // this.brands = this.appService.getBrands();
-    this.appService.getBrands().subscribe(data => {
-      this.brands=data;
-      console.log('branddddd',this.brands);
+    this.appService.getBrands().subscribe(data=>{
+      this.brands =data;
+      this.brands.forEach(brand => { brand.selected = false });
+      console.log("Brands ",data);
     });
+    // this.brands.forEach(brand => { brand.selected = false });
   }
 
   public getCategorie(){
@@ -113,6 +127,15 @@ export class HomeComponent implements OnInit {
   public async getProduitByPromotion() {
     this.promotion = await this.produitService.getProductByTop()
     console.log("res promotion :::::::: ",this.promotion)
+  }
+
+  public async listCampagne() {
+    this.campagnes = await this.campagneService.getCampagneEligible()
+    console.log("res campagnes :::::::: ",this.campagnes)
+    this.campagnes.forEach(val => {
+      this.slides.push(val)
+    })
+    // this.slides
   }
   public async getProduitByBest() {
     this.best = await this.produitService.getProductByTop()

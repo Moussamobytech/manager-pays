@@ -1,50 +1,50 @@
 <footer class="bg-primary footer">
     <div fxLayout="column" fxLayout.gt-sm="row wrap" fxLayoutAlign="center center" class="border-bottom-mute subscribe-block theme-container">
         <div fxFlex="100" fxFlex.gt-sm="40" fxLayout="column" fxLayoutAlign="center center">
-            <h1 class="fw-500">Subscribe our Newsletter</h1>
-            <h3 class="fw-300 secondary-color">Stay up to date with our latest new and products</h3>
+            <h1 class="fw-500">{{'NEWSLETTER' | translate}}</h1>
+            <h3 class="fw-300 secondary-color">{{'NEWSLETTER_DESC' | translate}}</h3>
         </div>
         <form method="get" class="subscribe-search-form" fxLayout="row" fxFlex="100" fxFlex.gt-sm="42.4" ngClass.sm="mt-2" ngClass.xs="mt-2">
-            <input type="text" placeholder="Your email address..." fxFlex>
-            <button mat-raised-button color="accent" (click)="subscribe()" type="button" class="mat-elevation-z0 text-muted">Subscribe</button>
+            <input type="text" [placeholder]="'FIELD.EMAIL' | translate" fxFlex>
+            <button mat-raised-button color="accent" (click)="subscribe()" type="button" class="mat-elevation-z0 text-muted">{{'SUBSCRIBE' | translate}}</button>
         </form>
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="space-between" class="py-4 border-bottom-mute theme-container">
         <div fxFlex="100" fxFlex.gt-sm="20" fxFlex.sm="40">
-            <h3 class="col-title">{{'USEFUL LINKS' | translate}}</h3>
-            <p class="mt-3"><a href="javascript:void(0);" class="link secondary-color">My Account</a></p>
-            <p class="mt-2"><a routerLink="/contact" class="link secondary-color">Contact</a></p>
+            <h3 class="col-title">{{'LINKS' | translate}}</h3>
+            <p class="mt-3"><a routerLink="/account/dashboard" class="link secondary-color">{{'ACCOUNT' | translate}}</a></p>
+            <p class="mt-2"><a routerLink="/contact" class="link secondary-color"> {{'CONTACT' | translate}}</a></p>
             <!-- <p class="mt-2"><a routerLink="/compare" class="link secondary-color">Compare</a></p> -->
-            <p class="mt-2"><a routerLink="/wishlist" class="link secondary-color">Wishlist</a></p>
+            <!-- <p class="mt-2"><a routerLink="/wishlist" class="link secondary-color">Wishlist</a></p> -->
             <!-- <p class="mt-2"><a routerLink="/checkout" class="link secondary-color">Checkout</a></p> -->
-            <p class="mt-2"><a routerLink="/faq" class="link secondary-color">FAQ</a></p>
+            <p class="mt-2"><a routerLink="/faq" class="link secondary-color">{{'FAQ' | translate}}</a></p>
         </div>
         <div fxFlex="100" fxFlex.gt-sm="30" fxFlex.sm="60" ngClass.xs="mt-3" class="contact-information">
-            <h3 class="col-title">CONTACT INFORMATION</h3>
+            <h3 class="col-title">{{'CONTACT_INFO' | translate}}</h3>
             <p fxLayout="row" fxLayoutAlign="start center" class="mt-3 secondary-color">
                 <mat-icon>location_on</mat-icon>
-                <span>2903 Avenue Z, Brooklyn, NY</span>
+                <span>Sotuba ACI, près de Nissan</span>
             </p>
             <p fxLayout="row" fxLayoutAlign="start center" class="mt-2 secondary-color">
                 <mat-icon>call</mat-icon>
-                <span>(212) 457-2308</span>
+                <span>(+223) 76 00 79 79</span>
             </p>
             <p fxLayout="row" fxLayoutAlign="start center" class="mt-2 secondary-color">
                 <mat-icon>mail_outline</mat-icon>
-                <span>contact&#64;emporium.com</span>
+                <span>info&#64;fidely.io</span>
             </p>
             <p fxLayout="row" fxLayoutAlign="start center" class="mt-2 secondary-color">
                 <mat-icon>schedule</mat-icon>
-                <span>Mon - Sun / 9:00AM - 8:00PM</span>
+                <span>Lun - Sam: 8:00 - 17:00</span>
             </p>
-            <p fxLayout="row" fxLayoutAlign="start center" class="mt-2 secondary-color">
+            <!-- <p fxLayout="row" fxLayoutAlign="start center" class="mt-2 secondary-color">
                 <mat-icon>directions</mat-icon>
                 <a href="javascript:void(0);" class="link secondary-color">Get directions</a>
             </p>
             <p fxLayout="row" fxLayoutAlign="start center" class="mt-2 secondary-color">
                 <mat-icon>directions_bus</mat-icon>
                 <span>Routes to us</span>
-            </p>
+            </p> -->
         </div>
         <div fxFlex="100" fxFlex.gt-sm="50" ngClass.sm="mt-3" ngClass.xs="mt-3">
             <google-map [center]="center" [zoom]="zoom" height="220px" width="100%">
@@ -55,7 +55,7 @@
         </div>
     </div>
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="copyright secondary-color theme-container">
-        <p ngClass.xs="mt-1">Copyright © 2023 All Rights Reserved</p>
-        <p>Designed & Developed by <a mat-button href="http://themeseason.com/" target="_blank">ThemeSeason</a></p>
+        <p ngClass.xs="mt-1">Copyright © 2024 All Rights Reserved</p>
+        <p>{{'RIGHT' | translate}} <a mat-button href="https://geotrac.io/" target="_blank">Geotrac</a></p>
     </div>
 </footer>
