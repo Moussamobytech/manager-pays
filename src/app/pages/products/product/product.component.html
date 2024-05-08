@@ -95,8 +95,27 @@
         <div class="divider"></div>
 
         <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted py-2">
-            <button mat-button><mat-icon>mail_outline</mat-icon> Email to a Friend</button>
-            <button mat-icon-button><mat-icon>share</mat-icon></button>
+
+              <!-- <mat-icon>
+
+              <i class="fab fa-whatsapp fa-lg">
+
+              </i>
+            </mat-icon>  -->
+            <a *ngIf="product?.contact" href="https://wa.me/{{product?.contact}}" target="_blank" class="ml-2">
+              <button mat-button>
+              <i class="fab fa-whatsapp fa-lg"> </i>
+              <!-- <button mat-icon-button><mat-icon>share</mat-icon></button> -->
+
+
+            Partager su whatsApp</button>
+          </a>
+            <a *ngIf="product?.contact" href="https://wa.me/{{product?.contact}}" target="_blank" class="ml-2">
+              <!-- <i class="fab fa-whatsapp fa-lg"></i> -->
+              <button mat-icon-button><mat-icon>share</mat-icon></button>
+
+            </a>
+            <!-- <button mat-icon-button><mat-icon>share</mat-icon></button> -->
         </div>
 
     </div>

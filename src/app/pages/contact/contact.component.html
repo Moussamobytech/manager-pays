@@ -9,17 +9,16 @@
     <div fxFlex="100" fxFlex.gt-xs="33.3" ngClass.xs="mt-2">
         <div fxLayout="column" fxLayoutAlign="center center">
             <mat-icon color="primary" class="mat-icon-lg">call</mat-icon>
-            <h3 class="primary-text py-2">PHONES :</h3>
-            <span class="text-muted">(212) 457-2308</span>
-            <span class="text-muted">(212) 457-2309</span>
+            <h3 class="primary-text py-2">Numero de telephone :</h3>
+            <span class="text-muted">(223) 76 00 79 79</span>
+            <span class="text-muted">(223) 70 70 00 97</span>
         </div>
     </div>
     <div fxFlex="100" fxFlex.gt-xs="33.3" ngClass.xs="mt-2">
         <div fxLayout="column" fxLayoutAlign="center center">
             <mat-icon color="primary" class="mat-icon-lg">mail_outline</mat-icon>
             <h3 class="primary-text py-2">E-MAIL :</h3>
-            <span class="text-muted">contact&#64;emporium.com</span>
-            <span class="text-muted">info&#64;emporium.com</span>
+            <span class="text-muted">info&#64;fidelity.io</span>
         </div>
     </div>
     <div class="divider w-100 mt-3"></div>
@@ -28,14 +27,14 @@
     <form [formGroup]="contactForm" (ngSubmit)="onContactFormSubmit()" fxLayout="row wrap">
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-2" ngClass.sm="mt-1" ngClass.xs="mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Nom</mat-label>
+                <mat-label>Prenom et Nom</mat-label>
                 <input matInput placeholder="Nom et prenom" formControlName="name" required>
                 <mat-error *ngIf="contactForm.controls.name.errors?.required">Nom est obligatoire</mat-error>
           </mat-form-field>
         </div>
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-2" ngClass.sm="mt-1" ngClass.xs="mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Email</mat-label>
+                <mat-label>Email </mat-label>
                 <input matInput placeholder="Email" formControlName="email" required>
                 <mat-error *ngIf="contactForm.controls.email.errors?.required">Email est obligatoire</mat-error>
                 <mat-error *ngIf="contactForm.controls.email.hasError('invalidEmail')">Invalid email address</mat-error>
@@ -43,14 +42,14 @@
         </div>
         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-2" ngClass.sm="mt-1" ngClass.xs="mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Phone</mat-label>
+                <mat-label>Numero de telephone </mat-label>
                 <input matInput placeholder="Numero de telephone" formControlName="phoneNumber" required>
                 <mat-error *ngIf="contactForm.controls.phoneNumber.errors?.required">Numero de telephone est obligatoire</mat-error>
           </mat-form-field>
         </div>
         <div fxFlex="100" class="px-2 mt-1">
           <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Message</mat-label>
+                <mat-label>Message </mat-label>
                 <textarea matInput placeholder="Message" formControlName="message" required rows="7"></textarea>
                 <mat-error *ngIf="contactForm.controls.message.errors?.required">Message est obligatoire</mat-error>
           </mat-form-field>

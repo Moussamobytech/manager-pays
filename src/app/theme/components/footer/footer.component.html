@@ -1,13 +1,20 @@
 <footer class="bg-primary footer">
     <div fxLayout="column" fxLayout.gt-sm="row wrap" fxLayoutAlign="center center" class="border-bottom-mute subscribe-block theme-container">
         <div fxFlex="100" fxFlex.gt-sm="40" fxLayout="column" fxLayoutAlign="center center">
-            <h1 class="fw-500">Subscribe our Newsletter</h1>
-            <h3 class="fw-300 secondary-color">Stay up to date with our latest new and products</h3>
+            <h1 class="fw-400">{{"NEWSLETTER" | translate}}</h1>
+            <h3 class="fw-300 secondary-color">{{"TEXT_NEWSLETTER" | translate}}</h3>
         </div>
-        <form method="get" class="subscribe-search-form" fxLayout="row" fxFlex="100" fxFlex.gt-sm="42.4" ngClass.sm="mt-2" ngClass.xs="mt-2">
-            <input type="text" placeholder="Your email address..." fxFlex>
+        <!-- <form method="get" class="subscribe-search-form" fxLayout="row" fxFlex="100" fxFlex.gt-sm="42.4" ngClass.sm="mt-2" ngClass.xs="mt-2">
+            <input type="text"  placeholder="Your email address..." fxFlex> -
+            <input matInput placeholder="Email" formControlName="email" required>
+
             <button mat-raised-button color="accent" (click)="subscribe()" type="button" class="mat-elevation-z0 text-muted">Subscribe</button>
-        </form>
+        </form> -->
+        <form method="get" class="subscribe-search-form" fxLayout="row" fxFlex="100" fxFlex.gt-sm="42.4" ngClass.sm="mt-2" ngClass.xs="mt-2" [formGroup]="contactForm" (ngSubmit)="subscribe()">
+          <input matInput placeholder="Email" formControlName="email" required fxFlex>
+          <button mat-raised-button color="accent" type="submit" class="mat-elevation-z0 text-muted">Subscribe</button>
+      </form>
+
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="space-between" class="py-4 border-bottom-mute theme-container">
         <div fxFlex="100" fxFlex.gt-sm="20" fxFlex.sm="40">

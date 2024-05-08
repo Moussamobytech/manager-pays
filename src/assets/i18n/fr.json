@@ -18,6 +18,11 @@
   "STATS": "Statistiques",
   "PRICE": "Prix",
   "SHOW_ALL_BRAND":"Toutes les marques",
+  "SHOW":"Voir",
+  "FROM":"De",
+  "TO":"à",
+  "NEWSLETTER":"Abonnez-vous à notre newsletter",
+  "TEXT_NEWSLETTER": "Restez à jour avec nos dernières nouveautés et produits",
 
 
   "NAV": {
@@ -176,5 +181,11 @@
     "PAGE_TITLE": "Liste des Categories",
     "ADD_BTN": "Ajouter une Categorie",
     "PRICE": "Prix"
+  },
+  "SORTINGS": {
+    "SORT_BY_DEFAULT": "Trier par défaut",
+    "BEST_MATCH": "Meilleure correspondance",
+    "LOWEST_FIRST": "Prix les plus bas en premier",
+    "HIGHEST_FIRST": "Prix les plus élevés en premier"
   }
 }

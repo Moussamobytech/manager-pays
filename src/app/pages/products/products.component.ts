@@ -7,6 +7,7 @@ import { Product, Category, Brand } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { TranslateService } from '@ngx-translate/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-products',
@@ -21,13 +22,14 @@ export class ProductsComponent implements OnInit {
   public viewCol: number = 25;
   public counts = [12, 24, 36];
   public count:any;
-  public sortings = ['Sort by Default', 'Best match', 'Lowest first', 'Highest first'];
+  // public sortings = ['Sort by Default', 'Best match', 'Lowest first', 'Highest first'];
+  public   sortings = ['SORTINGS.SORT_BY_DEFAULT', 'SORTINGS.BEST_MATCH', 'SORTINGS.LOWEST_FIRST', 'SORTINGS.HIGHEST_FIRST'];
   public sort:any;
   public products: Array<Product> = [];
   public categories:Category[];
   public brands : any;
-  public priceFrom: number = 750;
-  public priceTo: number = 1599;
+  public priceFrom: number = 0;
+  public priceTo: number = Number.MAX_SAFE_INTEGER;
   public colors = [
     { name: "#5C6BC0", selected: false },
     { name: "#66BB6A", selected: false },
@@ -66,11 +68,12 @@ export class ProductsComponent implements OnInit {
   public settings: Settings;
   tous:any;
   idCat:any;
-  Allcategories:any;
+ public allCategories:any;
   selectedCategoryId: any;
-
+  public produits: Product[];
 
   categoryId: string;
+
 
   constructor(public appSettings:AppSettings,
               private activatedRoute: ActivatedRoute,
@@ -80,32 +83,74 @@ export class ProductsComponent implements OnInit {
               private router: Router,
               public domHandlerService: DomHandlerService) {
     this.settings = this.appSettings.settings;
+
+
   }
 
   ngOnInit() {
-    this.count = this.counts[0];
+      this.count = this.counts[0];
     this.sort = this.sortings[0];
+
+    // Abonnez-vous aux paramètres de l'URL
     this.sub = this.activatedRoute.params.subscribe(params => {
-      //console.log(params['name']);
+        // Vérifiez s'il y a un paramètre de catégorie dans l'URL
+        if (params['name']) {
+            // S'il y a un paramètre de catégorie, chargez les produits de cette catégorie
+            // En utilisant le nom de la catégorie dans les paramètres de l'URL
+            this.selectedCategoryId = params['name'];
+            this.getProductsByCetegorie(this.selectedCategoryId);
+        } else {
+            // S'il n'y a pas de paramètre de catégorie dans l'URL, chargez les produits de la première catégorie
+            // de votre liste de catégories
+            if (this.allCategories && this.allCategories.length > 0) {
+                this.selectedCategoryId = this.allCategories[0].id; // Sélectionnez le premier ID de catégorie
+                this.getProductsByCetegorie(this.selectedCategoryId); // Chargez les produits de cette catégorie
+            }
+        }
     });
-    if(this.domHandlerService.window?.innerWidth < 960){
-      this.sidenavOpen = false;
+
+    // Gérez les fenêtres redimensionnées
+    if (this.domHandlerService.window?.innerWidth < 960) {
+        this.sidenavOpen = false;
     };
-    if(this.domHandlerService.window?.innerWidth < 1280){
-      this.viewCol = 33.3;
+    if (this.domHandlerService.window?.innerWidth < 1280) {
+        this.viewCol = 33.3;
     };
+    this.priceFrom = 0; // Mettez la valeur par défaut que vous préférez
+    this.priceTo = 2000000;
 
     this.getCategories();
-     this.getBrands();
-    this.getProductsByCetegorie(this.selectedCategoryId);
+    this.getBrands();
     this.getCategorie();
+    this.AllProduct();
+    // this.count = this.counts[0];
+    // this.sort = this.sortings[0];
+    // this.sub = this.activatedRoute.params.subscribe(params => {
+    //   //console.log(params['name']);
+    // });
+    // if(this.domHandlerService.window?.innerWidth < 960){
+    //   this.sidenavOpen = false;
+    // };
+    // if(this.domHandlerService.window?.innerWidth < 1280){
+    //   this.viewCol = 33.3;
+    // };
 
+    // this.getCategories();
+    //  this.getBrands();
+    // this.getProductsByCetegorie(this.selectedCategoryId);
+    // this.getCategorie();
+    // // this.filterProductsByPrice(this.products);
 
+    // this.priceFrom = 0; // Mettez la valeur par défaut que vous préférez
+    // this.priceTo = 200000; // Mettez la valeur par défaut que vous préférez
+    // this.AllProduct();
   }
 
   public getProductsByCetegorie(categoryId: string){
     this.appService.getProductByCategorie(categoryId).subscribe(data=>{
       this.products = data;
+      // this.filterProductsByPrice();
+
       //for show more product
       // for (var index = 0; index < 3; index++) {
       //   this.products = this.products.concat(this.products);
@@ -129,18 +174,9 @@ export class ProductsComponent implements OnInit {
   }
 
 
-  // public getCategorie(){
-  //   this.appService.getCategories().subscribe(data =>{
-
-  //     this.tous = data;
-  //     console.log("Mes tous :" ,data)
-
-  //   })
-  // }
-
   public getCategorie(){
     this.appService.getCategories().subscribe(data =>{
-      this.Allcategories = data;
+      this.allCategories = data;
     })
   }
 
@@ -193,38 +229,64 @@ export class ProductsComponent implements OnInit {
 
   public onPageChanged(event){
     this.page = event;
-    this.getProductsByCetegorie(this.selectedCategoryId);
+    // this.getProductsByCetegorie(this.selectedCategoryId);
     this.domHandlerService.winScroll(0,0);
   }
 
-  // public onChangeCategory(categoryId: string){
-  //   this.selectedCategoryId = categoryId;
-  //   this.getProductsByCetegorie(categoryId);
 
-  //   console.log("Logggggggg  ",categoryId)
-  //     // Recherche du texte de la catégorie en fonction de son ID
-  // const selectedCategory = this.Allcategories.find(category => category.id === categoryId);
-  // if (selectedCategory) {
-  //   this.router.navigate(['/products', selectedCategory.name.toLowerCase()]);
-  // }
-  //   // if(event.target){
-  //   //   this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
-  //   // }
-//   // }
   public onChangeCategory(categoryId: string) {
     this.selectedCategoryId = categoryId;
     this.getProductsByCetegorie(categoryId); // Vérifiez cette ligne pour vous assurer que categoryId est correctement passé
 
 
     // Recherche du texte de la catégorie en fonction de son ID
-    const selectedCategory = this.Allcategories.find(category => category.id === categoryId);
+    const selectedCategory = this.allCategories.find(category => category.id === categoryId);
     if (selectedCategory) {
         this.router.navigate(['/products', selectedCategory.nom.toLowerCase()]); // Assurez-vous d'utiliser la propriété correcte pour le nom de la catégorie (probablement nom, plutôt que name)
     }
 }
-// public onChangeCategory(event){
-//   if(event.target){
-//     this.router.navigate(['/products', event.target.innerText.toLowerCase()]);
-//   }
+
+
+
+AllProduct(){
+  this.appService.getAllProducts().subscribe(data=>{
+    this.produits = data;
+    console.log("Tous les produits", this.produits);
+  })
+}
+
+filterProductsByPrice() {
+  // Filtrer les produits en fonction des prix sélectionnés
+  this.products = this.produits.filter(product => {
+      // Vérifier si priceFrom est inférieur à priceTo
+      if (this.priceFrom <= this.priceTo) {
+          return product.priceBasic >= this.priceFrom && product.priceBasic <= this.priceTo;
+      } else {
+          // Inverser les valeurs de priceFrom et priceTo si nécessaire
+          return product.priceBasic >= this.priceTo && product.priceBasic <= this.priceFrom;
+      }
+  });
+}
+onChangePriceFrom() {
+
+    this.filterProductsByPrice();
+}
+
+onChangePriceTo() {
+
+    this.filterProductsByPrice();
+
+}
+
+
+// onChangePriceFrom() {
+//   console.log('Price from changed to: ', this.priceFrom);
+//   this.filterProductsByPrice();
 // }
+
+// onChangePriceTo() {
+//   console.log('Price to changed to: ', this.priceTo);
+//   this.filterProductsByPrice();
+// }
+
 }

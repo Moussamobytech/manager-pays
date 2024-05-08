@@ -37,7 +37,12 @@
   "CONTACT": "Contact",
   "ABOUT_US": "On",
   "ADMIN": "Admin",
-  "SHOW_ALL_BRAND":"Show all brands"
+  "SHOW_ALL_BRAND":"Show all brands",
+  "SHOW":"Show",
+  "FROM":"From",
+  "TO":"To",
+  "NEWSLETTER":"Subscribe our Newsletter",
+  "TEXT_NEWSLETTER":"Stay up to date with our latest new and products "
 
   },
   "ADMIN_NAV": {
@@ -186,5 +191,11 @@
   "IMAGE": "Image",
   "PAGE_TITLE": "List of Categories",
   "ADD_BTN": "Add a Category"
+  },
+  "SORTINGS": {
+    "SORT_BY_DEFAULT": "Sort by Default",
+    "BEST_MATCH": "Best match",
+    "LOWEST_FIRST": "Lowest first",
+    "HIGHEST_FIRST": "Highest first"
   }
  }

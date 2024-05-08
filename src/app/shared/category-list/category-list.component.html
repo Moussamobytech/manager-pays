@@ -4,6 +4,6 @@
       <span>{{category.nom}}</span>
   </button>
    <div *ngIf="category" class="sub-category">
-      <app-category-list [categories]="categorie" [categoryParentId]="category.id" (change)="changeCategory($event)"></app-category-list>
+      <app-category-list [categories]="tous" [categoryParentId]="categorie" (change)="changeCategory($event)"></app-category-list>
   </div>
 </div>

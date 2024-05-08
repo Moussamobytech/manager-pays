@@ -29,8 +29,10 @@ export class CategoryListComponent {
 
   public ngDoCheck() {
     if(this.categories && !this.mainCategories) {
+      //this.tous();
       this.categorie = this.categories.filter(category => category.parentId == this.categoryParentId);
     }
+
 
   }
 
@@ -66,6 +68,7 @@ export class CategoryListComponent {
     this.appService.getCategories().subscribe(data =>{
 
       this.tous = data;
+      console.log("Category ", this.tous)
     })
   }
 

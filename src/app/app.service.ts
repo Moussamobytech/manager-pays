@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Campagne, Category, Contact, Product } from './app.models';
+import { Campagne, Category, Contact, Newsletter, Product } from './app.models';
 import { environment } from 'src/environments/environment';
 import { ApiService } from './services/api.service';
 
@@ -101,6 +101,10 @@ public getBrandById(id: string): Observable<any>{
 
    public addContact(contact: Contact): Observable<any> {
     return this.apiService.post('/contact/add', contact);
+   }
+
+   public addNewsletter(newsletter: Newsletter): Observable<any> {
+    return this.apiService.post('/newsletter/add', newsletter);
    }
 
 

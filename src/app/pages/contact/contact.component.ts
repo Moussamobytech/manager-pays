@@ -3,6 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { emailValidator } from '../../theme/utils/app-validators';
 import { AppService } from 'src/app/app.service';
 import { Contact } from 'src/app/app.models';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-contact',
@@ -37,6 +38,8 @@ initForm(){
         (response) => {
           console.log('Contact ajouté avec succès:', response);
           // Réinitialiser le formulaire ici si nécessaire
+          this.contactForm.reset(); // Réinitialiser le formulaire
+
         },
         (error) => {
           console.error('Erreur lors de l\'ajout du contact:', error);

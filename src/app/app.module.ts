@@ -39,6 +39,7 @@ import { AuthenticationService } from './services/auth.service';
 import { ProductService } from './services/product.service';
 import { CategoryService } from './services/category.service';
 import { ApiService } from './services/api.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ApiService } from './services/api.service';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent,
+    FooterComponent
+
   ],
   imports: [
     BrowserModule,
@@ -58,6 +60,7 @@ import { ApiService } from './services/api.service';
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    ReactiveFormsModule,
     GoogleMapsModule,
     ToastrModule.forRoot(), // ToastrModule added
     TranslateModule.forRoot({
