@@ -98,7 +98,15 @@ public getBrandById(id: string): Observable<any>{
 
   }
 
-
+  public getNewsletter(): Observable<any>{
+    return this.apiService.get('/newsletter/liste');
+  }
+  public getContact(): Observable<any>{
+    return this.apiService.get('/contact/liste');
+  }
+  public getContactById(id: string): Observable<any>{
+    return this.apiService.get('/contact/' +id);
+  }
    public addContact(contact: Contact): Observable<any> {
     return this.apiService.post('/contact/add', contact);
    }
@@ -205,6 +213,10 @@ public setStatusCampagne (id : string , etat : boolean ) : Observable<any> {
 
 return this.apiService.put(`/campagne/etat/${id}/${etat}`, null ).pipe() ;
 }
+public setStatusNewsletter (id : string , etat : boolean ) : Observable<any> {
+
+  return this.apiService.put(`/newsletter/etat/${id}/${etat}`, null ).pipe() ;
+  }
 public setEtatBrand (id : string , etat : boolean ) : Observable<any> {
 
   return this.apiService.put(`/brand/etat/${id}/${etat}`, null ).pipe() ;

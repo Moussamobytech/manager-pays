@@ -1,6 +1,7 @@
 {
   "WELCOME": "Bienvenue sur notre marché!",
   "LOGIN": "S'identifier",
+  "SIGN_IN": "Se connecter",
   "LOGIN_IN": "Connectez vous",
   "LOGOUT": "Se déconnecter",
   "REGISTER": "S'inscrire",
@@ -66,6 +67,11 @@
     "ADD_CAMPAGNE": "Ajouter campagne",
     "CAMPAGNE_LIST": "Liste Campagne",
     "CAMPAGNE_DETAIL": "Detail campagne",
+    "CONTACT_LIST":"Liste de contact",
+    "CONTACT":"Contact",
+    "CONTACT_DETAIL":"Detail contact",
+    "NEWSLETTER":"Newsletter",
+    "NEWSLETTER_LIST":"Liste de newsletter",
     "USERS": "Utilisateurs",
     "CUSTOMERS": "Les clients",
     "COUPONS": "Coupons",
@@ -76,7 +82,8 @@
     "SUPPORT": "Soutien",
     "REVIEWS": "Commentaires",
     "EXTERNAL_LINK": "Lien Externe",
-    "PRICE": "Prix"
+    "PRICE": "Prix",
+    "UPDATE_PASSWORD" :"Changement de mot de passe"
 
   },
   "BTN": {

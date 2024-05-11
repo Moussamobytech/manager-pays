@@ -20,7 +20,7 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Username</mat-label>
           <!-- Désactiver le champ indépendamment du mode -->
-          <input matInput formControlName="username" [readonly]="true" >
+          <input matInput formControlName="username"  >
           <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
         </mat-form-field>
       </div>

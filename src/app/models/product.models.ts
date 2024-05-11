@@ -1,3 +1,4 @@
+import { Category } from "./category.models";
 
 export class Product {
     constructor(public id: number,
@@ -24,9 +25,9 @@ export class Product {
                 public size: Array<string>,
                 public weight: number,
                 public etat: string,
-                public categorie: string,
+                public categorie: Category,
                 public contact: string,
                 public user : string,
-                public createdAt:string, 
+                public createdAt:string,
                 public updatedAt:string ){ }
   }

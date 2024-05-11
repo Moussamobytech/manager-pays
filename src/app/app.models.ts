@@ -41,7 +41,8 @@ export class  User {
                  public email: string,
                  public phoneNumber: number,
                  public firstname : string,
-                 public lastname : string
+                 public lastname : string,
+                 public adresse : string ,
                  ) {}
 
 
@@ -55,7 +56,7 @@ export class  Contact {
     public id: string,
              public name: string,
                public email: string,
-               public phoneNumber: number,
+               public phoneNumber: string,
                public message : string,
                ) {}
 }

@@ -11,7 +11,7 @@
           <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)" autocomplete="off">
 
             <mat-form-field class="full-width">
-              <input matInput [placeholder]="'FIELD.USERNAME' | translate" name="username" formControlName="username" required>
+              <input matInput [placeholder]="'FIELD.PHONE' | translate" name="username" formControlName="username" required>
               <mat-error *ngIf="loginFormControl.username.hasError('required')">
                 {{"USERNAME_REQUIRED"|translate}}
               </mat-error>

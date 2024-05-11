@@ -7,33 +7,38 @@
         <mat-toolbar color="primary">
             <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">
                 <img [src]="userImage" alt="user-image" width="80" class="mat-elevation-z6">
-                <p>Emilio Verdines <br> <small>General Manager</small></p>
-            </div>  
+                <p>{{currentUser?.firstname}} {{currentUser?.lastname}}<br> <small *ngFor="let profile of currentUser?.profiles" >{{profile.name| userType }}</small></p>
+
+            </div>
         </mat-toolbar>
-        <a mat-menu-item routerLink="/admin"> 
+        <a mat-menu-item routerLink="/admin">
             <mat-icon>person</mat-icon>
-            <span>Profile</span> 
+            <span>Profile</span>
         </a>
-        <a mat-menu-item routerLink="/admin"> 
+        <a mat-menu-item routerLink="/admin/information">
             <mat-icon>edit</mat-icon>
-            <span>Edit Profile</span> 
+            <span>Edit Profile</span>
         </a>
-        <a mat-menu-item routerLink="/admin"> 
+        <a mat-menu-item routerLink="/admin/information/update">
+          <mat-icon>password</mat-icon>
+          <span>Edit password</span>
+      </a>
+        <a mat-menu-item routerLink="/admin">
             <mat-icon>settings</mat-icon>
-            <span>Settings</span> 
+            <span>Settings</span>
         </a>
-        <a mat-menu-item routerLink="/admin"> 
+        <a mat-menu-item routerLink="/admin">
             <mat-icon>lock</mat-icon>
-            <span>Lock screen</span> 
+            <span>Lock screen</span>
         </a>
-        <a mat-menu-item routerLink="/admin"> 
+        <a mat-menu-item routerLink="/admin">
             <mat-icon>help</mat-icon>
-            <span>Help</span> 
+            <span>Help</span>
         </a>
         <div class="divider"></div>
-        <a mat-menu-item routerLink="/sign-in"> 
+        <a mat-menu-item routerLink="/sign-in">
             <mat-icon>power_settings_new</mat-icon>
-            <span>Log out</span> 
+            <span>Log out</span>
         </a>
     </span>
 </mat-menu>

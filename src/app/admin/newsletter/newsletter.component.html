@@ -1,0 +1,33 @@
+<div class="p-2">
+    <mat-card>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+            <h2>{{"ADMIN_NAV.NEWSLETTER_LIST" | translate}}</h2>
+            <!-- <button mat-raised-button color="primary" (click)="openCampagneDialog(null)">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button> -->
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-mdc-table admin-table">
+            <div class="mat-mdc-header-row">
+                <div class="mat-mdc-header-cell" style="width: 10%;">Email</div>
+                <div class="mat-mdc-header-cell" style="width: 15%;">Actions</div>
+            </div>
+            <div *ngFor="let item of newsletter | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+                <div class="mat-mdc-cell" style="width: 10%;">{{item.email |translate}}</div>
+                <div class="mat-mdc-cell" style="width: 40%;">
+                  <div class="p-2 actions" style="display: flex; align-items: center;">
+
+                      <mat-slide-toggle [color]="item.etat ? 'primary' : 'warn'" [checked]="item.etat" (change)="setStatus(item.id, $event)">
+                          {{ item.etat ? 'Activée' : 'Désactivée' }}
+                      </mat-slide-toggle>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div fxLayout="row wrap">
+            <div fxFlex="100">
+                <mat-card class="text-center">
+                    <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card>
+  </div>

@@ -1,0 +1,41 @@
+<div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.gt-sm="100" class="p-2">
+        <h2 class="text-muted text-center">{{'ACCOUNT_INFO' | translate}}</h2>
+        <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit(infoForm.value)">
+            <mat-form-field class="w-100 mt-2">
+                <input matInput placeholder="Prenom" formControlName="firstname" required>
+                <mat-error *ngIf="infoForm.controls.firstname.errors?.required">Le prenom est obligatoire</mat-error>
+                <mat-error *ngIf="infoForm.controls.firstname.hasError('minlength')">Le prénom n'est pas assez long, minimum 3 caractères</mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-2">
+                <input matInput placeholder="Nom" formControlName="lastname" required>
+                <mat-error *ngIf="infoForm.controls.lastname.errors?.required">Le nom est obligatoire</mat-error>
+                <mat-error *ngIf="infoForm.controls.lastname.hasError('minlength')">Le nom n'est pas assez long, minimum 3 caractères</mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+                <input matInput placeholder="Numéro de contact" formControlName="phoneNumber" required>
+                <mat-error *ngIf="infoForm.controls.phoneNumber.errors?.required">Le numéro de contact est obligatoire</mat-error>
+                <mat-error *ngIf="infoForm.controls.phoneNumber.hasError('minlength')">Le numéro n'est pas assez long, minimum 8 caractère</mat-error>
+                <mat-error *ngIf="infoForm.controls.lastname.hasError('minlength')">Le numéro est trop long, maximun of 8 characters</mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+              <input matInput placeholder="Email" formControlName="email" required>
+              <mat-error *ngIf="infoForm.controls.email.errors?.required">L'email est obligatoire</mat-error>
+              <!-- <mat-error *ngIf="infoForm.controls.email.hasError('minlength')">Le numéro n'est pas assez long, minimum 8 caractère</mat-error>
+              <mat-error *ngIf="infoForm.controls.email.hasError('minlength')">Le numéro est trop long, maximun of 8 characters</mat-error> -->
+          </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+                <input matInput placeholder="Adresse" formControlName="adresse" >
+            </mat-form-field>
+            <mat-form-field class="w-100 mt-1">
+              <input matInput placeholder="Points" formControlName="points" [value]="infoForm.controls.points?.value ? passwordForm.controls.points?.value : 'null'">
+          </mat-form-field>
+
+
+            <div class="text-center mt-2">
+                <button mat-raised-button color="primary" (click)="onInfoFormSubmit(infoForm.value)">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+
+</div>

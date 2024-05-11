@@ -41,6 +41,19 @@ export class AuthenticationService {
       }
   }
 
+  public async updatePassword(data : any){
+    try {
+      console.log("::::::::::",data)
+        let res : any = await this.api.post('/users/change-password',data).toPromise()
+        console.log("::::::RESSSSSSSSSSSS::::",res)
+
+        return "OK"
+    } catch (error : any) {
+        console.log(error);
+        return "KO"
+    }
+}
+
 
 
     /**
@@ -80,7 +93,7 @@ export class AuthenticationService {
     list() {
         return this.api.get(`/users/list`).toPromise();
     }
-    
+
 
     /**
      * Performs the login auth

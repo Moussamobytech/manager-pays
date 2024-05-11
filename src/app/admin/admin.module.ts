@@ -32,7 +32,11 @@ export const routes = [
       { path: 'support', loadChildren: () => import('./support/support.module').then(m => m.SupportModule), data: { breadcrumb: 'Support' } },
       { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule), data: { breadcrumb: 'Reviews' } },
       { path: 'campagne', loadChildren: () => import('./campagne/campagne.module').then(m => m.CampagneModule), data: { breadcrumb: 'Campagne' } },
-      { path: 'brand', loadChildren: () => import('./brands/brand.module').then(m => m.BrandModule), data: { breadcrumb: 'Brand' } }
+      { path: 'brand', loadChildren: () => import('./brands/brand.module').then(m => m.BrandModule), data: { breadcrumb: 'Brand' } },
+      { path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule), data: { breadcrumb: 'Contact' } },
+      { path: 'newsletter', loadChildren: () => import('./newsletter/newsletter.module').then(m => m.NewsletterModule), data: { breadcrumb: 'Newsletter' } },
+      { path: 'information', loadChildren: () => import('./information/information.module').then(m => m.InformationModule), data: { breadcrumb: 'Information' } }
+
     ]
   }
 ];
