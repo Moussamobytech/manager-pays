@@ -22,7 +22,44 @@ export class HomeComponent implements OnInit {
 
 
 
-  public brands: any;
+  public brands: any= [
+    {
+        "createdAt": "2024-05-06T01:51:39.000+00:00",
+        "updatedAt": "2024-05-06T01:51:39.000+00:00",
+        "id": "2cbd8227-8a8f-4f7e-9051-f28c506ebe32",
+        "libelle": "H & M",
+        "description": "La marque  de vetement H&M",
+        "etat": true,
+        "logo": "https://storage.googleapis.com/fidelity-e0007.appspot.com/2e11feeab444496fb9298a486801bce4.png"
+    },
+    {
+        "createdAt": "2024-05-06T01:48:55.000+00:00",
+        "updatedAt": "2024-05-06T01:48:55.000+00:00",
+        "id": "31b5eba4-7d78-46bc-a703-77f8a34a9ab5",
+        "libelle": "Bershka",
+        "description": "La marque  Bershka",
+        "etat": true,
+        "logo": "https://storage.googleapis.com/fidelity-e0007.appspot.com/5e5de7d9ef024e9090167ae060fbc3e8.png"
+    },
+    {
+        "createdAt": "2024-05-06T01:50:58.000+00:00",
+        "updatedAt": "2024-05-06T01:50:58.000+00:00",
+        "id": "a80d6198-9817-4cbe-9ca8-2ce620b2eca8",
+        "libelle": "Zara",
+        "description": "La marque  de vetement ZARA",
+        "etat": true,
+        "logo": "https://storage.googleapis.com/fidelity-e0007.appspot.com/519337814c1d4bbeb2c9c000f6ef3a43.png"
+    },
+    {
+        "createdAt": "2024-05-06T01:49:56.000+00:00",
+        "updatedAt": "2024-05-06T01:49:56.000+00:00",
+        "id": "bd48ffd4-bf89-4ac5-a4c0-243ac3cb3977",
+        "libelle": "Nike",
+        "description": "La marque  d'equipementier Nike",
+        "etat": true,
+        "logo": "https://storage.googleapis.com/fidelity-e0007.appspot.com/c42ca8d48d34487a9aa9251fb882af9a.png"
+    }
+];
   public banners = [];
   public campagnes = [];
   public produit: Array<Product>;
@@ -53,8 +90,10 @@ export class HomeComponent implements OnInit {
     this.getNewArrivals();
     this.getTopRate();
 
+  }
 
-
+  ngAfterViewInit(){
+    this.listCampagne()
   }
 
   public onLinkClick(e){

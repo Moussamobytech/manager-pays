@@ -19,6 +19,13 @@
             }
         }        
     }
+    .swiper-slide {
+        flex-shrink: 0;
+        width: 25%;
+        height: 100%;
+        position: relative;
+        transition-property: transform;
+    }
     .swiper-button-prev{
         left: -10px;
     }

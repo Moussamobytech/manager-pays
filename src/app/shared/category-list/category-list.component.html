@@ -1,6 +1,6 @@
 
 <div *ngFor="let category of categories">
-  <button mat-menu-item (click)="changeCategory(category.id)">
+  <button mat-menu-item (click)="changeCategory(category.cle || category.id)">
       <span>{{category.nom}}</span>
   </button>
    <div *ngIf="category" class="sub-category">
