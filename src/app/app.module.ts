@@ -40,6 +40,7 @@ import { ProductService } from './services/product.service';
 import { CategoryService } from './services/category.service';
 import { ApiService } from './services/api.service';
 import { CampagneService } from './services/campagne.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { CampagneService } from './services/campagne.service';
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent,
+    FooterComponent
+
   ],
   imports: [
     BrowserModule,
@@ -59,6 +61,7 @@ import { CampagneService } from './services/campagne.service';
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    ReactiveFormsModule,
     GoogleMapsModule,
     ToastrModule.forRoot(), // ToastrModule added
     TranslateModule.forRoot({

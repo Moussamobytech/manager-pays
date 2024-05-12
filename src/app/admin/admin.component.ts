@@ -3,6 +3,8 @@ import { AppSettings, Settings } from '../app.settings';
 import { Router, NavigationEnd } from '@angular/router';
 import { MenuService } from './components/menu/menu.service';
 import { DomHandlerService } from '../dom-handler.service';
+import { AuthenticationService } from '../services/auth.service';
+import { User } from '../models/user.models';
 
 @Component({
   selector: 'app-admin',
@@ -15,14 +17,19 @@ export class AdminComponent implements OnInit {
   public settings:Settings;
   public menuItems:Array<any>;
   public toggleSearchBar:boolean = false;
+  currentUser : User
+
   constructor(public appSettings:AppSettings,
               public router:Router,
               private menuService: MenuService,
-              public domHandlerService: DomHandlerService){
+              public domHandlerService: DomHandlerService,
+              private auth : AuthenticationService,){
     this.settings = this.appSettings.settings;
   }
 
   ngOnInit() {
+    this.currentUser = this.auth.currentUser()
+    console.log("::::::::: ", this.currentUser)
     if(this.domHandlerService.window?.innerWidth <= 960){
       this.settings.adminSidenavIsOpened = false;
       this.settings.adminSidenavIsPinned = false;

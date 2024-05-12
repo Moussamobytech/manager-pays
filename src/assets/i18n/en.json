@@ -1,6 +1,7 @@
 {
   "WELCOME": "Welcome to our market!",
   "LOGIN": "Log in",
+  "SIGN_IN": "Sign in",
   "LOGIN_IN": "Log in",
   "LOGOUT": "Logout",
   "REGISTER": "Register",
@@ -37,7 +38,12 @@
   "CONTACT": "Contact",
   "ABOUT_US": "On",
   "ADMIN": "Admin",
-  "SHOW_ALL_BRAND":"Show all brands"
+  "SHOW_ALL_BRAND":"Show all brands",
+  "SHOW":"Show",
+  "FROM":"From",
+  "TO":"To",
+  "NEWSLETTER":"Subscribe our Newsletter",
+  "TEXT_NEWSLETTER":"Stay up to date with our latest new and products "
 
   },
   "ADMIN_NAV": {
@@ -56,6 +62,12 @@
   "ADD_CAMPAGNE":"Add Campaign",
   "CAMPAGNE_LIST":"Campaign list",
   "CAMPAGNE_DETAIL":"Campaign detail",
+  "CONTACT":"Contact",
+  "CONTACT_LIST":"Contact list",
+  "CONTACT_DETAIL":"Contact detail",
+
+  "NEWSLETTER":"Newsletter",
+  "NEWSLETTER_LIST":"Newsletter list",
   "SALES": "Sales",
   "ORDERS": "Orders",
   "TRANSACTIONS": "Transactions",
@@ -68,6 +80,7 @@
   "FOLLOWERS": "Followers",
   "SUPPORT": "Support",
   "REVIEWS": "Reviews",
+  "UPDATE_PASSWORD" :"Update password",
   "EXTERNAL_LINK": "External Link"
   },
   "BTN": {
@@ -186,5 +199,11 @@
   "IMAGE": "Image",
   "PAGE_TITLE": "List of Categories",
   "ADD_BTN": "Add a Category"
+  },
+  "SORTINGS": {
+    "SORT_BY_DEFAULT": "Sort by Default",
+    "BEST_MATCH": "Best match",
+    "LOWEST_FIRST": "Lowest first",
+    "HIGHEST_FIRST": "Highest first"
   }
  }

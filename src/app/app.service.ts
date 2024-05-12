@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Campagne, Category, Contact, Product } from './app.models';
+import { Campagne, Category, Contact, Newsletter, Product } from './app.models';
 import { environment } from 'src/environments/environment';
 import { ApiService } from './services/api.service';
 
@@ -94,6 +94,20 @@ export class AppService {
   public addContact(contact: Contact): Observable<any> {
     return this.apiService.post('/contact/add', contact);
   }
+  public getNewsletter(): Observable<any>{
+    return this.apiService.get('/newsletter/liste');
+  }
+  public getContact(): Observable<any>{
+    return this.apiService.get('/contact/liste');
+  }
+  public getContactById(id: string): Observable<any>{
+    return this.apiService.get('/contact/' +id);
+  }
+
+   public addNewsletter(newsletter: Newsletter): Observable<any> {
+    return this.apiService.post('/newsletter/add', newsletter);
+   }
+
 
   public addCategory(categorie: Category, image: File): Observable<any> {
     const formData = new FormData();
@@ -153,15 +167,18 @@ export class AppService {
   //   return this.apiService.put(`/categorie/status/${id}`, { params: status  });
   // }
 
-  public setStatus(id: string, status: string): Observable<any> {
+
+  public setStatus (id : string , status : string ) : Observable<any> {
     // const formData: FormData = new FormData();
     // formData.append ('status', status.toString() );
-
-    return this.apiService.put(
-      `/categorie/status/${id}?status=${status}`,
-      null
-    );
+  
+  return this.apiService.put(`/categorie/status/${id}?status=${status}`, null) ;
   }
+  
+  public setStatusNewsletter (id : string , etat : boolean ) : Observable<any> {
+    return this.apiService.put(`/newsletter/etat/${id}/${etat}`, null ).pipe() ;
+  }
+ 
 
   public setStatusCampagne(id: string, etat: boolean): Observable<any> {
     return this.apiService.put(`/campagne/etat/${id}/${etat}`, null).pipe();

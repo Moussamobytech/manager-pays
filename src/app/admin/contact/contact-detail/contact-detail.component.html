@@ -1,0 +1,48 @@
+<div class="p-2">
+  <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h2>{{"ADMIN_NAV.CONTACT_DETAIL" | translate}}</h2>
+      </div>
+      <!-- <mat-divider></mat-divider>
+      <div class="mat-mdc-table admin-table">
+          <div class="mat-mdc-header-row">
+              <div class="mat-mdc-header-cell" style="width: 10%;">Email</div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">Numero de telephone</div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">{{"FIELD.LASTNAME"|translate}}</div>
+              <div class="mat-mdc-header-cell" style="width: 15%;">{{"FIELD.PHONE" | translate}}</div>
+
+          </div>
+          <div  class="mat-mdc-row">
+              <div class="mat-mdc-cell" style="width: 10%;">{{contact.email }}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{contact.phoneNumber}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{contact.name}}</div>
+              <div class="mat-mdc-cell" style="width: 15%; overflow: hidden; text-overflow: ellipsis;">
+                {{contact.message | slice:0:200}}{{contact.message.length > 200 ? '...' : ''}}</div>
+
+
+          </div>
+      </div> -->
+      <!-- <div class="mat-mdc">
+        <mat-divider class="mb-4"></mat-divider>
+        <p class="mb-2"><b>Email</b> : {{currentUser?.email}}</p>
+        <mat-divider class="mb-4"></mat-divider>
+      </div> -->
+      <div class="mat-mdc">
+        <mat-divider class="mb-4"></mat-divider>
+        <p class="mb-2"><b>Email</b> : {{contact.email}}</p>
+        <mat-divider class="mb-4"></mat-divider>
+
+        <p class="mb-2"><b>{{"FIELD.PHONE"|translate}} :</b> {{contact.phoneNumber}}</p>
+        <mat-divider class="mb-4"></mat-divider>
+
+        <p class="mb-2"><b>{{"FIELD.LASTNAME"|translate}} :</b> {{contact.name}}</p>
+        <mat-divider class="mb-4"></mat-divider>
+
+        <p class="mb-2"><b>Message :</b> {{contact.message}}</p>
+        <mat-divider class="mb-4"></mat-divider>
+      </div>
+
+
+
+  </mat-card>
+</div>

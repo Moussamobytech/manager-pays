@@ -1,6 +1,7 @@
 {
   "WELCOME": "Bienvenue sur notre marché!",
   "LOGIN": "S'identifier",
+  "SIGN_IN": "Se connecter",
   "LOGIN_IN": "Connectez vous",
   "LOGOUT": "Se déconnecter",
   "REGISTER": "S'inscrire",
@@ -30,6 +31,10 @@
   "CONTACTUS":"Contactez nous",
   "RIGHT":"Conçu et développé par",
   "SHOW":"Voir",
+  "FROM":"De",
+  "TO":"à",
+  "TEXT_NEWSLETTER": "Restez à jour avec nos dernières nouveautés et produits",
+
 
   "NAV": {
     "HOME": "Accueil",
@@ -72,6 +77,11 @@
     "ADD_CAMPAGNE": "Ajouter campagne",
     "CAMPAGNE_LIST": "Liste Campagne",
     "CAMPAGNE_DETAIL": "Detail campagne",
+    "CONTACT_LIST":"Liste de contact",
+    "CONTACT":"Contact",
+    "CONTACT_DETAIL":"Detail contact",
+    "NEWSLETTER":"Newsletter",
+    "NEWSLETTER_LIST":"Liste de newsletter",
     "USERS": "Utilisateurs",
     "CUSTOMERS": "Les clients",
     "COUPONS": "Coupons",
@@ -82,7 +92,8 @@
     "SUPPORT": "Soutien",
     "REVIEWS": "Commentaires",
     "EXTERNAL_LINK": "Lien Externe",
-    "PRICE": "Prix"
+    "PRICE": "Prix",
+    "UPDATE_PASSWORD" :"Changement de mot de passe"
 
   },
   "BTN": {
@@ -189,5 +200,11 @@
     "PAGE_TITLE": "Liste des Categories",
     "ADD_BTN": "Ajouter une Categorie",
     "PRICE": "Prix"
+  },
+  "SORTINGS": {
+    "SORT_BY_DEFAULT": "Trier par défaut",
+    "BEST_MATCH": "Meilleure correspondance",
+    "LOWEST_FIRST": "Prix les plus bas en premier",
+    "HIGHEST_FIRST": "Prix les plus élevés en premier"
   }
 }

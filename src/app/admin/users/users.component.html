@@ -175,7 +175,8 @@
                 <div class="mat-mdc-cell">{{ user.lastname|capitalCase }}</div>
                 <div class="mat-mdc-cell">{{ user.username }}</div>
                 <div class="mat-mdc-cell" *ngFor="let profile of user.profiles">{{ profile.name | userType }}</div>
-                <div class="mat-mdc-cell">{{ user.createdAt | date: "dd /MM /yy" }}</div>
+                <!-- <div class="mat-mdc-cell">{{ user.createdAt | date: "dd /MM /yy" }}</div> -->
+                <div class="mat-mdc-cell">{{ user.createdAt | date: "yyyy-mm-dd" }}</div>
                 <div class="mat-mdc-cell">
                     <div class="p-2 actions">
                         <button mat-mini-fab color="primary" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">

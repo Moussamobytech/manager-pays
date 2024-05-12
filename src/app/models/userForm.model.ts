@@ -3,6 +3,7 @@ export class UserAddForm {
   contacts:Contact;
   firstname:string;
   lastname:string;
+  adresse: string;
   type:Type;
 }
 export class UserEditForm {
@@ -10,6 +11,7 @@ export class UserEditForm {
   contacts:Contact;
   firstname:string;
   lastname:string;
+  adresse: string;
   username:string
   type:Type;
 }

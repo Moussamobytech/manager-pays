@@ -1,59 +1,41 @@
 <!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
    À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
 
-<div fxLayout="row wrap" class="flex-wrapper">
-    <div fxFlex="50" fxFlex.sm="50" fxFlex.xs="100" class="col">
-        <mat-card>
-          <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>{{'ACCOUNT_INFO' | translate}}</h3></mat-card-title>
-              <a mat-icon-button routerLink="/account/information"><mat-icon class="text-muted">edit</mat-icon></a>
-          </mat-card-header>
-          <div class="divider"></div>
-          <mat-card-content class="pb-5 text-muted account-card-content">
-              <p>Nom complet : <b>{{currentUser.firstname + " "+ currentUser.lastname}}</b></p>
-              <p>Email : <b>{{currentUser.email || 'N/A'}}</b></p>
-              <p>Numéro de contact :  <b>{{currentUser.phoneNumber}}</b></p>
-              <p>Adresse :  <b>{{currentUser.adresse || 'N/A'}}</b></p>
-              <p>Date de création : <b>{{currentUser.createdAt | date}}</b></p>
-              <p>Type de compte : <b>{{currentProfile(currentUser.profiles[0])}}</b></p>
-              <p><a routerLink="/account/information" class="primary-text">Change mot de passe</a></p>
-          </mat-card-content>
-        </mat-card>
-    </div>
-    <div fxFlex="50" fxFlex.sm="50" fxFlex.xs="100" class="col">
-        <mat-card>
-          <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>{{'STATS' | translate}}</h3></mat-card-title>
-              <a mat-icon-button routerLink="/account/addresses"><mat-icon class="text-muted">edit</mat-icon></a>
-          </mat-card-header>
-          <div class="divider"></div>
-          <mat-card-content class="p-2 text-muted account-card-content">
-            <p>Total produits : <b>{{statsNumber.total}}</b></p>
-            <p>Total produits actifs: <b>{{statsNumber.actif}}</b></p>
-            <p>Total produits inactifs: <b>{{statsNumber.inactif}}</b></p>
-            <p>Total produits en attente de validation: <b>{{statsNumber.pending}}</b></p>
-            <p>Nombre de points : <b>{{statsNumber.points || '0'}}</b></p>
-            
-          </mat-card-content>
-        </mat-card>
-    </div>
-    <!-- <div fxFlex="33.3" fxFlex.sm="100" fxFlex.xs="100" class="col">
-        <mat-card>
-          <mat-card-header class="p-2 account-card-title" fxLayoutAlign="space-between center">
-              <mat-card-title class="m-0"><h3>Orders</h3></mat-card-title>
-              <a mat-icon-button routerLink="/account/orders"><mat-icon class="text-muted">edit</mat-icon></a>
-          </mat-card-header>
-          <div class="divider"></div>
-          <mat-card-content class="p-2 text-muted account-card-content">
-            <p class="">Completed</p>
-            <mat-progress-bar value="75" color="primary"></mat-progress-bar>
-            <p class="mt-1">Processing</p>
-            <mat-progress-bar value="25" color="accent"></mat-progress-bar>
-            <p class="mt-1">On hold</p>
-            <mat-progress-bar value="65" color="warn"></mat-progress-bar>
-            <p class="mt-1">Refunded</p>
-            <mat-progress-bar value="25" color="primary"></mat-progress-bar>
-          </mat-card-content>
-        </mat-card>
-    </div> -->
+<div fxLayout="row wrap">
+
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-purple tile p-2">
+      <mat-icon>shopping_cart</mat-icon>
+      <h2>{{statsNumber.total}}</h2>
+      <p>Total produits </p>
+  </mat-card>  </div>
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-green tile p-2">
+      <mat-icon>check_circle</mat-icon>
+      <h2>{{statsNumber.actif}}</h2>
+      <p>Total produits actifs</p>
+  </mat-card>  </div>
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-red tile p-2">
+      <mat-icon>cancel</mat-icon>
+      <h2>{{statsNumber.inactif}}</h2>
+      <p>Total produits inactifs</p>
+  </mat-card>  </div>
+</div>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="100" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-brown tile p-2">
+      <mat-icon>pending</mat-icon>
+      <h2>{{statsNumber.pending}}</h2>
+      <p>Total produits en attente de validation</p>
+  </mat-card>
+</div>
+  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="100" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-gray tile p-2">
+      <mat-icon>score</mat-icon>
+      <h2>{{statsNumber.points || '0'}}</h2>
+      <p>Nombre de points</p>
+  </mat-card>
+</div>
+
 </div>

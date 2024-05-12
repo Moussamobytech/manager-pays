@@ -1,0 +1,44 @@
+<div class="p-2">
+  <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h2>{{"ADMIN_NAV.CONTACT_LIST" | translate}}</h2>
+          <!-- <button mat-raised-button color="primary" (click)="openCampagneDialog(null)">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button> -->
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mat-mdc-table admin-table">
+          <div class="mat-mdc-header-row">
+              <div class="mat-mdc-header-cell" style="width: 10%;">Email</div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">{{"FIELD.PHONE" | translate}}</div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">{{"FIELD.LASTNAME" | translate}}</div>
+              <div class="mat-mdc-header-cell" style="width: 50%;">Message</div>
+              <div class="mat-mdc-header-cell" style="width: 40%;">Actions</div>
+
+          </div>
+          <div *ngFor="let item of contact | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.email |translate}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.phoneNumber |translate}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.name}}</div>
+              <!-- <div class="mat-mdc-cell" style="width: 15%;">{{item.message }}</div> -->
+              <div class="mat-mdc-cell" style="width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" matTooltip="{{item.message}}">{{item.message }}</div>
+              <!-- <div class="mat-mdc-cell" style="width: 15%;" matTooltip="{{item.message}}">{{item.message }}</div> -->
+
+
+              <div class="mat-mdc-cell" style="width: 40%;">
+                <div class="p-2 actions" style="display: flex; align-items: center;">
+
+                    <a [routerLink]="['/admin/contact/contact-detail', item.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+
+                </div>
+            </div>
+
+          </div>
+      </div>
+      <div fxLayout="row wrap">
+          <div fxFlex="100">
+              <mat-card class="text-center">
+                  <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+              </mat-card>
+          </div>
+      </div>
+  </mat-card>
+</div>

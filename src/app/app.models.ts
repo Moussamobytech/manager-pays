@@ -17,7 +17,7 @@ export class Product {
               public image5: Array<any>,
               public prix : number,
               public pricePromotion: number,
-              public priceBasic : string,
+              public priceBasic : number,
               public quantite: number,
               public oldPrice: number,
               public newPrice: number,
@@ -41,7 +41,8 @@ export class  User {
                  public email: string,
                  public phoneNumber: number,
                  public firstname : string,
-                 public lastname : string
+                 public lastname : string,
+                 public adresse : string ,
                  ) {}
 
 
@@ -55,7 +56,7 @@ export class  Contact {
     public id: string,
              public name: string,
                public email: string,
-               public phoneNumber: number,
+               public phoneNumber: string,
                public message : string,
                ) {}
 }
@@ -86,4 +87,12 @@ export class  Brand {
                public etat: boolean,
                public logo : string,
                ) {}
+}
+
+export class Newsletter{
+  constructor(
+        public id: string,
+        public email: string,
+        public etat:boolean
+  ){}
 }
