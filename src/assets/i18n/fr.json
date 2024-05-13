@@ -50,7 +50,7 @@
     "TERMS_CONDITIONS": "Terms & Conditions",
     "LANDING": "Page de destination",
     "404_PAGE": "404 Page",
-    "OTHERS": "Others",
+    "OTHERS": "Autres",
     "EXTERNAL_LINK": "Lien Externe",
     "MENU_ITEM": "Menu Item",
     "CONTACT": "Contact",
@@ -93,7 +93,8 @@
     "REVIEWS": "Commentaires",
     "EXTERNAL_LINK": "Lien Externe",
     "PRICE": "Prix",
-    "UPDATE_PASSWORD" :"Changement de mot de passe"
+    "UPDATE_PASSWORD" :"Changement de mot de passe",
+    "PASSWORD" :"Mot de passe"
 
   },
   "BTN": {

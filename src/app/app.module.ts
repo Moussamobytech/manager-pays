@@ -41,12 +41,14 @@ import { CategoryService } from './services/category.service';
 import { ApiService } from './services/api.service';
 import { CampagneService } from './services/campagne.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PagesComponent,
     NotFoundComponent,
+    AdminConnectionComponent,
     TopMenuComponent,
     MenuComponent,
     SidenavMenuComponent,

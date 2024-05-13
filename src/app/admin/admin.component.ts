@@ -20,6 +20,7 @@ export class AdminComponent implements OnInit {
   currentUser : User
 
   constructor(public appSettings:AppSettings,
+              private authenticationService: AuthenticationService,
               public router:Router,
               private menuService: MenuService,
               public domHandlerService: DomHandlerService,
@@ -89,4 +90,10 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  logout(){
+    this.authenticationService.logout();
+    this.router.navigateByUrl("/")
+  }
+
+  
 }

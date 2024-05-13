@@ -4,10 +4,11 @@ import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators } from '@
 import { MatDialog } from '@angular/material/dialog';
 import { SwiperConfigInterface, SwiperDirective } from '../../../theme/components/swiper/swiper.module';
 import { Data, AppService } from '../../../app.service';
-import { Product } from "../../../app.models";
 import { emailValidator } from '../../../theme/utils/app-validators';
 import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { ProductService } from 'src/app/services/product.service';
+import { Product } from 'src/app/app.models';
 
 @Component({
   selector: 'app-product',
@@ -26,6 +27,7 @@ export class ProductComponent implements OnInit {
   public relatedProducts: Array<Product>;
 
   constructor(public appService:AppService,
+    private productService : ProductService,
               private activatedRoute: ActivatedRoute,
               public dialog: MatDialog,
               public formBuilder: UntypedFormBuilder,
@@ -66,6 +68,7 @@ export class ProductComponent implements OnInit {
   }
 
   public getProductById(id){
+    
     this.appService.getProductById(id).subscribe(data=>{
       this.product = data;
       console.log("Produit :", this.product)
@@ -73,15 +76,24 @@ export class ProductComponent implements OnInit {
       this.zoomImage = data.image2;
       setTimeout(() => {
         this.config.observer = true;
+        this.getRelatedProducts();
        // this.directiveRef.setIndex(0);
       });
     });
   }
 
-  public getRelatedProducts(){
-    this.appService.getProducts('related').subscribe(data => {
-      this.relatedProducts = data;
-    })
+  public async getRelatedProducts(){
+    console.log("res related :::::: ",this.product);
+    console.log("res related :::::: ",this.product?.categorie);
+    if (this.product && this.product?.categorie) {
+      let res = await this.productService.getProductByCategorie(this.product.categorie)
+      console.log("res related :::::: ",res);
+      this.relatedProducts = res;
+    }
+    
+    // this.appService.getProducts('related').subscribe(data => {
+    //   this.relatedProducts = data;
+    // })
   }
 
   public selectImage(image){

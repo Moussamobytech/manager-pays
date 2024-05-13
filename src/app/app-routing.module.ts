@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PagesComponent } from './pages/pages.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { UserAuthSessionComponent } from './pages/session/user-auth-session/user-auth-session.component';
+import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,7 @@ const routes: Routes = [
   },
   { path: 'sign-in', loadChildren: () => import('./pages/session/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Sign In ' } },
 
+  { path: 'admin-connection', component: AdminConnectionComponent },
   { path: '**', component: NotFoundComponent }
 ];
 

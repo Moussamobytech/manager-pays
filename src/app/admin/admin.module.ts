@@ -14,10 +14,13 @@ import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { FullScreenComponent } from './components/fullscreen/fullscreen.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { AdminGuard } from '../helpers/admin.guard';
 
 export const routes = [
   {
     path: '',
+    canActivate: [AdminGuard],
+    canLoad: [AdminGuard],
     component: AdminComponent, children: [
       { path: '', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule) },

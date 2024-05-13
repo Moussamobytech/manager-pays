@@ -1,0 +1,48 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="h-100">
+    <div fxFlex="80" fxFlex.gt-sm="30" fxFlex.sm="60">
+        <div class="mat-elevation-z6 box">
+            <div fxLayout="column" fxLayoutAlign="center center" class="bg-primary box-header">
+                <mat-icon class="mat-icon-xlg">exit_to_app</mat-icon>
+                <h3 class="error">Fidelity Administration</h3>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="end center" class="box-content">
+                <div fxLayout="column" fxLayoutAlign="center center" class="mat-elevation-z8 box-content-inner p-3">
+                    <!-- <p class="box-text">{{'LOGIN_IN' | translate}}</p>  -->
+                    <h2 class="text-muted text-center mb-3">{{'LOGIN_IN' | translate}}</h2>
+                    <!-- <p class="box-text">If you are sure it should, search for it.</p>  -->
+                    
+                    <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit(loginForm.value)">
+                        
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.USERNAME' | translate}}</mat-label>
+                            <input matInput formControlName="phone" required>
+                            <mat-error *ngIf="loginForm.controls.phone.errors?.required">{{'FIELD_ERROR.USERNAME_REQUIRED' | translate}}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="w-100 mt-1">
+                            <mat-label>{{'FIELD.PASSWORD' | translate}}</mat-label>
+                            <input matInput placeholder="Mot de passe" formControlName="password" required>
+                            <mat-error *ngIf="loginForm.controls.password.errors?.required">{{'FIELD_ERROR.PASSWORD_REQUIRED' | translate}}</mat-error>
+                            <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">{{'FIELD_ERROR.PASSWORD_MINLENGTH' | translate}}</mat-error>
+                        </mat-form-field>
+                        
+                        <div class="text-center mt-2">
+        
+                          <button mat-raised-button color="primary" class="mat-elevation-z6"> {{ 'SIGN_IN' | translate }}</button>
+        
+                        </div>
+                        
+        
+                    </form>
+                </div>
+                <div class="box-footer">
+                    <button mat-raised-button color="primary" class="mat-elevation-z8" type="button" (click)="goHome()">
+                        <mat-icon class="mat-icon-md m-0">home</mat-icon>
+                    </button>
+                    <button mat-raised-button color="primary" class="mat-elevation-z8" type="button" (click)="goHome()">
+                        <mat-icon class="mat-icon-md m-0">search</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>          
+    </div>
+</div>

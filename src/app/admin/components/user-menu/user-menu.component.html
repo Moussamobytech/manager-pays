@@ -11,19 +11,19 @@
 
             </div>
         </mat-toolbar>
-        <a mat-menu-item routerLink="/admin">
+        <!-- <a mat-menu-item routerLink="/admin">
             <mat-icon>person</mat-icon>
             <span>Profile</span>
-        </a>
+        </a> -->
         <a mat-menu-item routerLink="/admin/information">
             <mat-icon>edit</mat-icon>
-            <span>Edit Profile</span>
+            <span>{{"ACCOUNT" | translate}}</span>
         </a>
         <a mat-menu-item routerLink="/admin/information/update">
           <mat-icon>password</mat-icon>
-          <span>Edit password</span>
-      </a>
-        <a mat-menu-item routerLink="/admin">
+          <span>{{"ADMIN_NAV.PASSWORD" | translate}}</span>
+        </a>
+        <!-- <a mat-menu-item routerLink="/admin">
             <mat-icon>settings</mat-icon>
             <span>Settings</span>
         </a>
@@ -34,11 +34,15 @@
         <a mat-menu-item routerLink="/admin">
             <mat-icon>help</mat-icon>
             <span>Help</span>
-        </a>
+        </a> -->
         <div class="divider"></div>
-        <a mat-menu-item routerLink="/sign-in">
+        <!-- <button mat-icon-button (click)="logout()">
             <mat-icon>power_settings_new</mat-icon>
-            <span>Log out</span>
+            <span>{{"LOGOUT" | translate}}</span>
+        </button> -->
+        <a mat-menu-item (click)="logout()">
+            <mat-icon>power_settings_new</mat-icon>
+            <span>{{"LOGOUT" | translate}}</span>
         </a>
     </span>
 </mat-menu>

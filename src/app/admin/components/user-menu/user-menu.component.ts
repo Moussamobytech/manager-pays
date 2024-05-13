@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 
@@ -10,7 +11,7 @@ import { AuthenticationService } from 'src/app/services/auth.service';
 export class UserMenuComponent implements OnInit {
   public userImage = 'assets/images/others/admin.jpg';
   currentUser : User;
-  constructor(private auth : AuthenticationService) { }
+  constructor(private auth : AuthenticationService, private router: Router) { }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
@@ -45,6 +46,11 @@ export class UserMenuComponent implements OnInit {
         break;
     }
     return profil
+  }
+
+  logout(){
+    this.auth.logout();
+    this.router.navigateByUrl("/")
   }
 
 }

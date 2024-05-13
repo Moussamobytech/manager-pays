@@ -1,7 +1,7 @@
 import { Category } from "./category.models";
 
 export class Product {
-    constructor(public id: number,
+    constructor(public id: string,
                 public nom: string,
                 public images: Array<any>,
                 public image1: string,
@@ -25,7 +25,7 @@ export class Product {
                 public size: Array<string>,
                 public weight: number,
                 public etat: string,
-                public categorie: Category,
+                public categorie: string,
                 public contact: string,
                 public user : string,
                 public createdAt:string,

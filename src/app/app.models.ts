@@ -30,7 +30,7 @@ export class Product {
               public color: Array<string>,
               public size: Array<string>,
               public weight: number,
-              public categorie: Category,
+              public categorie: string,
               public contact: string,
               public user : User){ }
 }
