@@ -9,7 +9,7 @@
                             <h4>Categories :</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div class="categories-wrapper categories-dropdown" >
+                    <div class="categories-wrapper " >
                         <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false" >
                             <app-category-list [categories]="Allcategories"  [categoryParentId]="0"  (change)="onChangeCategory($event)"></app-category-list>
                         </ng-scrollbar>
