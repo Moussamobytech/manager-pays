@@ -21,6 +21,7 @@ export class ProductComponent implements OnInit {
   public config: SwiperConfigInterface={};
   public product: Product;
   public image: any;
+  public path: any;
   public zoomImage: any;
   private sub: any;
   public form: UntypedFormGroup;
@@ -34,6 +35,8 @@ export class ProductComponent implements OnInit {
               public domHandlerService: DomHandlerService) {  }
 
   ngOnInit() {
+    console.log(window.location.href)
+    this.path = window.location.href
     this.sub = this.activatedRoute.params.subscribe(params => {
       this.getProductById(params['id']);
     });

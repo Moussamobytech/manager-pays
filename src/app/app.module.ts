@@ -41,6 +41,8 @@ import { CategoryService } from './services/category.service';
 import { ApiService } from './services/api.service';
 import { CampagneService } from './services/campagne.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
 
 @NgModule({
@@ -65,6 +67,8 @@ import { AdminConnectionComponent } from './pages/admin-connection/admin-connect
     NgxSpinnerModule,
     ReactiveFormsModule,
     GoogleMapsModule,
+    ShareButtonsModule,
+    ShareIconsModule,
     ToastrModule.forRoot(), // ToastrModule added
     TranslateModule.forRoot({
       loader: {

@@ -9,6 +9,8 @@ import { PipesModule } from '../../theme/pipes/pipes.module';
 import { ProductsComponent } from './products.component';
 import { ProductComponent } from './product/product.component';
 import { ProductZoomComponent } from './product/product-zoom/product-zoom.component';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 
 export const routes: Routes = [
   { path: '', component: ProductsComponent, pathMatch: 'full' },
@@ -25,6 +27,8 @@ export const routes: Routes = [
         SwiperModule,
         NgxPaginationModule,
         SharedModule,
+        ShareButtonsModule,
+        ShareIconsModule,
         PipesModule
     ],
     declarations: [

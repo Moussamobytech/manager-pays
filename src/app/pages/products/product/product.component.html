@@ -97,8 +97,24 @@
         <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted py-2">
             
             <button mat-button><i class="fab fa-whatsapp fa-lg me-2"></i> {{'SHARE_ZAP' | translate}}</button>
+            <share-buttons theme="modern-dark"
+                [include]="['copy', 'messenger', 'sms', 'telegram', 'whatsapp']"
+                [url]="path"
+                [description]="'SHARE_ZAP' | translate"
+                class="pt-5">
+            </share-buttons>
+
+            <!-- <share-buttons theme="modern-dark"
+                [include]="['copy', 'facebook', 'email', 'messenger', 'mix', 'line', 'linkedin', 'pinterest', 'print', 'reddit', 'sms', 'telegram', 'tumblr', 'twitter', 'viber', 'vk', 'xing', 'whatsapp']"
+                [showIcon]="true"
+                [showText]="true"
+                url="https://rodrigo.kamada.com.br/"
+                description="Angular Share Buttons"
+                twitterAccount="rodrigokamada"
+                class="pt-5">
+            </share-buttons> -->
             <!-- <button mat-button><mat-icon>mail_outline</mat-icon> {{'SHARE_ZAP' | translate}}</button> -->
-            <button mat-icon-button><mat-icon>share</mat-icon></button>
+            <!-- <button mat-icon-button><mat-icon>share</mat-icon></button> -->
         </div>
 
     </div>
