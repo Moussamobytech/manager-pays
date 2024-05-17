@@ -35,7 +35,7 @@
     <div *ngIf="viewType.value == 'grid'" fxLayout="row wrap">
         <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" fxFlex.md="50" fxFlex.gt-md="33.3"  class="p-2">
             <mat-card fxFlex="100">
-                <div class="mat-toolbar mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
                     <h3 *ngIf="user.enabled" class="user-name">{{user.firstname+' '+user.lastname|capitalCase|roundName:(isAboveMdSize$|async)}}</h3>
                     <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
                     <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
@@ -93,7 +93,7 @@
   <div *ngIf="viewType.value == 'list'" fxLayout="row wrap">
       <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" class="p-2">
           <mat-card>
-              <div class="mat-toolbar mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
+              <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
                   <h3 *ngIf="user.enabled" class="user-name">{{user.firstname|capitalCase}} {{user.lastname|capitalCase}}</h3>
                   <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
                   <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
