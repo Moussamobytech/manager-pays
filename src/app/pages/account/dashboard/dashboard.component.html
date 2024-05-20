@@ -3,34 +3,35 @@
 
 <div fxLayout="row wrap">
 
-  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-purple tile p-2">
       <mat-icon>shopping_cart</mat-icon>
       <h2>{{statsNumber.total}}</h2>
-      <p>Total produits </p>
+      <p>Produits </p>
   </mat-card>  </div>
-  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-green tile p-2">
       <mat-icon>check_circle</mat-icon>
       <h2>{{statsNumber.actif}}</h2>
-      <p>Total produits actifs</p>
+      <p>Produits actifs</p>
   </mat-card>  </div>
+  
+</div>
+<div fxLayout="row wrap">
   <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-red tile p-2">
       <mat-icon>cancel</mat-icon>
       <h2>{{statsNumber.inactif}}</h2>
-      <p>Total produits inactifs</p>
+      <p>Produits inactifs</p>
   </mat-card>  </div>
-</div>
-<div fxLayout="row wrap">
-  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="100" fxFlex.sm="100" class="p-2">
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-brown tile p-2">
       <mat-icon>pending</mat-icon>
       <h2>{{statsNumber.pending}}</h2>
-      <p>Total produits en attente de validation</p>
+      <p>Produits en attente de validation</p>
   </mat-card>
 </div>
-  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="100" fxFlex.sm="100" class="p-2">
+  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-gray tile p-2">
       <mat-icon>score</mat-icon>
       <h2>{{statsNumber.points || '0'}}</h2>

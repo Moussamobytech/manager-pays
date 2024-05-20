@@ -14,7 +14,7 @@
       <a *ngIf="product?.contact" href="https://wa.me/{{product?.contact}}" target="_blank" class="ml-2 text-sm" style="color:#25D366;">
           <i class="fab fa-whatsapp fa-lg me-2"></i>
       </a>
-      <a [href]="'sms:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.priceBasic" class="ml-2 text-sm">
+      <a [href]="'sms:' + product?.contact + '?body=Bonjour, je suis intéressé par le produit ' + product?.nom + '. Prix : ' + product?.priceBasic" class="ml-2 text-sm" style="color:#d81b60;">
           <i class="fas fa-sms fa-lg me-2"></i>
       </a>
     </div>
