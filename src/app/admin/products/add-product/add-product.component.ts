@@ -27,36 +27,36 @@ export class AddProductComponent implements OnInit {
 
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
     private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router ) { }
-  
+
   // constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute ) { }
 
-  
+
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
     console.log("currentUser :::::::: ",this.currentUser)
-    this.form = this.formBuilder.group({ 
+    this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
       "pricePromotion": null,
       "priceBasic": [null, Validators.required ],
       "description": null,
-      "weight": "5", 
+      "weight": "5",
       "user": this.currentUser?.username || null,
-      "categorie": [null, Validators.required ]  
-      // "discount": null, 
+      "categorie": [null, Validators.required ]
+      // "discount": null,
       // "color": null,
-      // "size": null, 
-    }); 
+      // "size": null,
+    });
     this.getCategories();
     this.getUsers();
-    this.sub = this.activatedRoute.params.subscribe(params => {  
+    this.sub = this.activatedRoute.params.subscribe(params => {
       if(params['id']){
         this.id = params['id'];
         this.getProductById();
       }
     });
   }
-  
+
 
   public getProductById(){
     this.productService.find(this.id).then((data : any) =>{
@@ -70,15 +70,15 @@ export class AddProductComponent implements OnInit {
         }
         images.push(image);
       })
-      this.form.controls.images.setValue(images); 
+      this.form.controls.images.setValue(images);
     })
   }
-  
 
-  
+
+
 
   async save(){
-    
+
     try {
       if (this.form.valid) {
         var data = new FormData();
@@ -104,7 +104,7 @@ export class AddProductComponent implements OnInit {
         let res = await this.productService.add(data);
         console.log("res save product :::::::: ",res)
         if (res != null) {
-          this.router.navigate(["/account/products-seller"])
+          this.router.navigate(["/amin/products/product-list"])
         }
       }else{
         this.commonService.warnToast("Merci de vérifier si les champs sont toutes remplis")
@@ -115,7 +115,7 @@ export class AddProductComponent implements OnInit {
   }
 
   async edit(){
-    
+
     try {
       if (this.form.valid) {
         var data = new FormData();
@@ -147,35 +147,35 @@ export class AddProductComponent implements OnInit {
         let res = await this.productService.edit(this.id,data);
         console.log("res save product :::::::: ",res)
         if (res != null) {
-          this.router.navigate(["/account/products-seller"])
+          this.router.navigate(["/admin/products/product-list"])
         }
       }else{
         this.commonService.warnToast("Merci de vérifier si les champs sont toutes remplis")
       }
 
-      
+
     } catch (error) {
       console.log(error)
     }
   }
-  
 
 
-  public getCategories(){   
+
+  public getCategories(){
     this.category.categories().subscribe(data => {
       console.log(data)
-      this.categories = data; 
-    }); 
+      this.categories = data;
+    });
   }
 
-  public async getUsers(){   
+  public async getUsers(){
     let res : any = await this.auth.list();
     console.log("res users :::::::: ",res)
     this.users = res
-    
+
   }
 
-  
+
   public  async onSubmit(){
     console.log(this.form.value);
     if (this.id) {

@@ -14,8 +14,8 @@ export class CampagneService {
 
   constructor(private api: ApiService) {}
 
-  public getCampagne() {
-    return this.api.get('/campagne/liste/').toPromise();
+  public getCampagne(): Observable<any>  {
+    return this.api.get('/campagne/liste/');
   }
 
   public getCampagneEligible() {

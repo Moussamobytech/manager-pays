@@ -20,17 +20,20 @@ export class ProductsCardComponent implements OnInit {
   @Input('onePrice') onePrice: boolean = false;
   public config: SwiperConfigInterface = {};
   public settings: Settings;
+
   imageData: string | ArrayBuffer | null = null;
-  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog, 
+  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog,
     private router: Router,  public produitService : ProductService) {
     this.settings = this.appSettings.settings;
   }
 
   ngOnInit() {
-    
+    // this.incrementProductView(this.product.id);
+
+
    }
 
-  
+
 
   public openProductDialog(product) {
     let dialogRef = this.dialog.open(ProductDialogComponent, {
@@ -40,10 +43,22 @@ export class ProductsCardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(product => {
       if (product) {
+        // this.incrementProductView(product.id)
         this.router.navigate(['/products', product.id, product.nom]);
       }
     });
   }
 
+
+  // public incrementProductView(productId: string): void {
+  //   this.produitService.incrementProductViews(productId).subscribe(
+  //     (response) => {
+  //       console.log('Product views incremented successfully', response.body.message);
+  //     },
+  //     (error) => {
+  //       console.error('Failed to increment product views', error);
+  //     }
+  //   );
+  // }
 
 }

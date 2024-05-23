@@ -35,7 +35,7 @@
         <span fxShow="false" fxShow.gt-sm>{{ 'ACCOUNT' | translate }}</span>
         <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
     </a>
-    <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown account">
+    <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="primary account">
         <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
             <a mat-menu-item routerLink="/sign-in">
                 <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>

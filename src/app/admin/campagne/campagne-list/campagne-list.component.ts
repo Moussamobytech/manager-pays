@@ -54,18 +54,27 @@ export class CampagneListComponent implements OnInit {
     this.domHandlerService.winScroll(0, 0);
   }
 
+  // public getCampagne(){
+
+  //   try {
+  //     let res = this.campagneService.getCampagne();
+  //     this.campagne = res;
+  //     console.log("Campagne :"+ this.campagne);
+  //   } catch (error) {
+  //     console.log('error Campagne Id ', error);
+  //   }
+
+  // }
   public getCampagne(){
-
-    try {
-      let res = this.campagneService.getCampagne();
-      this.campagne = res;
-      console.log("Camapagne :"+ this.campagne);
-    } catch (error) {
-      console.log('error Campagne Id ', error);
-    }
-   
+    this.campagneService.getCampagne().subscribe(data=>{
+      this.campagne = data;
+      console.log("campagne :", this.campagne)
+      //for show more product
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
+    });
   }
-
   public getAllProducts(){
     this.appService.getAllProducts().subscribe(data=>{
       this.products = data;

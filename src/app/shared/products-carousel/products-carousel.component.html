@@ -1,6 +1,6 @@
-<div *ngIf="products" class="swiper-container" [swiper]="config">
+<div *ngIf="products" class="swiper-container" [swiper]="config" >
     <div class="swiper-wrapper h-100">
-        <div *ngFor="let product of products" class="swiper-slide">
+        <div *ngFor="let product of products "   class="swiper-slide" >
 
             <app-product-card [product]="product"></app-product-card>
             <!-- <mat-card class="product-item">

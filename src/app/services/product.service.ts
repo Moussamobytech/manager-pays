@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
 import { User } from '../models/user.models';
+import { Observable } from 'rxjs';
+import { Product } from '../models/product.models';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -41,6 +43,20 @@ export class ProductService {
     return null;
   }
 
+
+
+
+getTotalProductViewsDate(): Observable<any> {
+  return this.api.get(`produit/views-today`);
+}
+
+getTotalViewsMonth(): Observable<any> {
+  return this.api.get(`produit/month`);
+}
+
+getTotalViewsYear(): Observable<any> {
+  return this.api.get(`produit/year`);
+}
   async edit(id: string, formData: any) {
     try {
       let res = await this.api
@@ -91,8 +107,11 @@ export class ProductService {
     return this.api.get('/produit/list-by-category/' + type).toPromise();
   }
 
-  public getProductByCategorie(categorie: string) {
-    return this.api.get('/produit/list-by-category/' + categorie).toPromise();
+  // public getProductByCategorie(categorie: string) {
+  //   return this.api.get('/produit/list-by-category/' + categorie).toPromise();
+  // }
+  public getProductByCategorie(id: string): Observable<any> {
+    return this.api.get('/produit/list-by-category/' + id);
   }
 
   public getProductByCategorieName(categorie: string) {

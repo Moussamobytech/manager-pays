@@ -13,7 +13,8 @@
 
     .bg-primary {
         background: #25224a;
-        color: #c54896;
+        // color: #c54896;
+        color: mat.get-color-from-palette($primary, default-contrast);
     }
     .bg-accent {
         background: mat.get-color-from-palette($accent);
@@ -22,6 +23,11 @@
     .bg-warn {
         background: mat.get-color-from-palette($warn);
         color: mat.get-color-from-palette($warn, default-contrast);
+    }
+    .bg-button{
+      background: #c54896;
+      color: mat.get-color-from-palette($primary, default-contrast);
+
     }
 
     .text-muted {
@@ -64,6 +70,7 @@
     }
     .app-dropdown .mat-icon{
     color: $fid_green;
+
     }
     .mat-mdc-menu-item{
     color: mat.get-color-from-palette($warn) !important;
@@ -77,7 +84,7 @@
     color: mat.get-color-from-palette($primary) !important;
     }
     .mat-toolbar .logo{
-    color: mat.get-color-from-palette($warn) !important;
+    color: mat.get-color-from-palette($primary, default-contrast) !important;
     }
     .mat-toolbar .logo:hover img{
     transform: scale(1.05);
@@ -118,7 +125,7 @@
         border-bottom: 1px solid mat.get-color-from-palette($primary, lighter, 0.2);
         // color: mat.get-color-from-palette($primary, 100);
         .top-menu > a{
-        color: mat.get-color-from-palette($primary);
+        color: mat.get-color-from-palette($primary, default-contrast);
         }
         .sidenav-toggle {
             color: mat.get-color-from-palette($primary, 100);
@@ -165,6 +172,7 @@
     .horizontal-active-link,
     .app-dropdown .mat-mdc-menu-item.horizontal-active-link{
       color: $fid_green;
+
     }
 
     .filter-brands  button.selected,
@@ -241,7 +249,7 @@
     .filter-sidenav .mat-expansion-panel-header-title,
     .mat-tab-body-content,
     .account-card-title {
-         color: mat.get-color-from-palette($accent, darker) !important;
+         color: mat.get-color-from-palette($primary, default-contrast) !important;
     }
 
     .top-toolbar.mat-toolbar-row{
@@ -249,7 +257,7 @@
         color: mat.get-color-from-palette($primary, 100);
         .top-menu a,
         .sidenav-toggle {
-            color: mat.get-color-from-palette($primary, 100);
+            color: mat.get-color-from-palette($accent, 100);
         }
     }
 

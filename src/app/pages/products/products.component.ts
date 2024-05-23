@@ -90,7 +90,6 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
       this.count = this.counts[0];
     this.sort = this.sortings[0];
-
     // Abonnez-vous aux paramètres de l'URL
     this.sub = this.activatedRoute.params.subscribe(params => {
       console.log(params['name']);
@@ -110,7 +109,8 @@ export class ProductsComponent implements OnInit {
 
     this.getCategories();
      this.getBrands();
-    
+     this.getProductsByCetegorie(this.selectedCategoryId)
+
     this.getCategorie();
     this.AllProduct();
     // this.count = this.counts[0];
@@ -136,18 +136,26 @@ export class ProductsComponent implements OnInit {
     // this.AllProduct();
   }
 
-  public async getProductsByCetegorie(categoryId: string){
+  public getProductByCategorie(categoryId: string){
+    this.produitService.getProductByCategorie(categoryId).subscribe((data=>{
+      this.products = data;
+      console.log("productName ::::::::: ",this.products)
 
-    let productName = await this.produitService.getProductByCategorieName(categoryId);
-    console.log("productName ::::::::: ",productName)
-    this.products = productName;
-    // this.appService.getProductByCategorie(categoryId).subscribe(data=>{
-    //   this.products = data;
-    //   //for show more product
-    //   // for (var index = 0; index < 3; index++) {
-    //   //   this.products = this.products.concat(this.products);
-    //   // }
-    // });
+    }))
+  }
+  public getProductsByCetegorie(categoryId: string){
+
+    // let productName = await this.produitService.getProductByCategorie(categoryId);
+    // console.log("productName ::::::::: ",productName)
+    // this.products = productName;
+    this.appService.getProductByCategorie(categoryId).subscribe(data=>{
+      this.products = data;
+      console.log("Produit ::::: ", this.products)
+      //for show more product
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
+    });
   }
 
   public getCategories(){
@@ -214,6 +222,7 @@ export class ProductsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(product => {
       if(product){
+
         this.router.navigate(['/products', product.id, product.nom]);
       }
     });

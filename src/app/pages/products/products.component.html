@@ -9,6 +9,9 @@
                           <h4>{{'PRODUCTS.CATEGORY' | translate}}</h4>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
+
+
+
                     <div class="categories-wrapper categories-dropdown" >
 
                         <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false" >
@@ -97,9 +100,12 @@
 
     <mat-sidenav-content class="all-products" ngClass.gt-sm="p-left">
         <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="filter-row mat-elevation-z1 text-muted">
-            <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()">
-                <mat-icon>more_vert</mat-icon>
-            </button>
+
+
+            <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()" class="toggle-button">
+              <!-- <mat-icon class="icon-more_vert">more_vert</mat-icon> -->
+              <mat-icon class="icon-menu">menu</mat-icon>
+          </button>
             <!-- <div>
                 <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
                     {{sort}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
@@ -117,7 +123,7 @@
               <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
                 {{ sort | translate }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
               </a>
-              <mat-menu #sortMenu="matMenu" xPosition="before" class="app-dropdown" overlapTrigger="true">
+              <mat-menu #sortMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
                   <span (mouseleave)="sortMenuTrigger.closeMenu()">
                       <button mat-menu-item *ngFor="let sort of sortings" (click)="changeSorting(sort)">
                           <span>{{ sort | translate }}</span>
@@ -130,7 +136,7 @@
                 <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
                     {{"SHOW" | translate}} {{count}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
                 </a>
-                <mat-menu #countsMenu="matMenu" xPosition="before" class="app-dropdown" overlapTrigger="true">
+                <mat-menu #countsMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
                     <span (mouseleave)="countsMenuTrigger.closeMenu()">
                         <button mat-menu-item *ngFor="let count of counts" (click)="changeCount(count)">
                             <span>{{count}}</span>
@@ -149,9 +155,11 @@
             </div>
         </div>
 
+
+
         <div *ngIf="viewType == 'grid'" fxLayout="row wrap" class="products-wrapper">
 
-            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="col">
+            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }"  fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="col">
                 <mat-card class="product-item text-center">
                     <mat-chip-listbox *ngIf="product.discount">
                         <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
@@ -180,7 +188,7 @@
 
         <div *ngIf="viewType == 'list'" fxLayout="row wrap" class="products-wrapper">
 
-            <div  *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" fxFlex="100" class="col">
+            <div  *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }"  fxFlex="100" class="col">
                 <mat-card class="product-item">
                     <div fxLayout="row wrap">
                         <div fxFlex="100" fxFlex.gt-xs="40" class="p-2">

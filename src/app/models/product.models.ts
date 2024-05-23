@@ -29,5 +29,8 @@ export class Product {
                 public contact: string,
                 public user : string,
                 public createdAt:string,
-                public updatedAt:string ){ }
+                public updatedAt:string,
+                public monthlyVisits: number,
+                public dailyVisits: number,
+                public yearlyVisits: number ){ }
   }

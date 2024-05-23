@@ -20,7 +20,7 @@ export class ProductsCarouselComponent implements OnInit {
   public config: SwiperConfigInterface = {};
   public settings: Settings;
   imageData: string | ArrayBuffer | null = null;
-  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog, 
+  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog,
     private router: Router,  public produitService : ProductService) {
     this.settings = this.appSettings.settings;
   }
@@ -87,6 +87,7 @@ export class ProductsCarouselComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(product => {
       if (product) {
+
         this.router.navigate(['/products', product.id, product.nom]);
       }
     });
@@ -104,11 +105,14 @@ export class ProductsCarouselComponent implements OnInit {
   public async getNewArrivals() {
     this.products = await this.produitService.getProductByNewArrival("yes")
     console.log("res newArrivals :::::::: ",this.products)
-    
+
   }
   public async getTopRate() {
     this.products = await this.produitService.getProductByTop()
     console.log("res topRate :::::::: ",this.products)
   }
+
+
+
 
 }

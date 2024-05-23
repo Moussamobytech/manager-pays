@@ -6,7 +6,7 @@
         place-content: flex-start;
         font-weight: 500;
         height: 42px;
-    } 
+    }
 }
 .account-content{
     min-height: 400px;
@@ -27,3 +27,20 @@
     }
 }
 
+.icon-more_vert {
+  display: none;
+}
+
+.toggle-button .icon-menu {
+  display: block;
+}
+
+@media (min-width: 960px) {
+  .icon-more_vert {
+      display: block;
+  }
+
+  .toggle-button .icon-menu {
+      display: none;
+  }
+}

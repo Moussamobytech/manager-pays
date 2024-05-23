@@ -1,27 +1,52 @@
 <mat-sidenav-container class="pages-container">
 
     <mat-sidenav [opened]="false" mode="over" #sidenav class="sidenav mat-elevation-z6">
-        <button mat-icon-button color="warn" class="close" (click)="sidenav.close()">
+        <button mat-icon-button color="accent" class="close" (click)="sidenav.close()">
            <mat-icon color="warn">close</mat-icon>
         </button>
         <div class="divider"></div>
         <app-sidenav-menu [menuItems]="sidenavMenuItems" [menuParentId]="0"></app-sidenav-menu>
         <div class="divider"></div>
         <div class="text-center py-2">
+          <a href="https://www.facebook.com/profile.php?id=100090755901688">
+              <svg class="social-icon" viewBox="0 0 24 24">
+                  <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M18,5H15.5A3.5,3.5 0 0,0 12,8.5V11H10V14H12V21H15V14H18V11H15V9A1,1 0 0,1 16,8H18V5Z" />
+              </svg>
+          </a>
+          <a href="https://www.linkedin.com/company/fidelitybusiness/" >
+              <svg class="social-icon" viewBox="0 0 27 22">
+                  <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.25c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 11.25h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.45-2.16 2.95v5.72h-3v-10h2.88v1.37h.04c.4-.76 1.38-1.55 2.84-1.55 3.04 0 3.6 2 3.6 4.58v5.6Z" style="transform: scale(0.9)"/>
+              </svg>
+          </a>
+          <a href="https://fidely.io/">
+              <svg class="social-icon" viewBox="0 0 24 24">
+                  <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M19.5,12H18V10.5H17V12H15.5V13H17V14.5H18V13H19.5V12M9.65,11.36V12.9H12.22C12.09,13.54 11.45,14.83 9.65,14.83C8.11,14.83 6.89,13.54 6.89,12C6.89,10.46 8.11,9.17 9.65,9.17C10.55,9.17 11.13,9.56 11.45,9.88L12.67,8.72C11.9,7.95 10.87,7.5 9.65,7.5C7.14,7.5 5.15,9.5 5.15,12C5.15,14.5 7.14,16.5 9.65,16.5C12.22,16.5 13.96,14.7 13.96,12.13C13.96,11.81 13.96,11.61 13.89,11.36H9.65Z" />
+              </svg>
+          </a>
+      </div>
+
+        <!-- <div class="text-center py-2">
             <svg class="social-icon" viewBox="0 0 24 24">
+              <a href="https://www.facebook.com/profile.php?id=100090755901688">
                 <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M18,5H15.5A3.5,3.5 0 0,0 12,8.5V11H10V14H12V21H15V14H18V11H15V9A1,1 0 0,1 16,8H18V5Z" />
+
+              </a>
             </svg>
             <svg class="social-icon" viewBox="0 0 24 24">
-                <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M17.71,9.33C18.19,8.93 18.75,8.45 19,7.92C18.59,8.13 18.1,8.26 17.56,8.33C18.06,7.97 18.47,7.5 18.68,6.86C18.16,7.14 17.63,7.38 16.97,7.5C15.42,5.63 11.71,7.15 12.37,9.95C9.76,9.79 8.17,8.61 6.85,7.16C6.1,8.38 6.75,10.23 7.64,10.74C7.18,10.71 6.83,10.57 6.5,10.41C6.54,11.95 7.39,12.69 8.58,13.09C8.22,13.16 7.82,13.18 7.44,13.12C7.81,14.19 8.58,14.86 9.9,15C9,15.76 7.34,16.29 6,16.08C7.15,16.81 8.46,17.39 10.28,17.31C14.69,17.11 17.64,13.95 17.71,9.33Z" />
-            </svg>
+              <a href="https://www.linkedin.com/company/fidelitybusiness/">
+                  <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.25c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 11.25h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.45-2.16 2.95v5.72h-3v-10h2.88v1.37h.04c.4-.76 1.38-1.55 2.84-1.55 3.04 0 3.6 2 3.6 4.58v5.6z" style="transform: scale(0.8)"/>
+              </a>
+          </svg>
+
             <svg class="social-icon" viewBox="0 0 24 24">
-                <path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M19.5,12H18V10.5H17V12H15.5V13H17V14.5H18V13H19.5V12M9.65,11.36V12.9H12.22C12.09,13.54 11.45,14.83 9.65,14.83C8.11,14.83 6.89,13.54 6.89,12C6.89,10.46 8.11,9.17 9.65,9.17C10.55,9.17 11.13,9.56 11.45,9.88L12.67,8.72C11.9,7.95 10.87,7.5 9.65,7.5C7.14,7.5 5.15,9.5 5.15,12C5.15,14.5 7.14,16.5 9.65,16.5C12.22,16.5 13.96,14.7 13.96,12.13C13.96,11.81 13.96,11.61 13.89,11.36H9.65Z" />
+              <a href="https://fidely.io/"><path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M19.5,12H18V10.5H17V12H15.5V13H17V14.5H18V13H19.5V12M9.65,11.36V12.9H12.22C12.09,13.54 11.45,14.83 9.65,14.83C8.11,14.83 6.89,13.54 6.89,12C6.89,10.46 8.11,9.17 9.65,9.17C10.55,9.17 11.13,9.56 11.45,9.88L12.67,8.72C11.9,7.95 10.87,7.5 9.65,7.5C7.14,7.5 5.15,9.5 5.15,12C5.15,14.5 7.14,16.5 9.65,16.5C12.22,16.5 13.96,14.7 13.96,12.13C13.96,11.81 13.96,11.61 13.89,11.36H9.65Z" /> </a>
+
             </svg>
-        </div>
+        </div> -->
     </mat-sidenav>
 
     <mat-toolbar color="primary" id="header-toolbar">
-        <mat-toolbar-row fxLayoutAlign="space-between center" class="top-toolbar theme-container">
+        <mat-toolbar-row fxLayoutAlign="space-between center" class="top-toolbar bg-primary">
             <span fxHide="false" fxHide.gt-sm>
                 <button mat-button (click)="sidenav.toggle()" class="sidenav-toggle">
                     <mat-icon class="mat-icon-md mr-0">menu</mat-icon>
@@ -31,7 +56,7 @@
             <!-- <span fxShow="false" fxShow.gt-sm>{{ 'WELCOME' | translate }}</span> -->
             <app-top-menu></app-top-menu>
         </mat-toolbar-row>
-        <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar theme-container">
+        <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar bg-primary">
 
             <div fxFlex="20">
                 <a class="logo" routerLink="/" (click)="closeSubMenus()">
@@ -41,8 +66,8 @@
             </div>
             <div fxFlex fxShow="false" fxShow.gt-sm>
                 <form method="get" class="search-form" fxLayout="row">
-                    <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-truncate warn-color bg-primary">{{category?.nom}}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
-                    <mat-menu #categoriesMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown categories-dropdown">
+                    <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-truncate  ">{{category?.nom}}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
+                    <mat-menu #categoriesMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="categories-dropdown">
                         <span (mouseleave)="categoriesMenuTrigger.closeMenu()">
                             <app-category-list [categories]="categories" [categoryParentId]="0" (change)="changeCategory($event)"></app-category-list>
                         </span>
