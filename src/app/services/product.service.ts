@@ -98,7 +98,21 @@ getTotalViewsYear(): Observable<any> {
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }
+  // searchProducts(term: string): Promise<Product[]> {
+  //   return this.products().then(products =>
+  //     products.filter(product =>
+  //       product.nom.toLowerCase().includes(term.toLowerCase())
+  //     )
+  //   );
+  // }
 
+  searchProducts(term: string): Promise<Product[]> {
+    return this.products().then(products =>
+      products.filter(product =>
+        product.nom.toLowerCase().includes(term.toLowerCase())
+      )
+    );
+  }
   public getCategories() {
     return this.api.get('/categorie/list').toPromise();
   }
@@ -118,8 +132,21 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/list-by-category-name/' + categorie).toPromise();
   }
 
+
+
+
   public getAllProducts() {
     return this.api.get('/produit/list').toPromise();
+  }
+
+  public async getProduct(): Promise<Product[]> {
+    try {
+      const response = await this.api.get('/produit/list').toPromise();
+      return response || [];
+    } catch (error) {
+      console.error('Error fetching products', error);
+      return [];
+    }
   }
 
   public getProductById(id) {

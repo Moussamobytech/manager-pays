@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { HomeComponent } from './home.component';
+import { FormsModule } from '@angular/forms';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full'  }
@@ -12,10 +13,14 @@ export const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    SharedModule   
+    SharedModule,
+    FormsModule
+
+
   ],
   declarations: [
-    HomeComponent
+    HomeComponent,
+
   ]
 })
 export class HomeModule { }

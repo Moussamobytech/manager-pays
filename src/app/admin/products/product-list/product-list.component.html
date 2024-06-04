@@ -34,7 +34,7 @@
       <mat-divider></mat-divider>
         <mat-divider></mat-divider>
         <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row">
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
                 <div class="mat-mdc-header-cell image">{{ 'PRODUCTS.IMAGE' | translate }}</div>
                 <div class="mat-mdc-header-cell">{{ 'PRODUCTS.LIBELLE' | translate }}</div>
                 <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CATEGORY' | translate }}</div>
@@ -57,8 +57,8 @@
                 <div class="mat-mdc-cell">{{etat(product.etat)}}</div>
                 <div class="mat-mdc-cell">
                     <div class="icons">
-                        <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="primary" matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
-                        <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="primary" matTooltip="Afficher" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                        <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent" matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
+                        <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent" matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
                         <button mat-mini-fab color="warn" matTooltip="Remove" (click)="remove(product)"><mat-icon>delete</mat-icon></button>
                     </div>
 

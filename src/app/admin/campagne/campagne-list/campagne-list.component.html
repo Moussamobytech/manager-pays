@@ -2,11 +2,11 @@
   <mat-card>
       <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
           <h2>{{"ADMIN_NAV.CAMPAGNE_LIST" | translate}}</h2>
-          <button mat-raised-button color="primary" (click)="openCampagneDialog(null)">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
+          <button mat-raised-button color="warn" (click)="openCampagneDialog(null)">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
       </div>
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table">
-          <div class="mat-mdc-header-row">
+          <div class="mat-mdc-header-row mat-toolbar mat-primary">
               <div class="mat-mdc-header-cell" style="width: 10%;">Libelle</div>
               <div class="mat-mdc-header-cell" style="width: 10%;">Type</div>
               <div class="mat-mdc-header-cell" style="width: 10%;">Username</div>
@@ -22,10 +22,10 @@
               <div class="mat-mdc-cell" style="width: 15%;">{{item.dateFin | date: 'dd-MM-yyyy' }}</div>
               <div class="mat-mdc-cell" style="width: 40%;">
                   <div class="p-2 actions" style="display: flex; align-items: center;">
-                      <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openCampagneDialog(item)">
+                      <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openCampagneDialog(item)">
                           <mat-icon>edit</mat-icon>
                       </button>
-                      <a [routerLink]="['/admin/campagne/campagne-detail', item.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                      <a [routerLink]="['/admin/campagne/campagne-detail', item.id]" mat-mini-fab color="accent" matTooltip="View" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
                       <mat-slide-toggle [color]="item.etat ? 'primary' : 'warn'" [checked]="item.etat" (change)="setStatusCampagne(item.id, $event)">
                           {{ item.etat ? 'Activée' : 'Désactivée' }}
                       </mat-slide-toggle>

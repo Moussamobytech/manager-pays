@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Category, Product } from 'src/app/app.models';
+// import { Category, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { Category } from 'src/app/models/category.models';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-category-list',

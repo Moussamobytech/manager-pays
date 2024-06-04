@@ -8,7 +8,8 @@ import { emailValidator } from '../../../theme/utils/app-validators';
 import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { ProductService } from 'src/app/services/product.service';
-import { Product } from 'src/app/app.models';
+import { Product } from 'src/app/models/product.models';
+// import { Product } from 'src/app/app.models';
 
 @Component({
   selector: 'app-product',

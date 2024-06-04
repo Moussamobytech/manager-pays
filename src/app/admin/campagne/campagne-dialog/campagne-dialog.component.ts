@@ -3,10 +3,12 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
 import { Router } from '@angular/router';
-import { Campagne, Product } from 'src/app/app.models';
+// import { Campagne, Product } from 'src/app/app.models';
 import moment from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { Product } from 'src/app/models/product.models';
+import { Campagne } from 'src/app/app.models';
 @Component({
   selector: 'app-campagne-dialog',
   templateUrl: './campagne-dialog.component.html',
@@ -139,13 +141,13 @@ this.getSelectedProductsNames()
         } catch (error) {
           console.error('Erreur lors de la mise à jour de la campagne:', error);
         }
-        
+
       } else {
         if (this.selectedImage == null) {
           alert("Veuillez ajouter une image");
           return;
         }
-        
+
         try {
           let response = await this.campagneService.addCampagne(values, this.selectedImage);
           console.log('Campagne ajoutée avec succès:', response);

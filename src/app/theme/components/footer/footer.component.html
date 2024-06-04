@@ -5,9 +5,25 @@
             <h3 class="fw-300 secondary-color">{{'NEWSLETTER_DESC' | translate}}</h3>
         </div>
         <form method="get" class="subscribe-search-form" fxLayout="row" fxFlex="100" fxFlex.gt-sm="42.4" ngClass.sm="mt-2" ngClass.xs="mt-2" [formGroup]="contactForm" (ngSubmit)="subscribe()">
+          <input type="text" formControlName="email" [placeholder]="'FIELD.EMAIL' | translate" fxFlex>  <!-- Utilisez formControlName -->
+          <button mat-raised-button  type="submit" class="mat-elevation-z0 text-muted jaune">{{'SUBSCRIBE' | translate}}</button>
+      </form>
+      <div *ngIf="contactForm.get('email').invalid && (contactForm.get('email').dirty || contactForm.get('email').touched)">
+        <div *ngIf="contactForm.get('email').errors?.['required']">
+          Email is required.
+        </div>
+        <div *ngIf="contactForm.get('email').errors?.['email']">
+          Invalid email address.
+        </div>
+      </div>
+      <!-- <div *ngIf="formSubmitAttempt && contactForm.invalid">
+        Form submission failed. Please check your input.
+      </div> -->
+
+        <!-- <form method="get" class="subscribe-search-form" fxLayout="row" fxFlex="100" fxFlex.gt-sm="42.4" ngClass.sm="mt-2" ngClass.xs="mt-2" [formGroup]="contactForm" (ngSubmit)="subscribe()">
             <input type="text" [placeholder]="'FIELD.EMAIL' | translate" fxFlex>
             <button mat-raised-button color="accent" type="submit" class="mat-elevation-z0 text-muted">{{'SUBSCRIBE' | translate}}</button>
-        </form>
+        </form> -->
 
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="space-between" class="py-4 border-bottom-mute theme-container">

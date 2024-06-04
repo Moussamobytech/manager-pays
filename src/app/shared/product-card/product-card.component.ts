@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.module';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from '../../app.service';
-import { Product } from "../../app.models";
+// import { Product } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { ProductService } from 'src/app/services/product.service';
 import { ProductDialogComponent } from '../products-carousel/product-dialog/product-dialog.component';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-product-card',
@@ -50,15 +51,5 @@ export class ProductsCardComponent implements OnInit {
   }
 
 
-  // public incrementProductView(productId: string): void {
-  //   this.produitService.incrementProductViews(productId).subscribe(
-  //     (response) => {
-  //       console.log('Product views incremented successfully', response.body.message);
-  //     },
-  //     (error) => {
-  //       console.error('Failed to increment product views', error);
-  //     }
-  //   );
-  // }
 
 }

@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Campagne, Product } from 'src/app/app.models';
+// import { Campagne, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
@@ -10,6 +10,8 @@ import { CampagneDialogComponent } from '../campagne-dialog/campagne-dialog.comp
 import { FormBuilder } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { Campagne } from 'src/app/app.models';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-campagne-list',

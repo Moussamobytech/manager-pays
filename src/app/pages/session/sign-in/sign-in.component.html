@@ -1,41 +1,45 @@
 <mat-card class="p-4">
   <div fxLayout="row wrap">
-      <div fxFlex="100" fxFlex.gt-sm="50" class="p-3">
-          <h2 class="text-muted text-center mb-3">{{'LOGIN_IN' | translate}}</h2>
-          <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit(loginForm.value)">
-              <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>{{'FIELD.COUNTRY' | translate}}</mat-label>
-                  <mat-select formControlName="country" (selectionChange)="handleChange($event)" required>
-                      <mat-option *ngFor="let country of countries" [value]="country.id">
-                          <span>{{country.nom}}</span>
-                      </mat-option>
-                  </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="w-100 mt-2">
-                  <mat-label>{{'FIELD.PHONE' | translate}} ({{maskPlaceholder}})</mat-label>
-                  <input matInput [placeholder]="maskPlaceholder" formControlName="phone" [mask]="mask" required>
-                  <mat-error *ngIf="loginForm.controls.phone.errors?.required">{{'FIELD_ERROR.USERNAME_REQUIRED' | translate}}</mat-error>
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="w-100 mt-1">
-                  <mat-label>{{'FIELD.PASSWORD' | translate}}</mat-label>
-                  <input matInput placeholder="Mot de passe" formControlName="password" required>
-                  <mat-error *ngIf="loginForm.controls.password.errors?.required">{{'FIELD_ERROR.PASSWORD_REQUIRED' | translate}}</mat-error>
-                  <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">{{'FIELD_ERROR.PASSWORD_MINLENGTH' | translate}}</mat-error>
-              </mat-form-field>
-              <div class="text-center mt-2">
-                  <button mat-raised-button color="warn" class="mat-elevation-z6">{{ 'SIGN_IN' | translate }}</button>
-              </div>
-              <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-3">
-                  <div class="divider w-100"></div>
-                  <h3 class="text-muted auth">{{'NO_ACCOUNT' | translate}} <a routerLink="/sign-up">{{'REGISTER_IN' | translate}}</a></h3>
-                  <div class="divider w-100"></div>
-              </div>
-          </form>
-      </div>
-      <div fxFlex="100" fxFlex.gt-sm="50" class="p-3" ngClass.sm="mt-3" ngClass.xs="mt-3">
-          <div class="text-center">
-              <img class="logo" src="./assets/images/logo_fidelity.png" fxHide fxShow.gt-sm />
+    <div fxFlex="100" fxFlex.gt-sm="50" class="p-3">
+      <h2 class="text-muted text-center mb-3">{{'LOGIN_IN' | translate}}</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit(loginForm.value)">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>{{'FIELD.COUNTRY' | translate}}</mat-label>
+          <mat-select formControlName="country" (selectionChange)="handleChange($event)" required>
+            <mat-option *ngFor="let country of countries" [value]="country.id">
+              <span>{{country.nom}}</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100 mt-2">
+          <mat-label>{{'FIELD.PHONE' | translate}} ({{maskPlaceholder}})</mat-label>
+          <input matInput [placeholder]="maskPlaceholder" formControlName="phone" [mask]="mask" required>
+          <mat-error *ngIf="loginForm.controls.phone.errors?.required">{{'FIELD_ERROR.USERNAME_REQUIRED' | translate}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100 mt-1">
+          <mat-label>{{'FIELD.PASSWORD' | translate}}</mat-label>
+          <input matInput placeholder="Mot de passe" formControlName="password" required>
+          <mat-error *ngIf="loginForm.controls.password.errors?.required">{{'FIELD_ERROR.PASSWORD_REQUIRED' | translate}}</mat-error>
+          <mat-error *ngIf="loginForm.controls.password.hasError('minlength')">{{'FIELD_ERROR.PASSWORD_MINLENGTH' | translate}}</mat-error>
+        </mat-form-field>
+        <div class="text-center mt-2">
+          <button mat-raised-button color="warn" class="mat-elevation-z6">{{ 'SIGN_IN' | translate }}</button>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="mt-3">
+          <div class="divider w-100"></div>
+          <h3 class="text-muted auth" fxHide fxShow.gt-sm>{{'NO_ACCOUNT' | translate}} <a routerLink="/sign-up">{{'REGISTER_IN' | translate}}</a></h3>
+          <div fxHide fxShow.lt-md fxLayout="column" fxLayoutAlign="center center" class="text-center">
+            <h3 class="text-muted auth">{{'NO_ACCOUNT' | translate}}</h3>
+            <a routerLink="/sign-up">{{'REGISTER_IN' | translate}}</a>
           </div>
+          <div class="divider w-100"></div>
+        </div>
+      </form>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="50" class="p-3" ngClass.sm="mt-3" ngClass.xs="mt-3">
+      <div class="text-center">
+        <img class="logo" src="./assets/images/logo_fidelity.png" fxHide fxShow.gt-sm />
       </div>
+    </div>
   </div>
 </mat-card>

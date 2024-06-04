@@ -3,11 +3,11 @@
 
         <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
             <h2>{{"CATEGORY.PAGE_TITLE"|translate}}</h2>
-            <button mat-raised-button color="primary" (click)="openCategoryDialog(null)">{{"CATEGORY.ADD_BTN"|translate}}</button>
+            <button mat-raised-button color="warn" (click)="openCategoryDialog(null)">{{"CATEGORY.ADD_BTN"|translate}}</button>
         </div>
         <mat-divider></mat-divider>
         <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row">
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
                 <div class="mat-mdc-header-cell">{{"CATEGORY.NAME"|translate}}</div>
                 <!-- <div class="mat-mdc-header-cell">Has SubCategory</div>
                 <div class="mat-mdc-header-cell">Parent Category</div> -->
@@ -31,17 +31,17 @@
 
                   <div class="mat-mdc-cell">
                       <div class="p-2 actions">
-                          <button mat-mini-fab color="primary" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
+                          <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
                               <mat-icon>edit</mat-icon>
                           </button>
                         <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(cat)">
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="primary" [matTooltip]="'BTN.VIEW'|translate" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                        <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="accent" [matTooltip]="'BTN.VIEW'|translate" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
                         <!-- <mat-slide-toggle [color]="cat.status ? 'primary' : 'warn'" [checked]="cat.status" (change)="setStatus(cat.id, $event)">
                           {{ cat.status ? 'Actif' : 'Inactif' }}
                       </mat-slide-toggle> -->
-                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.DEACTIVATE'|translate" class="mx-1"  (click)="setStatus(cat.id, cat.status==='INACTIF'? 'actif': 'inactif')" >
+                        <button mat-mini-fab [color]="cat.status === 'INACTIF' ? 'accent' : 'primary'" [matTooltip]="'BTN.DEACTIVATE'|translate" class="mx-1"  (click)="setStatus(cat.id, cat.status==='INACTIF'? 'actif': 'inactif')" >
                           <mat-icon>{{ cat.status === 'INACTIF' ? 'check_circle' : 'block' }}</mat-icon>
 
                         </button>

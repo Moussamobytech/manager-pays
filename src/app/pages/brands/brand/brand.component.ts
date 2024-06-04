@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../../../shared/products-carousel/product-dialog/product-dialog.component';
 import { AppService } from '../../../app.service';
-import { Product, Category } from "../../../app.models";
+// import { Product, Category } from "../../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { Product } from 'src/app/models/product.models';
+import { Category } from 'src/app/models/category.models';
 
 @Component({
   selector: 'app-brand',

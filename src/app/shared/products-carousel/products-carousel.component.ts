@@ -4,9 +4,10 @@ import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.modu
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import { AppService } from '../../app.service';
-import { Product } from "../../app.models";
+// import { Product } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { ProductService } from 'src/app/services/product.service';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-products-carousel',
@@ -19,6 +20,7 @@ export class ProductsCarouselComponent implements OnInit {
   @Input('products') products: Array<Product> = [];
   public config: SwiperConfigInterface = {};
   public settings: Settings;
+  public searchTerm : any;
   imageData: string | ArrayBuffer | null = null;
   constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog,
     private router: Router,  public produitService : ProductService) {

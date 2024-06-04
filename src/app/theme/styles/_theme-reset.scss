@@ -352,4 +352,15 @@
     }
   }
 
+  .yellow-button {
+    background-color: #feb930 !important; /* Couleur jaune */
+    color: #fff !important; /* Couleur du texte */
+
+    &:hover {
+      background-color: darken(#feb930, 10%) !important; /* Assombri légèrement la couleur au survol */
+    }
+  }
+
+
+
 }

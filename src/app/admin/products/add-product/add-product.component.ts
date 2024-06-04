@@ -104,7 +104,7 @@ export class AddProductComponent implements OnInit {
         let res = await this.productService.add(data);
         console.log("res save product :::::::: ",res)
         if (res != null) {
-          this.router.navigate(["/amin/products/product-list"])
+          this.router.navigate(["/admin/products/product-list"])
         }
       }else{
         this.commonService.warnToast("Merci de vérifier si les champs sont toutes remplis")

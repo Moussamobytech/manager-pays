@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data, AppService } from '../../app.service';
-import { Product } from 'src/app/app.models';
+import { Product } from 'src/app/models/product.models';
+// import { Product } from 'src/app/app.models';
 // import { Product } from '../../app.models';
 
 @Component({
@@ -27,18 +28,18 @@ export class WishlistComponent implements OnInit {
     const index: number = this.appService.Data.wishList.indexOf(product);
     if (index !== -1) {
         this.appService.Data.wishList.splice(index, 1);
-    }     
+    }
   }
 
   public clear(){
     this.appService.Data.wishList.length = 0;
-  } 
+  }
 
   public getQuantity(val){
     this.quantity = val.soldQuantity;
-  } 
+  }
 
-  public addToCart(product: Product): void { 
+  public addToCart(product: Product): void {
     const currentProduct = this.appService.Data.cartList.find(item => item.id === product.id);
     if (currentProduct) {
       const availableCount = product.availibilityCount;
@@ -57,6 +58,6 @@ export class WishlistComponent implements OnInit {
       product.cartCount = this.quantity;
     }
     this.appService.addToCart(product);
-  } 
+  }
 
 }

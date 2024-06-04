@@ -40,8 +40,9 @@ import { ProductService } from './services/product.service';
 import { CategoryService } from './services/category.service';
 import { ApiService } from './services/api.service';
 import { CampagneService } from './services/campagne.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
+import { SearchResultsComponent } from './pages/search-results/search-results.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { AdminConnectionComponent } from './pages/admin-connection/admin-connect
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
-    FooterComponent
+    FooterComponent,
+    SearchResultsComponent
 
   ],
   imports: [
@@ -64,6 +66,7 @@ import { AdminConnectionComponent } from './pages/admin-connection/admin-connect
     HttpClientModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
+    FormsModule,
     GoogleMapsModule,
     ToastrModule.forRoot(), // ToastrModule added
     TranslateModule.forRoot({

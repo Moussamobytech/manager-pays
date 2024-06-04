@@ -119,21 +119,33 @@
                 </mat-menu>
             </div> -->
 
-            <div>
+            <!-- <div>
               <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
                 {{ sort | translate }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
               </a>
               <mat-menu #sortMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
                   <span (mouseleave)="sortMenuTrigger.closeMenu()">
-                      <button mat-menu-item *ngFor="let sort of sortings" (click)="changeSorting(sort)">
-                          <span>{{ sort | translate }}</span>
+                      <button mat-menu-item *ngFor="let sorts of sortings" (click)="changeSorting(sorts)">
+                          <span>{{ sorts | translate }}</span>
                       </button>
                   </span>
               </mat-menu>
+          </div> -->
+          <div>
+            <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
+              {{ selectedSorting | translate }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
+            </a>
+            <mat-menu #sortMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
+              <span (mouseleave)="sortMenuTrigger.closeMenu()">
+                <button mat-menu-item *ngFor="let sorts of sortings" (click)="changeSorting(sorts)">
+                  <span>{{ sorts | translate }}</span>
+                </button>
+              </span>
+            </mat-menu>
           </div>
 
             <div fxLayoutAlign="start center">
-                <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
+                <!-- <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
                     {{"SHOW" | translate}} {{count}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
                 </a>
                 <mat-menu #countsMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
@@ -142,6 +154,18 @@
                             <span>{{count}}</span>
                         </button>
                     </span>
+                </mat-menu>
+                 -->
+
+                 <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
+                  {{ 'SHOW' | translate }} {{ count }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
+                </a>
+                <mat-menu #countsMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
+                  <span (mouseleave)="countsMenuTrigger.closeMenu()">
+                    <button mat-menu-item *ngFor="let count of counts" (click)="changeCount(count)">
+                      <span>{{ count }}</span>
+                    </button>
+                  </span>
                 </mat-menu>
                 <button mat-icon-button (click)="changeViewType('list', 100)">
                     <mat-icon>view_list</mat-icon>
@@ -174,7 +198,7 @@
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
                         <div fxLayout="column" fxLayoutAlign="center start">
                             <p class=" text-muted"><span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
-                            <p class="new-pricePromotion">{{product.pricePromotion | number : '1.2-2'}}</p>
+                            <p class="new-pricePromotion">{{product.pricePromotion | number : '1.2-2'}} FCFA</p>
                         </div>
                         <!-- <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating> -->
                     </div>
@@ -229,6 +253,12 @@
                 <mat-card class="p-0 text-center">
                     <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
                 </mat-card>
+            </div>
+        </div>
+
+        <div *ngIf="products.length === 0" fxLayout="row wrap" class="products-wrapper">
+            <div fxFlex="100" class="text-center">
+                <p>{{ 'PRODUCTS.NO_DATA' | translate }}</p>
             </div>
         </div>
 

@@ -3,11 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from '../../shared/products-carousel/product-dialog/product-dialog.component';
 import { AppService } from '../../app.service';
-import { Product, Category, Brand } from "../../app.models";
+// import { Products, Category, Brand } from "../../app.models";
 import { Settings, AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from 'src/app/services/product.service';
+import { Product } from 'src/app/models/product.models';
+import { Category } from 'src/app/models/category.models';
+// import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-products',
@@ -23,9 +26,13 @@ export class ProductsComponent implements OnInit {
   public counts = [12, 24, 36];
   public count:any;
   // public sortings = ['Sort by Default', 'Best match', 'Lowest first', 'Highest first'];
-  public   sortings = ['SORTINGS.SORT_BY_DEFAULT', 'SORTINGS.BEST_MATCH', 'SORTINGS.LOWEST_FIRST', 'SORTINGS.HIGHEST_FIRST'];
+  public sortings = ['SORTINGS.SORT_BY_DEFAULT',  'SORTINGS.LOWEST_FIRST', 'SORTINGS.HIGHEST_FIRST'];
+  // public selectedSorting: string = this.sortings[0];
+  public selectedSorting: string;
   public sort:any;
   public products: Array<Product> = [];
+  public produit : Array<Product>= []
+  public productsw : Array<Product>
   public categories:Category[];
   public brands : any;
   public priceFrom: number = 0;
@@ -83,6 +90,11 @@ export class ProductsComponent implements OnInit {
               private router: Router,
               public domHandlerService: DomHandlerService) {
     this.settings = this.appSettings.settings;
+      // Assurez-vous que sortings contient les valeurs correctes
+      console.log('Sortings: ', this.sortings);
+      this.selectedSorting = this.sortings[0];
+      // Vérifiez la valeur de selectedSorting
+      console.log('Selected sorting initial: ', this.selectedSorting);
 
 
   }
@@ -113,27 +125,9 @@ export class ProductsComponent implements OnInit {
 
     this.getCategorie();
     this.AllProduct();
-    // this.count = this.counts[0];
-    // this.sort = this.sortings[0];
-    // this.sub = this.activatedRoute.params.subscribe(params => {
-    //   //console.log(params['name']);
-    // });
-    // if(this.domHandlerService.window?.innerWidth < 960){
-    //   this.sidenavOpen = false;
-    // };
-    // if(this.domHandlerService.window?.innerWidth < 1280){
-    //   this.viewCol = 33.3;
-    // };
+    this.loadProducts();
 
-    // this.getCategories();
-    //  this.getBrands();
-    // this.getProductsByCetegorie(this.selectedCategoryId);
-    // this.getCategorie();
-    // // this.filterProductsByPrice(this.products);
 
-    // this.priceFrom = 0; // Mettez la valeur par défaut que vous préférez
-    // this.priceTo = 200000; // Mettez la valeur par défaut que vous préférez
-    // this.AllProduct();
   }
 
   public getProductByCategorie(categoryId: string){
@@ -206,7 +200,9 @@ export class ProductsComponent implements OnInit {
   }
 
   public changeSorting(sort){
-    this.sort = sort;
+    this.selectedSorting = sort;
+    console.log('Selected sorting changed: ', this.selectedSorting);
+    this.sortProducts();
   }
 
   public changeViewType(viewType, viewCol){
@@ -255,19 +251,19 @@ AllProduct(){
     console.log("Tous les produits", this.produits);
   })
 }
-
 filterProductsByPrice() {
   // Filtrer les produits en fonction des prix sélectionnés
   this.products = this.produits.filter(product => {
-      // Vérifier si priceFrom est inférieur à priceTo
+      const priceBasic = Number(product.priceBasic); // Conversion en number
       if (this.priceFrom <= this.priceTo) {
-          return product.priceBasic >= this.priceFrom && product.priceBasic <= this.priceTo;
+          return priceBasic >= this.priceFrom && priceBasic <= this.priceTo;
       } else {
           // Inverser les valeurs de priceFrom et priceTo si nécessaire
-          return product.priceBasic >= this.priceTo && product.priceBasic <= this.priceFrom;
+          return priceBasic >= this.priceTo && priceBasic <= this.priceFrom;
       }
   });
 }
+
 onChangePriceFrom() {
 
     this.filterProductsByPrice();
@@ -279,15 +275,36 @@ onChangePriceTo() {
 
 }
 
+loadProducts() {
+  this.appService.getAllProducts().subscribe((data: any[]) => {
+    this.products = data;
+    this.sortProducts();
+  });
+}
+sortProducts() {
+  console.log("::::::::::::::: selectedSorting ", this.selectedSorting);
+  switch (this.selectedSorting) {
 
-// onChangePriceFrom() {
-//   console.log('Price from changed to: ', this.priceFrom);
-//   this.filterProductsByPrice();
-// }
+    // case 'SORTINGS.BEST_MATCH':
+    //   console.log("::::::::::::: BEST ");
+    //   // Implémentez votre logique de tri pour BEST_MATCH
+    //   this.products.sort((a, b)=> Number(a.priceBasic) - Number(a.priceBasic)); // Sorting by highest rating
 
-// onChangePriceTo() {
-//   console.log('Price to changed to: ', this.priceTo);
-//   this.filterProductsByPrice();
-// }
+    //   console.log("::::::::::::: BEST 1 ", this.products);
+    //   break;
+    case 'SORTINGS.LOWEST_FIRST':
+      this.products.sort((a, b) => Number(a.priceBasic) - Number(b.priceBasic));
+      console.log("::::::::::::::: lowest ", this.products);
+      break;
+    case 'SORTINGS.HIGHEST_FIRST':
+      this.products.sort((a, b) => Number(b.priceBasic) - Number(a.priceBasic));
+      console.log("::::::::::::::: HIGHEST_FIRST ", this.products);
+      break;
+      case 'SORTINGS.SORT_BY_DEFAULT':
+      default:
+        this.products.sort((a, b) => Number(b.priceBasic) - Number(a.priceBasic));
+        break;
+  }
+}
 
 }

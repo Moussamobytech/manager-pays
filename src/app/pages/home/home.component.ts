@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService, Data } from '../../app.service';
-import { Product } from "../../app.models";
-import { json } from 'stream/consumers';
+// import { Product } from "../../app.models";
 import { ProductService } from 'src/app/services/product.service';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-home',
@@ -75,7 +75,6 @@ export class HomeComponent implements OnInit {
   newArrivals:any;
   topRate:any;
 
-
   constructor(public appService:AppService, public produitService : ProductService, public campagneService : CampagneService) { }
 
   ngOnInit() {
@@ -101,13 +100,13 @@ export class HomeComponent implements OnInit {
     this.getAllProduit();
   }
 
-
   public getProducts(type){
     if(type == "Les meilleurs produits"){
       // this.appService.getProducts("featured").subscribe(data=>{
       //   console.log("PCcccccccc  :",this.best)
       // })
       this.featuredProducts = this.best;
+
     }
     if(type == "En promotion" && !this.onSaleProducts){
       // this.appService.getProducts("on-sale").subscribe(data=>{
@@ -184,11 +183,13 @@ export class HomeComponent implements OnInit {
   public async getNewArrivals() {
     this.newArrivals = await this.produitService.getProductByNewArrival("yes")
     console.log("res newArrivals :::::::: ",this.newArrivals)
-    
+
   }
   public async getTopRate() {
     this.topRate = await this.produitService.getProductByTop()
     console.log("res topRate :::::::: ",this.topRate)
   }
+
+
 
 }
