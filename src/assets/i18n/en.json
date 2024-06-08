@@ -131,6 +131,7 @@
 
   "FIELD_ERROR":{
   "NAME_REQUIRED": "The name is required.",
+  "AMOUNT_REQUIRED": "The amount is required.",
   "FIRSTNAME_REQUIRED": "First name is required.",
   "LASTNAME_REQUIRED": "The name is required.",
   "USERNAME_REQUIRED": "Username is required.",

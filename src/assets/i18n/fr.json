@@ -146,6 +146,7 @@
 
   "FIELD_ERROR":{
     "NAME_REQUIRED": "Le nom est obligatoire.",
+    "AMOUNT_REQUIRED": "Le montant est obligatoire.",
     "FIRSTNAME_REQUIRED": "Le prénom est obligatoire.",
     "LASTNAME_REQUIRED": "Le nom est obligatoire.",
     "USERNAME_REQUIRED": "Le nom d'utilisateur est obligatoire.",
