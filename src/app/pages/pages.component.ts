@@ -2,9 +2,13 @@ import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Settings, AppSettings } from '../app.settings';
 import { AppService } from '../app.service';
-import { Category } from '../app.models';
+// import { Category, Product } from '../app.models';
 import { SidenavMenuService } from '../theme/components/sidenav-menu/sidenav-menu.service';
 import { DomHandlerService } from '../dom-handler.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { ProductService } from '../services/product.service';
+import { Category } from '../models/category.models';
+import { Product } from '../models/product.models';
 
 @Component({
   selector: 'app-pages',
@@ -18,10 +22,18 @@ export class PagesComponent implements OnInit {
   public category:Category;
   public sidenavMenuItems:Array<any>;
   @ViewChild('sidenav', { static: true }) sidenav:any;
+  public produit: any;
+  public AllProduits: Product[] = [];
+  public produits: Product[] = [];
 
+  public sort : any;
   public settings: Settings;
+  public products: Product[] = [];
+  public searchTerm: string = '';
+
   constructor(public appSettings:AppSettings,
               public appService:AppService,
+              public produitService : ProductService,
               public sidenavMenuService:SidenavMenuService,
               public router:Router,
               public domHandlerService: DomHandlerService) {
@@ -35,24 +47,54 @@ export class PagesComponent implements OnInit {
       this.settings.theme = 'fidelity';
       // this.settings.theme = 'green';
     });
+    // this.getAllProduit();
+
+
   }
 
   public getCategories(){
     this.appService.getCategories().subscribe(data => {
       this.categories = data;
+      // this.router.navigate(['/products']);
       this.category = data[0];
       this.appService.Data.categories = data;
     })
   }
 
-  public changeCategory(event){
-    if(event.target){
-      this.category = this.categories.filter(category => category.nom == event.target.innerText)[0];
+  // public changeCategory(event) {
+  //   if (event.target) {
+  //     this.category = this.categories.find(category => category.nom === event.target.innerText);
+  //     console.log("Ma cat ", this.category)
+  //     if (this.category) {
+  //       this.router.navigate(['/products', this.category]); // Navigate to products page with category ID
+  //     }
+  //   }
+  //   if (this.domHandlerService.window?.innerWidth < 960) {
+  //     this.stopClickPropagate(event);
+  //   }
+  // }
+  public changeCategory(event) {
+    if (event.target) {
+      const selectedCategory = this.categories.find(category => category.nom === event.target.innerText);
+      if (selectedCategory) {
+        this.category = selectedCategory;
+        console.log("Selected category:", this.category);
+        this.router.navigate(['/products', this.category.nom]); // Naviguer vers la page des produits avec l'ID de la catégorie
+      }
     }
-    if(this.domHandlerService.window?.innerWidth < 960){
+    if (this.domHandlerService.window?.innerWidth < 960) {
       this.stopClickPropagate(event);
     }
   }
+
+  // public changeCategory(event){
+  //   if(event.target){
+  //     this.category = this.categories.filter(category => category.nom == event.target.innerText)[0];
+  //   }
+  //   if(this.domHandlerService.window?.innerWidth < 960){
+  //     this.stopClickPropagate(event);
+  //   }
+  // }
 
   public remove(product) {
       const index: number = this.appService.Data.cartList.indexOf(product);
@@ -83,9 +125,24 @@ export class PagesComponent implements OnInit {
     event.preventDefault();
   }
 
-  public search(){}
+
+  public onSearch(event: Event): void {
+    event.preventDefault();
+    if (this.searchTerm) {
+      console.log(":::::::::searchTerm ",this.searchTerm)
+      this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm } });
+    }
+  }
 
 
+  public async getProduit() {
+    let res : Array<Product> = await this.produitService.products()
+    console.log("res product :::::::: ",res)
+    this.produit = res
+    // this.appService.getAllProducts().subscribe(data => {
+    //   this.produit = data;
+    // });
+  }
   public scrollToTop(){
     var scrollDuration = 200;
     var scrollStep = -this.domHandlerService.window?.pageYOffset / (scrollDuration / 20);
@@ -137,5 +194,20 @@ export class PagesComponent implements OnInit {
       this.sidenavMenuService.closeAllSubMenus();
     }
   }
+
+  async getAllProduit() {
+    try {
+      this.produitService.getAllProducts().subscribe(produits => {
+        this.AllProduits = produits || [];
+        this.produits = this.AllProduits;
+        this.produits.sort = this.sort;
+      });
+    } catch (error) {
+      console.error("Erreur lors de la récupération des produits :", error);
+      this.AllProduits = [];
+      this.produits = [];
+    }
+  }
+
 
 }

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -11,27 +13,43 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('popupTemplate') popupTemplate: TemplateRef<any>;
+  rechargeForm: FormGroup;
+  rechargeAmount: number;  // Ensure this is correctly defined
+  public form: UntypedFormGroup;
+  public username : any;
+  points: any = 0;
+  currentUser: any;
+  statsNumber: any = {
+    total: 0,
+    actif: 0,
+    inactif: 0,
+    pending: 0,
 
-  currentUser : User;
-  statsNumber : any = {
-    total : 0,
-    actif : 0,
-    inactif : 0,
-    pending : 0
   }
-  constructor(private auth : AuthenticationService, private productService : ProductService, private router: Router) { }
+  constructor(private auth: AuthenticationService, private productService: ProductService, private router: Router, public dialog: MatDialog, private fb: FormBuilder) {
+
+  }
 
   ngOnInit() {
-
     this.currentUser = this.auth.currentUser()
-    console.log("currentUser :::::::: ",this.currentUser)
-    if (this.currentUser == null || this.currentUser.profiles == null ||this.currentUser.profiles == undefined) {
+    //this.username = this.auth.currentUser();
+   // this.points = this.currentUser.points
+
+    console.log("currentUser :::::::: ", this.currentUser)
+    if (this.currentUser == null || this.currentUser.profiles == null || this.currentUser.profiles == undefined) {
       this.router.navigate(["/sign-in"]);
     }
     this.stats(this.currentUser.username)
+
+    this.form = this.fb.group({
+      amount: ['', Validators.required]
+
+    });
+    this.getUserById()
   }
 
-  currentProfile(roles){
+  currentProfile(roles) {
     // console.log("roles :::::::: ",roles)
     if (!roles) {
       return 'N/A'
@@ -60,8 +78,8 @@ export class DashboardComponent implements OnInit {
     return profil
   }
 
-  public stats(id){
-    this.productService.stats(id).then((data : any) =>{
+  public stats(id) {
+    this.productService.stats(id).then((data: any) => {
       console.log(data)
       this.statsNumber.total = data.total
       this.statsNumber.actif = data.actif
@@ -69,4 +87,60 @@ export class DashboardComponent implements OnInit {
       this.statsNumber.pending = data.pending
     })
   }
+  onNoClick(): void {
+    this.dialog.closeAll();
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(this.popupTemplate, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.router.navigate(["/account/dashboard"])
+
+    });
+  }
+
+  getUserById(){
+    this.auth.info(this.currentUser.username).then((data: any) => {
+      console.log("Username ",data)
+     this.username= data;
+     this.points = data.points
+
+     console.log("Username ",data)
+
+
+    })
+  }
+  onRecharge() {
+    if (this.form.valid) {
+      const amount: number = +this.form.get('amount').value; // Ensure amount is a number
+      console.log('Amount to recharge:', amount); // Debugging line
+
+
+      this.auth.recharge(amount, this.currentUser.id).subscribe(
+        response => {
+          console.log('Recharge successful:', response);
+          this.points = response.points
+
+          setTimeout(() => {
+            this.dialog.closeAll();
+          }, 3000);
+          if (amount != null) {
+            console.log("MES POINT ", this.points);
+
+            //   this.router.navigate(["/account/dashboard"])
+          }
+
+        },
+        error => {
+          console.error('Error during recharge:', error);
+        }
+      );
+    }
+  }
+
+
 }

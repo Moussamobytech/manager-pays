@@ -1,4 +1,4 @@
-.main-slider{ 
+.main-slider{
     height: 300px;
     margin-top: 14px;
     .slide-item{
@@ -39,9 +39,16 @@
         top: 18%;
     }
 }
+.jaune {
+  background-color: #feb930;
+}
+.jaune:hover {
+  background-color: #25224a;
+  color:white
+}
 
-@media (max-width: 575px) { 
-    .main-slider{ 
+@media (max-width: 575px) {
+    .main-slider{
         height: 280px;
         .slide-item .content {
             h1{
@@ -53,22 +60,22 @@
                 margin-bottom: 10px;
                 letter-spacing: 2px;
             }
-        } 
+        }
     }
 }
 @media (min-width: 576px) and (max-width: 767px) {
-    .main-slider{ 
+    .main-slider{
         height: 320px;
         .slide-item .content {
             h1{
                 font-size: 36px;
-                letter-spacing: 3px; 
+                letter-spacing: 3px;
             }
             h3{
                 font-size: 24px;
                 margin-bottom: 20px;
                 letter-spacing: 2px;
             }
-        } 
+        }
     }
 }

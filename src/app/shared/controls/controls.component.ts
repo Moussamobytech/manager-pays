@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data, AppService } from '../../app.service';
-import { Product } from '../../app.models';
+import { Product } from 'src/app/models/product.models';
+// import { Product } from '../../app.models';
 
 @Component({
   selector: 'app-controls',
@@ -22,8 +23,8 @@ export class ControlsComponent implements OnInit {
       if(this.product.cartCount > 0){
         this.count = this.product.cartCount;
       }
-    }  
-    this.layoutAlign(); 
+    }
+    this.layoutAlign();
   }
 
   public layoutAlign(){
@@ -52,7 +53,7 @@ export class ControlsComponent implements OnInit {
     }
     else{
       this.snackBar.open('You can not choose more items than available. In stock ' + this.count + ' items.', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-    }    
+    }
   }
 
   public decrement(){
@@ -75,7 +76,7 @@ export class ControlsComponent implements OnInit {
     this.appService.addToWishList(product);
   }
 
-  public addToCart(product: Product): void { 
+  public addToCart(product: Product): void {
     const currentProduct = this.appService.Data.cartList.find(item => item.id === product.id);
     if (currentProduct) {
       const availableCount = this.product.availibilityCount;
@@ -94,7 +95,7 @@ export class ControlsComponent implements OnInit {
       product.cartCount = this.count;
     }
     this.appService.addToCart(product);
-  }  
+  }
 
   public openProductDialog(event){
     this.onOpenProductDialog.emit(event);

@@ -8,7 +8,8 @@ import { emailValidator } from '../../../theme/utils/app-validators';
 import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { ProductService } from 'src/app/services/product.service';
-import { Product } from 'src/app/app.models';
+import { Product } from 'src/app/models/product.models';
+// import { Product } from 'src/app/app.models';
 
 @Component({
   selector: 'app-product',
@@ -26,11 +27,13 @@ export class ProductComponent implements OnInit {
   private sub: any;
   public form: UntypedFormGroup;
   public relatedProducts: Array<Product>;
+  public views: any;
 
   constructor(public appService:AppService,
     private productService : ProductService,
               private activatedRoute: ActivatedRoute,
               public dialog: MatDialog,
+              public produitService : ProductService,
               public formBuilder: UntypedFormBuilder,
               public domHandlerService: DomHandlerService) {  }
 
@@ -46,6 +49,7 @@ export class ProductComponent implements OnInit {
       'email': [null, Validators.compose([Validators.required, emailValidator])]
     });
     this.getRelatedProducts();
+    // this.inscrementViewsProduit()
   }
 
   ngAfterViewInit(){
@@ -71,7 +75,7 @@ export class ProductComponent implements OnInit {
   }
 
   public getProductById(id){
-    
+
     this.appService.getProductById(id).subscribe(data=>{
       this.product = data;
       console.log("Produit :", this.product)
@@ -85,15 +89,16 @@ export class ProductComponent implements OnInit {
     });
   }
 
+
   public async getRelatedProducts(){
     console.log("res related :::::: ",this.product);
     console.log("res related :::::: ",this.product?.categorie);
     if (this.product && this.product?.categorie) {
-      let res = await this.productService.getProductByCategorie(this.product.categorie)
+      let res = await this.productService.getProductByCategorieName(this.product.categorie)
       console.log("res related :::::: ",res);
       this.relatedProducts = res;
     }
-    
+
     // this.appService.getProducts('related').subscribe(data => {
     //   this.relatedProducts = data;
     // })
@@ -142,4 +147,13 @@ export class ProductComponent implements OnInit {
       //email sent
     }
   }
+
+
+  // public inscrementViewsProduit(){
+  //   this.produitService.incrementProductViews(this.product.id).then((data =>{
+  //     this.views = data;
+  //     console.log("Viewsssssssss ",this.views);
+  //     }))
+  //  }
+
 }

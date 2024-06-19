@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { AccountComponent } from './account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -19,8 +19,8 @@ const config: InputFileConfig = {
 };
 
 export const routes: Routes = [
-  { 
-      path: '', 
+  {
+      path: '',
       canActivate: [AuthGuard],
       canLoad: [AuthGuard],
       component: AccountComponent, children: [
@@ -31,7 +31,7 @@ export const routes: Routes = [
           { path: 'add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
           { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
 
-          { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } }, 
+          { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
           { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
       ]
   }
@@ -43,6 +43,8 @@ export const routes: Routes = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     SharedModule,
+    FormsModule,
+
     NgxPaginationModule,
     SwiperModule,
     InputFileModule.forRoot(config),

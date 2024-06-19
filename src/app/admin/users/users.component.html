@@ -179,7 +179,7 @@
                 <div class="mat-mdc-cell">{{ user.createdAt | date: "yyyy-mm-dd" }}</div>
                 <div class="mat-mdc-cell">
                     <div class="p-2 actions">
-                        <button mat-mini-fab color="primary" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
+                        <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
                             <mat-icon>edit</mat-icon>
                         </button>
                         <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="openUserDialog(user,'delete')">

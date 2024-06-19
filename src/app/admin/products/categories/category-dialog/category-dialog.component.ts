@@ -2,10 +2,11 @@ import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
-import { Category } from 'src/app/app.models';
+// import { Category } from 'src/app/app.models';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Category } from 'src/app/models/category.models';
 
 @Component({
   selector: 'app-category-dialog',

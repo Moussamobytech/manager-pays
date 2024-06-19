@@ -50,6 +50,7 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LangComponent } from './lang/lang.component';
 import { ProductsCardComponent } from './product-card/product-card.component';
+import { SearchResultsComponent } from '../pages/search-results/search-results.component';
 
 @NgModule({
   imports: [

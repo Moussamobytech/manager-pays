@@ -2,11 +2,11 @@
   <mat-card>
       <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
           <h2>{{"ADMIN_NAV.BRAND_LIST" | translate}}</h2>
-          <button mat-raised-button color="primary" (click)="openBrandDialog(null)">{{"ADMIN_NAV.ADD_BRAND" | translate}}</button>
+          <button mat-raised-button color="warn" (click)="openBrandDialog(null)">{{"ADMIN_NAV.ADD_BRAND" | translate}}</button>
       </div>
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table text-center">
-          <div class="mat-mdc-header-row ">
+          <div class="mat-mdc-header-row mat-toolbar mat-primary">
             <div class="mat-mdc-header-cell" >Logo</div>
               <div class="mat-mdc-header-cell">Libelle</div>
               <div class="mat-mdc-header-cell" >Description</div>
@@ -25,10 +25,10 @@
 
               <div class="mat-mdc-cell" >
                   <div class="p-2 actions" style="display: flex; align-items: center;">
-                      <button mat-mini-fab color="primary" matTooltip="Edit" (click)="openBrandDialog(item)">
+                      <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openBrandDialog(item)">
                           <mat-icon>edit</mat-icon>
                       </button>
-                      <a [routerLink]="['/admin/brand/brand-detail', item.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
+                      <a [routerLink]="['/admin/brand/brand-detail', item.id]" mat-mini-fab color="accent" matTooltip="View" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
                       <mat-slide-toggle [color]="item.etat ? 'primary' : 'warn'" [checked]="item.etat" (change)="setEtatBrand(item.id, $event)">
                           {{ item.etat ? 'Activée' : 'Désactivée' }}
                       </mat-slide-toggle>

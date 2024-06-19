@@ -5,7 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/app.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomHandlerService } from 'src/app/dom-handler.service';
-import { Category, Product } from 'src/app/app.models';
+import { Product } from 'src/app/models/product.models';
+import { Category } from 'src/app/models/category.models';
+// import { Category, Product } from 'src/app/app.models';
 
 @Component({
   selector: 'app-categorie-detail',

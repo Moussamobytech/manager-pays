@@ -148,5 +148,13 @@ export class AuthenticationService {
         this.user = null;
     }
 
+
+    recharge(amount: number, userId: string): Observable<any> {
+      console.log('Request URL:', `/users/recharge/${userId}?amount=${amount}`); // Debugging line
+
+      return this.api.post(`/users/recharge/${userId}?amount=${amount}`, {});
+    }
+
+
 }
 

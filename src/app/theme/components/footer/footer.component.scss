@@ -50,7 +50,14 @@
         font-weight: 300;
     }
 }
+.jaune{
+  background-color: #feb930;
 
+}
+
+.jaune:hover{
+  background-color: #c54896;
+}
 @media (max-width: 575px) {
     .footer .subscribe-block{
         .subscribe-search-form{
@@ -69,7 +76,7 @@
     }
 }
 
-@media (min-width: 576px) and (max-width: 767px) {    
+@media (min-width: 576px) and (max-width: 767px) {
     .footer .subscribe-block{
         .subscribe-search-form{
             margin-top: 16px;

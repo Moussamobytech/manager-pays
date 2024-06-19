@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
 import { User } from '../models/user.models';
+import { Observable } from 'rxjs';
+import { Product } from '../models/product.models';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -41,6 +43,20 @@ export class ProductService {
     return null;
   }
 
+
+
+
+getTotalProductViewsDate(): Observable<any> {
+  return this.api.get(`produit/views-today`);
+}
+
+getTotalViewsMonth(): Observable<any> {
+  return this.api.get(`produit/month`);
+}
+
+getTotalViewsYear(): Observable<any> {
+  return this.api.get(`produit/year`);
+}
   async edit(id: string, formData: any) {
     try {
       let res = await this.api
@@ -82,7 +98,21 @@ export class ProductService {
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }
+  // searchProducts(term: string): Promise<Product[]> {
+  //   return this.products().then(products =>
+  //     products.filter(product =>
+  //       product.nom.toLowerCase().includes(term.toLowerCase())
+  //     )
+  //   );
+  // }
 
+  searchProducts(term: string): Promise<Product[]> {
+    return this.products().then(products =>
+      products.filter(product =>
+        product.nom.toLowerCase().includes(term.toLowerCase())
+      )
+    );
+  }
   public getCategories() {
     return this.api.get('/categorie/list').toPromise();
   }
@@ -91,16 +121,32 @@ export class ProductService {
     return this.api.get('/produit/list-by-category/' + type).toPromise();
   }
 
-  public getProductByCategorie(categorie: string) {
-    return this.api.get('/produit/list-by-category/' + categorie).toPromise();
+  // public getProductByCategorie(categorie: string) {
+  //   return this.api.get('/produit/list-by-category/' + categorie).toPromise();
+  // }
+  public getProductByCategorie(id: string): Observable<any> {
+    return this.api.get('/produit/list-by-category/' + id);
   }
 
   public getProductByCategorieName(categorie: string) {
     return this.api.get('/produit/list-by-category-name/' + categorie).toPromise();
   }
 
+
+
+
   public getAllProducts() {
     return this.api.get('/produit/list').toPromise();
+  }
+
+  public async getProduct(): Promise<Product[]> {
+    try {
+      const response = await this.api.get('/produit/list').toPromise();
+      return response || [];
+    } catch (error) {
+      console.error('Error fetching products', error);
+      return [];
+    }
   }
 
   public getProductById(id) {

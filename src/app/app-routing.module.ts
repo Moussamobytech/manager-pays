@@ -5,6 +5,7 @@ import { PagesComponent } from './pages/pages.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { UserAuthSessionComponent } from './pages/session/user-auth-session/user-auth-session.component';
 import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
+import { SearchResultsComponent } from './pages/search-results/search-results.component';
 
 const routes: Routes = [
   {
@@ -17,11 +18,14 @@ const routes: Routes = [
           { path: 'cart', loadChildren: () => import('./pages/cart/cart.module').then(m => m.CartModule), data: { breadcrumb: 'Cart' } },
           { path: 'checkout', loadChildren: () => import('./pages/checkout/checkout.module').then(m => m.CheckoutModule), data: { breadcrumb: 'Checkout' } },
           { path: 'contact', loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule), data: { breadcrumb: 'Contact' } },
+          // { path: 'search', loadChildren: () => import('./pages/search/search.module').then(m => m.SearchModule), data: { breadcrumb: 'Search' } },
           { path: 'sign-in', loadChildren: () => import('./pages/session/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Se connecter' } },
           { path: 'sign-up', loadChildren: () => import('./pages/sign-up/sign-up.module').then(m => m.SignUpModule), data: { breadcrumb: 'S\'inscrire ' } },
           { path: 'brands', loadChildren: () => import('./pages/brands/brands.module').then(m => m.BrandsModule), data: { breadcrumb: 'Brands' } },
           { path: 'products', loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule), data: { breadcrumb: 'All Products' } },
           { path: 'faq', loadChildren: () => import('./theme/faq/faq.module').then(m => m.FaqModule), data: { breadcrumb: 'FAQ' } },
+          // { path: 'search-results', loadChildren: () => import('./pages/search-results/search-results.module').then(m => m.SearchResultsModule), data: { breadcrumb: 'search-results' } },
+          { path: 'search-results', component: SearchResultsComponent }, // Ajouter cette ligne pour la route de recherche
 
       ]
   },

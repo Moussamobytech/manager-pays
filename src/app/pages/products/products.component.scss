@@ -68,3 +68,12 @@ $filter-sidenav-width: 280px;
   height: 200px;
 
 }
+@media (min-width: 960px) {
+  .icon-more_vert {
+      display: block;
+  }
+
+  .toggle-button .icon-menu {
+      display: none;
+  }
+}

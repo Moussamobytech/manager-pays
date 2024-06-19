@@ -7,7 +7,7 @@ export class Category {
               public status : string= 'actif'){ }
 }
 
-export class Product {
+export class Products {
   constructor(public id: string,
               public nom: string,
               public image1: Array<any>,
@@ -72,7 +72,7 @@ export class  Campagne {
                public etat: boolean,
                public dateDebut : Date,
                public dateFin : Date,
-               public produit : Product,
+               public produit : Products,
                public image : File,
                ) {}
 }

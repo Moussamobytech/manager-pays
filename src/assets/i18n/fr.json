@@ -23,7 +23,7 @@
   "SHARE_ZAP":"Partager ce produit",
   "SUBSCRIBE":"S'abonner",
   "NEWSLETTER":"Abonnez-vous à notre newsletter",
-  "NEWSLETTER_DESC":"Restez à jour avec nos dernières nouveautés et produits",
+  "NEWSLETTER_DESC":"Restez connectés aux dernières nouveautés !!!",
   "LINKS":"Liens utiles",
   "CONTACT_INFO":"Coordonnées",
   "FAQ":"FAQ",
@@ -33,7 +33,7 @@
   "SHOW":"Voir",
   "FROM":"De",
   "TO":"à",
-  "TEXT_NEWSLETTER": "Restez à jour avec nos dernières nouveautés et produits",
+  "TEXT_NEWSLETTER": "Restez connectés aux dernières nouveautés !!!",
 
 
   "NAV": {
@@ -146,6 +146,7 @@
 
   "FIELD_ERROR":{
     "NAME_REQUIRED": "Le nom est obligatoire.",
+    "AMOUNT_REQUIRED": "Le montant est obligatoire.",
     "FIRSTNAME_REQUIRED": "Le prénom est obligatoire.",
     "LASTNAME_REQUIRED": "Le nom est obligatoire.",
     "USERNAME_REQUIRED": "Le nom d'utilisateur est obligatoire.",
@@ -204,7 +205,7 @@
   },
   "SORTINGS": {
     "SORT_BY_DEFAULT": "Trier par défaut",
-    "BEST_MATCH": "Meilleure correspondance",
+    "BEST_MATCH": "Meilleure produits",
     "LOWEST_FIRST": "Prix les plus bas en premier",
     "HIGHEST_FIRST": "Prix les plus élevés en premier"
   }

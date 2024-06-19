@@ -15,7 +15,7 @@ export class AdminConnectionComponent implements OnInit {
   formSubmitted: boolean = false;
   toSubmit: boolean = false;
   loading: boolean = false;
-  
+
   constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder,
     public router:Router, public snackBar: MatSnackBar) { }
 
@@ -32,13 +32,13 @@ export class AdminConnectionComponent implements OnInit {
   }
 
   public goHome(): void {
-    this.router.navigate(['/']); 
+    this.router.navigate(['/']);
     // if(this.router.routerState.snapshot.url.includes("/admin")){
     //   this.router.navigate(['/admin']);
     // }
     // else{
     //   this.router.navigate(['/']);
-    // } 
+    // }
   }
 
   public onLoginFormSubmit(values:Object):void {
@@ -49,7 +49,7 @@ export class AdminConnectionComponent implements OnInit {
       // this.loading = true;
       let phone = values['phone']
       let pwd = this.formValues.password?.value
-      
+
       this.authenticationService.login(phone, pwd)
         .subscribe(
           async (data: any) => {

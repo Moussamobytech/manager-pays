@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Campagne, Product } from 'src/app/app.models';
+// import { Campagne, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
@@ -10,6 +10,8 @@ import { CampagneDialogComponent } from '../campagne-dialog/campagne-dialog.comp
 import { FormBuilder } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { Campagne } from 'src/app/app.models';
+import { Product } from 'src/app/models/product.models';
 
 @Component({
   selector: 'app-campagne-list',
@@ -54,18 +56,27 @@ export class CampagneListComponent implements OnInit {
     this.domHandlerService.winScroll(0, 0);
   }
 
+  // public getCampagne(){
+
+  //   try {
+  //     let res = this.campagneService.getCampagne();
+  //     this.campagne = res;
+  //     console.log("Campagne :"+ this.campagne);
+  //   } catch (error) {
+  //     console.log('error Campagne Id ', error);
+  //   }
+
+  // }
   public getCampagne(){
-
-    try {
-      let res = this.campagneService.getCampagne();
-      this.campagne = res;
-      console.log("Camapagne :"+ this.campagne);
-    } catch (error) {
-      console.log('error Campagne Id ', error);
-    }
-   
+    this.campagneService.getCampagne().subscribe(data=>{
+      this.campagne = data;
+      console.log("campagne :", this.campagne)
+      //for show more product
+      // for (var index = 0; index < 3; index++) {
+      //   this.products = this.products.concat(this.products);
+      // }
+    });
   }
-
   public getAllProducts(){
     this.appService.getAllProducts().subscribe(data=>{
       this.products = data;
