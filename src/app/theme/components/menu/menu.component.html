@@ -60,14 +60,14 @@
 
 
     <!-- <a mat-button [matMenuTriggerFor]="pages">{{ 'NAV.PAGES' | translate }}<mat-icon class="caret" iconPositionEnd>arrow_drop_down</mat-icon></a> -->
-    <mat-menu #pages="matMenu" [overlapTrigger]="false" class="app-dropdown">
+    <!-- <mat-menu #pages="matMenu" [overlapTrigger]="false" class="app-dropdown">
         <a mat-menu-item routerLink="/contact" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'NAV.CONTACT' | translate }}</a>
         <a mat-menu-item [matMenuTriggerFor]="shop">{{ 'NAV.SHOP' | translate }}</a>
         <a mat-menu-item routerLink="/sign-in">{{ 'LOGIN' | translate }}</a>
         <a mat-menu-item routerLink="/404">{{ 'NAV.404_PAGE' | translate }}</a>
         <a mat-menu-item routerLink="/landing">{{ 'NAV.LANDING' | translate }}</a>
         <a mat-menu-item [matMenuTriggerFor]="others">{{ 'NAV.OTHERS' | translate }}</a>
-    </mat-menu>
+    </mat-menu> -->
 
     <mat-menu #shop="matMenu" class="app-dropdown">
         <a mat-menu-item routerLink="/products" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'NAV.ALL_PRODUCTS' | translate }}</a>

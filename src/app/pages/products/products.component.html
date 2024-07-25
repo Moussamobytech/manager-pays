@@ -193,13 +193,13 @@
                         <img [src]="product.image1" alt="" class="card-image">
                     </a>
                     <h4 class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
-                    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
+                    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate center">
                         {{product.nom}}
                     </a>
                     <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
-                        <div fxLayout="column" fxLayoutAlign="center start">
-                            <p class=" text-muted"><span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
-                            <p class="new-pricePromotion">{{product.pricePromotion | number : '1.2-2'}} FCFA</p>
+                        <div fxLayout="column" fxLayoutAlign="center start"  style="width: 100%;">
+                            <p class=" text-muted" style="inline-size: 100%;"><span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
+                            <p class="new-pricePromotion"  style="inline-size: 100%;"  *ngIf="product.pricePromotion != null">{{product.pricePromotion | number : '1.2-2'}} FCFA</p>
                         </div>
                         <!-- <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating> -->
                     </div>

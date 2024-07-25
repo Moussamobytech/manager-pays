@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.models';
 import { Category } from 'src/app/models/category.models';
+import { CommonMessageService } from 'src/app/services/common-message.service';
 // import { Product } from 'src/app/models/product.models';
 
 @Component({
@@ -82,7 +83,7 @@ export class ProductsComponent implements OnInit {
   categoryId: string;
 
 
-  constructor(public appSettings:AppSettings,
+  constructor(public appSettings:AppSettings, private common: CommonMessageService,
               private activatedRoute: ActivatedRoute,
               public appService:AppService, private produitService : ProductService,
               public dialog: MatDialog,
@@ -100,14 +101,9 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.count = this.counts[0];
+    this.count = this.counts[0];
     this.sort = this.sortings[0];
-    // Abonnez-vous aux paramètres de l'URL
-    this.sub = this.activatedRoute.params.subscribe(params => {
-      console.log(params['name']);
-      this.selectedCategoryId = params['name']
-      this.getProductsByCetegorie(this.selectedCategoryId);
-    });
+    
 
     // Gérez les fenêtres redimensionnées
     if (this.domHandlerService.window?.innerWidth < 960) {
@@ -120,14 +116,19 @@ export class ProductsComponent implements OnInit {
     this.priceTo = 2000000;
 
     this.getCategories();
-     this.getBrands();
-     this.getProductsByCetegorie(this.selectedCategoryId)
+    this.getBrands();
+    // this.getProductsByCetegorie(this.selectedCategoryId)
 
     this.getCategorie();
-    this.AllProduct();
-    this.loadProducts();
+    // this.AllProduct();
+    // this.loadProducts();
 
-
+    // Abonnez-vous aux paramètres de l'URL
+    this.sub = this.activatedRoute.params.subscribe(params => {
+      console.log(params['name']);
+      this.selectedCategoryId = params['name']
+      this.getProductsByCetegorie(this.selectedCategoryId);
+    });
   }
 
   public getProductByCategorie(categoryId: string){
@@ -137,42 +138,50 @@ export class ProductsComponent implements OnInit {
 
     }))
   }
-  public getProductsByCetegorie(categoryId: string){
+  public async getProductsByCetegorie(categoryId: string){
 
-    // let productName = await this.produitService.getProductByCategorie(categoryId);
-    // console.log("productName ::::::::: ",productName)
-    // this.products = productName;
-    this.appService.getProductByCategorie(categoryId).subscribe(data=>{
-      this.products = data;
-      console.log("Produit ::::: ", this.products)
-      //for show more product
-      // for (var index = 0; index < 3; index++) {
-      //   this.products = this.products.concat(this.products);
-      // }
-    });
-  }
-
-  public getCategories(){
-    if(this.appService.Data.categories.length == 0) {
-      this.appService.getCategories().subscribe(data => {
-        this.categories = data;
-        this.appService.Data.categories = data;
-
-      });
+    try {
+      let res = await this.produitService.getProductByCategorieName(categoryId)
+      console.log("res Produit :::::: ",res);
+      this.products = res;
+    } catch (error) {
+      this.common.errorToast("Une erreur s'est produite lors du chargement de la liste, merci de réessayer")
     }
-    else{
-      this.categories = this.appService.Data.categories;
-
-
-    }
+    
+    
+    // this.produitService.getProductByCategorieName(categoryId).subscribe(data=>{
+    //   this.products = data;
+    //   console.log("Produit ::::: ", this.products)
+    //   //for show more product
+    //   // for (var index = 0; index < 3; index++) {
+    //   //   this.products = this.products.concat(this.products);
+    //   // }
+    // });
   }
-
 
   public getCategorie(){
     this.appService.getCategories().subscribe(data =>{
       this.allCategories = data;
     })
   }
+  public getCategories(){
+    console.log("this.appService.Data.categories.length ::::: ",this.appService.Data.categories.length);
+    
+    if(this.appService.Data.categories.length == 0) {
+      this.appService.getCategories().subscribe(data => {
+        this.categories = data;
+        this.allCategories = data;
+        this.appService.Data.categories = data;
+
+      });
+    }
+    else{
+      this.categories = this.appService.Data.categories;
+    }
+  }
+
+
+  
 
 
   public getBrands(){

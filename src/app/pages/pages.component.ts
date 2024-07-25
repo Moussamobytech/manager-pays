@@ -53,10 +53,14 @@ export class PagesComponent implements OnInit {
   }
 
   public getCategories(){
+      let deflt: any =  {"nom":"Tous", "cle":"all"}
+      // this.category = data[0];
+      this.category = deflt;
     this.appService.getCategories().subscribe(data => {
       this.categories = data;
       // this.router.navigate(['/products']);
-      this.category = data[0];
+
+      data.push({"nom":"Tous", "cle":"all"})
       this.appService.Data.categories = data;
     })
   }

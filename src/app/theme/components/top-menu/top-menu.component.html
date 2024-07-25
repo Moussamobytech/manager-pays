@@ -31,8 +31,9 @@
     </span>
 
     <a mat-button [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
-        <mat-icon class="mat-icon-sm account-icon">person</mat-icon>
-        <span fxShow="false" fxShow.gt-sm>{{ 'ACCOUNT' | translate }}</span>
+        <mat-icon fxShow="false" class="mat-icon-sm account-icon">person</mat-icon>
+        <!-- <span fxShow="false" fxShow.gt-sm>{{ 'ACCOUNT' | translate }}</span> -->
+        <span fxShow.gt-sm>{{ 'SELL' | translate }}</span>
         <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
     </a>
     <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="primary account">

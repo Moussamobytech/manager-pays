@@ -1,13 +1,13 @@
 <!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
    À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
    <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
-    <button mat-raised-button color="warn" matTooltip="Recharge son compte" (click)="openDialog()">
-      Recharge son compte
+    <button mat-raised-button color="warn" matTooltip="Recharger mon compte" (click)="openDialog()">
+      Recharger mon compte
     </button>
   </div>
 
   <ng-template #popupTemplate>
-    <h1 mat-dialog-title>Recharge son compte</h1>
+    <h1 mat-dialog-title>Recharger mon compte</h1>
     <div mat-dialog-content>
       <!-- <p>Entrez les détails pour recharger votre compte.</p> -->
       <form [formGroup]="form" (ngSubmit)="onRecharge()" autocomplete="off">

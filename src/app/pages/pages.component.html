@@ -39,7 +39,7 @@
           <div fxFlex="20">
               <a class="logo" routerLink="/" (click)="closeSubMenus()">
                   <img src="./assets/images/logo_fidelity.png" alt="logo_fidelity">
-                  <span>&nbsp;&nbsp;Fidelity</span>
+                  <span  fxShow.xs="false">&nbsp;&nbsp;Fidelity</span>
               </a>
           </div>
           <div fxFlex fxShow="false" fxShow.gt-sm>
@@ -84,13 +84,37 @@
             </form> -->
 
           </div>
+          <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">
+              
+              <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
+                
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
+                <button mat-mini-fab type="submit"  class="search-btn mat-elevation-z0 text-muted">
+                  <mat-icon>search</mat-icon>
+              </button>
+              </form>
+
+          </div>
 
       </mat-toolbar-row>
+      <!-- <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar bg-primary" style="height: 55px !important;">
+        <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">
+              
+            <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
+              
+              <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
+              <button mat-mini-fab type="submit"  class="search-btn mat-elevation-z0 text-muted">
+                <mat-icon>search</mat-icon>
+            </button>
+            </form>
+
+        </div>
+      </mat-toolbar-row> -->
   </mat-toolbar>
   <app-menu fxShow="false" fxShow.gt-sm></app-menu>
 
   <div class="theme-container main">
-      <app-breadcrumb></app-breadcrumb>
+      <app-breadcrumb fxShow fxHide.xs></app-breadcrumb>
       <router-outlet></router-outlet>
   </div>
 
