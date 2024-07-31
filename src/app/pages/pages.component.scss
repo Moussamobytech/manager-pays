@@ -15,3 +15,59 @@
         margin: 8px 0;
     }
 }
+
+
+div.scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding-inline: 5px;
+    text-decoration: none;
+    font-size: 80%;
+}
+
+// div.scrollmenu a:hover {
+//     // background-color: #777;
+// }
+
+.suggestions-list {
+    position: absolute;
+    left: 40%;
+    // right: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    color: black;
+    z-index: 1000;
+    max-height: 200px; /* Limit the maximum height of the suggestions */
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for better contrast */
+}
+  
+.suggestions-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+  
+.suggestions-list li {
+    padding: 2px;
+    cursor: pointer;
+    font-size: 65%;
+}
+  
+.suggestions-list li:hover {
+    background-color: #f0f0f0;
+}
+
+@media only screen and (max-width: 600px) {
+    .suggestions-list[_ngcontent-ng-c2552304252] {
+        position: absolute;
+        left: 30%;
+    }
+}

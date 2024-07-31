@@ -63,6 +63,10 @@ export class AppService {
     return this.apiService.get('/categorie/list');
   }
 
+  public getCategoriesSidenav(): Observable<any> {
+    return this.apiService.get('/categorie/sidenav');
+  }
+
   public getCategorieById(id: string): Observable<any> {
     return this.apiService.get('/categorie/' + id);
   }

@@ -16,7 +16,7 @@
           <div class="swiper-container" [swiper]="config">
               <div class="swiper-wrapper">
                   <div *ngFor="let image of [product?.image1, product?.image2,product?.image3,product?.image4, product?.image5]" class="swiper-slide">
-                      <mat-card (click)="selectImage(image)" class="p-2">
+                      <mat-card *ngIf="image" (click)="selectImage(image)" class="p-2">
                           <img [attr.data-src]="image" class="swiper-lazy carousel-image"/>
                           <div class="swiper-lazy-preloader"></div>
                       </mat-card>

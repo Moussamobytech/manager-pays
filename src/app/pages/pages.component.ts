@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Settings, AppSettings } from '../app.settings';
 import { AppService } from '../app.service';
@@ -9,6 +9,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.models';
 import { Product } from '../models/product.models';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pages',
@@ -22,6 +24,7 @@ export class PagesComponent implements OnInit {
   public category:Category;
   public sidenavMenuItems:Array<any>;
   @ViewChild('sidenav', { static: true }) sidenav:any;
+  @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
   public produit: any;
   public AllProduits: Product[] = [];
   public produits: Product[] = [];
@@ -29,29 +32,65 @@ export class PagesComponent implements OnInit {
   public sort : any;
   public settings: Settings;
   public products: Product[] = [];
-  public searchTerm: string = '';
+  // public searchTerm: string = '';
+
+  searchTerm = new FormControl('');
+  suggestions: Product[] = [];
+  public showSuggestions: boolean = false;
+  public clickOutsideSubject = new Subject<Event>();
 
   constructor(public appSettings:AppSettings,
               public appService:AppService,
               public produitService : ProductService,
               public sidenavMenuService:SidenavMenuService,
               public router:Router,
-              public domHandlerService: DomHandlerService) {
+              public domHandlerService: DomHandlerService,
+              private cdRef: ChangeDetectorRef) {
     this.settings = this.appSettings.settings;
+    this.getCategoriesSidenav()
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // this.getCategoriesSidenav();
+    let res = await this.appService.getCategoriesSidenav().toPromise()
+    console.log("this.menuItems res :::::: ",res)
+    this.sidenavMenuItems = res;
     this.getCategories();
-    this.sidenavMenuItems = this.sidenavMenuService.getSidenavMenuItems();
     setTimeout(() => {
       this.settings.theme = 'fidelity';
       // this.settings.theme = 'green';
     });
     // this.getAllProduit();
 
-
+    this.searchTerm.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => {
+        this.showSuggestions = term.length > 0; // Afficher les suggestions seulement si le terme n'est pas vide
+        return this.appService.searchProducts(term);
+      })
+    ).subscribe(results => {
+      this.suggestions = results;
+    });
+    document.addEventListener('click', this.onGlobalClick.bind(this));
   }
 
+  onGlobalClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!this.suggestionsListElement?.nativeElement.contains(target)) {
+      this.suggestions = [];
+    }
+  }
+  selectSuggestion(suggestion: Product): void {
+    this.searchTerm.setValue(suggestion.nom);
+    this.router.navigate(['/search-results'], { queryParams: { q: suggestion.nom } });
+    this.showSuggestions = false; // Masquer les suggestions après la sélection
+  }
+
+  onClickOutside(): void {
+    this.showSuggestions = false; // Masquer les suggestions lorsque l'utilisateur clique à l'extérieur
+  }
+  
   public getCategories(){
       let deflt: any =  {"nom":"Tous", "cle":"all"}
       // this.category = data[0];
@@ -63,6 +102,13 @@ export class PagesComponent implements OnInit {
       data.push({"nom":"Tous", "cle":"all"})
       this.appService.Data.categories = data;
     })
+  }
+
+  public async getCategoriesSidenav(){
+
+    let res = await this.appService.getCategoriesSidenav().toPromise()
+    console.log("this.menuItems res :::::: ",res)
+    this.sidenavMenuItems = res;
   }
 
   // public changeCategory(event) {

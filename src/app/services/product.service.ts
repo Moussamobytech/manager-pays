@@ -154,8 +154,11 @@ getTotalViewsYear(): Observable<any> {
   }
 
   public getProductByNewArrival(limit) {
-
     return this.api.get('/produit/new-arrivals?limit='+limit).toPromise();
+  }
+
+  public nomProduits() {
+    return this.api.get('/produit/liste-noms').toPromise();
   }
 
   public getProductByPromotion() {
@@ -169,4 +172,6 @@ getTotalViewsYear(): Observable<any> {
   public getProductByTop() {
     return this.api.get('/produit/top-rates').toPromise();
   }
+
+  
 }

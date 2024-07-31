@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit {
     // this.getAllProduit();
     // this.getBrands();
     this.getCategorie();
+    this.nomProduits();
     // this.getProduitByPromotion();
     // this.getProduitByBest();
     // this.getNewArrivals();
@@ -187,6 +188,12 @@ export class HomeComponent implements OnInit {
   public async getNewArrivals() {
     this.newArrivals = await this.produitService.getProductByNewArrival("yes")
     console.log("res newArrivals :::::::: ",this.newArrivals)
+
+  }
+
+  public async nomProduits() {
+    this.newArrivals = await this.produitService.nomProduits()
+    console.log("res nomProduits :::::::: ",this.newArrivals)
 
   }
   public async getTopRate() {

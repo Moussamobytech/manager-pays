@@ -134,6 +134,7 @@ export class ProductsComponent implements OnInit {
   public getProductByCategorie(categoryId: string){
     this.produitService.getProductByCategorie(categoryId).subscribe((data=>{
       this.products = data;
+      this.produits = data;
       console.log("productName ::::::::: ",this.products)
 
     }))
@@ -144,6 +145,7 @@ export class ProductsComponent implements OnInit {
       let res = await this.produitService.getProductByCategorieName(categoryId)
       console.log("res Produit :::::: ",res);
       this.products = res;
+      this.produits = res;
     } catch (error) {
       this.common.errorToast("Une erreur s'est produite lors du chargement de la liste, merci de réessayer")
     }
@@ -257,12 +259,17 @@ export class ProductsComponent implements OnInit {
 AllProduct(){
   this.appService.getAllProducts().subscribe(data=>{
     this.produits = data;
+    this.products = data
     console.log("Tous les produits", this.produits);
   })
 }
 filterProductsByPrice() {
+  console.log("Starting filterProductsByPrice :::::::::: ");
+  console.log("Starting filterProductsByPrice :::::::::: ", this.products);
+  console.log("Starting filterProductsByPrice :::::::::: ", this.produits);
   // Filtrer les produits en fonction des prix sélectionnés
-  this.products = this.produits.filter(product => {
+  this.products = this.produits;
+  this.products = this.products.filter(product => {
       const priceBasic = Number(product.priceBasic); // Conversion en number
       if (this.priceFrom <= this.priceTo) {
           return priceBasic >= this.priceFrom && priceBasic <= this.priceTo;

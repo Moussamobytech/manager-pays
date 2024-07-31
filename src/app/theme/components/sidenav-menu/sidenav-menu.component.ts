@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SidenavMenuService } from './sidenav-menu.service';
+import { AppService } from 'src/app/app.service';
 
 @Component({
   selector: 'app-sidenav-menu',
@@ -12,15 +13,22 @@ export class SidenavMenuComponent implements OnInit {
   @Input('menuParentId') menuParentId;
   parentMenu:Array<any>;
 
-  constructor(private sidenavMenuService:SidenavMenuService ) { }
+  constructor(private sidenavMenuService:SidenavMenuService, private appService: AppService ) { }
 
-  ngOnInit() {
-    this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
+  async ngOnInit() {
+    // console.log("this.menuItems :::::: ",this.menuItems)
+    
+    if (this.menuItems) {
+      this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
+    }
+    
+    // this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
   }
 
   onClick(menuId){
     this.sidenavMenuService.toggleMenuItem(menuId);
     this.sidenavMenuService.closeOtherSubMenus(this.menuItems, menuId);    
   }
+
 
 }

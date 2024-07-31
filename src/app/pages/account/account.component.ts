@@ -27,16 +27,23 @@ export class AccountComponent implements OnInit {
     public translateService: TranslateService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
 
     if(this.domHandlerService.window?.innerWidth < 960){
       this.sidenavOpen = false;
     };
+    let home = await this.translateService.instant('NAV.HOME')
+    let setting = this.translateService.instant('NAV.SETTING')
+    let produits = this.translateService.instant('NAV.ALL_PRODUCTS')
+    let logout = this.translateService.instant('LOGOUT')
+
+    // console.log("home ::::::::: ",home);
+    
     this.links = [
-      { name: this.translateService.instant('NAV.HOME') || 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-      { name: this.translateService.instant('NAV.SETTING') || 'Information', href: 'information', icon: 'info' },
-      { name: this.translateService.instant('NAV.ALL_PRODUCTS') || 'Produits', href: 'products-seller', icon: 'add_shopping_cart' },
-      { name: this.translateService.instant('LOGOUT') || 'Logout', href: '/sign-in', icon: 'power_settings_new' },
+      { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
+      { name: 'Tous les produits', href: 'products-seller', icon: 'add_shopping_cart' },
+      { name: 'Paramètre', href: 'information', icon: 'info' },
+      { name: 'Déconnection', href: '/sign-in', icon: 'power_settings_new' },
     ];
 
   }
