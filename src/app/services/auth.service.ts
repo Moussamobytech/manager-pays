@@ -155,6 +155,14 @@ export class AuthenticationService {
       return this.api.post(`/users/recharge/${userId}?amount=${amount}`, {});
     }
 
+    supprimerUser(id: string): Observable<any> {
+      return this.api.delete(`/users/supprimer/${id}`);
+    }
+
+    public setStatus(id: string, etat: boolean): Observable<any> {
+      return this.api.put(`/users/etat/${id}/${etat}`, null).pipe();
+    }
+
 
 }
 

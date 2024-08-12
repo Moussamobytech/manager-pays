@@ -48,7 +48,7 @@
                             <mat-icon>mode_edit</mat-icon>
                             <span>{{'BTN.EDIT'|translate}}</span>
                         </button>
-                        <button mat-menu-item (click)="openUserDialog(user,'delete')">
+                        <button mat-menu-item (click)="deleteUser(user.id)">
                             <mat-icon>delete</mat-icon>
                             <span>{{'BTN.REMOVE'|translate}}</span>
                         </button>
@@ -62,7 +62,9 @@
                             <mat-icon *ngIf="!user.enabled" color="warn">block</mat-icon>
                         </div>
                         <div class="user-social">
-                            <mat-slide-toggle color="primary" [checked]="!user.enabled" (change)="user.enabled = !user.enabled"></mat-slide-toggle>
+                            <!-- <mat-slide-toggle color="primary" [checked]="!user.enabled" (change)="user.enabled = !user.enabled"></mat-slide-toggle> -->
+                            <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)"></mat-slide-toggle>
+
                         </div>
                     </div>
                     <div fxFlex="70" fxLayout="column" class="user-details transition-2" [class.blocked]="!user.enabled">
@@ -106,10 +108,13 @@
                           <mat-icon>mode_edit</mat-icon>
                           <span>{{"BTN.EDIT" |translate}}</span>
                       </button>
-                      <button mat-menu-item (click)="openUserDialog(user,'delete')">
+                      <button mat-menu-item (click)="deleteUser(user.id)">
                           <mat-icon>delete</mat-icon>
                           <span>{{"BTN.DELETE" |translate}}</span>
                       </button>
+                      <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">
+                        {{user.enabled ? 'Activée' : 'Désactivée' }}
+                    </mat-slide-toggle>
                   </span>
               </mat-menu>
               <div class="user-content" fxLayout="row" fxLayoutAlign="space-around center">
@@ -120,7 +125,11 @@
                           <mat-icon *ngIf="!user.enabled" color="warn">block</mat-icon>
                       </div>
                       <div class="user-social">
-                          <mat-slide-toggle color="primary" [checked]="!user.enabled" (change)="user.enabled = !user.enabled"></mat-slide-toggle>
+                          <!-- <mat-slide-toggle color="primary" [checked]="!user.enabled" (change)="user.enabled = !user.enabled">
+
+                          </mat-slide-toggle> -->
+                          <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)"></mat-slide-toggle>
+
                       </div>
                   </div>
                   <div fxFlex="80" fxFlex.xs="70" fxLayout="row" fxLayout.xs="column" class="user-details transition-2" [class.blocked]="!user.enabled">
@@ -178,16 +187,19 @@
                 <!-- <div class="mat-mdc-cell">{{ user.createdAt | date: "dd /MM /yy" }}</div> -->
                 <div class="mat-mdc-cell">{{ user.createdAt | date: "yyyy-mm-dd" }}</div>
                 <div class="mat-mdc-cell">
-                    <div class="p-2 actions">
-                        <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="openUserDialog(user,'delete')">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
+                  <div class="p-2 actions d-flex align-items-center">
+                      <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
+                          <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="deleteUser(user.id)">
+                          <mat-icon>delete</mat-icon>
+                      </button>
+                      <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">
+                          {{user.enabled ? 'Activée' : 'Désactivée' }}
+                      </mat-slide-toggle>
+                  </div>
+              </div>
+
         </div>
         </div>
     </div>
