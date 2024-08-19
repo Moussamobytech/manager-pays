@@ -5,6 +5,7 @@ import { MenuService } from './components/menu/menu.service';
 import { DomHandlerService } from '../dom-handler.service';
 import { AuthenticationService } from '../services/auth.service';
 import { User } from '../models/user.models';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin',
@@ -19,7 +20,7 @@ export class AdminComponent implements OnInit {
   public toggleSearchBar:boolean = false;
   currentUser : User
 
-  constructor(public appSettings:AppSettings,
+  constructor(public appSettings:AppSettings, public translateService: TranslateService, 
               private authenticationService: AuthenticationService,
               public router:Router,
               private menuService: MenuService,
@@ -39,6 +40,9 @@ export class AdminComponent implements OnInit {
       this.settings.theme = 'fidelity';
     });
     this.menuItems = this.menuService.getMenuItems();
+    // this.localStorage.setJsonValue("lang-key",{lang})
+    // console.log(lg.lang)
+    this.translateService.use("fr");
   }
 
   ngAfterViewInit(){

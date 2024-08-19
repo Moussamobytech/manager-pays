@@ -40,7 +40,7 @@
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Prix promo</mat-label>
-                                <input matInput formControlName="pricePromotion">
+                                <input type="number" matInput formControlName="pricePromotion">
                                 <mat-error *ngIf="form.controls.pricePromotion.errors?.required">Prix promo est obligatoire</mat-error>
                             </mat-form-field>
                         </div> 

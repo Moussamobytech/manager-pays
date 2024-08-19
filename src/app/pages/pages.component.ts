@@ -179,8 +179,9 @@ export class PagesComponent implements OnInit {
   public onSearch(event: Event): void {
     event.preventDefault();
     if (this.searchTerm) {
-      console.log(":::::::::searchTerm ",this.searchTerm)
-      this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm } });
+      console.log(":::::::::searchTerm ",this.searchTerm.value)
+      this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
+
     }
   }
 
