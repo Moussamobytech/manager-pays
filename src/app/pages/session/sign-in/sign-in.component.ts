@@ -30,7 +30,8 @@ export class SignInComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       'country': ['mali'],
       'phone': ['', Validators.compose([Validators.required])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'username': ['', Validators.required]
     });
 
 
@@ -116,7 +117,6 @@ export class SignInComponent implements OnInit {
     this.formValues.password.setValue("")
     this.toSubmit = false;
   }
-
 
 
 }

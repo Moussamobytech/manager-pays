@@ -15,6 +15,8 @@ export const SessionRoutes: Routes = [{
   }, {
     path: 'register',
     component: RegisterComponent
-  }
+  },
+
+
  ]
 }];

@@ -1,9 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UntypedFormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormGroup} from '@angular/forms';
 import { User } from 'src/app/models/user.models';
 import { StringMatchValidators } from 'src/app/shared/confirmed.validator';
 import { UserTypePipe } from 'src/app/theme/pipes/userType.pipe';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-dialog',
@@ -22,11 +24,21 @@ export class UserDialogComponent implements OnInit {
   ]
   public hide:  boolean = true;
   public hide2: boolean = true;
+  updatePasswordForm: FormGroup;
+  whatsappLink: string;
+  generatedPassword: string = ''; // Propriété pour stocker le mot de passe généré
+
   constructor(
               private dialogRef: MatDialogRef<UserDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               public fb: UntypedFormBuilder,
+              private authenticationService: AuthenticationService,
+              private snackBar: MatSnackBar,
   ){
+    this.updatePasswordForm = this.fb.group({
+      phone: ['', [Validators.required, Validators.pattern(/^\d{11}$/)]]
+    });
+
     this.user = data.user;
     this.action = data.action;
     if(this.action == "add"){
@@ -103,5 +115,79 @@ export class UserDialogComponent implements OnInit {
     }else{
       return userId;
     }
+  }
+
+
+
+  // onSubmit() {
+  //   if (this.updatePasswordForm.invalid) {
+  //     this.snackBar.open('Invalid form data', 'Close', {
+  //       duration: 3000,
+  //     });
+  //     return;
+  //   }
+
+  //   const phone = this.updatePasswordForm.get('phone').value;
+  //   const newPassword = this.generateRandomPassword();
+  //   this.whatsappLink = this.createWhatsAppLink(phone, newPassword);
+
+  //   this.authenticationService.resetPassword(phone, newPassword).subscribe(
+  //     response => {
+  //       this.snackBar.open('Password reset successful!', 'Close', {
+  //         duration: 3000,
+  //       });
+  //       // this.router.navigate(['/sign-in']);
+  //     },
+  //     error => {
+  //       console.error('Error resetting password', error);
+  //       this.snackBar.open('Failed to reset password', 'Close', {
+  //         duration: 3000,
+  //       });
+  //     }
+  //   );
+  // }
+  onSubmit() {
+    if (this.updatePasswordForm.invalid) {
+      this.snackBar.open('Invalid form data', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    const phone = this.updatePasswordForm.get('phone').value;
+    const newPassword = this.generateRandomPassword();
+    this.generatedPassword = newPassword;  // Stocke le mot de passe généré
+    this.whatsappLink = this.createWhatsAppLink(phone, newPassword);
+
+    this.authenticationService.resetPassword(phone, newPassword).subscribe(
+      response => {
+        this.snackBar.open('Password reset successful!', 'Close', {
+          duration: 3000,
+        });
+        // this.router.navigate(['/sign-in']);
+      },
+      error => {
+        console.error('Error resetting password', error);
+        this.snackBar.open('Failed to reset password', 'Close', {
+          duration: 3000,
+        });
+      }
+    );
+  }
+
+  generateRandomPassword(length: number = 12): string {
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+    return password;
+  }
+  createWhatsAppLink(phone: string, password: string): string {
+    const link = `https://wa.me/${phone}?text=Your%20new%20password%20is:%20${encodeURIComponent(password)}`;
+    console.log('WhatsApp Link:', link);  // Affichez le lien dans la console pour le débogage
+    console.log(`Sending WhatsApp message to ${phone}: ${password}`);
+    return link;
   }
 }

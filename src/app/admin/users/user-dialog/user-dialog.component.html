@@ -176,6 +176,59 @@
                   </mat-form-field>
               </div>
           </mat-tab>
+          <mat-tab label="Generer password" formGroupName="contacts">
+            <div fxLayout="column" class="form-field-outer">
+              <!-- <form [formGroup]="updatePasswordForm" (ngSubmit)="onSubmit()">
+
+                <mat-form-field class="w-100">
+                  <mat-label><mat-icon>local_phone</mat-icon> *{{"FIELD.PHONE"|translate}}</mat-label>
+                  <input matInput formControlName="phone" >
+
+              </mat-form-field>
+
+              <div class="text-center mt-2">
+                <button mat-raised-button color="primary" class="mat-elevation-z6" type="submit" [disabled]="updatePasswordForm.invalid">
+                  Reset Password
+                </button>
+              </div>
+              </form> -->
+              <form [formGroup]="updatePasswordForm" (ngSubmit)="onSubmit()">
+
+                <mat-form-field class="w-100">
+                  <mat-label><mat-icon>local_phone</mat-icon> *{{"FIELD.PHONE"|translate}}</mat-label>
+                  <input matInput formControlName="phone">
+                </mat-form-field>
+
+                <div class="text-center mt-2">
+                  <button mat-raised-button color="primary" class="mat-elevation-z6" type="submit" [disabled]="updatePasswordForm.invalid">
+                    Reset Password
+                  </button>
+                </div>
+
+              </form>
+
+              <!-- Affiche le mot de passe généré -->
+              <div *ngIf="generatedPassword" class="mt-3">
+                <p>Your new password is: <strong>{{ generatedPassword }}</strong></p>
+              </div>
+
+                <!-- <mat-form-field class="w-100">
+                    <mat-label><mat-icon>person</mat-icon> {{"FIELD.PHONE"|translate}}</mat-label>
+                    <input matInput formControlName="username" required>
+                    <mat-error *ngIf="form.controls.username.errors?.required">{{"FIELD_ERROR.PHONE_REQUIRED"|translate}}</mat-error>
+                </mat-form-field> -->
+                <!-- <mat-form-field class="w-100">
+                  <mat-label><mat-icon>person</mat-icon> {{"FIELD.LASTNAME"|translate}}</mat-label>
+                  <input matInput formControlName="lastname" required>
+                  <mat-error *ngIf="form.controls.lastname.errors?.required">{{"FIELD_ERROR.LASTNAME_REQUIRED"|translate}}</mat-error>
+                </mat-form-field> -->
+                <!-- <mat-form-field class="w-100">
+                  <mat-label><mat-icon *ngIf=" usernameType=='phone' ">local_phone</mat-icon><mat-icon *ngIf=" usernameType=='email' ">mail</mat-icon> Identifiant</mat-label>
+                  <input matInput formControlName="username" required>
+                  <mat-error *ngIf="form.controls.username.errors?.required">L'identifiant est obligatoire.</mat-error>
+                </mat-form-field> -->
+            </div>
+        </mat-tab>
         </mat-tab-group>
       </form>
     </div>
