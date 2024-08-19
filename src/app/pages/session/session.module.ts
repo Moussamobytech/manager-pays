@@ -43,7 +43,7 @@ import { SignInModule } from './sign-in/sign-in.module';
   declarations: [
     LoginComponent,
     RegisterComponent,
-    UserAuthSessionComponent,
+    UserAuthSessionComponent
   ],
   providers:[
   ]

@@ -11,9 +11,10 @@ import { User } from '../models/user.models';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     user: User | null = null;
+ private resetPasswordUrl = 'https://api.fidelity-market.com/ecommerce/api/v1/users/reset-forgoten-password'
 
     constructor (private utility: CommonMessageService, private tokenStorage: TokenStorageService,
-        private api: ApiService) {
+        private api: ApiService, private http : HttpClient) {
     }
 
     public async updateUserInfo(id : any, data : any){
@@ -54,6 +55,12 @@ export class AuthenticationService {
     }
 }
 
+
+resetPassword(username: string, newpassword: string): Observable<any> {
+  const url = this.resetPasswordUrl;
+  const body = { username, newpassword };
+  return this.http.post(url, body);
+}
 
 
     /**
@@ -153,6 +160,14 @@ export class AuthenticationService {
       console.log('Request URL:', `/users/recharge/${userId}?amount=${amount}`); // Debugging line
 
       return this.api.post(`/users/recharge/${userId}?amount=${amount}`, {});
+    }
+
+    supprimerUser(id: string): Observable<any> {
+      return this.api.delete(`/users/supprimer/${id}`);
+    }
+
+    public setStatus(id: string, etat: boolean): Observable<any> {
+      return this.api.put(`/users/etat/${id}/${etat}`, null).pipe();
     }
 
 

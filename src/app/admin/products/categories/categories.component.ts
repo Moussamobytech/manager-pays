@@ -72,6 +72,7 @@ export class CategoriesComponent implements OnInit {
 
 
   public remove(category: any) {
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {

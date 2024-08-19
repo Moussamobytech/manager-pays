@@ -25,11 +25,10 @@ export class InformationComponent implements OnInit {
       'profiles': [this.currentUser.profiles || null],
       'adresse': [this.currentUser.adresse || null]
     });
-
     this.passwordForm = this.formBuilder.group({
       'currentPassword': ['', Validators.required],
       'newPassword': ['', Validators.required],
-      'confirmNewPassword': ['', Validators.required]
+      'confirmNewPassword': ['', Validators.required],
     },{validator: matchingPasswords('newPassword', 'confirmNewPassword')});
   }
 
@@ -47,12 +46,32 @@ export class InformationComponent implements OnInit {
     }
   }
 
-  public async onPasswordFormSubmit(values:Object):Promise<void> {
-    if (this.passwordForm.valid) {
+  public async onPasswordFormSubmit(values: Object): Promise<void> {
+    if (this.passwordForm.valid && this.passwordForm.value.newPassword) {
+        let data: any = {
+            username: this.currentUser.username,  // Use the currentUser's username
+            password: this.passwordForm.value.currentPassword,
+            newpassword: this.passwordForm.value.newPassword
+        };
 
-      this.snackBar.open('Your password changed successfully!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
+        try {
+            let res: any = await this.auth.updatePassword(data);
+            console.log("Response:", res);
+            if (res === "OK") {
+                this.snackBar.open('Your password changed successfully!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
+                // window.location.reload();
+            } else {
+                this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations!', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+            }
+        } catch (error: any) {
+            console.log("Error:", error);
+            this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations!', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+        }
     }
-  }
+}
+
+
+
 
   currentProfile(roles){
     console.log("roles :::::::: ",roles)

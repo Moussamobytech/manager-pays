@@ -11,6 +11,8 @@ import { json } from 'stream/consumers';
 import { User } from 'src/app/models/user.models';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { UserAddForm, UserEditForm } from 'src/app/models/userForm.model';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-users',
@@ -122,10 +124,39 @@ export class UsersComponent implements OnInit {
     }
     public deleteUser(id:any){
       console.log(id)
-      //  this.usersService.deleteUser(user.id).subscribe(user => this.getUsers());
+       this.authService.supprimerUser(id).subscribe(user => this.getUsers());
     }
 
 
+    public remove(user: any) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: {
+        title: "Confirm Action",
+        message: "Vous etes sur de supprimer user?"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        // Si l'utilisateur confirme la suppression dans la boîte de dialogue
+        this.authService.supprimerUser(user.id).subscribe(
+          () => {
+            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+            const index: number = this.users.findIndex((us: any) => us.id === user.id);
+            if (index !== -1) {
+              this.users.splice(index, 1);
+            }
+            console.log("Category successfully deleted.");
+          },
+          (error) => {
+            console.error("Error deleting category:", error);
+            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+          }
+        );
+      }
+    });
+  }
     public onPageChanged(event){
         this.page = event;
         this.getUsers();
@@ -168,6 +199,26 @@ export class UsersComponent implements OnInit {
               this.deleteUser(id);
             }
         });
+      }
+    }
+
+    setStatus(id: string, event: MatSlideToggleChange): void {
+      // Trouver la campagne correspondante dans la liste
+      const user = this.users.find(c => c.id === id);
+      if (user) {
+        // Mettre à jour l'état de la campagne
+        user.enabled = event.checked;
+        // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
+        this.auth.setStatus(id, event.checked).subscribe(
+          () => {
+            console.log(`Statut de la user ${id} modifié avec succès à ${event.checked}.`);
+            // Mettre à jour l'état de la campagne dans votre application si nécessaire
+          },
+          error => {
+            console.error("Erreur lors du réglage du statut de user:", error);
+            // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
+          }
+        );
       }
     }
 

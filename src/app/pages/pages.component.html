@@ -67,9 +67,9 @@
                   <mat-icon>search</mat-icon>
               </button>
               </form>
-              <div *ngIf="showSuggestions && suggestions.length > 0" 
-                    class="suggestions-list" 
-                    appClickOutside="onClickOutside()" 
+              <div *ngIf="showSuggestions && suggestions.length > 0"
+                    class="suggestions-list"
+                    appClickOutside="onClickOutside()"
                     #suggestionsContainer>
                 <ul>
                 <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
@@ -94,7 +94,7 @@
 
           </div>
           <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">
-              
+
               <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
                 <!-- [formControl]="searchTerm" -->
                 <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
@@ -102,9 +102,9 @@
                   <mat-icon>search</mat-icon>
               </button>
               </form>
-							<div *ngIf="showSuggestions && suggestions.length > 0" 
-										class="suggestions-list" 
-										appClickOutside="onClickOutside()" 
+							<div *ngIf="showSuggestions && suggestions.length > 0"
+										class="suggestions-list"
+										appClickOutside="onClickOutside()"
 										#suggestionsContainer>
 								<ul>
 								<li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
@@ -113,13 +113,13 @@
 								</ul>
 							</div>
           </div>
-          
+
       </mat-toolbar-row>
       <!-- <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar bg-primary" style="height: 55px !important;">
         <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">
-              
+
             <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
-              
+
               <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
               <button mat-mini-fab type="submit"  class="search-btn mat-elevation-z0 text-muted">
                 <mat-icon>search</mat-icon>
@@ -129,11 +129,11 @@
         </div>
       </mat-toolbar-row> -->
       <mat-toolbar-row fxShow="false" fxShow.xs="true" fxLayoutAlign="space-between left" class="logo-toolbar bg-primary" style="height: 30px !important;">
-        
+
         <div class="scrollmenu" fxShow.gt-md="false" fxShow.gt-sm="false">
             <!-- <a href="#home">Home</a>
             <a href="#news">News</a> -->
-            
+
             <a [routerLink]="['/products', 'mode']">Mode-Beauté</a>
             <a [routerLink]="['/products', 'health']">Santé-Bien-être</a>
             <a [routerLink]="['/products', 'household']">Electroménagers</a>
@@ -144,7 +144,7 @@
             <a [routerLink]="['/products', 'custom']">{{ 'NAV.OTHERS' | translate }}</a>
           </div>
       </mat-toolbar-row>
-      
+
   </mat-toolbar>
   <app-menu fxShow="false" fxShow.gt-sm></app-menu>
 
