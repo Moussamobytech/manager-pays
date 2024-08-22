@@ -15,7 +15,7 @@
   "CHOOSE": "Choissisez le type de profil",
   "RECHOOSE": "Choissisez à nouveau le profil",
   "FORM_SIGNUP": "Formulaire d'inscription",
-  "STORE": "Boutique",
+  "STORE_LOG": "Logo Boutique",
   "PARTICULAR": "Particulier",
   "ACCOUNT_INFO": "Information sur le compte",
   "STATS": "Statistiques",
@@ -36,7 +36,7 @@
   "FROM":"De",
   "TO":"à",
   "TEXT_NEWSLETTER": "Restez à jour avec nos dernières nouveautés et produits",
-  
+
   "NAV": {
     "HOME": "Home",
     "PAGES": "Pages",
@@ -142,6 +142,8 @@
     "EMAIL": "Email",
     "CONTACT": "Numéro de contact",
     "ADD": "Adresse",
+    "STORE_LOGO": "Logo Boutique",
+    "STORE_NAME": "Nom Boutique",
     "RCCM": "RCCM",
     "COUNTRY": "Pays",
     "STATE": "Ville",

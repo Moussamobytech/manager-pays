@@ -6,6 +6,7 @@ export class User {
   email?: string|null;
   phoneNumber?: string|null;
   adresse?: string|null;
+  boutique?: string|null;
   password?: string;
   profiles?: Profile[];
   avatar?: string;

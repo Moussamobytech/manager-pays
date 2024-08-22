@@ -82,7 +82,7 @@
                         </p>
                         <p fxLayout="row" fxLayoutAlign="start center">
                             <mat-icon class="text-muted mt-size">date_range</mat-icon>
-                            <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                            <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:'yyyy-MM-dd'}}</span>
                         </p>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                           </p>
                           <p fxLayout="row" fxLayoutAlign="start center">
                               <mat-icon class="text-muted">event_available</mat-icon>
-                              <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                              <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:'yyyy-MM-dd'}}</span>
                           </p>
                       </div>
                       <div fxFlex="26" fxFlex.xs="100" fxLayout="column" fxLayoutAlign=" center">
@@ -185,7 +185,8 @@
                 <div class="mat-mdc-cell">{{ user.username }}</div>
                 <div class="mat-mdc-cell" *ngFor="let profile of user.profiles">{{ profile.name | userType }}</div>
                 <!-- <div class="mat-mdc-cell">{{ user.createdAt | date: "dd /MM /yy" }}</div> -->
-                <div class="mat-mdc-cell">{{ user.createdAt | date: "yyyy-mm-dd" }}</div>
+                <div class="mat-mdc-cell">{{ user.createdAt | date:'yyyy-MM-dd' }}</div>
+
                 <div class="mat-mdc-cell">
                   <div class="p-2 actions d-flex align-items-center">
                       <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">

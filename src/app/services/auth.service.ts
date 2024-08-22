@@ -130,6 +130,8 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * Performs the signup auth
      * @param firstname firstname of user
      * @param lastname lastname of user
+     * @param boutique boutique of user
+     * @param logo logo of user
      * @param phoneNumber phoneNumber of user
      * @param role role of user
      * @param email email of user

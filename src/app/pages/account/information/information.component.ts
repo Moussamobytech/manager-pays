@@ -23,7 +23,8 @@ export class InformationComponent implements OnInit {
       'lastname': [(this.currentUser.lastname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
       'phoneNumber': [this.currentUser.phoneNumber, Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(8)])],
       'profiles': [this.currentUser.profiles || null],
-      'adresse': [this.currentUser.adresse || null]
+      'adresse': [this.currentUser.adresse || null],
+      'boutique': [this.currentUser.boutique || null]
     });
     this.passwordForm = this.formBuilder.group({
       'currentPassword': ['', Validators.required],

@@ -5,9 +5,9 @@
         </mat-card-header>
         <mat-card-content class="pt-3">
             <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
-                <div fxFlex="100" fxFlex.gt-sm="40" class="px-2"> 
-                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 5 images)</span></p>  
-                    <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>  
+                <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
+                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 5 images)</span></p>
+                    <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>
                 </div>
                 <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
                     <div fxLayout="row wrap">
@@ -18,7 +18,7 @@
                                 <mat-error *ngIf="form.controls.nom.errors?.required">nom est obligatoire</mat-error>
                                 <mat-error *ngIf="form.controls.nom.hasError('minlength')">nom isn't long enough, minimum of 4 characters</mat-error>
                             </mat-form-field>
-                        </div> 
+                        </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Categorie</mat-label>
@@ -29,22 +29,37 @@
                                 </mat-select>
                                 <mat-error *ngIf="form.controls.categorie.errors?.required">categorie est obligatoire</mat-error>
                             </mat-form-field>
-                        </div> 
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        </div>
+                        <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Prix</mat-label>
                                 <input matInput formControlName="priceBasic" required>
                                 <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
                             </mat-form-field>
-                        </div> 
+                        </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Prix promo</mat-label>
                                 <input matInput formControlName="pricePromotion">
                                 <mat-error *ngIf="form.controls.pricePromotion.errors?.required">Prix promo est obligatoire</mat-error>
                             </mat-form-field>
-                        </div> 
-                       
+                        </div>  -->
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Prix</mat-label>
+                              <input matInput formControlName="priceBasic" required>
+                              <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
+                              <mat-error *ngIf="form.controls.priceBasic.errors?.nonZero">Prix ne peut pas être zéro</mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Prix promo</mat-label>
+                              <input matInput formControlName="pricePromotion">
+                              <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error>
+                            </mat-form-field>
+                          </div>
+
                         <!-- <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Color</mat-label>
@@ -54,11 +69,11 @@
                                         <div fxLayout="row" fxLayoutAlign="space-between center">
                                             <span>{{color}}</span>
                                             <mat-icon [style.color]="color">fiber_manual_record</mat-icon>
-                                        </div> 
+                                        </div>
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-                        </div> 
+                        </div>
                         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Size</mat-label>
@@ -68,21 +83,21 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-                        </div> 
+                        </div>
                         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Weight</mat-label>
-                                <input matInput formControlName="weight" type="number"> 
+                                <input matInput formControlName="weight" type="number">
                             </mat-form-field>
                         </div>  -->
 
                         <div fxFlex="100" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Description</mat-label> 
-                                <textarea matInput formControlName="description" rows="7"></textarea> 
-                            </mat-form-field> 
-                        </div> 
-                       
+                                <mat-label>Description</mat-label>
+                                <textarea matInput formControlName="description" rows="7"></textarea>
+                            </mat-form-field>
+                        </div>
+
 
 
                         <div fxFlex="100" class="mt-2 text-center w-100">
@@ -92,8 +107,8 @@
                 </div>
             </form>
         </mat-card-content>
-       
-       
-        
+
+
+
     </mat-card>
 </div>
