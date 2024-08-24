@@ -27,6 +27,7 @@ export class TilesComponent implements OnInit {
   public users :User[] = [];
   public userParticulier : any;
   public userBoutique : any;
+  public vendeurInActif :any;
 
   public totalViews : any;
   public currentDateDay : any;
@@ -138,8 +139,11 @@ export class TilesComponent implements OnInit {
   public getAllProduct(){
     this.productService.getAllProducts().then((data: any) =>{
       this.products = data;
-      console.log("::::::::::::::::::;;;; total", this.products);
+      console.log("::::::::::::::::::;;;; total", data);
 
+      this.totalInActif = this.products.filter((product: any) => product.etat === 'PENDING').length;
+
+      console.log(`Total produits inactifs: ${this.totalInActif}`);
 
       // this.products.etat = data.etat
       console.log("::::::::::::::::::;;;; actif actif actif ", this.products);
@@ -152,12 +156,12 @@ export class TilesComponent implements OnInit {
       // this.products.pending = data.pending
 
     //  // Compter le nombre de produits actifs
-     this.totalActif = this.products.filter(product => product.etat === 'actif').length;
+     this.totalActif = this.products.filter(product => product.etat === 'ACTIF').length;
      console.log(":::::::::: total  ", this.totalActif);
 
      // Compter le nombre de produits inactifs
-     this.totalInActif = this.products.filter(product => product.etat === 'inactif').length;
-     console.log(":::::::::: totalInActif  ", this.totalInActif);
+    //  this.totalInActif = this.products.filter(product => product.etat === 'inactif').length;
+    //  console.log(":::::::::: totalInActif  ", this.totalInActif);
 
     //  // Compter le nombre de produits en attente
     //  this.totalPending = this.products.filter(product => product.etat === 'pending').length;
@@ -169,11 +173,28 @@ export class TilesComponent implements OnInit {
   public getUsers(){
     this.auth.list().then((data: any) =>{
       this.users =data;
+      console.log("::::::::::::::::::;;;; users", data);
       this.userBoutique = data.filter((user: User) => user.profiles?.some(profile => profile.name === 'ROLE_BOUTIQUE'));
       console.log('Utilisateurs avec le rôle ROLE_BOUTIQUE :', this.userBoutique);
 
       this.userParticulier = data.filter((user: User) => user.profiles?.some(profile => profile.name === 'ROLE_PARTICULIER'));
       console.log('Utilisateurs avec le rôle ROLE_PARTICULIER :', this.userParticulier);
+
+
+      this.vendeurInActif = data.filter((user: User) =>
+            !user.enabled &&
+            user.profiles?.some(profile => profile.name === 'ROLE_BOUTIQUE' || profile.name === 'ROLE_PARTICULIER')
+        ).length;
+
+        console.log(`Total utilisateurs inactifs (boutique + particulier): ${this.vendeurInActif}`);
+
+    //   this.totalInActif = this.userBoutique.filter((user: User) => !user.enabled).length;
+
+    //   console.log(`Total vendeurs inactifs: ${this.totalInActif}`);
+    //   this.userBoutique.forEach((user: User) => {
+    //     const status = user.enabled ? 'Actif' : 'Inactif';
+    //     console.log(`User: ${user.username}, Status: ${status}`);
+    // });
     });
   }
 

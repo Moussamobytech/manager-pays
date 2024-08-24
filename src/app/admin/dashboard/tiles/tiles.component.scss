@@ -17,3 +17,21 @@
         text-transform: uppercase;
     }
 }
+.icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.icon-base {
+  font-size: 36px; /* Taille de l'icône de base */
+  // color: white;
+}
+
+// .icon-overlay {
+//   position: absolute;
+//   top: 0;
+//   right: -10px; /* Ajuster pour centrer la croix sur l'icône de groupe */
+//   color: red; /* Couleur de la croix */
+//   font-size: 20px; /* Taille de la croix */
+//   background-color: white;
+// }
