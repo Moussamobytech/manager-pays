@@ -49,7 +49,7 @@
       <p class="new-price" *ngIf="product?.pricePromotion">
         {{'PRODUCTS.PRICE_PROMOTION' | translate}} : {{product?.pricePromotion}} FCFA
       </p>
-      <p class="py-1 text-muted lh">{{product?.description }}</p>
+      <p  *ngIf="product.description != null && product.description != 'null'" class="py-1 text-muted lh">{{product?.description }}</p>
 
         <div class="divider mt-1"></div>
         <div class="py-2">
@@ -98,7 +98,7 @@
             
             <button mat-button><i class="fab fa-whatsapp fa-lg me-2"></i> {{'SHARE_ZAP' | translate}}</button>
             <share-buttons theme="modern-dark"
-                [include]="['copy', 'messenger', 'sms', 'telegram', 'whatsapp']"
+                [include]="['copy', 'messenger', 'facebook', 'twitter', 'whatsapp', 'x']"
                 [url]="path"
                 [description]="'SHARE_ZAP' | translate"
                 class="pt-5">
