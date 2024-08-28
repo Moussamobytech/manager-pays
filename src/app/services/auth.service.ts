@@ -53,7 +53,19 @@ export class AuthenticationService {
         console.log(error);
         return "KO"
     }
-}
+  }
+
+  public reset(username : any){
+      console.log("::::::::::",username)
+      return this.api.get('/users/reset-forgoten-password?username='+username)
+
+  }
+
+  public delete(username : any){
+      console.log("::::::::::",username)
+      return this.api.get('/users/delete-user?username='+username)
+
+  }
 
 
 resetPassword(username: string, newpassword: string): Observable<any> {
@@ -166,8 +178,8 @@ resetPassword(username: string, newpassword: string): Observable<any> {
       return this.api.delete(`/users/supprimer/${id}`);
     }
 
-    public setStatus(id: string, etat: boolean): Observable<any> {
-      return this.api.put(`/users/etat/${id}/${etat}`, null).pipe();
+    public setStatus(id: string, etat: string): Observable<any> {
+      return this.api.put(`/users/etat/${id}?state=${etat}`, null).pipe();
     }
 
 

@@ -45,6 +45,7 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
+import { AnalyticsService } from './services/analitycs.service';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { SearchResultsComponent } from './pages/search-results/search-results.co
     CategoryService,
     CampagneService,
     ApiService,
+    AnalyticsService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },

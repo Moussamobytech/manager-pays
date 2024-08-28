@@ -188,10 +188,13 @@
                 <div class="mat-mdc-cell">{{ user.createdAt | date: "dd-MM-yyyy" }}</div>
                 <div class="mat-mdc-cell">
                   <div class="p-2 actions d-flex align-items-center">
+                      <button mat-mini-fab color="success" [matTooltip]="'BTN.EDIT'|translate" (click)="reset(user.username)">
+                          <mat-icon>refresh</mat-icon>
+                      </button>
                       <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
                           <mat-icon>edit</mat-icon>
                       </button>
-                      <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="deleteUser(user.id)">
+                      <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(user)">
                           <mat-icon>delete</mat-icon>
                       </button>
                       <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">

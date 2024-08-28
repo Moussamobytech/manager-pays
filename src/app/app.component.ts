@@ -4,6 +4,7 @@ import { Settings, AppSettings } from './app.settings';
 import { TranslateService } from '@ngx-translate/core';
 import { DomHandlerService } from './dom-handler.service';
 import { LocalService } from './services/local.service';
+import { AnalyticsService } from './services/analitycs.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
               public router: Router,
               public translate: TranslateService,
               private localStorage: LocalService,
+              private analitycsService: AnalyticsService,
               public domHandlerService: DomHandlerService){
     this.settings = this.appSettings.settings;
     translate.addLangs(['en','de','fr','ru','tr']);

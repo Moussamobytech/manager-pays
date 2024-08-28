@@ -29,7 +29,7 @@ export const routes: Routes = [
   ],
   declarations: [
     UsersComponent,
-    UserDialogComponent
+    UserDialogComponent,
   ]
 })
 export class UsersModule { }

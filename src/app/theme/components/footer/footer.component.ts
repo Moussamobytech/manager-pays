@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Newsletter } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
+import { AnalyticsService } from 'src/app/services/analitycs.service';
 
 @Component({
   selector: 'app-footer',
@@ -18,10 +19,11 @@ export class FooterComponent implements OnInit {
 public newsletter: Newsletter[];
 contactForm: UntypedFormGroup;
 
-  constructor(public formBuilder: UntypedFormBuilder, public appService : AppService) { }
+  constructor(public formBuilder: UntypedFormBuilder, public appService : AppService, private analitycsService: AnalyticsService) { }
 
   ngOnInit() {
     this.initForm()
+    this.analitycsService.trackEvent('footer loaded', 'footer loaded into view','view');
    }
 
 

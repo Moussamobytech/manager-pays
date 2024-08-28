@@ -13,6 +13,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { UserAddForm, UserEditForm } from 'src/app/models/userForm.model';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { CommonMessageService } from 'src/app/services/common-message.service';
 
 @Component({
   selector: 'app-users',
@@ -32,7 +33,7 @@ export class UsersComponent implements OnInit {
 
     constructor(
       public appSettings: AppSettings,
-      public dialog: MatDialog,
+      public dialog: MatDialog, private commonService: CommonMessageService,
       private authService:AuthenticationService,
       public usersService: UsersService,
       private breakpointObserver:BreakpointObserver,
@@ -112,6 +113,7 @@ export class UsersComponent implements OnInit {
     public async updateUser(id:string,userFormData:UserEditForm){
       let userInfo:any = {
         type        : (userFormData.type.name),
+        role:[userFormData.type.name],
         // username    : (userFormData.username),
         firstname   : (userFormData.firstname),
         lastname    : (userFormData.lastname),
@@ -120,40 +122,98 @@ export class UsersComponent implements OnInit {
         adresse     : (userFormData.contacts.address)||null,
         // password    : (userFormData.auth.password2)||null,
       };
-        return await this.authService.updateUser(id,userInfo).then(user => this.getUsers());
+      console.log("userInfo ::::: ",userInfo);
+      
+      return await this.authService.updateUser(id,userInfo).then(user => this.getUsers());
     }
-    public deleteUser(id:any){
-      console.log(id)
-       this.authService.supprimerUser(id).subscribe(user => this.getUsers());
+    // public deleteUser(id:any){
+    //   console.log(id)
+    //    this.authService.supprimerUser(id).subscribe(user => this.getUsers());
+    // }
+
+    public async deleteUser(username : any){
+      try {
+        console.log("::::::::::",username)
+          let res : any = await this.authService.delete(username).toPromise()
+          console.log("::::::RESSSSSSSSSSSS::::",res)
+
+          this.commonService.successToast(`${res.data.message || 'Utilisateur supprimer avec succès'}.`)
+  
+          this.getUsers()
+          return res
+      } catch (error : any) {
+          console.log(error);
+          return "KO"
+      }
     }
 
+    public async reset(username : any){
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: "400px",
+        data: {
+          title: "Reinitialisation",
+          message: "Vous etes sur de vouloir reinitialiser le mot de passe de cet utilisateur : "+username+" ?"
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(async dialogResult => {
+        if (dialogResult) {
+          console.log("reset ::::")
+          
+          try {
+            console.log("::::::::::",username)
+              let res : any = await this.authService.reset(username).toPromise()
+              console.log("::::::RESSSSSSSSSSSS::::",res)
+              this.commonService.successToast(`${res.message}.`)
+              let link = this.createWhatsAppLink(username, res.message)
+              alert(res.message)
+    
+              return res
+          } catch (error : any) {
+              console.log(error);
+              return "KO"
+          }
+        }
+      });
+
+      
+    }
+
+    createWhatsAppLink(phone: string, password: string): string {
+      const link = `https://wa.me/${phone}?text=Your%20new%20password%20is:%20${encodeURIComponent(password)}`;
+      console.log('WhatsApp Link:', link);  // Affichez le lien dans la console pour le débogage
+      console.log(`Sending WhatsApp message to ${phone}: ${password}`);
+      return link;
+    }
 
     public remove(user: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
       data: {
-        title: "Confirm Action",
-        message: "Vous etes sur de supprimer user?"
+        title: "Suppression",
+        message: "Vous etes sur de supprimer cet utilisateur : "+user.username+" ?"
       }
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
+        console.log("verify ::::")
+        this.deleteUser(user.username)
         // Si l'utilisateur confirme la suppression dans la boîte de dialogue
-        this.authService.supprimerUser(user.id).subscribe(
-          () => {
-            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
-            const index: number = this.users.findIndex((us: any) => us.id === user.id);
-            if (index !== -1) {
-              this.users.splice(index, 1);
-            }
-            console.log("Category successfully deleted.");
-          },
-          (error) => {
-            console.error("Error deleting category:", error);
-            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
-          }
-        );
+        // this.authService.supprimerUser(user.id).subscribe(
+        //   () => {
+        //     // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+        //     const index: number = this.users.findIndex((us: any) => us.id === user.id);
+        //     if (index !== -1) {
+        //       this.users.splice(index, 1);
+        //     }
+        //     console.log("Category successfully deleted.");
+        //   },
+        //   (error) => {
+        //     console.error("Error deleting category:", error);
+        //     // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+        //   }
+        // );
       }
     });
   }
@@ -209,13 +269,15 @@ export class UsersComponent implements OnInit {
         // Mettre à jour l'état de la campagne
         user.enabled = event.checked;
         // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
-        this.auth.setStatus(id, event.checked).subscribe(
+        this.auth.setStatus(id, event.checked ? 'actif' : 'inactif').subscribe(
           () => {
             console.log(`Statut de la user ${id} modifié avec succès à ${event.checked}.`);
+            this.commonService.successToast(`Statut de la user ${id} modifié avec succès à ${event.checked}.`)
             // Mettre à jour l'état de la campagne dans votre application si nécessaire
           },
           error => {
             console.error("Erreur lors du réglage du statut de user:", error);
+            this.commonService.errorToast("Merci de vérifier si les champs sont toutes remplis")
             // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
           }
         );
