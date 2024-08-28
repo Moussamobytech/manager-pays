@@ -82,7 +82,7 @@
                         </p>
                         <p fxLayout="row" fxLayoutAlign="start center">
                             <mat-icon class="text-muted mt-size">date_range</mat-icon>
-                            <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                            <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:'yyyy-MM-dd'}}</span>
                         </p>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                           </p>
                           <p fxLayout="row" fxLayoutAlign="start center">
                               <mat-icon class="text-muted">event_available</mat-icon>
-                              <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:"MMMM, yyyy"}}</span>
+                              <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:'yyyy-MM-dd'}}</span>
                           </p>
                       </div>
                       <div fxFlex="26" fxFlex.xs="100" fxLayout="column" fxLayoutAlign=" center">

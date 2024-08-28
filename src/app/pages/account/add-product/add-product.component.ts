@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -33,8 +33,10 @@ export class AddProductComponent implements OnInit {
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
-      "pricePromotion": null,
-      "priceBasic": [null, Validators.required ],
+      priceBasic: ['', [Validators.required, this.nonZeroValidator]],
+      pricePromotion: ['', this.nonZeroValidator],
+      // "pricePromotion": null,
+      // "priceBasic": [null, Validators.required ],
       "description": null,
       "weight": "5",
       "user": this.currentUser.username,
@@ -51,7 +53,14 @@ export class AddProductComponent implements OnInit {
       }
     });
   }
-
+  //Controle pour la saisie de 0
+  nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = parseFloat(control.value);
+    if (value === 0) {
+      return { nonZero: true };
+    }
+    return null;
+  }
   public getCategories(){
     this.category.categories().subscribe(data => {
     // this.appService.getCategories().subscribe(data => {
