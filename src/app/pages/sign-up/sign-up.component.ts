@@ -101,7 +101,7 @@ export class SignUpComponent implements OnInit {
   //     this.selectedFile = fileInput.files[0];
   //   }
   // }
-  public async onRegisterFormSubmit(values:Object):Promise<void> {
+  public async onRegisterFormSubmit1(values:Object):Promise<void> {
     console.log("values :::::::: ", this.registerForm.value);
     console.log("values :::::::: ", this.registerForm.valid);
 
@@ -148,31 +148,9 @@ export class SignUpComponent implements OnInit {
       this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
     }
   }
-  //   public async onRegisterFormSubmit(): Promise<void> {
-  //   try {
-  //     if (this.registerForm.valid) {
-  //       const formData = this.registerForm.value;
-  //       // Log the form data before sending
-  //       console.log("Form data being sent:", JSON.stringify(formData));
 
-  //       const response = await this.authenticationService.signup(formData).toPromise();
-  //       console.log("Registration successful:", response);
-  //       this.snackBar.open('Inscription réussie!', '×', {
-  //         panelClass: 'success',
-  //         verticalPosition: 'top',
-  //         duration: 3000
-  //       });
-  //     }
-  //   } catch (error: any) {
-  //     console.error("Error during form submission:", error);
-  //     this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte !', '×', {
-  //       panelClass: 'error',
-  //       verticalPosition: 'top',
-  //       duration: 3000
-  //     });
-  //   }
-  // }
 
+  
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
@@ -180,39 +158,43 @@ export class SignUpComponent implements OnInit {
     }
   }
 
-  // public async onRegisterFormSubmit(values:Object):Promise<void> {
-  //   console.log("values :::::::: ",values)
-  //   console.log("values :::::::: ",this.registerForm.valid)
-  //   try {
-  //     if (this.registerForm.valid) {
-  //       let formData = {
-  //         username: ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'],
-  //         firstname: values["firstname"],
-  //         lastname: values["lastname"],
-  //         password: values["password"],
-  //         phoneNumber: values["phone"],
-  //         addresse: values["addresse"],
-  //         country: values['country'],
-  //         state: values['state'],
-  //         rccm: values['rccm'],
-  //         boutique: values['boutique'],
-  //         logo: values['logo'],
-  //         email: values["email"],
-  //         role: [this.profil],
-  //         typeOfUsername: 'phone'
+  public async onRegisterFormSubmit(values:Object):Promise<void> {
+    console.log("values :::::::: ",values)
+    console.log("values :::::::: ",this.registerForm.valid)
+    try {
+      if (this.registerForm.valid) {
+        let formData = {
+          username: ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'],
+          firstname: values["firstname"],
+          lastname: values["lastname"],
+          password: values["password"],
+          phoneNumber: values["phone"],
+          addresse: values["addresse"],
+          country: values['country'],
+          state: values['state'],
+          rccm: values['rccm'],
+          boutique: values['boutique'],
+          logo: values['logo'],
+          email: values["email"],
+          role: [this.profil],
+          typeOfUsername: 'phone'
 
-  //         // typeOfUsername: validateEmail(values["email"]) ? 'email' : 'phone',
-  //       };
-  //       let res = await this.authenticationService.signup(formData).toPromise();
-  //       console.log("res :::::::: ",res)
-  //       this.snackBar.open(res.message || 'Votre compte a été crée avec succès!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
-  //       this.router.navigate(["/sign-in"]);
-  //     }
-  //   } catch (error : any) {
-  //     console.log(error)
-  //     this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-  //   }
+          // typeOfUsername: validateEmail(values["email"]) ? 'email' : 'phone',
+        };
+        let res = await this.authenticationService.signup(formData).toPromise();
+        console.log("res :::::::: ",res)
+        this.snackBar.open(res.message || 'Votre compte a été crée avec succès!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
+        // Ajout du logo si un fichier a été sélectionné
+        if (this.selectedFile) {
+          this.authenticationService.uploadImange(("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'],this.selectedFile)
+        }
+        this.router.navigate(["/sign-in"]);
+      }
+    } catch (error : any) {
+      console.log(error)
+      this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+    }
 
-  // }
+  }
 
 }

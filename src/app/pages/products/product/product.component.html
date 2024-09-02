@@ -17,7 +17,7 @@
               <div class="swiper-wrapper">
                   <div *ngFor="let image of [product?.image1, product?.image2,product?.image3,product?.image4, product?.image5]" class="swiper-slide">
                       <mat-card *ngIf="image" (click)="selectImage(image)" class="p-2">
-                          <img [attr.data-src]="image" class="swiper-lazy carousel-image"/>
+                          <img [src]="image" class="swiper-lazy carousel-image"/>
                           <div class="swiper-lazy-preloader"></div>
                       </mat-card>
                   </div>
@@ -98,7 +98,7 @@
             
             <button mat-button><i class="fab fa-whatsapp fa-lg me-2"></i> {{'SHARE_ZAP' | translate}}</button>
             <share-buttons theme="modern-dark"
-                [include]="['copy', 'messenger', 'facebook', 'twitter', 'whatsapp', 'x']"
+                [include]="['copy', 'messenger', 'facebook', 'whatsapp']"
                 [url]="path"
                 [description]="'SHARE_ZAP' | translate"
                 class="pt-5">

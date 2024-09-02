@@ -67,6 +67,12 @@ export class AuthenticationService {
 
   }
 
+  public uploadImange(username : any, file){
+      console.log("::::::::::",username)
+      return this.api.postFile('/users/update-user-image?username='+username,file)
+
+  }
+
 
 resetPassword(username: string, newpassword: string): Observable<any> {
   const url = this.resetPasswordUrl;
