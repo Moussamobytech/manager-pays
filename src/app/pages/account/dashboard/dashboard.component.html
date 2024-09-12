@@ -1,8 +1,11 @@
 <!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
    À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
    <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
-    <button mat-raised-button color="warn" matTooltip="Recharger mon compte" (click)="openDialog()">
+    <button mat-raised-button class="mr-2" color="warn" matTooltip="Recharger mon compte" (click)="openDialog()">
       Recharger mon compte
+    </button>
+    <button mat-raised-button color="primary" matTooltip="ajouter un produit" (click)="add()">
+      {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
     </button>
   </div>
 
@@ -81,7 +84,7 @@
   </mat-card>
 </div>
 
-<div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+<!-- <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
   <mat-card class="gradient-brown tile p-2">
       <mat-icon>access_time</mat-icon>
       <h2>0</h2>
@@ -101,6 +104,6 @@
   <h2>0</h2>
   <p>Visites par an</p>
 </mat-card>
-</div>
+</div> -->
 </div>
 

@@ -13,10 +13,11 @@ import { Product } from 'src/app/models/product.models';
 export class HomeComponent implements OnInit {
 
   public slides = [
+    { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
     { title: 'TOUT ACHETER TOUT VENDRE', subtitle: 'Choisis un produit qui t\'intéresse et contacte le vendeur en un clic.', image: 'assets/images/ads/1.jpg' },
     { title: 'FIABLE ET SÉCURISÉ', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/2.jpg' },
-    { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg' },
-    { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Pas de temps? Nous te livrons à domicile.', image: 'assets/images/ads/4.jpg' }
+    { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
+    // { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Pas de temps? Nous te livrons à domicile.', image: 'assets/images/ads/4.jpg' }
     // { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner1.jpg' },
     // { title: 'Summer collection', subtitle: 'New Arrivals On Sale', image: 'assets/images/carousel/banner2.jpg' },
     // { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner3.jpg' },

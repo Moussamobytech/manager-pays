@@ -46,6 +46,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { AnalyticsService } from './services/analitycs.service';
+import { InfluencerService } from './services/influencer.service';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { AnalyticsService } from './services/analitycs.service';
     ProductService,
     CategoryService,
     CampagneService,
+    InfluencerService,
     ApiService,
     AnalyticsService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },

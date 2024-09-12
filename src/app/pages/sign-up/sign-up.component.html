@@ -52,7 +52,8 @@
                     </div>
                     <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                       <mat-form-field appearance="outline" class="w-100 mt-2">
-                          <mat-label>{{'FIELD.STORE_NAME' | translate}}</mat-label>
+                          <mat-label>Nom de la boutique</mat-label>
+                          <!-- <mat-label>{{'FIELD.STORE_NAME' | translate}}</mat-label> -->
                           <input matInput formControlName="boutique">
                       </mat-form-field>
                   </div>
@@ -63,7 +64,8 @@
                     </mat-form-field>
                 </div> -->
                 <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-                  <label for="logoInput">{{'FIELD.STORE_LOGO' | translate}}</label>
+                  <!-- <label for="logoInput">{{'FIELD.STORE_LOGO' | translate}}</label> -->
+                  <label for="logoInput">Logo</label>
                   <input id="logoInput" type="file" (change)="onFileSelected($event)" class="custom-file-input"/>
                 </div>
 
@@ -73,6 +75,13 @@
                             <mat-label>{{'FIELD.EMAIL' | translate}}</mat-label>
                             <input matInput formControlName="email">
                             <mat-error *ngIf="registerForm.controls.email.errors?.required">Le nom est obligatoire</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100 mt-2">
+                            <mat-label>{{'FIELD.CODE' | translate}}</mat-label>
+                            <input matInput formControlName="code">
+                            <mat-error *ngIf="registerForm.controls.code.errors?.required">Le code est obligatoire</mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">

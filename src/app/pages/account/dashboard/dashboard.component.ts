@@ -49,6 +49,10 @@ export class DashboardComponent implements OnInit {
     this.getUserById()
   }
 
+  public add(){
+    this.router.navigate(["/account/add-product"])
+  }
+
   currentProfile(roles) {
     // console.log("roles :::::::: ",roles)
     if (!roles) {

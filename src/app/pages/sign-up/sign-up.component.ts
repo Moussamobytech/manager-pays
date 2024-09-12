@@ -37,6 +37,7 @@ export class SignUpComponent implements OnInit {
       'addresse': [null],
       'country': ['mali'],
       'state': [null],
+      'code': [null],
       'rccm': [null],
       'boutique': [null],
       'logo': [''],
@@ -119,6 +120,7 @@ export class SignUpComponent implements OnInit {
         formData.append('addresse', values["addresse"]);
         formData.append('country', values['country']);
         formData.append('state', values['state']);
+        formData.append('code', values['code']);
         formData.append('rccm', values['rccm']);
         formData.append('boutique', values['boutique']);
         formData.append('email', values["email"]);
@@ -172,6 +174,7 @@ export class SignUpComponent implements OnInit {
           addresse: values["addresse"],
           country: values['country'],
           state: values['state'],
+          code: values['code'],
           rccm: values['rccm'],
           boutique: values['boutique'],
           logo: values['logo'],

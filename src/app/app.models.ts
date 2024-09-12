@@ -89,6 +89,18 @@ export class  Brand {
                ) {}
 }
 
+
+export class  Influencer {
+  constructor (
+               public id: string,
+               public nomClomplet: string,
+               public code: string,
+               public etat: boolean,
+               public email : string,
+               public createdAt : string,
+               ) {}
+}
+
 export class Newsletter{
   constructor(
         public id: string,

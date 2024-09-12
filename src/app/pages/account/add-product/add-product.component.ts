@@ -116,7 +116,7 @@ export class AddProductComponent implements OnInit {
   }
 
   async save(){
-
+    let size= 0;
     try {
       if (this.form.valid) {
         var data = new FormData();
@@ -130,9 +130,16 @@ export class AddProductComponent implements OnInit {
         }
         this.form.value.images.forEach(item=>{
           console.log(item)
-          // console.log(typeof(item))
+          console.log(typeof(item))
+          console.log(item)
           data.append('images', item.file);
+          size += item.file.size
         })
+        console.log("size ::::::: ",size)
+        if(size > 8388608){
+          this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
+          return;
+        }
         // data.append('images', this.form.value.images);
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
