@@ -14,6 +14,9 @@ export class InformationComponent implements OnInit {
   infoForm: UntypedFormGroup;
   passwordForm: UntypedFormGroup;
   currentUser : User
+  hide = true;
+  hide1 = true;
+  hide2 = true;
   constructor(public formBuilder: UntypedFormBuilder, private auth : AuthenticationService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {

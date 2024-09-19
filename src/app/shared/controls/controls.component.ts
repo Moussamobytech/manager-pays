@@ -72,6 +72,11 @@ export class ControlsComponent implements OnInit {
     this.appService.addToCompare(product);
   }
 
+  public openWA(product:Product){
+    let url = "https://wa.me/"+product?.contact+"?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20"+product?.nom+".%20Prix%20%3A%20"+product?.priceBasic+""
+    window.open(url,"_blank");
+  }
+
   public addToWishList(product: Product) {
     this.appService.addToWishList(product);
   }

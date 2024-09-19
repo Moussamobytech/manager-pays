@@ -160,9 +160,21 @@ export class AddProductComponent implements OnInit {
   }
 
   async edit(){
-
+    let size= 0;
     try {
       if (this.form.valid) {
+        this.form.value.images.forEach(item=>{
+          console.log(item)
+          console.log(typeof(item))
+          console.log(item)
+          data.append('images', item.file);
+          size += item.file.size
+        })
+        console.log("size ::::::: ",size)
+        if(size > 8388608){
+          this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
+          return;
+        }
         var data = new FormData();
         data.append('nom', this.form.value.nom);
         data.append('description', this.form.value.description);

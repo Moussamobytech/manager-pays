@@ -79,7 +79,8 @@
                     </div>
                     <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                         <mat-form-field appearance="outline" class="w-100 mt-2">
-                            <mat-label>{{'FIELD.CODE' | translate}}</mat-label>
+                            <mat-label>Code influeneur</mat-label>
+                            <!-- <mat-label>{{'FIELD.CODE' | translate}}</mat-label> -->
                             <input matInput formControlName="code">
                             <mat-error *ngIf="registerForm.controls.code.errors?.required">Le code est obligatoire</mat-error>
                         </mat-form-field>

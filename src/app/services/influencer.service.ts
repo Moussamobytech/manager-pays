@@ -45,7 +45,7 @@ export class InfluencerService {
     }
     
     setEtat(id, etat): any {
-        return this.api.get(`/influencer/etat/${id}/${etat}`).toPromise();
+        return this.api.put(`/influencer/change-state/${id}?value=${etat ? 'yes' : 'no'}`,null);
     }
 
 

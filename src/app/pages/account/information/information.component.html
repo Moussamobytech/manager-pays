@@ -36,17 +36,20 @@
         <h2 class="text-muted text-center">Changement de mot de passe</h2>
         <form [formGroup]="passwordForm" (ngSubmit)="onPasswordFormSubmit(passwordForm.value)">
             <mat-form-field class="w-100 mt-2">
-                <input matInput placeholder="Mot de passe actuel" formControlName="currentPassword" type="password" minlength="6" required>
+                <input matInput placeholder="Mot de passe actuel" formControlName="currentPassword"  [type]="hide ? 'password' : 'text'" minlength="6" required>
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 <mat-error *ngIf="passwordForm.controls.currentPassword.errors?.required">Mot de passe actuel est obligatoire</mat-error>
                 <mat-error *ngIf="passwordForm.controls.currentPassword.hasError('minlength')">Mot de passe actuel n'est pas assez long, minimum 6 caractères</mat-error>
             </mat-form-field>
             <mat-form-field class="w-100 mt-1">
-                <input matInput placeholder="nouveau mot de passe" formControlName="newPassword" type="password" minlength="6" required>
+                <input matInput placeholder="nouveau mot de passe" formControlName="newPassword" [type]="hide1 ? 'password' : 'text'" minlength="6" required>
+                <mat-icon matSuffix (click)="hide1 = !hide1">{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
                 <mat-error *ngIf="passwordForm.controls.newPassword.errors?.required">nouveau mot de passe est obligatoire</mat-error>
                 <mat-error *ngIf="passwordForm.controls.newPassword.hasError('minlength')">nouveau mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
             </mat-form-field>
             <mat-form-field class="w-100 mt-1">
-              <input matInput placeholder="Confirmer le nouveau mot de passe" formControlName="confirmNewPassword" type="password" required>
+              <input matInput placeholder="Confirmer le nouveau mot de passe" formControlName="confirmNewPassword" [type]="hide2 ? 'password' : 'text'" required>
+              <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
               <mat-error *ngIf="passwordForm.controls.confirmNewPassword.errors?.required">Confirmer le nouveau mot de passe est obligatoire</mat-error>
               <mat-error *ngIf="passwordForm.controls.confirmNewPassword.hasError('mismatchedPasswords')">Les mots de passe ne correspondent pas</mat-error>
             </mat-form-field>

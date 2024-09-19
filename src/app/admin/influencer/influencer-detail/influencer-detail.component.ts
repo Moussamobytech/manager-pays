@@ -23,8 +23,10 @@ export class InfluencerDetailComponent implements OnInit {
   constructor( public appService : AppService, public influencerService: InfluencerService, public appSettings:AppSettings,
     private activatedRoute: ActivatedRoute){}
   ngOnInit(): void {
-    this.getInfluencerById(this.influencerId)
+    // this.getInfluencerById(this.influencerId)
     this.sub = this.activatedRoute.params.subscribe(params => {
+      console.log('Influencer Id ', this.influencer);
+      console.log('Influencer Id ', params['id']);
       if(params['id']){
         this.getInfluencerById(params['id']);
       }
@@ -33,11 +35,9 @@ export class InfluencerDetailComponent implements OnInit {
       }
     });
   }
-  public getInfluencerById(id){
-    this.influencerService.find(id).subscribe(data=>{
-      this.influencer = data;
-      console.log('Influencer Id ', this.influencer);
-
-    });
+  public async getInfluencerById(id){
+    let data = await this.influencerService.find(id);
+    this.influencer = data;
+    console.log('Influencer Id ', this.influencer);
   }
 }

@@ -13,8 +13,8 @@ import { Product } from 'src/app/models/product.models';
 export class HomeComponent implements OnInit {
 
   public slides = [
-    { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
-    { title: 'TOUT ACHETER TOUT VENDRE', subtitle: 'Choisis un produit qui t\'intéresse et contacte le vendeur en un clic.', image: 'assets/images/ads/1.jpg' },
+    { title: 'TU ES VENDEUR ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
+    { title: 'TU AS UNE BOUTIQUE ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/1.jpg' },
     { title: 'FIABLE ET SÉCURISÉ', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/2.jpg' },
     { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
     // { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Pas de temps? Nous te livrons à domicile.', image: 'assets/images/ads/4.jpg' }
