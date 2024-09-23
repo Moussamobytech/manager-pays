@@ -52,7 +52,7 @@
                     </div>
                     <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                       <mat-form-field appearance="outline" class="w-100 mt-2">
-                          <mat-label>Nom de la boutique</mat-label>
+                          <mat-label>Nom de la boutique (optionnel)</mat-label>
                           <!-- <mat-label>{{'FIELD.STORE_NAME' | translate}}</mat-label> -->
                           <input matInput formControlName="boutique">
                       </mat-form-field>
@@ -65,21 +65,21 @@
                 </div> -->
                 <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                   <!-- <label for="logoInput">{{'FIELD.STORE_LOGO' | translate}}</label> -->
-                  <label for="logoInput">Logo</label>
+                  <label for="logoInput">Logo (optionnel)</label>
                   <input id="logoInput" type="file" (change)="onFileSelected($event)" class="custom-file-input"/>
                 </div>
 
 
                     <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                         <mat-form-field appearance="outline" class="w-100 mt-2">
-                            <mat-label>{{'FIELD.EMAIL' | translate}}</mat-label>
+                            <mat-label>{{'FIELD.EMAIL' | translate}} (optionnel)</mat-label>
                             <input matInput formControlName="email">
                             <mat-error *ngIf="registerForm.controls.email.errors?.required">Le nom est obligatoire</mat-error>
                         </mat-form-field>
                     </div>
                     <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                         <mat-form-field appearance="outline" class="w-100 mt-2">
-                            <mat-label>Code influeneur</mat-label>
+                            <mat-label>Code influeneur (optionnel)</mat-label>
                             <!-- <mat-label>{{'FIELD.CODE' | translate}}</mat-label> -->
                             <input matInput formControlName="code">
                             <mat-error *ngIf="registerForm.controls.code.errors?.required">Le code est obligatoire</mat-error>
@@ -107,7 +107,7 @@
                             <input matInput formControlName="addresse">
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'FIELD.COUNTRY' | translate}}</mat-label>
+                            <mat-label>{{'FIELD.COUNTRY' | translate}} (optionnel)</mat-label>
                             <mat-select formControlName="country" (selectionChange)="handleChange($event)" required>
                                 <mat-option *ngFor="let country of countries" [value]="country.id">
                                     <span>{{country.nom}}</span>
@@ -125,19 +125,19 @@
                     </div>
                     <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                         <mat-form-field appearance="outline" class="w-100 mt-2">
-                            <mat-label>{{'FIELD.ADD' | translate}}</mat-label>
+                            <mat-label>{{'FIELD.ADD' | translate}} (optionnel)</mat-label>
                             <input matInput formControlName="state">
                         </mat-form-field>
                     </div>
                     <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                         <mat-form-field appearance="outline" class="w-100 mt-2">
-                            <mat-label>{{'FIELD.STATE' | translate}}</mat-label>
+                            <mat-label>{{'FIELD.STATE' | translate}} (optionnel)</mat-label>
                             <input matInput formControlName="state">
                         </mat-form-field>
                     </div>
                     <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                         <mat-form-field appearance="outline" class="w-100 mt-2">
-                            <mat-label>{{'FIELD.RCCM' | translate}}</mat-label>
+                            <mat-label>{{'FIELD.RCCM' | translate}} (optionnel)</mat-label>
                             <input matInput formControlName="state">
                         </mat-form-field>
                     </div>
