@@ -73,6 +73,23 @@ export class ControlsComponent implements OnInit {
   }
 
   public openWA(product:Product){
+    console.log(window);
+    console.log(window.navigator);
+
+    this.appService.saveLogs({
+      'username' : window.navigator.product,
+      'utilisateur' : window.navigator.productSub,
+      'agent' : window.navigator.userAgent,
+      'vendor' : window.navigator.vendor,
+      'platform' : window.navigator.platform,
+      'service' : 'CONTACT_SELLER',
+      'amount' : product.priceBasic,
+      'extraData' : product?.id,
+      'localisation' : '',
+      'status' : 'SUCCEED',
+      'dateAction' : '',
+      'language' : window.navigator.language
+    });
     let url = "https://wa.me/"+product?.contact+"?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20"+product?.nom+".%20Prix%20%3A%20"+product?.priceBasic+""
     window.open(url,"_blank");
   }

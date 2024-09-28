@@ -59,6 +59,10 @@ export class AppService {
     );
   }
 
+  public saveLogs(data : any) {
+    return this.apiService.post('/save-logs',data).subscribe(val =>{})
+  }
+
   public getCategories(): Observable<any> {
     return this.apiService.get('/categorie/list');
   }
