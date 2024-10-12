@@ -38,9 +38,9 @@
         <button mat-raised-button class="rose mr-2" matTooltip="Acheter" (click)="openWA(product)">
             <mat-icon>shopping_cart</mat-icon> Acheter
         </button>
-        <!-- <button mat-icon-button matTooltip="Acheter" (click)="addToWishList(product)">
-            <mat-icon style="color: red;">shopping_cart</mat-icon> Acheter
-        </button> -->
+        <a [href]="'tel:' + product?.contact " class="light_primary-color text-sm">
+            <i class="fas fa-phone-volume fa-lg me-2"></i>
+        </a>
     </div>
 
     <!-- <div *ngIf="type!='wish'"> -->

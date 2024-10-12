@@ -77,8 +77,10 @@ export class SignInComponent implements OnInit {
             console.log(error);
             console.log(error.message);
             console.log(error.status);
-            if (error.status == 401) {
-              this.snackBar.open('Accès incorrect merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+            console.log(error == "Erreur d'accès au serveur");
+            console.log(error === "Erreur d'accès au serveur");
+            if (error == "Erreur d'accès au serveur") {
+              this.snackBar.open('Accès incorrect merci de vérifier les infos fournis !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
             }else{
               this.snackBar.open('Une erreur interne s\'est produite, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
             }

@@ -21,10 +21,11 @@
         </div> -->
         <div *ngIf="onePrice" fxLayout="column" fxLayoutAlign="center start"  style="inline-size: 100%;">
             <p class="text-muted" *ngIf="product.pricePromotion == null || product.pricePromotion == '' ||  product.pricePromotion == 'null'">
-                <span>{{product.priceBasic | number : '1.2-2'}} FCFA</span>
+                <span>{{product.priceBasic | number}} FCFA</span>
+                <!-- <span>{{product.priceBasic | number : '1.2-2'}} FCFA</span> -->
             </p>
             <p class="text-muted" *ngIf="product.pricePromotion != null && product.pricePromotion != '' && product.pricePromotion != 'null' ">
-                <span>{{product.pricePromotion | number : '1.2-2'}} FCFA</span>
+                <span>{{product.pricePromotion | number}} FCFA</span>
             </p>
         </div>
 

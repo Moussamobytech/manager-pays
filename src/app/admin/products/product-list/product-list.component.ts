@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.models';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-product-list',
@@ -16,7 +17,7 @@ export class ProductListComponent implements OnInit {
   public viewCol: number = 25;
   public page: any;
   public count = 12;
-  constructor(public appService:AppService, public dialog: MatDialog, public produitService: ProductService,
+  constructor(public appService:AppService, public productService:ProductService, public dialog: MatDialog, public produitService: ProductService,
     public domHandlerService: DomHandlerService) { }
 
   ngOnInit(): void {
@@ -56,15 +57,25 @@ export class ProductListComponent implements OnInit {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
-        message: "Are you sure you want delete this product?"
+        message: "Vous etes sur de supprimer produit?"
       }
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
-        const index: number = this.products.indexOf(product);
-        if (index !== -1) {
-          this.products.splice(index, 1);
-        }
+        this.produitService.supprimer(product.id).subscribe(
+          () => {
+            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+            const index: number = this.products.findIndex((us: any) => us.id === product.id);
+            if (index !== -1) {
+              this.products.splice(index, 1);
+            }
+            console.log("Produit successfully deleted.");
+          },
+          (error) => {
+            console.error("Error deleting produit:", error);
+            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+          }
+        );
       }
     });
   }
@@ -104,5 +115,12 @@ export class ProductListComponent implements OnInit {
         break;
     }
     return res
+  }
+
+  setStatus(id: string, event: MatSlideToggleChange): void {
+    // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications 
+    this.productService.updateState(id, event.checked ? 'ok' : 'nok').then((data : any) =>{
+      console.log(data)
+    })
   }
 }

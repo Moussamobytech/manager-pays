@@ -140,6 +140,11 @@ export class AddProductComponent implements OnInit {
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
           return;
         }
+        
+        if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
+          this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
+          return;
+        }
         // data.append('images', this.form.value.images);
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
@@ -163,16 +168,15 @@ export class AddProductComponent implements OnInit {
     let size= 0;
     try {
       if (this.form.valid) {
-        this.form.value.images.forEach(item=>{
-          console.log(item)
-          console.log(typeof(item))
-          console.log(item)
-          data.append('images', item.file);
-          size += item.file.size
-        })
-        console.log("size ::::::: ",size)
+        
         if(size > 8388608){
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
+          return;
+        }
+
+        
+        if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
+          this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
           return;
         }
         var data = new FormData();

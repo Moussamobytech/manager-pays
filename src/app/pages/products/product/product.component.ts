@@ -83,7 +83,7 @@ export class ProductComponent implements OnInit {
       this.zoomImage = data.image2;
       setTimeout(() => {
         this.config.observer = true;
-        this.getRelatedProducts();
+        // this.getRelatedProducts();
        // this.directiveRef.setIndex(0);
       });
     });

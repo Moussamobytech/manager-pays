@@ -91,7 +91,8 @@ export class AppService {
     return this.getAllProducts().pipe(
       map(products =>
         products.filter((product: Product) =>
-          product.nom.toLowerCase().includes(term.toLowerCase())
+          product.nom.toLowerCase().includes(term.toLowerCase()) || product.description.toLowerCase().includes(term.toLowerCase())
+          || product.categorieNom.toLowerCase().includes(term.toLowerCase())
         )
       )
     );

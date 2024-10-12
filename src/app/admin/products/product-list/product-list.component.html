@@ -60,6 +60,8 @@
                         <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent" matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
                         <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent" matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
                         <button mat-mini-fab color="warn" matTooltip="Remove" (click)="remove(product)"><mat-icon>delete</mat-icon></button>
+                        
+                    <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'primary' : 'warn'" [checked]="product.etat == 'ACTIF'" (change)="setStatus(product.id, $event)"> </mat-slide-toggle>
                     </div>
 
                     <!-- <div class="p-2 actions">

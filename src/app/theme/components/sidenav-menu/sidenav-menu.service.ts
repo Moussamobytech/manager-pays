@@ -22,10 +22,13 @@ export class SidenavMenuService {
         let activeMenuItem = menu.filter(item => item.routerLink === routerLink);
         if(activeMenuItem[0]){
             let menuItem = activeMenuItem[0];
-            while (menuItem.parentId != 0){  
+            // menuItem != null && menuItem != undefined
+            console.log("menuItem :::: ",menuItem);
+            
+            while (menuItem != null && menuItem.parentId != 0){  
                 let parentMenuItem = menu.filter(item => item.id == menuItem.parentId)[0];
                 menuItem = parentMenuItem;
-                this.toggleMenuItem(menuItem.id);
+                this.toggleMenuItem(menuItem?.id);
             }
         }
     }

@@ -119,7 +119,6 @@ export class ProductsComponent implements OnInit {
     this.getBrands();
     // this.getProductsByCetegorie(this.selectedCategoryId)
 
-    this.getCategorie();
     // this.AllProduct();
     // this.loadProducts();
 
@@ -161,11 +160,19 @@ export class ProductsComponent implements OnInit {
     // });
   }
 
-  public getCategorie(){
-    this.appService.getCategories().subscribe(data =>{
-      this.allCategories = data;
-    })
+  formatListCategorie(stringArray){
+    var sortedArray: Category[] = stringArray.sort((a,b) => {
+      if(a.title < b.title) { return -1; }
+      if(a.title > b.title) { return 1; }
+      return 0;
+    });
+
+    // console.log("sortedArray :::: ",sortedArray);
+    
+    // return sortedArray || stringArray
+    return sortedArray
   }
+
   public getCategories(){
     console.log("this.appService.Data.categories.length ::::: ",this.appService.Data.categories.length);
     
@@ -180,6 +187,7 @@ export class ProductsComponent implements OnInit {
     else{
       this.categories = this.appService.Data.categories;
     }
+
   }
 
 

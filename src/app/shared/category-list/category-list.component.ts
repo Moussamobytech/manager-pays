@@ -30,12 +30,27 @@ export class CategoryListComponent {
   constructor(public domHandlerService: DomHandlerService, public appService:AppService) { }
 
   public ngDoCheck() {
+    // console.log("ngDoCheck :::: ",this.categories);
     if(this.categories && !this.mainCategories) {
       //this.tous();
-      this.categorie = this.categories.filter(category => category.parentId == this.categoryParentId);
+      // console.log("ngDoCheck if :::: ",this.categories);
+      // this.categories = this.categories.filter(category => category.parentId == this.categoryParentId);
+      this.categories = this.formatListCategorie(this.categories)
     }
 
 
+  }
+
+  formatListCategorie(stringArray){
+    // console.log("stringArray :::: ",sortedArray);
+    var sortedArray: any[] = stringArray.sort((a,b) => {
+      if(a.nom < b.nom) { return -1; }
+      if(a.nom > b.nom) { return 1; }
+      return 0;
+    });
+    
+    // return sortedArray || stringArray
+    return sortedArray
   }
 
   public stopClickPropagate(event: any){

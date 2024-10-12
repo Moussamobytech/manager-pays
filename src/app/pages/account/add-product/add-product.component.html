@@ -47,7 +47,7 @@
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                               <mat-label>Prix</mat-label>
-                              <input type="number" matInput formControlName="priceBasic" required>
+                              <input type="number" step="1" onkeypress="return event.charCode >= 48" matInput formControlName="priceBasic" required>
                               <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
                               <mat-error *ngIf="form.controls.priceBasic.errors?.nonZero">Prix ne peut pas être zéro</mat-error>
                             </mat-form-field>
@@ -55,7 +55,7 @@
                           <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                               <mat-label>Prix promo</mat-label>
-                              <input type="number" matInput formControlName="pricePromotion">
+                              <input type="number" step="1" onkeypress="return event.charCode >= 48" matInput formControlName="pricePromotion">
                               <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error>
                             </mat-form-field>
                           </div>

@@ -4,6 +4,10 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { ProductService } from 'src/app/services/product.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { CommonMessageService } from 'src/app/services/common-message.service';
 
 @Component({
   selector: 'app-products',
@@ -38,7 +42,8 @@ export class ProductsComponent implements OnInit {
     { number: '#1981', date: 'December 24, 2017', status: 'Pending Payment', total: '$285.00 for 2 items', invoice: false },
     { number: '#1781', date: 'September 3, 2017', status: 'Refunded', total: '$49.00 for 2 items', invoice: false }
   ]
-  constructor(private productService : ProductService, private auth : AuthenticationService, private router: Router) { }
+  constructor(private productService : ProductService, private commonService : CommonMessageService, private auth : AuthenticationService,
+    public dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
 
@@ -90,26 +95,43 @@ export class ProductsComponent implements OnInit {
     return res
   }
 
+  public remove(product:any){
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: {
+        title: "Confirm Action",
+        message: "Vous etes sur de supprimer produit?"
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult){
+        this.productService.supprimer(product.id).subscribe(
+          () => {
+            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+            const index: number = this.products.findIndex((us: any) => us.id === product.id);
+            if (index !== -1) {
+              this.products.splice(index, 1);
+            }
+            console.log("Produit successfully deleted.");
+          },
+          (error) => {
+            console.error("Error deleting produit:", error);
+            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+          }
+        );
+      }
+    });
+  }
+
   public updateState(id, state){
     this.productService.updateState(id, state).then((data : any) =>{
       console.log(data)
     })
   }
-  public remove(follower:any){
-    // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    //   maxWidth: "400px",
-    //   data: {
-    //     title: "Confirm Action",
-    //     message: "Are you sure you want remove this follower?"
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe(dialogResult => {
-    //   if(dialogResult){
-    //     const index: number = this.followers.indexOf(follower);
-    //     if (index !== -1) {
-    //       this.followers.splice(index, 1);
-    //     }
-    //   }
-    // });
+
+  setStatus(id: string, event: MatSlideToggleChange): void {
+    // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
+    this.updateState(id, event.checked ? 'ok' : 'nok')  
   }
+  
 }

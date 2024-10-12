@@ -26,6 +26,7 @@ export class Product {
                 public weight: number,
                 public etat: string,
                 public categorie: string,
+                public categorieNom: string,
                 public contact: string,
                 public user : string,
                 public createdAt:string,

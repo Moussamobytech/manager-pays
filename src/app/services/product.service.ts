@@ -95,6 +95,10 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get(`/produit/list-by-user/` + id).toPromise();
   }
 
+  supprimer(id: string): Observable<any> {
+    return this.api.delete(`/produit/supprimer/${id}`);
+  }
+  
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }

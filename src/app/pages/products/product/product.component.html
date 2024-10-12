@@ -43,13 +43,14 @@
         <!-- <div class="py-3">
             <app-rating [ratingsCount]="product?.ratingsCount" [rate]="product?.rate" [direction]="'row'"></app-rating>
         </div> -->
-        <p class="py-1 text-muted lh" [ngClass]="{'old-price': product?.pricePromotion}">
-          {{'PRODUCTS.PRICE' | translate}}: {{product?.priceBasic}} FCFA
-      </p>
-      <p class="new-price" *ngIf="product?.pricePromotion">
-        {{'PRODUCTS.PRICE_PROMOTION' | translate}} : {{product?.pricePromotion}} FCFA
-      </p>
-      <p  *ngIf="product.description != null && product.description != 'null'" class="py-1 text-muted lh">{{product?.description }}</p>
+        <!-- [ngClass]="{'old-price': product?.pricePromotion}" -->
+        <p  *ngIf="product?.pricePromotion == null || product?.pricePromotion == undefined || product?.pricePromotion == '0' || product?.pricePromotion == 'null'" class="py-1 text-muted lh">
+          {{'PRODUCTS.PRICE' | translate}}: {{product?.priceBasic  | number}} FCFA
+        </p>
+        <p class="py-1 text-muted lh" *ngIf="product?.pricePromotion != null && product?.pricePromotion != undefined && product?.pricePromotion != '0' && product?.pricePromotion != 'null'">
+            {{'PRODUCTS.PRICE' | translate}} : {{product?.pricePromotion  | number}} FCFA
+        </p>
+        <p  *ngIf="product?.description != null && product?.description != 'null'" class="py-1 text-muted lh">{{product?.description }}</p>
 
         <div class="divider mt-1"></div>
         <div class="py-2">

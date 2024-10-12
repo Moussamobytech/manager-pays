@@ -13,16 +13,16 @@ import { Product } from 'src/app/models/product.models';
 export class HomeComponent implements OnInit {
 
   public slides = [
-    { title: 'TU ES VENDEUR ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
-    { title: 'TU AS UNE BOUTIQUE ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/1.jpg' },
-    { title: 'FIABLE ET SÉCURISÉ', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/2.jpg' },
-    { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
-    // { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Pas de temps? Nous te livrons à domicile.', image: 'assets/images/ads/4.jpg' }
-    // { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner1.jpg' },
-    // { title: 'Summer collection', subtitle: 'New Arrivals On Sale', image: 'assets/images/carousel/banner2.jpg' },
-    // { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner3.jpg' },
-    // { title: 'Summer collection', subtitle: 'New Arrivals On Sale', image: 'assets/images/carousel/banner4.jpg' },
-    // { title: 'The biggest sale', subtitle: 'Special for today', image: 'assets/images/carousel/banner5.jpg' }
+    // { title: 'TU ES VENDEUR ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
+    // { title: 'TU AS UNE BOUTIQUE ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/1.jpg' },
+    // { title: 'FIABLE ET SÉCURISÉ', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/2.jpg' },
+    // { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
+    
+    { title: 'BIENVENUE SUR FIDELITY MARKET', subtitle: 'Trouvez ce qui vous intéresse et contactez le vendeur en un clic. Vous êtes commerçant ? Créez votre compte et publier vos produits gratuiement!', image: 'assets/images/ads/5.jpg', show: 'Créer un compte', href:'sign-up' },
+    { title: 'PLUS FIABLE ET SÉCURISÉ QUE LES RÉSEAUX SOCIAUX', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/6.jpg', href:'sign-up'},
+    { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Vous n’avez pas de temps? Nous vous livrons à domicile.', image: 'assets/images/ads/7.jpg', href:'sign-up' },
+    { title: 'VOUS ETES COMMERCANTS?', subtitle: 'Ouvrez votre boutique en ligne en créant un compte.', image: 'assets/images/ads/8.jpg', show: 'Créer un compte', href:'sign-up' },
+
   ];
 
 

@@ -17,12 +17,24 @@ export class SidenavMenuComponent implements OnInit {
 
   async ngOnInit() {
     // console.log("this.menuItems :::::: ",this.menuItems)
-    
+    this.menuItems = this.formatListCategorie(this.menuItems)
+    // console.log("this.menuItems :::::: ",this.menuItems)
     if (this.menuItems) {
       this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
     }
     
     // this.parentMenu = this.menuItems.filter(item => item.parentId == this.menuParentId);
+  }
+
+  formatListCategorie(stringArray){
+    var sortedArray: string[] = stringArray.sort((a,b) => {
+      if(a.title < b.title) { return -1; }
+      if(a.title > b.title) { return 1; }
+      return 0;
+    });
+    
+    // return sortedArray || stringArray
+    return sortedArray
   }
 
   onClick(menuId){

@@ -50,14 +50,15 @@ export class PagesComponent implements OnInit {
     this.getCategoriesSidenav()
   }
 
+  
   async ngOnInit() {
     // this.getCategoriesSidenav();
     let res = await this.appService.getCategoriesSidenav().toPromise()
-    console.log("this.menuItems res :::::: ",res)
+    // console.log("this.menuItems res :::::: ",res)
     this.sidenavMenuItems = res;
     this.getCategories();
     setTimeout(() => {
-      this.settings.theme = 'fidelity';
+      this.settings.theme = 'fidelity'; 
       // this.settings.theme = 'green';
     });
     // this.getAllProduit();
