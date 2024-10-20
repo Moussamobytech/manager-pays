@@ -50,7 +50,7 @@ export class PagesComponent implements OnInit {
     this.getCategoriesSidenav()
   }
 
-  
+
   async ngOnInit() {
     // this.getCategoriesSidenav();
     let res = await this.appService.getCategoriesSidenav().toPromise()
@@ -58,7 +58,7 @@ export class PagesComponent implements OnInit {
     this.sidenavMenuItems = res;
     this.getCategories();
     setTimeout(() => {
-      this.settings.theme = 'fidelity'; 
+      this.settings.theme = 'fidelity';
       // this.settings.theme = 'green';
     });
     // this.getAllProduit();
@@ -91,7 +91,7 @@ export class PagesComponent implements OnInit {
   onClickOutside(): void {
     this.showSuggestions = false; // Masquer les suggestions lorsque l'utilisateur clique à l'extérieur
   }
-  
+
   public getCategories(){
       let deflt: any =  {"nom":"Tous", "cle":"all"}
       // this.category = data[0];
@@ -167,7 +167,7 @@ export class PagesComponent implements OnInit {
   }
 
 
-  public changeTheme(theme){
+  public changeTheme(theme: any){
     this.settings.theme = theme;
   }
 

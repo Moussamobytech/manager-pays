@@ -1,11 +1,47 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav [opened]="sidenavOpen" [mode]="sidenavOpen ? 'side' : 'over'" class="account-sidenav">
-        <ng-container *ngFor="let link of links">
-            <a mat-button [routerLink]="link.href" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">
-                <mat-icon>{{link.icon}}</mat-icon>
-                {{ link.name }}
-            </a>
-        </ng-container>
+      <mat-card class="user_acount_profile">
+
+        <div class="user_acount_logo" (click)="openFileDialog()">
+          <img [src]="currentUser.logo || defaultLogo" class="profile-icon" alt="boutique_logo">
+          <img src="../../../assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
+        </div>
+        <div class="mb-3">
+          <p>{{currentUser.name || 'XXXXX'}}</p>
+        </div>
+
+        <ng-template #FilePopupTemplate>
+          <h1 mat-dialog-title>{{"CHOOSE_IMG" | translate}}</h1>
+          <div mat-dialog-content >
+            <form [formGroup]="LogoForm" (ngSubmit)="onLogoChose()" autocomplete="off" class="text-center">
+              <div mat-dialog-content>
+                <div fxLayout="row wrap">
+                    <input formControlName="logo" #fileInput type="file" (change)="onFileSelected($event)" class="d-none" required>
+                    <button type="button" style="margin: 0 auto;" mat-raised-button (click)="fileInput.click()">
+                      {{ selectedLogoName || 'logo' }}
+                      <mat-icon>upload</mat-icon>
+                    </button>
+                </div>
+              </div>
+              <div mat-dialog-actions>
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+                  <button mat-raised-button class="warne" type="button" (click)="onNoClick()">Annuler</button>
+
+                  <button mat-raised-button class="blue" type="submit">Enregistrer</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </ng-template>
+
+      </mat-card>
+
+      <ng-container *ngFor="let link of links">
+          <a mat-button [routerLink]="link.href" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">
+              <mat-icon>{{link.icon}}</mat-icon>
+              {{ link.name }}
+          </a>
+      </ng-container>
         <!-- <mat-nav-list class="mat-elevation-z1 h-100">
             <mat-list-item *ngFor="let link of links">
                 <mat-icon matListIcon class="mat-icon-sm">{{link.icon}}</mat-icon>

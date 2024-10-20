@@ -103,8 +103,8 @@ export class SignUpComponent implements OnInit {
   //   }
   // }
   public async onRegisterFormSubmit1(values:Object):Promise<void> {
-    console.log("values :::::::: ", this.registerForm.value);
-    console.log("values :::::::: ", this.registerForm.valid);
+    // console.log("values :::::::: ", this.registerForm.value);
+    // console.log("values :::::::: ", this.registerForm.valid);
 
     try {
       if (this.registerForm.valid) {
@@ -135,7 +135,7 @@ export class SignUpComponent implements OnInit {
         // Envoi du FormData avec l'image et les autres données du formulaire
         this.authenticationService.signup(formData).toPromise()
           .then((res: any) => {
-            console.log("res :::::::: ", res);
+            // console.log("res :::::::: ", res);
             this.snackBar.open(res.message || 'Votre compte a été créé avec succès!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
             this.router.navigate(["/sign-in"]);
           })
@@ -152,7 +152,7 @@ export class SignUpComponent implements OnInit {
   }
 
 
-  
+
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
@@ -185,7 +185,7 @@ export class SignUpComponent implements OnInit {
           // typeOfUsername: validateEmail(values["email"]) ? 'email' : 'phone',
         };
         let res = await this.authenticationService.signup(formData).toPromise();
-        console.log("res :::::::: ",res)
+        // console.log("res :::::::: ",res)
         this.snackBar.open(res.message || 'Votre compte a été crée avec succès!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
         // Ajout du logo si un fichier a été sélectionné
         if (this.selectedFile) {

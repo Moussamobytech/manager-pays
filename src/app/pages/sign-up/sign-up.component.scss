@@ -1,5 +1,14 @@
 .auth{
     white-space: nowrap;
     padding: 7px 14px;
-    font-weight: 500;    
+    font-weight: 500;
+}
+.country_field{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.country_field img{
+  margin-right: 5px;
+  width: 30px;
 }

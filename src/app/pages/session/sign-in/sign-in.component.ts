@@ -63,10 +63,10 @@ export class SignInComponent implements OnInit {
       this.authenticationService.login(phone, pwd)
         .subscribe(
           async (data: any) => {
-            console.log("data ::::::: ",data)
+            // console.log("data ::::::: ",data)
             let userInfo = await this.authenticationService.info(data.username);
             // this.loading = false;
-            console.log("userInfo ::::::: ",userInfo)
+            // console.log("userInfo ::::::: ",userInfo)
             if (userInfo == null) {
               this.snackBar.open('Impossible de récuperer les informations du client, merci de réessayer à nouveau', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
               return;
@@ -74,11 +74,11 @@ export class SignInComponent implements OnInit {
             this.router.navigate(["/account/dashboard"]);
           },
           (error: any) => {
-            console.log(error);
-            console.log(error.message);
-            console.log(error.status);
-            console.log(error == "Erreur d'accès au serveur");
-            console.log(error === "Erreur d'accès au serveur");
+            // console.log(error);
+            // console.log(error.message);
+            // console.log(error.status);
+            // console.log(error == "Erreur d'accès au serveur");
+            // console.log(error === "Erreur d'accès au serveur");
             if (error == "Erreur d'accès au serveur") {
               this.snackBar.open('Accès incorrect merci de vérifier les infos fournis !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
             }else{
@@ -102,10 +102,11 @@ export class SignInComponent implements OnInit {
       this.authenticationService.login(this.formValues.phone?.value, this.formValues.password?.value)
         .subscribe(
           (data: any) => {
-            console.log("data ::::::: ",data)
+            // console.log("data ::::::: ",data)
             this.router.navigate(["account/dashboard"]);
           },
           (error: any) => {
+            this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
             console.log(error);
             this.loading = false;
           });

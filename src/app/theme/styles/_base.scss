@@ -74,7 +74,13 @@ a{
 .divider{
     border-top: 1px solid rgba(204, 204, 204, 0.6);
 }
-
+.d-none{
+  display: none;
+}
+.text-muted{
+  color: #888888;
+  font-size: small;
+}
 .mat-mdc-icon-button .mat-icon.mat-icon-xs,
 .mat-icon.mat-icon-xs{
     font-size: 14px !important;

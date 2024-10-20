@@ -29,14 +29,14 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
-    console.log("currentUser :::::::: ",this.currentUser)
+    // console.log("currentUser :::::::: ",this.currentUser)
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
-      priceBasic: ['', [Validators.required, this.nonZeroValidator]],
-      pricePromotion: ['', this.nonZeroValidator],
-      // "pricePromotion": null,
-      // "priceBasic": [null, Validators.required ],
+      // priceBasic: ['', [Validators.required, this.nonZeroValidator]],
+      // pricePromotion: ['', this.nonZeroValidator],
+      'pricePromotion': [null, [Validators.pattern('^[0-9]*$'),Validators.minLength(3)]],
+      'priceBasic': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)] ],
       "description": null,
       "weight": "5",
       "user": this.currentUser.username,
@@ -140,7 +140,7 @@ export class AddProductComponent implements OnInit {
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
           return;
         }
-        
+
         if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
           this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
           return;
@@ -168,13 +168,13 @@ export class AddProductComponent implements OnInit {
     let size= 0;
     try {
       if (this.form.valid) {
-        
+
         if(size > 8388608){
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
           return;
         }
 
-        
+
         if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
           this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
           return;

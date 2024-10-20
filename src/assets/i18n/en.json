@@ -9,7 +9,9 @@
   "RESET_PWD": "Mot de passe oublié ?",
   "ACCOUNT": "Compte",
   "SELL": "Vendre",
+  "CHOOSE_IMG": "Choise a picture",
   "NO_ACCOUNT": "Vous n'avez pas de compte ?",
+  "WITH_ACCOUNT":"Vous avez deja un compte ?",
   "COMPARE": "Comparer",
   "WISHLIST": "Liste de souhaits",
   "CHOOSE": "Choissisez le type de profil",
@@ -36,6 +38,8 @@
   "FROM":"De",
   "TO":"à",
   "TEXT_NEWSLETTER": "Restez à jour avec nos dernières nouveautés et produits",
+  "FIELD_REQUIRED":"This field is required",
+  "UPLOAD":"Upload",
 
   "NAV": {
     "HOME": "Home",

@@ -4,13 +4,10 @@
     <div fxLayout="row wrap">
       <div *ngFor="let product of topRate " fxFlex="100" fxFlex.md="20" fxFlex.gt-md="20" >
         <div class="p-2">
-                <app-product-card [onePrice]="true" [cat]="'nok'" [product]="product"></app-product-card>
-            </div>
-
+            <app-product-card [onePrice]="true" [cat]="'nok'" [product]="product"></app-product-card>
         </div>
+      </div>
     </div>
-
-
 </div>
 
 <app-brands-carousel [brands]="brands"></app-brands-carousel>

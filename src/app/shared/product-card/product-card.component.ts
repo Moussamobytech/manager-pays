@@ -36,7 +36,7 @@ export class ProductsCardComponent implements OnInit {
 
 
 
-  public openProductDialog(product) {
+  public openProductDialog(product: any) {
     let dialogRef = this.dialog.open(ProductDialogComponent, {
       data: product,
       panelClass: 'product-dialog',

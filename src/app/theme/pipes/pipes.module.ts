@@ -9,6 +9,7 @@ import { UserSearchPipe } from './user-search.pipe';
 import { CapitalCasePipe } from './capitalCase.pipe';
 import { RoundNamePipe } from './roundName.pipe';
 import { UserTypePipe } from './userType.pipe';
+import { SafePipe } from './safe.pipe';
 
 @NgModule({
     imports: [
@@ -22,17 +23,19 @@ import { UserTypePipe } from './userType.pipe';
       UserSearchPipe,
       CapitalCasePipe,
       RoundNamePipe,
-      UserTypePipe
+      UserTypePipe,
+      SafePipe
    ],
     exports: [
-        FilterByIdPipe,
-        FilterBrandsPipe,
-        BrandSearchPipe,
-        ProfilePicturePipe,
-        UserSearchPipe,
-        CapitalCasePipe,
-        RoundNamePipe,
-        UserTypePipe
+      FilterByIdPipe,
+      FilterBrandsPipe,
+      BrandSearchPipe,
+      ProfilePicturePipe,
+      UserSearchPipe,
+      CapitalCasePipe,
+      RoundNamePipe,
+      UserTypePipe,
+      SafePipe,
     ]
 })
 export class PipesModule { }

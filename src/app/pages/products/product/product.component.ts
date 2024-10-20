@@ -74,7 +74,7 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  public getProductById(id){
+  public getProductById(id:any){
 
     this.appService.getProductById(id).subscribe(data=>{
       this.product = data;

@@ -65,8 +65,12 @@
                 </div> -->
                 <div *ngIf="profil == 'boutique'" fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
                   <!-- <label for="logoInput">{{'FIELD.STORE_LOGO' | translate}}</label> -->
-                  <label for="logoInput">Logo (optionnel)</label>
-                  <input id="logoInput" type="file" (change)="onFileSelected($event)" class="custom-file-input"/>
+                  <label for="logoInput" lang="fr">Logo (optionnel) </label>
+                  <input id="logoInput" type="file" #fileInput (change)="onFileSelected($event)" class="custom-file-input d-none"/>
+                  <button type="button" style="margin: 0 auto;" mat-raised-button (click)="fileInput.click()">
+                    {{ selectedFile?.name || ('UPLOAD' | translate)}}
+                    <mat-icon>upload</mat-icon>
+                  </button>
                 </div>
 
 
@@ -110,7 +114,10 @@
                             <mat-label>{{'FIELD.COUNTRY' | translate}} (optionnel)</mat-label>
                             <mat-select formControlName="country" (selectionChange)="handleChange($event)" required>
                                 <mat-option *ngFor="let country of countries" [value]="country.id">
-                                    <span>{{country.nom}}</span>
+                                  <div class="country_field">
+                                    <img [src]="(country.id=='mali')? '../../../assets/images/flags/icons_mali.png' : '../../../assets/images/flags/icons_côte-d’ivoire.png'" alt="">
+                                    <span> {{country.nom}} </span>
+                                  </div>
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -164,7 +171,6 @@
                 </div>
 
                 <div class="text-center py-2">
-
                     <div class="text-center">
                         <button mat-fab color="primary" class="mat-elevation-z6" (click)="profilType(null)">
                             <mat-icon>settings_backup_restore</mat-icon>
@@ -172,7 +178,15 @@
                     </div>
                 </div>
 
-            </form>
+              </form>
+
+              <div class="text-center">
+                <div class="divider w-100"></div>
+                <h3 class="text-muted auth" fxHide fxShow.gt-sm>{{'WITH_ACCOUNT' | translate}}
+                  <a routerLink="/sign-in">{{'LOGIN_IN' | translate}}</a>
+                </h3>
+              </div>
+
         </div>
         <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="p-3" ngClass.sm="mt-3" ngClass.xs="mt-3">
             <h2 class="text-muted text-center mb-3">Don't have an account? Sign up now!</h2> settings_backup_restore

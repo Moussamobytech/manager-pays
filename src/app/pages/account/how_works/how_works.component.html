@@ -1,0 +1,21 @@
+<div class="tutorial-container">
+  <!-- Left side: Progress Bar with steps -->
+  <div class="progress-bar">
+    <ul>
+      <li *ngFor="let step of steps; let i = index"
+          [class.active]="currentStep === i"
+          (click)="scrollToStep(i)">
+        Etape {{ i + 1 }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Right side: Videos and Descriptions -->
+  <div class="tutorial-content" id="tutorial-content">
+    <div *ngFor="let step of steps; let i = index" [attr.id]="'step' + i">
+      <h2>{{ step.title }}</h2>
+      <iframe width="560" height="315" [src]="step.videoUrl" frameborder="0" allowfullscreen></iframe>
+      <p>{{ step.description }}</p>
+    </div>
+  </div>
+</div>

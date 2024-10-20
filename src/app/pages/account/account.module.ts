@@ -14,6 +14,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { AuthGuard } from 'src/app/helpers/auth.guard';
+import { HowWorksComponent } from './how_works/how_works.component';
 const config: InputFileConfig = {
   fileAccept: '*'
 };
@@ -30,6 +31,7 @@ export const routes: Routes = [
           { path: 'products-seller', component: ProductsComponent, data: {  breadcrumb: 'Produits' } },
           { path: 'add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
           { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
+          { path: 'how_works', component: HowWorksComponent, data: { breadcrumb: 'Comment ca marche ?' } },
 
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
           { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
@@ -44,7 +46,6 @@ export const routes: Routes = [
     ReactiveFormsModule,
     SharedModule,
     FormsModule,
-
     NgxPaginationModule,
     SwiperModule,
     InputFileModule.forRoot(config),
@@ -57,6 +58,7 @@ export const routes: Routes = [
     AddressesComponent,
     AddProductComponent,
     ProductsComponent,
+    HowWorksComponent,
     OrdersComponent
   ]
 })

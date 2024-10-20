@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, TemplateRef } from '@angular/core';
+import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
 
 import { Subscription } from 'rxjs';
 import { DomHandlerService } from 'src/app/dom-handler.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-account',
@@ -12,8 +15,20 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
-  @ViewChild('sidenav', { static: true }) sidenav: any;
-  public sidenavOpen:boolean = true;
+
+  constructor(public router: Router, public domHandlerService: DomHandlerService,
+    public translateService: TranslateService, private auth : AuthenticationService,
+    public dialog: MatDialog, private fb: FormBuilder, private snackBar: MatSnackBar) {
+    }
+
+    @ViewChild('sidenav', { static: true }) sidenav: any;
+    @ViewChild('FilePopupTemplate') FilePopupTemplate: TemplateRef<any>;
+    public sidenavOpen:boolean = true;
+    public currentUser:any = this.auth.currentUser();
+    public LogoForm: UntypedFormGroup;
+    defaultLogo ='../../../assets/images/icons/shop_icon.png';
+    selectedLogo: File | null = null ;
+    selectedLogoName : string = null;
 
   public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
@@ -23,9 +38,6 @@ export class AccountComponent implements OnInit {
     // { name: 'Order History', href: 'orders', icon: 'add_shopping_cart' },
     { name: 'Logout', href: '/sign-in', icon: 'power_settings_new' },
   ];
-  constructor(public router: Router, public domHandlerService: DomHandlerService,
-    public translateService: TranslateService
-  ) { }
 
   async ngOnInit() {
 
@@ -38,11 +50,15 @@ export class AccountComponent implements OnInit {
     let logout = this.translateService.instant('LOGOUT')
 
     // console.log("home ::::::::: ",home);
-    
+    this.LogoForm = this.fb.group({
+      'logo': [null, Validators.required]
+    });
+
     this.links = [
       { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-      { name: 'Tous les produits', href: 'products-seller', icon: 'add_shopping_cart' },
-      { name: 'Paramètre', href: 'information', icon: 'info' },
+      { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
+      // { name: 'Comment ça marche', href: 'how_works', icon: 'help_outline' },
+      { name: 'Informations', href: 'information', icon: 'info_outline' },
       { name: 'Déconnection', href: '/sign-in', icon: 'power_settings_new' },
     ];
 
@@ -62,6 +78,48 @@ export class AccountComponent implements OnInit {
       }
     });
   }
+  async onLogoChose(){
+    try{
+      if(this.LogoForm.valid){
+        // Ajout du logo
+        if (this.selectedLogo) {
+          this.auth.uploadImange(this.currentUser.username,this.selectedLogo);
+          this.currentUser = await this.auth.info(this.currentUser.username);
+          this.onNoClick();
+          console.log(this.currentUser);
+        }
+      }else{
+        this.snackBar.open("Veuillez choisir un logo puis réessayer!","x",{ panelClass: 'error', verticalPosition: 'top', duration: 3000 })
+      }
+    }catch(error:any){
+      console.log(error);
+    }
+  }
+  openFileDialog(): void {
+    const dialogRef = this.dialog.open(this.FilePopupTemplate, {
+      // width: '300px',
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(["/account/dashboard"])
 
+    });
+  }
+  onNoClick(): void {
+    this.dialog.closeAll();
+    this.selectedLogo = null;
+    this.selectedLogoName = null;
+  }
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedLogo = (input.files[0]);
+      let logoName = this.selectedLogo.name;
+      if(logoName.length>15){
+        this.selectedLogoName = logoName.substring(0,8)+'...'+logoName.substring(logoName.length-4);
+      }else{
+        this.selectedLogoName = logoName;
+      }
+    }
+  }
 }

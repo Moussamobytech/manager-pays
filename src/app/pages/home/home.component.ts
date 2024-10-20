@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
     // { title: 'TU AS UNE BOUTIQUE ? CRÉE TON COMPTE', subtitle: 'Cliques ici pour t\'inscrire et publier tes produits sur le site.', image: 'assets/images/ads/1.jpg' },
     // { title: 'FIABLE ET SÉCURISÉ', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/2.jpg' },
     // { title: 'TU VEUX VENDRE TES PRODUITS?', subtitle: 'Crée ton compte vendeur et attire des clients dès maintenant!', image: 'assets/images/ads/3.jpg', show: 'Créer un compte', href:'sign-up' },
-    
+
     { title: 'BIENVENUE SUR FIDELITY MARKET', subtitle: 'Trouvez ce qui vous intéresse et contactez le vendeur en un clic. Vous êtes commerçant ? Créez votre compte et publier vos produits gratuiement!', image: 'assets/images/ads/5.jpg', show: 'Créer un compte', href:'sign-up' },
     { title: 'PLUS FIABLE ET SÉCURISÉ QUE LES RÉSEAUX SOCIAUX', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/6.jpg', href:'sign-up'},
     { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Vous n’avez pas de temps? Nous vous livrons à domicile.', image: 'assets/images/ads/7.jpg', href:'sign-up' },
@@ -147,7 +147,7 @@ export class HomeComponent implements OnInit {
     this.appService.getBrands().subscribe(data=>{
       this.brands =data;
       this.brands.forEach(brand => { brand.selected = false });
-      console.log("Brands ",data);
+      // console.log("Brands ",data);
     });
     // this.brands.forEach(brand => { brand.selected = false });
   }
@@ -161,7 +161,7 @@ export class HomeComponent implements OnInit {
 
   public async getAllProduit() {
     let res : Array<Product> = await this.produitService.products()
-    console.log("res product :::::::: ",res)
+    // console.log("res product :::::::: ",res)
     this.produit = res
     // this.appService.getAllProducts().subscribe(data => {
     //   this.produit = data;
@@ -170,12 +170,12 @@ export class HomeComponent implements OnInit {
 
   public async getProduitByPromotion() {
     this.promotion = await this.produitService.getProductByTop()
-    console.log("res promotion :::::::: ",this.promotion)
+    // console.log("res promotion :::::::: ",this.promotion)
   }
 
   public async listCampagne() {
     this.campagnes = await this.campagneService.getCampagneEligible()
-    console.log("res campagnes :::::::: ",this.campagnes)
+    // console.log("res campagnes :::::::: ",this.campagnes)
     this.campagnes.forEach(val => {
       this.slides.push(val)
     })
@@ -183,23 +183,23 @@ export class HomeComponent implements OnInit {
   }
   public async getProduitByBest() {
     this.best = await this.produitService.getProductByTop()
-    console.log("res best :::::::: ",this.best)
+    // console.log("res best :::::::: ",this.best)
   }
 
   public async getNewArrivals() {
     this.newArrivals = await this.produitService.getProductByNewArrival("yes")
-    console.log("res newArrivals :::::::: ",this.newArrivals)
+    // console.log("res newArrivals :::::::: ",this.newArrivals)
 
   }
 
   public async nomProduits() {
     this.newArrivals = await this.produitService.nomProduits()
-    console.log("res nomProduits :::::::: ",this.newArrivals)
+    // console.log("res nomProduits :::::::: ",this.newArrivals)
 
   }
   public async getTopRate() {
     this.topRate = await this.produitService.getProductByTop()
-    console.log("res topRate :::::::: ",this.topRate)
+    // console.log("res topRate :::::::: ",this.topRate)
   }
 
 

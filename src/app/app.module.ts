@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -47,6 +47,7 @@ import { AdminConnectionComponent } from './pages/admin-connection/admin-connect
 import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { AnalyticsService } from './services/analitycs.service';
 import { InfluencerService } from './services/influencer.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,13 @@ import { InfluencerService } from './services/influencer.service';
         deps: [HttpClient]
       }
     }),
-    SharedModule
+    SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     // provideClientHydration(),

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from '../../../app.service';
 import { Settings, AppSettings } from '../../../app.settings';
@@ -9,16 +9,34 @@ import { Settings, AppSettings } from '../../../app.settings';
 })
 export class TopMenuComponent implements OnInit {
   public currencies = ['USD', 'EUR'];
-  public currency:any; 
-  public user:any; 
+  public currency:any;
+  public user:any;
+  deferredPrompt: any;
+  installButtonVisible: boolean = false;
 
   public settings: Settings;
   constructor(public appSettings:AppSettings, public appService:AppService, public translateService: TranslateService) {
     this.settings = this.appSettings.settings;
   }
 
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onBeforeInstallPrompt(event: any) {
+    event.preventDefault();
+    this.deferredPrompt = event;
+    this.installButtonVisible = true;
+  }
+
+  promptInstall() {
+    if (this.deferredPrompt) {
+      this.deferredPrompt.prompt();
+      this.deferredPrompt.userChoice.then((choiceResult: any) => {
+        this.deferredPrompt = null;
+      });
+    }
+  }
+
   ngOnInit() {
-    this.currency = this.currencies[0];  
+    this.currency = this.currencies[0];
     this.changeLang("fr")
     this.user  = JSON.parse(sessionStorage.getItem('currentUser')!);
       // this.username = sessionStorage.getItem('username')!;

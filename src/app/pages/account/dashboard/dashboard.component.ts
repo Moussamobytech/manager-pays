@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -15,7 +16,7 @@ import { ProductService } from 'src/app/services/product.service';
 export class DashboardComponent implements OnInit {
   @ViewChild('popupTemplate') popupTemplate: TemplateRef<any>;
   rechargeForm: FormGroup;
-  rechargeAmount: number;  // Ensure this is correctly defined
+  rechargeAmount: number;
   public form: UntypedFormGroup;
   public username : any;
   points: any = 0;
@@ -25,9 +26,11 @@ export class DashboardComponent implements OnInit {
     actif: 0,
     inactif: 0,
     pending: 0,
+    customer:0,
 
   }
-  constructor(private auth: AuthenticationService, private productService: ProductService, private router: Router, public dialog: MatDialog, private fb: FormBuilder) {
+  constructor(private auth: AuthenticationService, private productService: ProductService,
+    private router: Router, public dialog: MatDialog, private fb: FormBuilder, private snackBar:MatSnackBar) {
 
   }
 
@@ -36,7 +39,7 @@ export class DashboardComponent implements OnInit {
     //this.username = this.auth.currentUser();
    // this.points = this.currentUser.points
 
-    console.log("currentUser :::::::: ", this.currentUser)
+    // console.log("currentUser :::::::: ", this.currentUser)
     if (this.currentUser == null || this.currentUser.profiles == null || this.currentUser.profiles == undefined) {
       this.router.navigate(["/sign-in"]);
     }
@@ -84,7 +87,7 @@ export class DashboardComponent implements OnInit {
 
   public stats(id) {
     this.productService.stats(id).then((data: any) => {
-      console.log(data)
+      // console.log(data)
       this.statsNumber.total = data.total
       this.statsNumber.actif = data.actif
       this.statsNumber.inactif = data.inactif
@@ -101,7 +104,7 @@ export class DashboardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       this.router.navigate(["/account/dashboard"])
 
     });
@@ -109,11 +112,11 @@ export class DashboardComponent implements OnInit {
 
   getUserById(){
     this.auth.info(this.currentUser.username).then((data: any) => {
-      console.log("Username ",data)
+      // console.log("Username ",data)
      this.username= data;
      this.points = data.points
 
-     console.log("Username ",data)
+    //  console.log("Username ",data)
 
 
     })
@@ -121,25 +124,26 @@ export class DashboardComponent implements OnInit {
   onRecharge() {
     if (this.form.valid) {
       const amount: number = +this.form.get('amount').value; // Ensure amount is a number
-      console.log('Amount to recharge:', amount); // Debugging line
+      // console.log('Amount to recharge:', amount); // Debugging line
 
 
       this.auth.recharge(amount, this.currentUser.id).subscribe(
         response => {
-          console.log('Recharge successful:', response);
+          // console.log('Recharge successful:', response);
           this.points = response.points
 
           setTimeout(() => {
             this.dialog.closeAll();
           }, 3000);
           if (amount != null) {
-            console.log("MES POINT ", this.points);
+            // console.log("MES POINT ", this.points);
 
             //   this.router.navigate(["/account/dashboard"])
           }
 
         },
         error => {
+          this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
           console.error('Error during recharge:', error);
         }
       );

@@ -13,7 +13,7 @@ import { Product } from 'src/app/models/product.models';
 export class CategoryListComponent {
 
   @Input() categories;
-  @Input() ('categorieA') categorieA;
+  @Input('categorieA') categorieA;
   @Input() tous;
   @Input() categoryParentId;
   @Input('products') products: Array<Product> = [];
@@ -48,7 +48,7 @@ export class CategoryListComponent {
       if(a.nom > b.nom) { return 1; }
       return 0;
     });
-    
+
     // return sortedArray || stringArray
     return sortedArray
   }

@@ -1,0 +1,17 @@
+{
+  "name": "Fidelity Market",
+  "short_name": "Fidelity",
+  "theme_color": "#283593",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "assets/images/logo_fidelity.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}

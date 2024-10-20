@@ -35,6 +35,60 @@
   display: block;
 }
 
+.user_acount_profile{
+box-shadow: none;
+text-align: center;
+justify-content: center;
+align-items: center;
+width: 100%;
+box-shadow: rgba(99, 99, 99, 0.3) 0px 1px 10px 0px;
+}
+
+.user_acount_logo{
+  position:relative;
+  margin: 10px 0px 10px 0px;
+  border: 2px dashed #aaa;
+  border-radius: 50%;
+  padding: 5px 5px 0px 5px;
+  cursor: pointer;
+}
+
+
+.profile-icon{
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.user_acount_logo:hover .profile-icon {
+  filter: contrast(60%);
+}
+.camera-icon{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 4px solid white;
+  background-color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+.user_acount_logo:hover .camera-icon {
+  transform: scale(1.05);
+}
+
+.blue{
+  background-color: #25224a;
+  color: white;
+}
+.warne{
+  background-color: #d81b60 !important;
+  color: white;
+}
+
 @media (min-width: 960px) {
   .icon-more_vert {
       display: block;

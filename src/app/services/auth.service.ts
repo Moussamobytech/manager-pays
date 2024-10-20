@@ -67,8 +67,8 @@ export class AuthenticationService {
 
   }
 
-  public uploadImange(username : any, file){
-      console.log("::::::::::",username)
+  public uploadImange(username : any, file: File){
+      // console.log("::::::::::",username)
       return this.api.postFile('/users/update-user-image?username='+username,file)
 
   }

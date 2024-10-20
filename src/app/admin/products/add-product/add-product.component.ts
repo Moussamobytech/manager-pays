@@ -37,8 +37,8 @@ export class AddProductComponent implements OnInit {
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
-      "pricePromotion": null,
-      "priceBasic": [null, Validators.required ],
+      "pricePromotion": [null, [Validators.pattern('/0-9/'),Validators.minLength(3)]],
+      "priceBasic": [null, [Validators.required, Validators.pattern('/0-9/'), Validators.minLength(3)] ],
       "description": null,
       "weight": "5",
       "user": this.currentUser?.username || null,

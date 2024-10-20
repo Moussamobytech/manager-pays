@@ -28,6 +28,9 @@
     <span fxShow="false" fxShow.gt-sm>
         <!-- <a mat-button routerLink="/compare">{{ 'COMPARE' | translate }} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</a> -->
         <!-- <a mat-button routerLink="/wishlist">{{ 'WISHLIST' | translate }} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</a> -->
+        <div *ngIf="installButtonVisible">
+          <button (click)="promptInstall()">Install App</button>
+        </div>
     </span>
 
     <a mat-button [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
@@ -60,10 +63,10 @@
                 <mat-icon class="mat-icon-sm">compare</mat-icon>
                 <span>Compare <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</span>
             </a> -->
-            <a mat-menu-item routerLink="/wishlist" fxHide="false" fxHide.gt-sm>
+            <!-- <a mat-menu-item routerLink="/wishlist" fxHide="false" fxHide.gt-sm>
                 <mat-icon class="mat-icon-sm">favorite</mat-icon>
-            <!-- <span>{{'Wishlist'| translate}} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</span> -->
-            </a>
+            <span>{{'Wishlist'| translate}} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</span>
+            </a> -->
             <!-- <a mat-menu-item routerLink="/">
                 <mat-icon class="mat-icon-sm">lock</mat-icon>
                 <span>Lock screen</span>
