@@ -3,11 +3,11 @@
       <mat-card class="user_acount_profile">
 
         <div class="user_acount_logo" (click)="openFileDialog()">
-          <img [src]="currentUser.logo || defaultLogo" class="profile-icon" alt="boutique_logo">
-          <img src="../../../assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
+          <img [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo || defaultLogo" class="profile-icon" alt="boutique_logo">
+          <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
         </div>
-        <div class="mb-3">
-          <p>{{currentUser.name || 'XXXXX'}}</p>
+        <div *ngIf="currentUser.name" class="mb-3">
+          <p>{{currentUser.name}}</p>
         </div>
 
         <ng-template #FilePopupTemplate>
