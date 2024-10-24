@@ -2,10 +2,6 @@
   display: flex;
 }
 
-.progress-bar {
-
-}
-
 .progress-bar::before{
   content: " ";
   top: 30px;
@@ -20,12 +16,13 @@
   margin-left: -2.5px;
 }
 
-.progress-bar ul {
+ul {
   list-style-type: none;
   padding: 0;
+  width: 100%;
 }
 
-.progress-bar li {
+.progress-bar span {
   padding: 10px;
   cursor: pointer;
   margin: 10px 0;
@@ -35,18 +32,18 @@
   border-radius: 50%;
 }
 
-.progress-bar li:hover {
+.progress-bar span:hover {
   background-color: #ccc;
 }
 
-.progress-bar li.active {
+.progress-bar span.active {
   background-color: #d81b60;
   border: 2px solid #283593;
   color: #283593;
 }
 
 .tutorial-content {
-  width: 75%;
+  // width: 75%;
   margin-left: 25%;
   padding: 20px;
 }
