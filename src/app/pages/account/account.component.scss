@@ -98,3 +98,9 @@ box-shadow: rgba(99, 99, 99, 0.3) 0px 1px 10px 0px;
       display: none;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .auth{
+      white-space: normal;
+  }
+}
