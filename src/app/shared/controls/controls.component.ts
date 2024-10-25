@@ -90,7 +90,7 @@ export class ControlsComponent implements OnInit {
       'dateAction' : '',
       'language' : window.navigator.language
     });
-    let url = "https://wa.me/"+(product.contact || '22376007979')+"?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20"+product?.nom+".%20Prix%20%3A%20"+product?.priceBasic+""
+    let url = "https://wa.me/"+(((product.contact).length == 8)? "+223"+product.contact : "+225"+product.contact || '+22376007979')+"?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20"+product?.nom+".%20Prix%20%3A%20"+product?.priceBasic+""
     window.open(url,"_blank");
   }
 
