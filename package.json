@@ -57,6 +57,7 @@
     "sweetalert2": "^11.6.13",
     "swiper": "6.6.1",
     "tslib": "2.6.2",
+    "xlsx": "^0.18.5",
     "zone.js": "0.14.2"
   },
   "devDependencies": {

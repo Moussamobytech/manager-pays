@@ -1,23 +1,23 @@
 import {Component, ViewEncapsulation, ViewChild, HostListener, ElementRef, inject} from '@angular/core';
-import { DomHandlerService } from 'src/app/dom-handler.service'; 
+import { DomHandlerService } from 'src/app/dom-handler.service';
 
 @Component({
   selector: 'app-fullscreen',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <button mat-icon-button class="full-screen">
+    <button mat-icon-button class="full-screen" [matTooltip]="(toggle)?'Quitter le mode plein écran':'Mode plein écran'">
         <mat-icon *ngIf="!toggle" #expand>fullscreen</mat-icon>
         <mat-icon *ngIf="toggle" #compress>fullscreen_exit</mat-icon>
-    </button> 
+    </button>
   `
 })
-export class FullScreenComponent { 
+export class FullScreenComponent {
     toggle:boolean = false;
     @ViewChild('expand') private expand:ElementRef;
-    @ViewChild('compress') private compress:ElementRef; 
+    @ViewChild('compress') private compress:ElementRef;
     domHandlerService = inject(DomHandlerService);
     document: any = this.domHandlerService.window?.document;
-   
+
     requestFullscreen(elem: any) {
         if (elem.requestFullscreen) {
             elem.requestFullscreen();
@@ -48,8 +48,8 @@ export class FullScreenComponent {
         if (fullscreenElement != null) {
             this.toggle = true;
         } else {
-            this.toggle = false;          
+            this.toggle = false;
         }
-    }   
+    }
 
 }

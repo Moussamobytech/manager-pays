@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public stats(id){
+  public stats(id: any){
     this.productService.stats(id).then((data : any) =>{
       console.log(data)
       this.statsNumber.total = data.total

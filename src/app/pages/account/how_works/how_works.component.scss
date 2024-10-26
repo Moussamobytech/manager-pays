@@ -1,64 +1,182 @@
-.tutorial-container {
+
+#steps-container {
   display: flex;
+  margin: 0;
+  width: 100%;
+  height: auto;
+  box-shadow: rgba(204, 219, 232, 0.495) 0px -3px 6px 0px inset;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-direction: column;
 }
 
-.progress-bar::before{
-  content: " ";
-  top: 30px;
-  bottom: 0;
-  display: block;
-  position: absolute;
-  height: 650px;
-  width: 5px;
-  border: 1px solid #666;
-  background-color: #333;
-  left: 10%;
-  margin-left: -2.5px;
+.bleu{
+  background-color: #25224a;
+  color: white;
 }
 
 ul {
   list-style-type: none;
-  padding: 0;
   width: 100%;
+  position: relative;
+  padding: 0;
 }
 
-.progress-bar span {
-  padding: 10px;
+#steps-container ul::before {
+  content: "";
+  top: 120px;
+  bottom: 0;
+  display: block;
+  position: absolute;
+  height: 81%;
+  width: 5px;
+  background-color: #283593b8;
+  left: 10%;
+  z-index: 20;
+  border-radius: 3px;
+}
+
+.tutorial-progress {
+  position: relative;
+}
+
+.tutorial-progress span {
   cursor: pointer;
-  margin: 10px 0;
-  background-color: #ddd;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+  width: 50px;
+  height: 50px;
+  font-weight: bolder;
+  font-size: larger;
+  text-align: center;
+  align-content: center;
+  display: inline-block;
+  background-color: #283593;
+  color: #d81b60;
   border-radius: 50%;
+  transition: 0.4s ease;
+  position: relative;
+  top: 170px;
+  left: 70px;
+  z-index: 2000;
 }
 
-.progress-bar span:hover {
-  background-color: #ccc;
-}
-
-.progress-bar span.active {
+.tutorial-progress span:hover,
+.tutorial-progress span.active {
   background-color: #d81b60;
-  border: 2px solid #283593;
+  scale: 1.1;
   color: #283593;
 }
 
-.tutorial-content {
-  // width: 75%;
+.tutorial-video {
   margin-left: 25%;
   padding: 20px;
-}
-
-.tutorial-content div {
-  margin-bottom: 50px;
+  max-width: 100%;
+  display: block;
 }
 
 iframe {
   width: 100%;
-  height: 400px;
+  height: auto;
   margin-bottom: 20px;
+  border-radius: 10px;
+  border: 4px solid #283593;
+  transition: all 0.3s ease 0s;
+}
+
+iframe.active {
+  border: 4px solid #d81b60;
+}
+
+.tutorial-video h2 {
+  color: #283593;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.tutorial-video h2::after {
+  content: " ";
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 15px solid #283593;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 10px;
 }
 
 h2 {
-  color: #333;
-  margin-bottom: 10px;
+  margin: 0 0 20px 0;
+}
+
+
+@media only screen and (max-width: 1024px) {
+
+  #steps-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .tutorial-progress span {
+    left: 30px;
+    top: 200px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .tutorial-video {
+    margin-left: 15%;
+  }
+
+  iframe {
+    height: 320px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+
+  #steps-container ul::before {
+    display: none;
+  }
+
+  .tutorial-progress span {
+    width: 35px;
+    height: 35px;
+    top: 160px;
+    left: 5px;
+    font-size: medium;
+  }
+
+  .tutorial-video {
+    margin-left: 5%;
+    padding: 10px;
+  }
+
+  iframe {
+    height: 250px;
+  }
+
+  .tutorial-video h2::after {
+    display: none;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+}
+
+/* Accessibility */
+.tutorial-progress span:focus {
+  outline: 3px solid #ff4081;
+}
+
+li {
+  transition: background-color 0.4s ease;
+}
+
+li:hover {
+  background-color: #f0f0f0;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
