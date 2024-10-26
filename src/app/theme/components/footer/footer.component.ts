@@ -10,12 +10,12 @@ import { AnalyticsService } from 'src/app/services/analitycs.service';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  center: google.maps.LatLngLiteral = { lat: 40.678178, lng: -73.944158};
-  zoom = 7;
-  markerOptions: google.maps.MarkerOptions = { draggable: false };
-  markerPositions: google.maps.LatLngLiteral[] = [
-    { lat: 40.678178, lng: -73.944158 }
-  ];
+  // center: google.maps.LatLngLiteral = { lat: 12.664578, lng: -7.936185};
+  // zoom = 7;
+  // markerOptions: google.maps.MarkerOptions = { draggable: false };
+  // markerPositions: google.maps.LatLngLiteral[] = [
+  //   { lat: 12.664578, lng: -7.936185 }
+  // ];
 public newsletter: Newsletter[];
 contactForm: UntypedFormGroup;
 

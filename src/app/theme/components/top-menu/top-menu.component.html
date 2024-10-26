@@ -28,9 +28,7 @@
     <span fxShow="false" fxShow.gt-sm>
         <!-- <a mat-button routerLink="/compare">{{ 'COMPARE' | translate }} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</a> -->
         <!-- <a mat-button routerLink="/wishlist">{{ 'WISHLIST' | translate }} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</a> -->
-        <div *ngIf="installButtonVisible">
-          <button (click)="promptInstall()">Install App</button>
-        </div>
+        <a mat-button (click)="promptInstall()" *ngIf="installButtonVisible">Telecharger l’Appli</a>
     </span>
 
     <a mat-button [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
