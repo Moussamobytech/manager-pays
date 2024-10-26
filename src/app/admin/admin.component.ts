@@ -101,14 +101,14 @@ export class AdminComponent implements OnInit {
 
   private mapToUser(user: any) {
     return {
-      prenom: user.firstname,
-      nom: user.lastname,
-      email: user.email,
-      telephone: ( (user.phoneNumber != null) && (user.phoneNumber.length == 8) )? "+223"+user.phoneNumber : "+225"+user.phoneNumber,
-      type: this.userType(user.profiles[0].name),
-      member_since: new Date(user.createdAt).toLocaleString('en-GB', { timeZone: 'UTC' }),
-      etat:(user.enabled)?'active':'inactive',
-      adresse:user.adresse,
+      Prenom: user.firstname,
+      Nom: user.lastname,
+      Email: user.email,
+      Telephone: this.formatPhone(user.phoneNumber),
+      Type: this.userType(user.profiles[0].name),
+      MembreDepuis: new Date(user.createdAt).toLocaleString('en-GB', { timeZone: 'UTC' }),
+      Status:(user.enabled)?'active':'inactive',
+      Adresse:user.adresse,
     };
   }
 
@@ -122,7 +122,18 @@ export class AdminComponent implements OnInit {
     }else{
       return ('inconnue').toUpperCase()
     }
+  }
 
+  formatPhone(phone:any){
+    if(phone != 'null' && phone != null){
+      if((phone.length == 8)){
+        return "+223"+phone;
+      }else if(phone.length == 10){
+        return "+225"+phone;
+      }else{
+        return phone;
+      }
+    }
   }
 
   logout(){
