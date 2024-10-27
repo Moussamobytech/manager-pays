@@ -18,20 +18,22 @@ export class AdminComponent implements OnInit {
   public settings:Settings;
   public menuItems:Array<any>;
   public toggleSearchBar:boolean = false;
+  public users:any;
   currentUser : User
 
-  constructor(public appSettings:AppSettings, public translateService: TranslateService, 
+  constructor(public appSettings:AppSettings, public translateService: TranslateService,
               private authenticationService: AuthenticationService,
               public router:Router,
               private menuService: MenuService,
               public domHandlerService: DomHandlerService,
-              private auth : AuthenticationService,){
+              private auth : AuthenticationService,
+            ){
     this.settings = this.appSettings.settings;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.currentUser = this.auth.currentUser()
-    console.log("::::::::: ", this.currentUser)
+    // console.log("::::::::: ", this.currentUser)
     if(this.domHandlerService.window?.innerWidth <= 960){
       this.settings.adminSidenavIsOpened = false;
       this.settings.adminSidenavIsPinned = false;
@@ -43,6 +45,9 @@ export class AdminComponent implements OnInit {
     // this.localStorage.setJsonValue("lang-key",{lang})
     // console.log(lg.lang)
     this.translateService.use("fr");
+    this.auth.list().then((data: any) =>{
+      this.users= data.map((user: any) => this.mapToUser(user));
+    });
   }
 
   ngAfterViewInit(){
@@ -94,10 +99,47 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  private mapToUser(user: any) {
+    return {
+      Prenom: user.firstname,
+      Nom: user.lastname,
+      Email: user.email,
+      Telephone: this.formatPhone(user.phoneNumber),
+      Type: this.userType(user.profiles[0].name),
+      MembreDepuis: new Date(user.createdAt).toLocaleString('en-GB', { timeZone: 'UTC' }),
+      Status:(user.enabled)?'active':'inactive',
+      Adresse:user.adresse,
+    };
+  }
+
+  userType(user: string): any {
+    if( (/admin/ig).test(user) ){
+      return ('admin').toUpperCase();
+    }else if( (/particulier/ig).test(user) ){
+      return ('particulier').toUpperCase();
+    }else if( (/boutique/ig).test(user) ){
+      return ('boutique').toUpperCase()
+    }else{
+      return ('inconnue').toUpperCase()
+    }
+  }
+
+  formatPhone(phone:any){
+    if(phone != 'null' && phone != null){
+      if((phone.length == 8)){
+        return "+223"+phone;
+      }else if(phone.length == 10){
+        return "+225"+phone;
+      }else{
+        return phone;
+      }
+    }
+  }
+
   logout(){
     this.authenticationService.logout();
     this.router.navigateByUrl("/")
   }
 
-  
+
 }

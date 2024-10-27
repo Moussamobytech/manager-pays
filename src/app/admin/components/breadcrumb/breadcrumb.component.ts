@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot, UrlSegment, NavigationEnd } from "@angular/router";
 import { Title } from '@angular/platform-browser';
 import { MenuService } from '../menu/menu.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
+import { ExcelExportService } from 'src/app/services/excel-export.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -10,6 +11,7 @@ import { AppSettings, Settings } from 'src/app/app.settings';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent {
+  @Input() users!:any;
   public pageTitle:string;
   public breadcrumbs: {
       name: string;
@@ -21,7 +23,9 @@ export class BreadcrumbComponent {
               public router: Router,
               public activatedRoute: ActivatedRoute,
               public title:Title,
-              private menuService: MenuService){
+              private menuService: MenuService,
+              private excelExportService: ExcelExportService
+            ){
       this.settings = this.appSettings.settings;
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
@@ -61,4 +65,7 @@ export class BreadcrumbComponent {
     this.menuService.closeAllSubMenus();
   }
 
+  exportAsExel(){
+    this.excelExportService.exportToExcel(this.users, 'Liste d\'utilisateurs Fidelity_market');
+  }
 }

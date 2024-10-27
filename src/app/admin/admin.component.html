@@ -7,22 +7,22 @@
                     <span>&nbsp;&nbsp;Fidelity</span>
                 </a>
             </div>
-            <button mat-icon-button (click)="toggleSidenav()">
+            <button mat-icon-button (click)="toggleSidenav()" matTooltip="Basculer la navigation latérale">
                 <mat-icon>menu</mat-icon>
             </button>
-            <button mat-icon-button (click)="settings.adminSidenavIsPinned = !settings.adminSidenavIsPinned" fxShow="false" fxShow.gt-xs>
+            <button mat-icon-button (click)="settings.adminSidenavIsPinned = !settings.adminSidenavIsPinned" [matTooltip]="(settings.adminSidenavIsPinned)?'Détacher la navigation latérale':'Epingler la navigation latérale'" fxShow="false" fxShow.gt-xs>
                 <svg class="pin">
                     <path *ngIf="!settings.adminSidenavIsPinned" d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
                     <path *ngIf="settings.adminSidenavIsPinned" d="M2,5.27L3.28,4L20,20.72L18.73,22L12.8,16.07V22H11.2V16H6V14L8,12V11.27L2,5.27M16,12L18,14V16H17.82L8,6.18V4H7V2H17V4H16V12Z" />
                 </svg>
             </button>
-            <button fxShow="false" fxShow.gt-xs mat-icon-button (click)="settings.adminSidenavUserBlock = !settings.adminSidenavUserBlock">
+            <button [matTooltip]="(settings.adminSidenavUserBlock)?'Cacher les info Admin':''" fxShow="false" fxShow.gt-xs mat-icon-button (click)="settings.adminSidenavUserBlock = !settings.adminSidenavUserBlock">
                 <mat-icon>person</mat-icon>
             </button>
             <!-- <button mat-icon-button (click)="settings.rtl = !settings.rtl" matTooltip="LTR / RTL">
                 <mat-icon>swap_horiz</mat-icon>
             </button> -->
-            <a mat-icon-button routerLink="/"><mat-icon>home</mat-icon></a>
+            <a mat-icon-button routerLink="/" matTooltip="Accéder à la boutique"><mat-icon>home</mat-icon></a>
         </div>
         <div fxLayout="row" fxLayoutAlign="end center">
             <!-- <div fxLayout="row" fxLayoutAlign="start center" fxShow="false" fxShow.gt-xs class="search-bar">
@@ -53,11 +53,11 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100 muted-text">
                     <!-- <button mat-icon-button><mat-icon>person_outline</mat-icon></button> -->
-                    <a mat-icon-button routerLink="/admin/information">
-                        <mat-icon>person_outline</mat-icon>
+                    <a mat-icon-button routerLink="/admin/information" matTooltip="Informations du compte">
+                        <mat-icon>settings_account_box</mat-icon>
                     </a>
                     <!-- <button mat-icon-button><mat-icon>mail_outline</mat-icon></button> -->
-                    <button mat-icon-button (click)="logout()"><mat-icon>power_settings_new</mat-icon></button>
+                    <button mat-icon-button (click)="logout()" matTooltip="Se déconnecter"><mat-icon>power_settings_new</mat-icon></button>
                     <!-- <a mat-icon-button routerLink="/sign-in">
                         <mat-icon>power_settings_new</mat-icon>
                     </a> -->
@@ -67,7 +67,7 @@
         </ng-scrollbar>
     </mat-drawer>
     <mat-drawer-content>
-        <app-breadcrumb></app-breadcrumb>
+        <app-breadcrumb [users]="this.users"></app-breadcrumb>
         <router-outlet></router-outlet>
     </mat-drawer-content>
 </mat-drawer-container>

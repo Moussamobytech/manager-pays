@@ -1,21 +1,21 @@
 <div id="steps-container">
+  <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
+    <button class="mr-2" mat-raised-button class="bleu" matTooltip="Demander de l'aide" (click)="askHelp()">
+      Besoin d'aide?
+    </button>
+  </div>
   <ul>
-    <li *ngFor="let step of steps; let i = index"
-    [class.active]="currentStep === i"
-    (click)="scrollToStep(i)">
+    <li *ngFor="let step of steps; let i = index" (click)="scrollToStep(i)">
       <!-- Left side: Progress Bar with steps -->
       <div class="tutorial-progress">
-        <span>{{ i + 1 }}</span>
+        <span [class.active]="currentStep === i">{{ i + 1 }}</span>
       </div>
       <!-- Right side: Videos and Descriptions -->
-      <div class="tutorial-content" id="tutorial-content">
-        <div [attr.id]="'step' + i">
-          <h2>{{ step.title }}</h2>
-          <iframe width="560" height="315" [src]="step.videoUrl" frameborder="0" allowfullscreen></iframe>
-              <p>{{ step.description }}</p>
-        </div>
+      <div class="tutorial-video" [attr.id]="'step' + i">
+        <h2>{{ step.title }}</h2>
+        <iframe [class.active]="currentStep === i" [src]="step.videoUrl" frameborder="0" allowfullscreen></iframe>
+        <p>{{ step.description }}</p>
       </div>
     </li>
   </ul>
 </div>
-
