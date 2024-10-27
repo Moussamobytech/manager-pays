@@ -82,6 +82,13 @@
     .bg-primary{
       border-radius: 5px;
     }
+    .filter-cell a{
+      cursor:pointer;
+      transition: .1s all ease-in;
+    }
+    .filter-cell a:active{
+      color: #d81b60;
+    }
   }
   // border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 15px;
@@ -89,5 +96,5 @@
  .actions {
     display: flex;
     align-items: center;
-    gap: 5px; /* Ajustez l'espacement entre les éléments selon vos besoins */
+    gap: 5px;
 }
