@@ -116,6 +116,7 @@
   "BTN": {
     "ADD": "Ajouter",
     "EDIT": "Modifier",
+    "RESET": "Réinitialiser",
     "SAVE": "Sauvegarder",
     "DEACTIVATE": "Desactiver",
     "SUBMIT": "Soumettre",
@@ -160,7 +161,8 @@
     "MESSAGE": "Message"
   },
   "USER":{
-    "MEMBER_SINCE": "Membre depuis"
+    "MEMBER_SINCE": "Membre depuis",
+    "ACTION":"Actions"
   },
 
   "FIELD_ERROR":{

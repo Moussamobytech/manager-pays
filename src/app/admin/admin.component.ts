@@ -46,7 +46,8 @@ export class AdminComponent implements OnInit {
     // console.log(lg.lang)
     this.translateService.use("fr");
     this.auth.list().then((data: any) =>{
-      this.users= data.map((user: any) => this.mapToUser(user));
+      let sortedUsers = data.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      this.users= sortedUsers.map((user: any) => this.mapToUser(user));
     });
   }
 

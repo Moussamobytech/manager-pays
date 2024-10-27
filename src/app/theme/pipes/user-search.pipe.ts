@@ -7,7 +7,7 @@ export class UserSearchPipe implements PipeTransform {
     if (value) {
       return value.filter(user => {
         if (user.firstname||user.lastname||user.username) {
-          return (user.firstname.search(searchText) !== -1)||(user.lastname.search(searchText) !== -1)||(user.lastname.search(searchText) !== -1);
+          return (user.firstname.search(searchText) !== -1)||(user.lastname.search(searchText) !== -1)||(user.username.search(searchText) !== -1||(user.profiles[0].name.search(searchText) !== -1));
         }else{
           return user.search(searchText) !== -1;
         }

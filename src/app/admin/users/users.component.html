@@ -171,15 +171,14 @@
         <div  fxFlex="100"  class="p-2">
           <div class="mat-mdc-table admin-table">
             <div class="mat-mdc-header-row mat-toolbar mat-primary" >
-            <!-- <div class="mat-mdc-header-row bg-primary" > -->
-                <div class="mat-mdc-header-cell">{{"FIELD.FIRSTNAME" |translate}}</div>
-                <div class="mat-mdc-header-cell">{{"FIELD.LASTNAME"|translate}}</div>
-                <div class="mat-mdc-header-cell">{{"FIELD.USERNAME"|translate}}</div>
-                <div class="mat-mdc-header-cell">Type </div>
-                <div class="mat-mdc-header-cell">{{"USER.MEMBER_SINCE"|translate}}</div>
-                <div class="mat-mdc-header-cell"></div>
+                <div class="mat-mdc-header-cell filter-cell">{{"FIELD.FIRSTNAME" |translate}} <a (click)="sortUsers('firstname')"><mat-icon>swap_vert</mat-icon></a> </div>
+                <div class="mat-mdc-header-cell filter-cell">{{"FIELD.LASTNAME"|translate}} <a (click)="sortUsers('lastname')"><mat-icon>swap_vert</mat-icon></a> </div>
+                <div class="mat-mdc-header-cell filter-cell">{{"FIELD.USERNAME"|translate}} </div>
+                <div class="mat-mdc-header-cell filter-cell">Type <a (click)="sortUsers('type')"><mat-icon>swap_vert</mat-icon></a> </div>
+                <div class="mat-mdc-header-cell filter-cell">{{"USER.MEMBER_SINCE"|translate}} <a (click)="sortUsers('member_since')"><mat-icon>swap_vert</mat-icon></a> </div>
+                <div class="mat-mdc-header-cell text-center">{{"USER.ACTION"|translate}}</div>
             </div>
-            <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="mat-mdc-row">
+            <div *ngFor="let user of (sortedUsers||users) | UserSearchPipe : searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="mat-mdc-row">
                 <div class="mat-mdc-cell border-black">{{ user.firstname|capitalCase }}</div>
                 <div class="mat-mdc-cell">{{ user.lastname|capitalCase }}</div>
                 <div class="mat-mdc-cell">{{ user.username }}</div>
@@ -188,7 +187,7 @@
                 <div class="mat-mdc-cell">{{ user.createdAt | date: "dd-MM-yyyy" }}</div>
                 <div class="mat-mdc-cell">
                   <div class="p-2 actions d-flex align-items-center">
-                      <button mat-mini-fab color="success" [matTooltip]="'BTN.EDIT'|translate" (click)="reset(user.username)">
+                      <button mat-mini-fab color="success" [matTooltip]="'BTN.RESET'|translate" (click)="reset(user.username)">
                           <mat-icon>refresh</mat-icon>
                       </button>
                       <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">

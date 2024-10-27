@@ -6,7 +6,7 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { Observable, catchError, first, lastValueFrom, map } from 'rxjs';
+import { ConnectableObservable, Observable, catchError, first, lastValueFrom, map } from 'rxjs';
 import { json } from 'stream/consumers';
 import { User } from 'src/app/models/user.models';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -14,6 +14,7 @@ import { UserAddForm, UserEditForm } from 'src/app/models/userForm.model';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { CommonMessageService } from 'src/app/services/common-message.service';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'app-users',
@@ -24,12 +25,17 @@ import { CommonMessageService } from 'src/app/services/common-message.service';
 })
 export class UsersComponent implements OnInit {
     public users: User[];
+    public sortedUsers: User[]=null;
     public searchText: string;
     public page:any;
     public settings: Settings;
     domHandlerService = inject(DomHandlerService);
     isAboveSmSize$: Observable<boolean>;
     isAboveMdSize$: Observable<boolean>;
+    ascFirstname: boolean = true;
+    ascLastname: boolean = true;
+    ascType: boolean = true;
+    ascMember: boolean = true;
 
     constructor(
       public appSettings: AppSettings,
@@ -38,7 +44,8 @@ export class UsersComponent implements OnInit {
       public usersService: UsersService,
       private breakpointObserver:BreakpointObserver,
       private ngxSpinnerService: NgxSpinnerService,
-      private auth: AuthenticationService
+      private auth: AuthenticationService,
+      private sessionStorage: UserSessionService,
     ){
         this.settings = this.appSettings.settings;
     }
@@ -107,7 +114,10 @@ export class UsersComponent implements OnInit {
         typeofUser  : (userFormData.contacts.email)? 'email'  : 'tel'
       }
       console.log(userInfo);
-      return this.authService.signup(userInfo).subscribe((user:any) => this.getUsers());
+      return this.authService.signup(userInfo).subscribe((user:any) => {
+        this.getUsers();
+        this.sortUsers(this.sessionStorage.getItem("userListFilter"));
+      });
     }
 
     public async updateUser(id:string,userFormData:UserEditForm){
@@ -123,8 +133,11 @@ export class UsersComponent implements OnInit {
         // password    : (userFormData.auth.password2)||null,
       };
       console.log("userInfo ::::: ",userInfo);
-      
-      return await this.authService.updateUser(id,userInfo).then(user => this.getUsers());
+
+      return await this.authService.updateUser(id,userInfo).then(user =>{
+        this.getUsers();
+        this.sortUsers(this.sessionStorage.getItem("userListFilter"));
+      });
     }
     // public deleteUser(id:any){
     //   console.log(id)
@@ -138,8 +151,9 @@ export class UsersComponent implements OnInit {
           console.log("::::::RESSSSSSSSSSSS::::",res)
 
           this.commonService.successToast(`${res.data.message || 'Utilisateur supprimer avec succès'}.`)
-  
+
           this.getUsers()
+          this.sortUsers(this.sessionStorage.getItem("userListFilter"));
           return res
       } catch (error : any) {
           console.log(error);
@@ -159,7 +173,7 @@ export class UsersComponent implements OnInit {
       dialogRef.afterClosed().subscribe(async dialogResult => {
         if (dialogResult) {
           console.log("reset ::::")
-          
+
           try {
             console.log("::::::::::",username)
               let res : any = await this.authService.reset(username).toPromise()
@@ -167,7 +181,7 @@ export class UsersComponent implements OnInit {
               this.commonService.successToast(`${res.message}.`)
               let link = this.createWhatsAppLink(username, res.message)
               alert(res.message)
-    
+
               return res
           } catch (error : any) {
               console.log(error);
@@ -176,7 +190,7 @@ export class UsersComponent implements OnInit {
         }
       });
 
-      
+
     }
 
     createWhatsAppLink(phone: string, password: string): string {
@@ -220,6 +234,7 @@ export class UsersComponent implements OnInit {
     public onPageChanged(event){
         this.page = event;
         this.getUsers();
+        this.sortUsers(this.sessionStorage.getItem("userListFilter"));
         this.domHandlerService.winScroll(0, 0);
     }
 
@@ -281,6 +296,70 @@ export class UsersComponent implements OnInit {
             // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
           }
         );
+      }
+    }
+
+    sortUsers(keyWord:any){
+      this.sessionStorage.setItem("userListFilter",keyWord)
+      const {users} = this;
+      switch(keyWord){
+        case "firstname":
+            if(this.ascFirstname){
+              this.sortedUsers = users.sort((a, b) =>
+                a.firstname.trim().localeCompare(b.firstname.trim(),
+                undefined, { sensitivity: 'base' })
+              );
+            }else{
+              this.sortedUsers = users.sort((a, b) =>
+                b.firstname.trim().localeCompare(a.firstname.trim(),
+                undefined, { sensitivity: 'base' })
+              );
+            }
+          break;
+        case "lastname":
+          if(this.ascLastname){
+            this.sortedUsers = users.sort((a, b) =>
+              a.lastname.trim().localeCompare(b.lastname.trim(),
+              undefined, { sensitivity: 'base' })
+            );
+          }else{
+            this.sortedUsers = users.sort((a, b) =>
+              b.lastname.trim().localeCompare(a.lastname.trim(),
+              undefined, { sensitivity: 'base' })
+            );
+          }
+          break;
+        case "type":
+          if(this.ascType){
+            this.sortedUsers = users.sort((a, b) =>
+              a.profiles[0].name.localeCompare(b.profiles[0].name,
+              undefined, { sensitivity: 'base' })
+            );
+          }else{
+            this.sortedUsers = users.sort((a, b) =>
+              b.profiles[0].name.localeCompare(a.profiles[0].name,
+              undefined, { sensitivity: 'base' })
+            );
+          }
+          break;
+        case "member_since":
+          if(this.ascMember){
+            this.sortedUsers = users.sort((a, b) =>
+              new Date(a.createdAt).getTime()
+                -
+              new Date(b.createdAt).getTime()
+            );
+          }else{
+            this.sortedUsers = users.sort((a, b) =>
+              new Date(b.createdAt).getTime()
+                -
+              new Date(a.createdAt).getTime()
+            );
+          }
+          break;
+        default:
+          this.sortedUsers = users;
+          break;
       }
     }
 
