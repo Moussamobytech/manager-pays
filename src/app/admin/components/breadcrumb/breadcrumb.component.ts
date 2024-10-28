@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ActivatedRouteSnapshot, UrlSegment, NavigationEnd } from "@angular/router";
 import { Title } from '@angular/platform-browser';
 import { MenuService } from '../menu/menu.service';
@@ -10,9 +10,11 @@ import { ExcelExportService } from 'src/app/services/excel-export.service';
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.scss']
 })
-export class BreadcrumbComponent {
+export class BreadcrumbComponent implements OnInit{
+
   @Input() users!:any;
   public pageTitle:string;
+  showUserExport: boolean;
   public breadcrumbs: {
       name: string;
       url: string
@@ -59,6 +61,10 @@ export class BreadcrumbComponent {
     if (node.firstChild) {
       this.parseRoute(node.firstChild);
     }
+  }
+
+  ngOnInit(){
+console.log("breadcrumbs",this.breadcrumbs)
   }
 
   public closeSubMenus(){
