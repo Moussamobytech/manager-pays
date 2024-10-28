@@ -9,7 +9,7 @@
                 <a [hidden]="i == (breadcrumbs.length - 1)" [routerLink]="[breadcrumb.url]">{{breadcrumb.name}}</a>
                 <span [hidden]="i != (breadcrumbs.length - 1)" class="breadcrumb-title active">{{breadcrumb.name}}</span>
             </div>
-            <div class="text-right">
+            <div class="text-right" *ngIf="breadcrumbs | exportButtonShow:'Users'">
               <button mat-raised-button (click)="exportAsExel()">
                 <mat-icon>save_alt</mat-icon>
                 Exporter la liste

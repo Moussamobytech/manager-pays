@@ -315,6 +315,7 @@ export class UsersComponent implements OnInit {
                 undefined, { sensitivity: 'base' })
               );
             }
+            this.ascFirstname = !this.ascFirstname;
           break;
         case "lastname":
           if(this.ascLastname){
@@ -328,6 +329,7 @@ export class UsersComponent implements OnInit {
               undefined, { sensitivity: 'base' })
             );
           }
+          this.ascLastname = !this.ascLastname;
           break;
         case "type":
           if(this.ascType){
@@ -341,6 +343,7 @@ export class UsersComponent implements OnInit {
               undefined, { sensitivity: 'base' })
             );
           }
+          this.ascType = !this.ascType;
           break;
         case "member_since":
           if(this.ascMember){
@@ -356,6 +359,7 @@ export class UsersComponent implements OnInit {
               new Date(a.createdAt).getTime()
             );
           }
+          this.ascMember = !this.ascMember;
           break;
         default:
           this.sortedUsers = users;

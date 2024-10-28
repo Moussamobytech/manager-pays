@@ -10,6 +10,7 @@ import { CapitalCasePipe } from './capitalCase.pipe';
 import { RoundNamePipe } from './roundName.pipe';
 import { UserTypePipe } from './userType.pipe';
 import { SafePipe } from './safe.pipe';
+import { ExportButtonShowPipe } from './export-button-show.pipe';
 
 @NgModule({
     imports: [
@@ -24,7 +25,8 @@ import { SafePipe } from './safe.pipe';
       CapitalCasePipe,
       RoundNamePipe,
       UserTypePipe,
-      SafePipe
+      SafePipe,
+      ExportButtonShowPipe,
    ],
     exports: [
       FilterByIdPipe,
@@ -36,6 +38,7 @@ import { SafePipe } from './safe.pipe';
       RoundNamePipe,
       UserTypePipe,
       SafePipe,
+      ExportButtonShowPipe,
     ]
 })
 export class PipesModule { }
