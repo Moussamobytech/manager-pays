@@ -88,11 +88,11 @@
             </form> -->
 
           </div>
-          <!-- <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">
+          <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">
 
-              <form (submit)="onSearch($event)" class="search-form" fxLayout="row"> -->
+              <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
                 <!-- [formControl]="searchTerm" -->
-                <!-- <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
+                <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
                 <button mat-mini-fab type="submit"  class="search-btn mat-elevation-z0 text-muted">
                   <mat-icon>search</mat-icon>
               </button>
@@ -102,12 +102,14 @@
 										appClickOutside="onClickOutside()"
 										#suggestionsContainer>
 								<ul>
-								<li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
-										{{ suggestion.nom }}
-								</li>
+                  <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
+                    <mat-icon>search</mat-icon>
+                    <span *ngIf="suggestion.type === 'product'"><b>Produit: </b> {{ suggestion.item.nom }}</span>
+                    <span *ngIf="suggestion.type === 'category'"><b>Categorie: </b> {{ suggestion.item.nom }}</span>
+                  </li>
 								</ul>
 							</div>
-          </div> -->
+          </div>
 
       </mat-toolbar-row>
       <!-- <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar bg-primary" style="height: 55px !important;">
