@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, map, throwError, timeout } from 'rxjs';
+import { Observable, catchError, map, of, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import { Campagne, Category, Contact, Newsletter, Product } from './app.models';
 import { environment } from 'src/environments/environment';
@@ -97,6 +97,50 @@ export class AppService {
       )
     );
   }
+
+  private cache = new Map<string, any>();
+
+  public searchProducts1(categories: Category[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
+    const lowerTerm = term.toLowerCase().trim();
+
+    if (this.cache.has(lowerTerm)) {
+        return of(this.cache.get(lowerTerm)!);
+    }
+
+    const startingProducts = products.filter(product => product.nom.toLowerCase().startsWith(lowerTerm))
+                                     .map(product => ({ type: 'product', item: product }));
+    const startingCategories = categories.filter(category => category.nom.toLowerCase().startsWith(lowerTerm))
+                                         .map(category => ({ type: 'category', item: category }));
+
+    // Then include items that contain the term anywhere
+    let combinedResults: { type: string, item: Category | Product }[] = [...startingProducts, ...startingCategories];
+
+    if (combinedResults.length === 0) {
+        const includingProducts = products.filter(product => product.nom.toLowerCase().includes(lowerTerm))
+                                          .map(product => ({ type: 'product', item: product }));
+        const includingCategories = categories.filter(category => category.nom.toLowerCase().includes(lowerTerm))
+                                              .map(category => ({ type: 'category', item: category }));
+        combinedResults = [...includingProducts, ...includingCategories];
+    }
+
+    // Deduplicate results based on the name
+    const uniqueResults: { type: string, item: Category | Product }[] = [];
+    const seenNames = new Set<string>();
+
+    combinedResults.forEach(result => {
+        const name = result.item.nom.toLowerCase();
+        if (!seenNames.has(name)) {
+            seenNames.add(name);
+            uniqueResults.push(result);
+        }
+    });
+
+    this.cache.set(lowerTerm, uniqueResults); // Cache combined results
+
+    return of(uniqueResults);
+  }
+
+
   public getProductById(id): Observable<any> {
     return this.apiService.get('/produit/find/' + id);
   }
