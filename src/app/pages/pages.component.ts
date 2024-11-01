@@ -10,7 +10,7 @@ import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.models';
 import { Product } from '../models/product.models';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, of, Subject, Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pages',
@@ -27,15 +27,16 @@ export class PagesComponent implements OnInit {
   @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
   public produit: any;
   public AllProduits: Product[] = [];
-  public produits: Product[] = [];
+  // public produits: Product[] = [];
 
   public sort : any;
   public settings: Settings;
   public products: Product[] = [];
   // public searchTerm: string = '';
 
+  private searchSubscription: Subscription | undefined;
   searchTerm = new FormControl('');
-  suggestions: Product[] = [];
+  suggestions: any[] = [];
   public showSuggestions: boolean = false;
   public clickOutsideSubject = new Subject<Event>();
 
@@ -54,6 +55,7 @@ export class PagesComponent implements OnInit {
   async ngOnInit() {
     // this.getCategoriesSidenav();
     let res = await this.appService.getCategoriesSidenav().toPromise()
+    this.getAllProduit();
     // console.log("this.menuItems res :::::: ",res)
     this.sidenavMenuItems = res;
     this.getCategories();
@@ -61,30 +63,44 @@ export class PagesComponent implements OnInit {
       this.settings.theme = 'fidelity';
       // this.settings.theme = 'green';
     });
-    // this.getAllProduit();
 
-    this.searchTerm.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(term => {
-        this.showSuggestions = term.length > 0; // Afficher les suggestions seulement si le terme n'est pas vide
-        return this.appService.searchProducts(term);
-      })
-    ).subscribe(results => {
-      this.suggestions = results;
-    });
+    this.initializeSearch();
     document.addEventListener('click', this.onGlobalClick.bind(this));
   }
 
+  private initializeSearch(): void {
+    this.searchSubscription = this.searchTerm.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term => {
+            this.showSuggestions = term.length >= 1;
+            return this.showSuggestions
+                ? this.appService.searchProducts1(this.categories, this.AllProduits, term)
+                : of([]);
+        }),
+        catchError(error => {
+            console.error('Search error:', error);
+            return of([]);
+        })
+    ).subscribe(results => {
+        this.suggestions = results;
+    });
+  }
+
+
   onGlobalClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!this.suggestionsListElement?.nativeElement.contains(target)) {
-      this.suggestions = [];
+    if (!target.closest('.suggestions') && !target.closest('.search-input')) {
+      this.showSuggestions = false;
     }
   }
-  selectSuggestion(suggestion: Product): void {
+  selectSuggestion(suggestion: any,type): void {
     this.searchTerm.setValue(suggestion.nom);
-    this.router.navigate(['/search-results'], { queryParams: { q: suggestion.nom } });
+    if(type == 'product'){
+      this.router.navigate(['/search-results'], { queryParams: { q: suggestion.nom } });
+    }else{
+      this.router.navigate(['/products/'+suggestion.cle]);
+    }
     this.showSuggestions = false; // Masquer les suggestions après la sélection
   }
 
@@ -129,7 +145,6 @@ export class PagesComponent implements OnInit {
       const selectedCategory = this.categories.find(category => category.nom === event.target.innerText);
       if (selectedCategory) {
         this.category = selectedCategory;
-        console.log("Selected category:", this.category);
         this.router.navigate(['/products', this.category.nom]); // Naviguer vers la page des produits avec l'ID de la catégorie
       }
     }
@@ -247,19 +262,36 @@ export class PagesComponent implements OnInit {
     }
   }
 
+
   async getAllProduit() {
     try {
-      this.produitService.getAllProducts().subscribe(produits => {
+      this.appService.getAllProducts().subscribe((produits: any) => {
         this.AllProduits = produits || [];
-        this.produits = this.AllProduits;
-        this.produits.sort = this.sort;
       });
     } catch (error) {
       console.error("Erreur lors de la récupération des produits :", error);
       this.AllProduits = [];
-      this.produits = [];
     }
   }
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+    document.removeEventListener('click', this.onGlobalClick.bind(this));
+  }
+
+  // async getAllProduit() {
+  //   try {
+  //     this.produitService.getAllProducts().subscribe(produits => {
+  //       this.AllProduits = produits || [];
+  //       this.produits = this.AllProduits;
+  //       this.produits.sort = this.sort;
+  //     });
+  //   } catch (error) {
+  //     console.error("Erreur lors de la récupération des produits :", error);
+  //     this.AllProduits = [];
+  //     this.produits = [];
+  //   }
+  // }
 
 
 }
