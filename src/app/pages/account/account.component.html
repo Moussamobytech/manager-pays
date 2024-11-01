@@ -3,7 +3,8 @@
       <mat-card class="user_acount_profile">
 
         <div class="user_acount_logo" (click)="openFileDialog()">
-          <img [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo || defaultLogo" class="profile-icon" alt="boutique_logo">
+          <img *ngIf="!currentUser.logo" [src]="defaultLogo" class="profile-icon" alt="boutique_logo">
+          <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="boutique_logo">
           <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
         </div>
         <div *ngIf="currentUser.name" class="mb-3">
