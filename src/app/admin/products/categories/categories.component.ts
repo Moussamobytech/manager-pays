@@ -110,7 +110,6 @@ export class CategoriesComponent implements OnInit {
 
     this.appService.getCategories().subscribe(data => {
       this.tous = data;
-      // this.categories.shift();
       console.log('Categoriesss ', this.tous);
     });
     // Appeler le service ou effectuer toute autre opération pour récupérer à nouveau la liste des catégories

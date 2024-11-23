@@ -143,7 +143,7 @@ export class TilesComponent implements OnInit {
 
       this.totalInActif = this.products.filter((product: any) => product.etat != 'ACTIF').length;
 
-      console.log(`Total produits inactifs: ${this.totalInActif}`);
+      // console.log(`Total produits inactifs: ${this.totalInActif}`);
 
       // this.products.etat = data.etat
       console.log("::::::::::::::::::;;;; actif actif actif ", this.products);

@@ -14,7 +14,6 @@ import { UserAddForm, UserEditForm } from 'src/app/models/userForm.model';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { CommonMessageService } from 'src/app/services/common-message.service';
-import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'app-users',
@@ -45,7 +44,6 @@ export class UsersComponent implements OnInit {
       private breakpointObserver:BreakpointObserver,
       private ngxSpinnerService: NgxSpinnerService,
       private auth: AuthenticationService,
-      private sessionStorage: UserSessionService,
     ){
         this.settings = this.appSettings.settings;
     }
@@ -61,6 +59,7 @@ export class UsersComponent implements OnInit {
         .pipe(
           map(result => result.matches)
         );
+
         // fetch all the users from the server
         this.getUsers();
     }
@@ -116,7 +115,6 @@ export class UsersComponent implements OnInit {
       console.log(userInfo);
       return this.authService.signup(userInfo).subscribe((user:any) => {
         this.getUsers();
-        this.sortUsers(this.sessionStorage.getItem("userListFilter"));
       });
     }
 
@@ -136,7 +134,6 @@ export class UsersComponent implements OnInit {
 
       return await this.authService.updateUser(id,userInfo).then(user =>{
         this.getUsers();
-        this.sortUsers(this.sessionStorage.getItem("userListFilter"));
       });
     }
     // public deleteUser(id:any){
@@ -153,7 +150,6 @@ export class UsersComponent implements OnInit {
           this.commonService.successToast(`${res.data.message || 'Utilisateur supprimer avec succès'}.`)
 
           this.getUsers()
-          this.sortUsers(this.sessionStorage.getItem("userListFilter"));
           return res
       } catch (error : any) {
           console.log(error);
@@ -189,8 +185,6 @@ export class UsersComponent implements OnInit {
           }
         }
       });
-
-
     }
 
     createWhatsAppLink(phone: string, password: string): string {
@@ -234,7 +228,6 @@ export class UsersComponent implements OnInit {
     public onPageChanged(event){
         this.page = event;
         this.getUsers();
-        this.sortUsers(this.sessionStorage.getItem("userListFilter"));
         this.domHandlerService.winScroll(0, 0);
     }
 
@@ -286,8 +279,8 @@ export class UsersComponent implements OnInit {
         // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
         this.auth.setStatus(id, event.checked ? 'actif' : 'inactif').subscribe(
           () => {
-            console.log(`Statut de la user ${id} modifié avec succès à ${event.checked}.`);
-            this.commonService.successToast(`Statut de la user ${id} modifié avec succès à ${event.checked}.`)
+            console.log(`Le statut de la user ${id} modifié avec succès à ${event.checked}.`);
+            this.commonService.successToast(`L'utilisateur "${user.firstname} ${user.lastname}" a été ${(event.checked)?'activé':'desactivé'}.`)
             // Mettre à jour l'état de la campagne dans votre application si nécessaire
           },
           error => {
@@ -299,72 +292,56 @@ export class UsersComponent implements OnInit {
       }
     }
 
-    sortUsers(keyWord:any){
-      this.sessionStorage.setItem("userListFilter",keyWord)
-      const {users} = this;
-      switch(keyWord){
-        case "firstname":
-            if(this.ascFirstname){
-              this.sortedUsers = users.sort((a, b) =>
-                a.firstname.trim().localeCompare(b.firstname.trim(),
-                undefined, { sensitivity: 'base' })
-              );
-            }else{
-              this.sortedUsers = users.sort((a, b) =>
-                b.firstname.trim().localeCompare(a.firstname.trim(),
-                undefined, { sensitivity: 'base' })
-              );
-            }
-            this.ascFirstname = !this.ascFirstname;
-          break;
-        case "lastname":
-          if(this.ascLastname){
-            this.sortedUsers = users.sort((a, b) =>
-              a.lastname.trim().localeCompare(b.lastname.trim(),
-              undefined, { sensitivity: 'base' })
-            );
-          }else{
-            this.sortedUsers = users.sort((a, b) =>
-              b.lastname.trim().localeCompare(a.lastname.trim(),
-              undefined, { sensitivity: 'base' })
-            );
-          }
-          this.ascLastname = !this.ascLastname;
-          break;
-        case "type":
-          if(this.ascType){
-            this.sortedUsers = users.sort((a, b) =>
-              a.profiles[0].name.localeCompare(b.profiles[0].name,
-              undefined, { sensitivity: 'base' })
-            );
-          }else{
-            this.sortedUsers = users.sort((a, b) =>
-              b.profiles[0].name.localeCompare(a.profiles[0].name,
-              undefined, { sensitivity: 'base' })
-            );
-          }
-          this.ascType = !this.ascType;
-          break;
-        case "member_since":
-          if(this.ascMember){
-            this.sortedUsers = users.sort((a, b) =>
-              new Date(a.createdAt).getTime()
-                -
-              new Date(b.createdAt).getTime()
-            );
-          }else{
-            this.sortedUsers = users.sort((a, b) =>
-              new Date(b.createdAt).getTime()
-                -
-              new Date(a.createdAt).getTime()
-            );
-          }
-          this.ascMember = !this.ascMember;
-          break;
-        default:
-          this.sortedUsers = users;
-          break;
+    // the sorting method
+    sortUsers(keyWord: string) {
+
+      /* For you to understand this, just asume that the const ascKey and the this[ascKey] are different:
+         - ascKey exists just to help with accessing the correct keyWord to sort on (like this["ascFirstname"])
+         - this[ascKey] is the actual dynamic sort direction, and it is object property which stores boolean state for each entry of the keyWord
+      */
+      const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
+      if (this[ascKey] === undefined) {
+        this[ascKey] = true; // Initialize to ascending on the first sort
       }
+
+      const isAscending = this[ascKey];
+      const sortOrder = isAscending ? 1 : -1;
+
+      this.sortedUsers = [...this.users].sort((a, b) => {
+        const valueA = this.getSortValue(a, keyWord);
+        const valueB = this.getSortValue(b, keyWord);
+
+        if (typeof valueA === "string" && typeof valueB === "string") {
+          // This sorting way allows us to account every french characters even accentuated ones
+          return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
+        }
+
+        if (valueA < valueB) return -sortOrder;
+        if (valueA > valueB) return sortOrder;
+        return 0;
+      });
+
+      // Toggle the direction for the next sort dynamically
+      this[ascKey] = !isAscending;
     }
+
+// function to get the sortable value based on 'keyWord'
+getSortValue(user: User, keyWord: string): any {
+  switch (keyWord) {
+    case "firstname":
+      return user.firstname?.trim().toLowerCase() || '';
+    case "lastname":
+      return user.lastname?.trim().toLowerCase() || '';
+    case "type":
+      return user.profiles[0]?.name.toLowerCase() || '';
+    case "member_since":
+      return new Date(user.createdAt).getTime() || 0;
+    default:
+      return '';
+  }
+}
+
+
+
 
 }

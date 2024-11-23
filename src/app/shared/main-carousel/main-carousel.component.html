@@ -8,7 +8,7 @@
             <div fxLayout="column" fxLayoutAlign="center center" class="content">
               <h1>{{slide.title}}</h1>
               <h3>{{slide.subtitle}}</h3>
-              <button mat-raised-button [routerLink]="slide.href" color="jaune" class="jaune">{{slide.show ? slide.show : ('SHOW' | translate)}}</button>
+              <button *ngIf="slide.href" mat-raised-button [routerLink]="slide.href" color="jaune" class="jaune">{{slide.show ? slide.show : ('SHOW' | translate)}}</button>
             </div>
         </div>
       </div>

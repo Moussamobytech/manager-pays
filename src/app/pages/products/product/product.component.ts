@@ -80,7 +80,7 @@ export class ProductComponent implements OnInit {
       this.product = data;
       console.log("Produit :", this.product)
       this.image = data.image1;
-      this.zoomImage = data.image2;
+      this.zoomImage = data.image1;
       setTimeout(() => {
         this.config.observer = true;
         // this.getRelatedProducts();
@@ -105,8 +105,8 @@ export class ProductComponent implements OnInit {
   }
 
   public selectImage(image){
-    this.image = image.medium;
-    this.zoomImage = image.image2;
+    this.image = image;
+    this.zoomImage = image;
   }
 
   public onMouseMove(e){

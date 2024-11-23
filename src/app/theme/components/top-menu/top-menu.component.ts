@@ -2,12 +2,14 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from '../../../app.service';
 import { Settings, AppSettings } from '../../../app.settings';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-top-menu',
   templateUrl: './top-menu.component.html'
 })
 export class TopMenuComponent implements OnInit {
+
   public currencies = ['USD', 'EUR'];
   public currency:any;
   public user:any;
@@ -15,7 +17,7 @@ export class TopMenuComponent implements OnInit {
   installButtonVisible: boolean = false;
 
   public settings: Settings;
-  constructor(public appSettings:AppSettings, public appService:AppService, public translateService: TranslateService) {
+  constructor(public appSettings:AppSettings, public appService:AppService, public translateService: TranslateService, private auth:AuthenticationService) {
     this.settings = this.appSettings.settings;
   }
 
@@ -68,6 +70,10 @@ export class TopMenuComponent implements OnInit {
     else{
       return 'English';
     }
+  }
+
+  logout() {
+    this.auth.logout();
   }
 
 }

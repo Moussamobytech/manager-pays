@@ -166,49 +166,74 @@
       </div>
   </div>
 
-  <div class="table-list" *ngIf="isAboveSmSize$|async">
+  <div class="table-list" *ngIf="isAboveSmSize$ | async">
     <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
-        <div  fxFlex="100"  class="p-2">
-          <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row mat-toolbar mat-primary" >
-                <div class="mat-mdc-header-cell filter-cell">{{"FIELD.FIRSTNAME" |translate}} <a (click)="sortUsers('firstname')"><mat-icon>swap_vert</mat-icon></a> </div>
-                <div class="mat-mdc-header-cell filter-cell">{{"FIELD.LASTNAME"|translate}} <a (click)="sortUsers('lastname')"><mat-icon>swap_vert</mat-icon></a> </div>
-                <div class="mat-mdc-header-cell filter-cell">{{"FIELD.USERNAME"|translate}} </div>
-                <div class="mat-mdc-header-cell filter-cell">Type <a (click)="sortUsers('type')"><mat-icon>swap_vert</mat-icon></a> </div>
-                <div class="mat-mdc-header-cell filter-cell">{{"USER.MEMBER_SINCE"|translate}} <a (click)="sortUsers('member_since')"><mat-icon>swap_vert</mat-icon></a> </div>
-                <div class="mat-mdc-header-cell text-center">{{"USER.ACTION"|translate}}</div>
-            </div>
-            <div *ngFor="let user of (sortedUsers||users) | UserSearchPipe : searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="mat-mdc-row">
-                <div class="mat-mdc-cell border-black">{{ user.firstname|capitalCase }}</div>
-                <div class="mat-mdc-cell">{{ user.lastname|capitalCase }}</div>
-                <div class="mat-mdc-cell">{{ user.username }}</div>
-                <div class="mat-mdc-cell" *ngFor="let profile of user.profiles">{{ profile.name | userType }}</div>
-                <!-- <div class="mat-mdc-cell">{{ user.createdAt | date: "dd /MM /yy" }}</div> -->
-                <div class="mat-mdc-cell">{{ user.createdAt | date: "dd-MM-yyyy" }}</div>
-                <div class="mat-mdc-cell">
-                  <div class="p-2 actions d-flex align-items-center">
-                      <button mat-mini-fab color="success" [matTooltip]="'BTN.RESET'|translate" (click)="reset(user.username)">
-                          <mat-icon>refresh</mat-icon>
-                      </button>
-                      <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openUserDialog(user,'update')">
-                          <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(user)">
-                          <mat-icon>delete</mat-icon>
-                      </button>
-                      <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">
-                          <!-- {{user.enabled ? 'Activée' : 'Désactivée' }} -->
-                      </mat-slide-toggle>
-                  </div>
+      <div fxFlex="100" class="p-2">
+        <div class="table-scroll-wrapper">
+          <div class="admin-table">
+            <!-- Header Row -->
+            <div class="header-row">
+              <div class="header-cell filter-cell fixed-width">
+                {{ "FIELD.FIRSTNAME" | translate }}
+                <a (click)="sortUsers('firstname')"><mat-icon>swap_vert</mat-icon></a>
               </div>
+              <div class="header-cell filter-cell fixed-width">
+                {{ "FIELD.LASTNAME" | translate }}
+                <a (click)="sortUsers('lastname')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                {{ "FIELD.USERNAME" | translate }}
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Type
+                <a (click)="sortUsers('type')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                {{ "USER.MEMBER_SINCE" | translate }}
+                <a (click)="sortUsers('member_since')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width text-center">
+                {{ "USER.ACTION" | translate }}
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Produits
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Dernière Publication
+              </div>
+            </div>
 
+            <!-- Data Rows -->
+            <div *ngFor="let user of (sortedUsers || users) | UserSearchPipe: searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="data-row">
+              <div class="data-cell fixed-width"> {{ user.firstname | capitalCase }} </div>
+              <div class="data-cell fixed-width"> {{ user.lastname | capitalCase }} </div>
+              <div class="data-cell fixed-width"> {{ user.username }} </div>
+              <div class="data-cell fixed-width" *ngFor="let profile of user.profiles"> {{ profile.name | userType }} </div>
+              <div class="data-cell fixed-width"> {{ user.createdAt | date: "dd-MM-yyyy" }} </div>
+              <div class="data-cell fixed-width">
+                <div class="actions">
+                  <button mat-mini-fab color="success" [matTooltip]="'BTN.RESET' | translate" (click)="reset(user.username)">
+                    <mat-icon>refresh</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT' | translate" (click)="openUserDialog(user, 'update')">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate" (click)="remove(user)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">
+                  </mat-slide-toggle>
+                </div>
+              </div>
+              <div class="data-cell fixed-width"> {{ 'Product count' }} </div>
+              <div class="data-cell fixed-width"> {{ 'Derniere publication' }} </div>
+            </div>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
-
   </div>
 
-</div>
 
 <div *ngIf="users" fxLayout="row wrap">
     <div fxFlex="100" class="p-2">

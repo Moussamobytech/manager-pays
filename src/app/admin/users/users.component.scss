@@ -89,6 +89,9 @@
     .filter-cell a:active{
       color: #d81b60;
     }
+    display: table;
+    width: max-content;
+    min-width: 100%;
   }
   // border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 15px;
@@ -98,3 +101,38 @@
     align-items: center;
     gap: 5px;
 }
+
+
+
+
+.table-scroll-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.header-row, .data-row {
+  display: table-row;
+}
+
+.header-cell, .data-cell {
+  display: table-cell;
+  padding: 8px 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.data-cell {
+  border-bottom: 1px solid #ddd;
+}
+
+.header-cell {
+  font-weight: bold;
+  background-color: #feb930;
+  color: #283593;
+}
+.fixed-width {
+  min-width: 130px;
+}
+
+

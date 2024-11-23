@@ -1,6 +1,7 @@
 .mat-mdc-card.product-image {
     padding: 8px;
     text-align: center;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     button{
         position: absolute;
         top: 0;
@@ -21,15 +22,23 @@
 .small-carousel{
     margin-top: 8px;
     .swiper-container{
-        padding: 2px;
-        .swiper-slide{
-            text-align: center;
-            .mat-mdc-card {
-                display: block;
-            }
-            img{
-                max-width: 100%;
-            }
+      padding: 2px;
+      .swiper-slide{
+          border-radius: 5px;
+          border: 2px solid transparent;
+          text-align: center;
+          transition: all .5s;
+          cursor: pointer;
+          .mat-mdc-card {
+              display: block;
+              box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+          }
+          img{
+              max-width: 100%;
+          }
+        }
+        .swiper-slide:hover{
+          border-color: #25224ab0;
         }
     }
     .swiper-button-next.swiper-button-disabled,
@@ -86,8 +95,8 @@
     }
 }
 .carousel-image {
-  width: 100px; /* Définissez la largeur souhaitée */
-  height: 110px; /* Définissez la hauteur souhaitée */
+  width: 100px;
+  height: 110px;
 }
 
 .card-image{
@@ -97,8 +106,9 @@
 }
 .card-content {
   display: flex;
-  align-items: center; /* Aligner les éléments verticalement au centre */
-  justify-content: space-between; /* Espacer les éléments horizontalement */
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
 }
 // .contact-icons {
 // display: grid;

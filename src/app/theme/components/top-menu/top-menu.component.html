@@ -34,16 +34,20 @@
     <a mat-button [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
         <mat-icon fxShow="false" class="mat-icon-sm account-icon">person</mat-icon>
         <!-- <span fxShow="false" fxShow.gt-sm>{{ 'ACCOUNT' | translate }}</span> -->
-        <span fxShow.gt-sm>Vendre</span>
+        <span fxShow.gt-sm>Compte</span>&nbsp;
         <!-- <span fxShow.gt-sm>{{ 'SELL' | translate }}</span> -->
-        <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
+        <mat-icon class="mat-icon-sm caret" iconPositionEnd>account_circle</mat-icon>
     </a>
     <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="primary account">
         <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
             <a mat-menu-item routerLink="/sign-in">
                 <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>
-                <span>{{ 'LOGIN' | translate }}</span>
+                <span>{{ 'SIGN_IN' | translate }}</span>
             </a>
+            <a mat-menu-item routerLink="/sign-up">
+              <mat-icon class="mat-icon-sm">person_add</mat-icon>
+              <span>{{ 'SIGN_UP' | translate }}</span>
+          </a>
         </span>
         <span *ngIf="user != null && user != undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
             <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">
@@ -74,7 +78,7 @@
                 <span>Help</span>
             </a>
             <div class="divider"></div>
-            <a mat-menu-item routerLink="/sign-in">
+            <a mat-menu-item routerLink="/sign-in" (click)="logout()">
                 <mat-icon class="mat-icon-sm">power_settings_new</mat-icon>
                 <span>{{ 'LOGOUT' | translate }}</span>
             </a>

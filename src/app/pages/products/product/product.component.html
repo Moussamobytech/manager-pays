@@ -10,12 +10,12 @@
             <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
             <img *ngIf="image" [src]="image" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)" class="card-image"/>
         </mat-card-content>
-    </mat-card>
+      </mat-card>
 
       <div class="small-carousel">
           <div class="swiper-container" [swiper]="config">
-              <div class="swiper-wrapper">
-                  <div *ngFor="let image of [product?.image1, product?.image2,product?.image3,product?.image4, product?.image5]" class="swiper-slide">
+              <div class="swiper-wrapper" *ngIf="product?.images.length>1">
+                  <div *ngFor="let image of product?.images" class="swiper-slide">
                       <mat-card *ngIf="image" (click)="selectImage(image)" class="p-2">
                           <img [src]="image" class="swiper-lazy carousel-image"/>
                           <div class="swiper-lazy-preloader"></div>
@@ -96,7 +96,7 @@
         <div class="divider"></div>
 
         <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted py-2">
-            
+
             <button mat-button><i class="fab fa-whatsapp fa-lg me-2"></i> {{'SHARE_ZAP' | translate}}</button>
             <share-buttons theme="modern-dark"
                 [include]="['copy', 'messenger', 'facebook', 'whatsapp']"
