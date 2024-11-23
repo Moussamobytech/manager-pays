@@ -9,9 +9,15 @@ import { InfoCardsComponent } from './info-cards/info-cards.component';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { MontlySalesComponent } from './montly-sales/montly-sales.component';
 import { LatestOrdersComponent } from './latest-orders/latest-orders.component';
+import { SellerInfoComponent } from './seller-info/seller-info.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
+import { InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 
 export const routes: Routes = [
-  { path: '', component: DashboardComponent, pathMatch: 'full' }
+  { path: '', component: DashboardComponent, pathMatch: 'full' },
+  { path: 'seller-info', component: SellerInfoComponent, data: { breadcrumb: 'Seller info' } },
+  { path: 'seller-info/:id', component: SellerInfoComponent, data: { breadcrumb: 'Seller info' } },
 ];
 
 @NgModule({
@@ -21,9 +27,14 @@ export const routes: Routes = [
     InfoCardsComponent,
     AnalyticsComponent,
     MontlySalesComponent,
+    SellerInfoComponent,
     LatestOrdersComponent
   ],
   imports: [
+    NgxPaginationModule,
+    SwiperModule,
+    InputFileModule,
+
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,

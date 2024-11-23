@@ -6,6 +6,7 @@ export const menuItems = [
     new Menu (21, 'ADMIN_NAV.CATEGORIES', '/admin/products/categories', null, 'category', null, false, 20),
     // new Menu (25, 'ADMIN_NAV.CATEGORIE_DETAIL', '/admin/products/categorie-detail', null, 'remove_red_eye', null, false, 20),
     new Menu (22, 'ADMIN_NAV.PRODUCT_LIST', '/admin/products/product-list', null, 'list', null, false, 20),
+    new Menu (23, 'ADMIN_NAV.PRODUCT_STATE', '/admin/products/product-state', null, 'list_alt', null, false, 20),
     // new Menu (23, 'ADMIN_NAV.PRODUCT_DETAIL', '/admin/products/product-detail', null, 'remove_red_eye', null, false, 20),
     new Menu (24, 'ADMIN_NAV.ADD_PRODUCT', '/admin/products/add-product', null, 'add_circle_outline', null, false, 20),
     new Menu (40, 'ADMIN_NAV.USERS', '/admin/users', null, 'group_add', null, false, 0),

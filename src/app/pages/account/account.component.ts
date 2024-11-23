@@ -81,7 +81,7 @@ export class AccountComponent implements OnInit {
       if(this.LogoForm.valid){
         // Ajout du logo
         if (this.selectedLogo) {
-          this.auth.uploadImange(this.currentUser.username,this.selectedLogo);
+          await this.auth.uploadImange(this.currentUser.username,this.selectedLogo).toPromise();
           this.currentUser = await this.auth.info(this.currentUser.username);
           this.onNoClick();
           console.log(this.currentUser);

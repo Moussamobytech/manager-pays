@@ -1,0 +1,44 @@
+
+
+<div class="p-2">
+    <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-75 p-3">
+        <h2>{{"PRODUCTS.PAGE_SELLER_TITLE"|translate}}</h2>
+      </div>
+      <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <div class="mat-mdc-table admin-table w-75">
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
+                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CONSULTED' | translate }}</div>
+                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.LIBELLE' | translate }}</div>
+                <!-- <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CATEGORY' | translate }}</div> -->
+
+                <div class="mat-mdc-header-cell"></div>
+            </div>
+            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+                 
+                <div class="mat-mdc-cell">{{product.date_action | date}}</div>
+                <div class="mat-mdc-cell">{{product.nom}}</div>
+                <!-- <div class="mat-mdc-cell">{{product.categorie}}</div> -->
+                <div class="mat-mdc-cell">
+                    <div class="icons">
+                        
+                        <a [routerLink]="['/admin/products/product-detail', product.key]" mat-mini-fab color="accent" matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
+        
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </mat-card>
+
+    <div *ngIf="products.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="text-center">
+                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>
+

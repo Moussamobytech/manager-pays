@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
     actif: 0,
     inactif: 0,
     pending: 0,
-    customer:0,
+    contact:0,
 
   }
   constructor(private auth: AuthenticationService, private productService: ProductService,
@@ -92,6 +92,7 @@ export class DashboardComponent implements OnInit {
       this.statsNumber.actif = data.actif
       this.statsNumber.inactif = data.inactif
       this.statsNumber.pending = data.pending
+      this.statsNumber.contact = data.contact
     })
   }
   onNoClick(): void {
