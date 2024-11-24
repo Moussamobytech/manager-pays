@@ -86,7 +86,7 @@ export class AccountComponent implements OnInit {
         // Ajout du logo
         if(isFileAllowed){
           if (logo) {
-            this.imgCompressService.compressImage(logo,800,800,70).then( async (Bloblogo) => {
+            this.imgCompressService.compressImage(logo,1200,800,70).then( async (Bloblogo) => {
               // I must convert blob type to File first
               const randomName = `logo-${Math.random().toString(36).substring(2, 15)}.jpeg`;
               let editedLogo = new File([Bloblogo], randomName, { type: Bloblogo.type });
