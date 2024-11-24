@@ -133,7 +133,7 @@ export class AddProductComponent implements OnInit {
           // console.log(item)
           // console.log(typeof(item))
           // console.log(item)
-          this.imgCompressService.compressImage(item.file,800,800,70).then( async (blobImg) => {
+          this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
             const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
             let editedImg = new File([blobImg], randomName, { type: blobImg.type });
             data.append('image', editedImg);
