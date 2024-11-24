@@ -8,6 +8,7 @@ import { Category } from 'src/app/models/category.models';
 import { ProductService } from 'src/app/services/product.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
+import { ImageCompressService } from 'src/app/services/image-compress.servive';
 
 @Component({
   selector: 'app-add-product',
@@ -25,7 +26,7 @@ export class AddProductComponent implements OnInit {
   public id:any;
 
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
-    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router ) { }
+    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router, private imgCompressService: ImageCompressService ) { }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
@@ -129,13 +130,17 @@ export class AddProductComponent implements OnInit {
           return;
         }
         this.form.value.images.forEach(item=>{
-          console.log(item)
-          console.log(typeof(item))
-          console.log(item)
-          data.append('images', item.file);
+          // console.log(item)
+          // console.log(typeof(item))
+          // console.log(item)
+          this.imgCompressService.compressImage(item.file,800,800,70).then( async (blobImg) => {
+            const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+            let editedImg = new File([blobImg], randomName, { type: blobImg.type });
+            data.append('image', editedImg);
+          });
           size += item.file.size
         })
-        console.log("size ::::::: ",size)
+        // console.log("size ::::::: ",size)
         if(size > 8388608){
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
           return;
@@ -190,8 +195,8 @@ export class AddProductComponent implements OnInit {
         // }
         let i = 1;
         this.form.value.images.forEach(item=>{
-          console.log(item)
-          console.log(typeof(item))
+          // console.log(item)
+          // console.log(typeof(item))
           // if (typeof(item) != "string") {
           if (item.file) {
             data.append('image'+i, item.file);

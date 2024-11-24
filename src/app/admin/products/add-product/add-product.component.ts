@@ -8,6 +8,7 @@ import { CommonMessageService } from 'src/app/services/common-message.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Category } from 'src/app/models/category.models';
 import { User } from 'src/app/models/user.models';
+import { ImageCompressService } from 'src/app/services/image-compress.servive';
 
 @Component({
   selector: 'app-add-product',
@@ -26,7 +27,7 @@ export class AddProductComponent implements OnInit {
   private currentUser: User;
 
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
-    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router ) { }
+    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router, private imgCompressService: ImageCompressService ) { }
 
   // constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute ) { }
 
@@ -91,9 +92,11 @@ export class AddProductComponent implements OnInit {
           return;
         }
         this.form.value.images.forEach(item=>{
-          console.log(item)
-          // console.log(typeof(item))
-          data.append('images', item.file);
+          this.imgCompressService.compressImage(item.file,800,800,70).then( async (blobImg) => {
+            const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+            let editedImg = new File([blobImg], randomName, { type: blobImg.type });
+            data.append('image', editedImg);
+          });
         })
         // data.append('images', this.form.value.images);
         data.append('user', this.form.value.user);
@@ -129,8 +132,8 @@ export class AddProductComponent implements OnInit {
         // }
         let i = 1;
         this.form.value.images.forEach(item=>{
-          console.log(item)
-          console.log(typeof(item))
+          // console.log(item)
+          // console.log(typeof(item))
           // if (typeof(item) != "string") {
           if (item.file) {
             data.append('image'+i, item.file);

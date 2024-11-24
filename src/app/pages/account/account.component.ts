@@ -88,9 +88,9 @@ export class AccountComponent implements OnInit {
           if (logo) {
             this.imgCompressService.compressImage(logo,800,800,70).then( async (Bloblogo) => {
               // I must convert blob type to File first
-              const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+              const randomName = `logo-${Math.random().toString(36).substring(2, 15)}.jpeg`;
               let editedLogo = new File([Bloblogo], randomName, { type: Bloblogo.type });
-              console.log("::::::::::",editedLogo)
+
               await this.auth.uploadImange(this.currentUser.username,editedLogo).toPromise();
               this.currentUser = await this.auth.info(this.currentUser.username);
               this.onNoClick();
