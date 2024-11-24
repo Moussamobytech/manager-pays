@@ -44,6 +44,7 @@
     "moment": "^2.10.2",
     "ngx-cookie": "^6.0.1",
     "ngx-cookie-service": "^17.1.0",
+    "ngx-image-compress": "^18.1.5",
     "ngx-mask": "^17.0.7",
     "ngx-pagination": "6.0.3",
     "ngx-scrollbar": "13.0.3",

@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { ImageCompressService } from 'src/app/services/image-compress.servive';
 
 @Component({
   selector: 'app-account',
@@ -18,7 +19,8 @@ export class AccountComponent implements OnInit {
 
   constructor(public router: Router, public domHandlerService: DomHandlerService,
     public translateService: TranslateService, private auth : AuthenticationService,
-    public dialog: MatDialog, private fb: FormBuilder, private snackBar: MatSnackBar) {
+    public dialog: MatDialog, private fb: FormBuilder, private snackBar: MatSnackBar,
+    private imgCompressService: ImageCompressService) {
     }
 
     @ViewChild('sidenav', { static: true }) sidenav: any;
@@ -76,15 +78,26 @@ export class AccountComponent implements OnInit {
       }
     });
   }
-  async onLogoChose(){
+  onLogoChose(){
     try{
       if(this.LogoForm.valid){
+        let logo: File = this.selectedLogo;
+        let isFileAllowed:boolean = logo.type.includes("image/")
         // Ajout du logo
-        if (this.selectedLogo) {
-          await this.auth.uploadImange(this.currentUser.username,this.selectedLogo).toPromise();
-          this.currentUser = await this.auth.info(this.currentUser.username);
-          this.onNoClick();
-          console.log(this.currentUser);
+        if(isFileAllowed){
+          if (logo) {
+            this.imgCompressService.compressImage(logo,800,800,70).then( async (Bloblogo) => {
+              // I must convert blob type to File first
+              const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+              let editedLogo = new File([Bloblogo], randomName, { type: Bloblogo.type });
+              console.log("::::::::::",editedLogo)
+              await this.auth.uploadImange(this.currentUser.username,editedLogo).toPromise();
+              this.currentUser = await this.auth.info(this.currentUser.username);
+              this.onNoClick();
+            });
+          }
+        }else{
+          this.snackBar.open("Format incorrect, veillez choisir une image!","x",{ panelClass: 'error', verticalPosition: 'top', duration: 3000 })
         }
       }else{
         this.snackBar.open("Veuillez choisir un logo puis réessayer!","x",{ panelClass: 'error', verticalPosition: 'top', duration: 3000 })
