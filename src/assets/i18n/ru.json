@@ -67,6 +67,7 @@
     "CAMPAGNE": "Campagne",
     "CATEGORIE_DETAIL":"Détail de Catégories",
     "PRODUCT_LIST": "Liste de produit",
+    "PRODUCT_STATE": "Actifs produit par user",
     "PRODUCT_DETAIL": "Détail de produit",
     "ADD_PRODUCT": "Ajouter un produit",
     "SALES": "Ventes",
@@ -178,6 +179,7 @@
   "PRODUCTS": {
     "LIST": "Liste",
     "PAGE_TITLE":"Liste des produits",
+    "PAGE_SELLER_TITLE":"Détails des contacts effectuées par les clients",
     "LAST": "Derniers produits",
     "LIBELLE": "Libelle",
     "PRICE": "Prix",
@@ -193,6 +195,7 @@
     "USER": "Vendeur",
     "CATEGORY": "Categorie",
     "CREATED": "Date de création",
+    "CONSULTED": "Date de consultation",
     "ENDED": "Date de fin",
     "CALL_USER":"Contacter le vendeur",
     "BRAND": "Marque",

@@ -13,11 +13,13 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { CategoryDialogComponent } from './categories/category-dialog/category-dialog.component';
 import { CategorieDetailComponent } from './categories/categorie-detail/categorie-detail.component';
+import { ProductStateComponent } from './product-state/product-state.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'product-list', pathMatch: 'full'},
   { path: 'categories', component: CategoriesComponent, data: { breadcrumb: 'Categories' } },
   { path: 'product-list', component: ProductListComponent, data: { breadcrumb: 'Product List' } },
+  { path: 'product-state', component: ProductStateComponent, data: { breadcrumb: 'Product State' } },
   { path: 'product-detail', component: ProductDetailComponent, data: { breadcrumb: 'Product Detail' } },
   { path: 'product-detail/:id', component: ProductDetailComponent, data: { breadcrumb: 'Product Detail' } },
   { path: 'categorie-detail', component: CategorieDetailComponent, data: { breadcrumb: 'Categorie Detail' } },
@@ -29,6 +31,7 @@ export const routes: Routes = [
 @NgModule({
   declarations: [
     ProductListComponent,
+    ProductStateComponent,
     ProductDetailComponent,
     ProductZoomComponent,
     AddProductComponent,

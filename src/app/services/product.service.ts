@@ -85,6 +85,18 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get(`/produit/stats-seller/` + id).toPromise();
   }
 
+  infoSellerContact(id: any) {
+    return this.api.get(`/produit/info-seller-contact?username=` + id).toPromise();
+  }
+
+  statsSellerContact() {
+    return this.api.get(`/produit/stats-seller-contact/`).toPromise();
+  }
+
+  statsSellerActif() {
+    return this.api.get(`/produit/stats-seller-actifs`).toPromise();
+  }
+
   updateState(id: any, status) {
     return this.api
       .get(`/produit/update-state?id=${id}&status=${status}`)

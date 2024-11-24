@@ -1,0 +1,43 @@
+
+
+<div class="p-2">
+    <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+        <h2>{{"ADMIN_NAV.PRODUCT_STATE"|translate}}</h2>
+      </div>
+      <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
+        <div class="mat-mdc-table admin-table">
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
+                
+                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.USER' | translate }}</div>
+                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.USER' | translate }}</div>
+                <div class="mat-mdc-header-cell">{{ 'STATS' | translate }}</div>
+                <div class="mat-mdc-header-cell"></div>
+            </div>
+            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+                <div class="mat-mdc-cell">{{product.nom}}</div>
+                <div class="mat-mdc-cell">{{product.username}}</div>
+                <div class="mat-mdc-cell">{{product.actif}}</div>
+                
+            </div>
+
+        </div>
+    </mat-card>
+
+    <div *ngIf="products.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="text-center">
+                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<!-- <div *ngIf="products.length > 0" fxLayout="row wrap">
+    <div fxFlex="100" class="p-2">
+        <mat-card class="text-center">
+            <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+        </mat-card>
+    </div>
+</div> -->
