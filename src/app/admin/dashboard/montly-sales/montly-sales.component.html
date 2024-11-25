@@ -1,6 +1,6 @@
 <mat-card>
-    <mat-card-header fxLayoutAlign="center">                
-        <mat-card-title (click)="exportAsExel()">Vendeur Contacter <mat-icon>save_alt</mat-icon></mat-card-title>
+    <mat-card-header fxLayoutAlign="center">
+        <mat-card-title (click)="exportAsExel()">Vendeur Contacté <mat-icon>save_alt</mat-icon></mat-card-title>
     </mat-card-header>
     <mat-card-content class="pt-4">
         <!-- <div fxLayout="row" fxLayoutAlign="space-around">
@@ -21,7 +21,7 @@
                 [doughnut]="doughnut"
                 [gradient]="gradient"
                 (select)="onSelect($event)">
-            </ngx-charts-pie-chart>   
+            </ngx-charts-pie-chart>
         </div> -->
         <div class="mat-mdc-table admin-table header-sm truncated  h-500p"  #resizedDiv>
             <div class="mat-mdc-header-row">
@@ -32,15 +32,15 @@
             </div>
             <div *ngFor="let order of statsData" class="mat-mdc-row">
                 <div class="mat-mdc-cell">{{order.username}}</div>
-                <div class="mat-mdc-cell">{{order.nbre}}</div>     
-                <div class="mat-mdc-cell">{{order.date_action | date}}</div>     
+                <div class="mat-mdc-cell">{{order.nbre}}</div>
+                <div class="mat-mdc-cell">{{order.date_action | date}}</div>
                 <div class="mat-mdc-cell">
-                    <div class="p-2 actions">          
+                    <div class="p-2 actions">
                         <button mat-mini-fab color="primary" (click)="info(order.username)" matTooltip="View">
                             <mat-icon>remove_red_eye</mat-icon>
                         </button>
                     </div>
-                </div>      
+                </div>
             </div>
         </div>
     </mat-card-content>

@@ -53,6 +53,7 @@
     "ngx-toastr": "^18.0.0",
     "npm": "^10.5.0",
     "perfect-scrollbar": "^1.5.5",
+    "piexifjs": "^1.0.6",
     "rxjs": "7.8.1",
     "secure-web-storage": "^1.0.2",
     "sweetalert2": "^11.6.13",
