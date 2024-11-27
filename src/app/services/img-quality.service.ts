@@ -38,7 +38,7 @@ export class ImageQualityService {
    * @param file The uploaded image file.
    * @returns Promise<boolean> Resolves to true if brightness and contrast are acceptable.
    */
-  validateBrightnessAndContrast(file: File): Promise<boolean> {
+  validateBrightnessAndContrast(file: File): Promise<{brightness:number,contrast:number,result:boolean}> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       const url = URL.createObjectURL(file);
@@ -91,10 +91,14 @@ export class ImageQualityService {
         // Validate brightness and contrast
         console.log("average Contrast: ",brightnessVariance)
         console.log("average Brightness: ",averageBrightness)
-        const isBrightnessGood = averageBrightness > 75 && averageBrightness < 200; // Not too dark or bright
+        const isBrightnessGood = averageBrightness > 70 && averageBrightness < 190; // Not too dark or bright
         const isContrastGood = brightnessVariance > 30; // Ensure sufficient contrast
 
-        resolve(isBrightnessGood && isContrastGood);
+        resolve({
+          brightness: averageBrightness,
+          contrast: brightnessVariance,
+          result:isBrightnessGood && isContrastGood,
+        });
       };
 
       img.onerror = () => {

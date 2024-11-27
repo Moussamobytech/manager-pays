@@ -59,7 +59,7 @@ export class HowWorksComponent {
     }
   }
   askHelp() {
-    let user:any = this.auth.currentUser;
+    let user:any = this.auth.currentUser();
     let url = "https://wa.me/+22376007979?text=" + encodeURIComponent(
       "bonjour je m'appelle " + user.firstname + ' ' + user.lastname +
       " j'ai besoin d'aide à propos de Fidelity Market."

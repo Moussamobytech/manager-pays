@@ -39,7 +39,8 @@ export const routes = [
       { path: 'influencer', loadChildren: () => import('./influencer/influencer.module').then(m => m.InfluencerModule), data: { breadcrumb: 'Influencer' } },
       { path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule), data: { breadcrumb: 'Contact' } },
       { path: 'newsletter', loadChildren: () => import('./newsletter/newsletter.module').then(m => m.NewsletterModule), data: { breadcrumb: 'Newsletter' } },
-      { path: 'information', loadChildren: () => import('./information/information.module').then(m => m.InformationModule), data: { breadcrumb: 'Information' } }
+      { path: 'information', loadChildren: () => import('./information/information.module').then(m => m.InformationModule), data: { breadcrumb: 'Information' } },
+      { path: 'image_test', loadChildren: () => import('./image_quality_check/image_quality_check.module').then(m => m.ImageAnalysisModule), data: { breadcrumb: 'Teste d\'image' } }
 
     ]
   }
