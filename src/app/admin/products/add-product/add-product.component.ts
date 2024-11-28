@@ -29,24 +29,18 @@ export class AddProductComponent implements OnInit {
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
     private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router, private imgCompressService: ImageCompressService ) { }
 
-  // constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute ) { }
-
-
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
     console.log("currentUser :::::::: ",this.currentUser)
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
-      "pricePromotion": [null, [Validators.pattern('/0-9/'),Validators.minLength(3)]],
-      "priceBasic": [null, [Validators.required, Validators.pattern('/0-9/'), Validators.minLength(3)] ],
+      'pricePromotion': [null, [Validators.pattern('^[0-9]*$'),Validators.minLength(3)]],
+      'priceBasic': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)] ],
       "description": null,
       "weight": "5",
       "user": this.currentUser?.username || null,
       "categorie": [null, Validators.required ]
-      // "discount": null,
-      // "color": null,
-      // "size": null,
     });
     this.getCategories();
     this.getUsers();
@@ -91,14 +85,12 @@ export class AddProductComponent implements OnInit {
           this.commonService.errorToast("Choississez une image au minimum")
           return;
         }
-        this.form.value.images.forEach(item=>{
-          this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
-            const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-            let editedImg = new File([blobImg], randomName, { type: blobImg.type });
-            data.append('image', editedImg);
+        await this.compressAndPrepareImages().then((compressedFiles) => {
+          compressedFiles.forEach((file) => {
+            console.log("images before adding: ",file);
+            data.append('images', file);
           });
-        })
-        // data.append('images', this.form.value.images);
+        });
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
         data.append('weight', "5");
@@ -115,6 +107,18 @@ export class AddProductComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  compressAndPrepareImages () {
+
+    const compressedImagePromises = this.form.value.images.map(async (item: { file: File }) => {
+      const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 0.7);
+      const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+      const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
+      return compressedFile;
+    });
+
+    return Promise.all(compressedImagePromises);
   }
 
   async edit(){

@@ -37,7 +37,7 @@
                                 <input matInput formControlName="priceBasic" required>
                                 <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
                                 <mat-error *ngIf="form.controls.priceBasic.errors?.pattern">Le prix doit etre un nombre </mat-error>
-                                <mat-error *ngIf="form.controls.priceBasic.errors?.minlength">Le prix minimum est 100FCFA</mat-error>
+                                <mat-error *ngIf="!form.controls.priceBasic.errors?.pattern&&form.controls.priceBasic.errors?.minlength">Le prix minimum est 100FCFA</mat-error>
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">

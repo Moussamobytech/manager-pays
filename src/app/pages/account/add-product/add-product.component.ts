@@ -129,17 +129,15 @@ export class AddProductComponent implements OnInit {
           this.commonService.errorToast("Choississez une image au minimum")
           return;
         }
-        this.form.value.images.forEach(item=>{
-          // console.log(item)
-          // console.log(typeof(item))
-          // console.log(item)
-          this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
-            const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-            let editedImg = new File([blobImg], randomName, { type: blobImg.type });
-            data.append('image', editedImg);
+
+        await this.compressAndPrepareImages().then((compressedFiles) => {
+          compressedFiles.forEach((file) => {
+            console.log("images before adding: ",file);
+            data.append('images', file);
+            size += file.size;
           });
-          size += item.file.size
-        })
+        });
+
         // console.log("size ::::::: ",size)
         if(size > 8388608){
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
@@ -167,6 +165,18 @@ export class AddProductComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  compressAndPrepareImages () {
+
+    const compressedImagePromises = this.form.value.images.map(async (item: { file: File }) => {
+      const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 0.7);
+      const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+      const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
+      return compressedFile;
+    });
+
+    return Promise.all(compressedImagePromises);
   }
 
   async edit(){

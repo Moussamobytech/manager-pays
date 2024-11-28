@@ -46,7 +46,7 @@ export class ImageCompressService {
               }
             },
             'image/jpeg',
-            quality/100 //values expected (0.1 - 1)
+            (file.size/1000>350/*if more than 350kb*/)?(quality/100):(100/100) //values expected (0.1 - 1)
           );
         };
 
