@@ -133,12 +133,14 @@ export class AddProductComponent implements OnInit {
           // console.log(item)
           // console.log(typeof(item))
           // console.log(item)
-          this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
-            const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-            let editedImg = new File([blobImg], randomName, { type: blobImg.type });
-            data.append('image', editedImg);
-          });
+          data.append('images', item.file);
           size += item.file.size
+          // this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
+          //   const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+          //   let editedImg = new File([blobImg], randomName, { type: blobImg.type });
+          //   console.log("editedImg :::::: ",editedImg)
+          //   data.append('images', editedImg);
+          // });
         })
         // console.log("size ::::::: ",size)
         if(size > 8388608){
@@ -179,6 +181,14 @@ export class AddProductComponent implements OnInit {
           return;
         }
 
+        // this.form.value.images.forEach(item=>{
+        //   this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
+        //     const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+        //     let editedImg = new File([blobImg], randomName, { type: blobImg.type });
+        //     data.append('images', editedImg);
+        //   });
+        //   size += item.file.size
+        // })
 
         if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
           this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
@@ -199,7 +209,7 @@ export class AddProductComponent implements OnInit {
           // console.log(typeof(item))
           // if (typeof(item) != "string") {
           if (item.file) {
-            data.append('image'+i, item.file);
+            data.append('images'+i, item.file);
           }
           // data.append('images', item.file);
           i++;
