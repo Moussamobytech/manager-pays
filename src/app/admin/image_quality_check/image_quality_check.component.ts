@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ExcelExportService } from 'src/app/services/excel-export.service';
+import { ExcelOperationService } from 'src/app/services/excel-operation.service';
 import { ImageQualityService } from 'src/app/services/img-quality.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ImageAnalysisComponent implements OnInit {
 
   // selectedImages: File[] = [];
 
-  constructor(private qualityService: ImageQualityService,private fb: FormBuilder, private exelExport:ExcelExportService) {}
+  constructor(private qualityService: ImageQualityService,private fb: FormBuilder, private exelExport:ExcelOperationService) {}
 
   ngOnInit(): void {
     this.imgForm = this.fb.group({

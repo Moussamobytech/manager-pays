@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { montly_sales } from '../dashboard.data';
 import { ProductService } from 'src/app/services/product.service';
-import { ExcelExportService } from 'src/app/services/excel-export.service';
+import { ExcelOperationService } from 'src/app/services/excel-operation.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,7 +23,7 @@ export class MontlySalesComponent implements OnInit {
   @ViewChild('resizedDiv') resizedDiv:ElementRef;
   public previousWidthOfResizedDiv:number = 0;
 
-  constructor(public produitService : ProductService, public router: Router, private excelExportService: ExcelExportService) { }
+  constructor(public produitService : ProductService, public router: Router, private excelExportService: ExcelOperationService) { }
 
   ngOnInit(){
     this.data = montly_sales;

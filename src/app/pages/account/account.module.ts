@@ -15,6 +15,7 @@ import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { AuthGuard } from 'src/app/helpers/auth.guard';
 import { HowWorksComponent } from './how_works/how_works.component';
+import { CustomersModule } from './customers/customers.module';
 const config: InputFileConfig = {
   fileAccept: '*'
 };
@@ -35,6 +36,7 @@ export const routes: Routes = [
 
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
           { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
+          { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) }
       ]
   }
 ];
@@ -50,6 +52,7 @@ export const routes: Routes = [
     SwiperModule,
     InputFileModule.forRoot(config),
     InputFileModule,
+    // CustomersModule
   ],
   declarations: [
     AccountComponent,

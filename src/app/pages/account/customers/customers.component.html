@@ -1,0 +1,150 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
+  <div fxLayout="row">
+      <mat-button-toggle-group appearance="legacy">
+          <mat-button-toggle value="add" routerLink="add" [title]="'BTN.ADD'|translate">
+              <mat-icon color="primary">person_add</mat-icon>
+          </mat-button-toggle>
+      </mat-button-toggle-group>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy" [value]="(isAboveSmSize$|async)?'table':'grid'">
+          <mat-button-toggle [ngClass]="{'d-hidden' : !(isAboveSmSize$|async) }" value="grid">
+              <mat-icon color="primary">view_module</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle *ngIf="isAboveSmSize$|async" value="table">
+              <mat-icon color="primary">view_headline</mat-icon>
+          </mat-button-toggle>
+      </mat-button-toggle-group>
+  </div>
+</div>
+
+<div fxLayout="row">
+  <form class="customer-search">
+    <mat-form-field class="customer-search-input">
+        <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" name="search" autocomplete="off">
+        <mat-icon matSuffix color="primary">search</mat-icon>
+    </mat-form-field>
+  </form>
+</div>
+
+
+<div class="grid-list" *ngIf="viewType.value == 'grid'" fxLayout="row wrap" fxLayoutGap="16px">
+  <div *ngFor="let customer of customers | paginate: { itemsPerPage: 6, currentPage: page }"
+       fxFlex="100" fxFlex.sm="50" fxFlex.gt-sm="31.5">
+    <mat-card fxFlex>
+      <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
+        <h3 class="customer-name">
+          {{customer.prenom + ' ' + customer.nom | capitalCase}}
+        </h3>
+        <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+          <mat-icon style="color: white;">more_vert</mat-icon>
+        </button>
+      </div>
+      <mat-menu #menu="matMenu" xPosition="before" overlapTrigger="true">
+        <span (mouseleave)="menuTrigger.closeMenu()">
+          <button mat-menu-item [routerLink]="'update/'+customer.id">
+            <mat-icon>mode_edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item [routerLink]="'delete'" [queryParams]="customer">
+            <mat-icon>delete</mat-icon>
+            <span>Remove</span>
+          </button>
+        </span>
+      </mat-menu>
+      <div class="customer-content" fxLayout="row">
+        <div class="customer-details transition-2">
+          <p *ngIf="customer.numero">
+            <mat-icon class="mt-size">call</mat-icon>
+            <span>{{customer.numero}}</span>
+          </p>
+          <p *ngIf="customer.email">
+            <mat-icon class="mt-size">mail_outline</mat-icon>
+            <span>{{customer.email}}</span>
+          </p>
+          <p class="text-truncate" *ngIf="customer.adresse">
+            <mat-icon class="mt-size">location_on</mat-icon>
+            <span>{{customer.adresse}}</span>
+          </p>
+          <p>
+            <mat-icon class="mt-size">date_range</mat-icon>
+            <span>Client Depuis {{customer.createdAt | date:'yyyy-MM-dd'}}</span>
+          </p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+
+<div class="table-list" *ngIf="isAboveSmSize$ | async">
+  <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
+    <div fxFlex="100" class="p-2">
+      <div class="table-scroll-wrapper">
+        <div class="admin-table">
+          <!-- Header  -->
+          <div class="header-row">
+            <div class="header-cell filter-cell fixed-width">
+              Prénom
+              <a (click)="sortCustomers('prenom')"><mat-icon>swap_vert</mat-icon></a>
+            </div>
+            <div class="header-cell fixed-width">
+              Nom
+            </div>
+            <div class="header-cell fixed-width">
+              Téléphone
+            </div>
+            <div class="header-cell fixed-width">
+              Email
+            </div>
+            <div class="header-cell fixed-width">
+              Addresse
+            </div>
+            <div class="header-cell filter-cell fixed-width">
+              Client Depuis
+              <a (click)="sortCustomers('member_since')"><mat-icon>swap_vert</mat-icon></a>
+            </div>
+            <div class="header-cell fixed-width text-center">
+              Action
+            </div>
+          </div>
+
+          <!-- Data -->
+          <div *ngFor="let customer of (sortedCustomers || customers) | CustomerSearch:searchText | paginate: { itemsPerPage: 5, currentPage: page }" class="data-row">
+            <div class="data-cell fixed-width"> {{ customer.prenom | capitalCase }} </div>
+            <div class="data-cell fixed-width"> {{ customer.nom | capitalCase }} </div>
+            <div class="data-cell fixed-width"> {{ customer.numero }} </div>
+            <div class="data-cell fixed-width"> {{ customer.email }} </div>
+            <div class="data-cell fixed-width"> {{ customer.adresse | capitalCase }} </div>
+            <div class="data-cell fixed-width"> {{ customer.createdAt | date: "dd-MM-yyyy" }} </div>
+            <div class="data-cell fixed-width">
+              <div class="actions">
+                <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT' | translate" [routerLink]="'update/'+customer.id">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate" [routerLink]="'delete/'+customer.id">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="customers" fxLayout="row wrap">
+  <div fxFlex="100" class="p-2">
+      <mat-card class="text-center">
+          <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'Précédent'" [nextLabel]="'Suivant'" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+      </mat-card>
+  </div>
+</div>
+
+<div *ngIf="!customers" fxLayout="column" fxLayoutAlign="center center" class="customer-spinner">
+  <mat-spinner color="primary"></mat-spinner>
+</div>
+
