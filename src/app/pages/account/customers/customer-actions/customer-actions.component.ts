@@ -104,10 +104,9 @@ export class CustomerActionsComponent implements OnInit {
             //   return;
             // }
 
-            console.log(customers);
-            // this.customerService.addMultipleCustomers(customers);
-            // this.snackBar.open("Les clients ont été ajoutés avec succès.",'x',{ panelClass: 'success', verticalPosition: 'top', duration: 3500 });
-            // this.router.navigate(['account/customers']);
+            this.customerService.addMultipleCustomers(customers);
+            this.snackBar.open("Les clients ont été ajoutés avec succès.",'x',{ panelClass: 'success', verticalPosition: 'top', duration: 3500 });
+            this.router.navigate(['account/customers']);
           })
           .catch(error => {
             if(error.name)
