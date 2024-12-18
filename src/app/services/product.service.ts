@@ -144,6 +144,10 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/list-by-category/' + id);
   }
 
+  public getProductBySeller(id: string) {
+    return this.api.get('/produit/list-by-user/' + id).toPromise();
+  }
+
   public getProductByCategorieName(categorie: string) {
     return this.api.get('/produit/list-by-category-name/' + categorie).toPromise();
   }
