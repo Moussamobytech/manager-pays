@@ -50,7 +50,7 @@
                   </button>
               </form> -->
               <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
-                <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories text-truncate">{{ category?.nom }}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
+                <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories">{{ category?.nom }}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
                 <mat-menu #categoriesMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="categories-dropdown">
                     <span (mouseleave)="categoriesMenuTrigger.closeMenu()" >
                         <app-category-list [categories]="categories" [categoryParentId]="0" (change)="changeCategory($event)"></app-category-list>
