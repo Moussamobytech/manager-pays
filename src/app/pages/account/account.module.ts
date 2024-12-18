@@ -36,7 +36,7 @@ export const routes: Routes = [
 
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
           { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
-          { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule) }
+          { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule), data: {  breadcrumb: 'Clients' } }
       ]
   }
 ];

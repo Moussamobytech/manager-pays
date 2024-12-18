@@ -80,14 +80,14 @@ overflow:visible;
   .filter-cell a{
     cursor:pointer;
     transition: .1s all ease-in;
+    mat-icon{
+      color: #fff;
+    }
+    &:active{
+      color: #d81b60;
+    }
   }
 
-  .filter-cell a mat-icon{
-    color: #fff;
-  }
-  .filter-cell a:active{
-    color: #d81b60;
-  }
   display: table;
   width: max-content;
   min-width: 100%;
@@ -144,3 +144,15 @@ mat-icon{
   font-size: 18px;
 }
 
+.loyalty-badge {
+  padding: 4px 8px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2.5px solid transparent;
+  transition: .4 all;
+  &:hover, &:active {
+    border-color: #25224a;
+  }
+}

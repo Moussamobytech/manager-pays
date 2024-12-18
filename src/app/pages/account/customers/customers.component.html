@@ -35,7 +35,7 @@
     <mat-card fxFlex>
       <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
         <h3 class="customer-name">
-          {{customer.prenom + ' ' + customer.nom | capitalCase}}
+          {{(customer.prenom||'N/C') + ' ' + customer.nom }}
         </h3>
         <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
           <mat-icon style="color: white;">more_vert</mat-icon>
@@ -45,11 +45,11 @@
         <span (mouseleave)="menuTrigger.closeMenu()">
           <button mat-menu-item [routerLink]="'update/'+customer.id">
             <mat-icon>mode_edit</mat-icon>
-            <span>Edit</span>
+            <span>Modifier</span>
           </button>
           <button mat-menu-item [routerLink]="'delete'" [queryParams]="customer">
             <mat-icon>delete</mat-icon>
-            <span>Remove</span>
+            <span>Supprimer</span>
           </button>
         </span>
       </mat-menu>
@@ -59,9 +59,11 @@
             <mat-icon class="mt-size">call</mat-icon>
             <span>{{customer.numero}}</span>
           </p>
-          <p *ngIf="customer.email">
-            <mat-icon class="mt-size">mail_outline</mat-icon>
-            <span>{{customer.email}}</span>
+          <p>
+            <mat-icon class="mt-size">trending_up</mat-icon>
+            <span class="loyalty-badge" [ngStyle]="{'background-color': getLoyaltyColor(customer.commande)}">
+              {{ customer.commande }}
+            </span>
           </p>
           <p class="text-truncate" *ngIf="customer.adresse">
             <mat-icon class="mt-size">location_on</mat-icon>
@@ -93,10 +95,10 @@
               Nom
             </div>
             <div class="header-cell fixed-width">
-              Téléphone
+              Niveau de fidelité
             </div>
             <div class="header-cell fixed-width">
-              Email
+              Téléphone
             </div>
             <div class="header-cell fixed-width">
               Addresse
@@ -114,8 +116,12 @@
           <div *ngFor="let customer of (sortedCustomers || customers) | CustomerSearch:searchText | paginate: { itemsPerPage: 5, currentPage: page }" class="data-row">
             <div class="data-cell fixed-width"> {{ customer.prenom | capitalCase }} </div>
             <div class="data-cell fixed-width"> {{ customer.nom | capitalCase }} </div>
+            <div class="data-cell fixed-width">
+              <span class="loyalty-badge" [ngStyle]="{'background-color': getLoyaltyColor(customer.commande)}">
+                {{ customer.commande }}
+              </span>
+            </div>
             <div class="data-cell fixed-width"> {{ customer.numero }} </div>
-            <div class="data-cell fixed-width"> {{ customer.email }} </div>
             <div class="data-cell fixed-width"> {{ customer.adresse | capitalCase }} </div>
             <div class="data-cell fixed-width"> {{ customer.createdAt | date: "dd-MM-yyyy" }} </div>
             <div class="data-cell fixed-width">

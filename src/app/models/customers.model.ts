@@ -5,7 +5,7 @@ export class Customer {
   adresse: string;
   email: string;
   numero: string;
-  commande: number;
+  commande: any;
   boutique: string;
   createdAt: string;
 }

@@ -63,8 +63,21 @@ export class CustomersComponent implements OnInit {
             // Iterate through each property in the customer object
             for (const key in customer) {
               if (customer.hasOwnProperty(key)) {
-                if ((customer[key] === null || customer[key] === undefined || customer[key] === '')&& key !== 'nom') {
+                if ((customer[key] === null || customer[key] === undefined || customer[key] === '')
+                    && (key === 'adresse')
+                  ){
                   customer[key] = '............';
+                }
+                if (key === 'commande'){
+                  if(customer[key]==1){
+                    customer[key]= 'Nouveau';
+                  }else if(customer[key]>1){
+                    customer[key]= 'Occasionnel';
+                  }else if(customer[key]>3){
+                    customer[key]= 'Fidèle';
+                  }else{
+                    customer[key]= 'Non classé';
+                  }
                 }
               }
             }
@@ -79,6 +92,7 @@ export class CustomersComponent implements OnInit {
         (data: any) => {
           this.customers = data;
           this.ngxSpinnerService.hide();
+          console.log(this.customers)
         }
       );
 
@@ -87,6 +101,15 @@ export class CustomersComponent implements OnInit {
       //   console.log(this.customers)
       //   this.ngxSpinnerService.hide();
       // });
+    }
+
+    getLoyaltyColor(level: string): string {
+      switch (level) {
+        case 'Nouveau ': return '#00A86B';
+        case 'Occasionnel ': return '#FFD700';
+        case 'Fidèle ': return '#D81B60';
+        default: return '#c0c0c0';
+      }
     }
 
     public onPageChanged(event){

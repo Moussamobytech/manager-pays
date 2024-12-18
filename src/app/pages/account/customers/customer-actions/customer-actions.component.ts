@@ -41,13 +41,11 @@ export class CustomerActionsComponent implements OnInit {
 
   initializeForm(){
     this.form = this.fb.group({
-      prenom: [null, Validators.required],
+      prenom: [null],
       nom: [null],
-      contacts: this.fb.group({
-        email: [null, [Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
-        numero: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
-        adresse: [null],
-      }),
+      // email: [null, [Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
+      numero: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+      adresse: [null],
       exldata: [null],
     });
 
@@ -68,11 +66,9 @@ export class CustomerActionsComponent implements OnInit {
       const customerData = {
         prenom: data.prenom,
         nom: data.nom,
-        contacts: {
-          email: data.email,
-          numero: data.numero,
-          adresse: data.adresse,
-        },
+        // email: data.email,
+        numero: data.numero,
+        adresse: data.adresse,
       };
       // console.log(customerData)
       this.form.patchValue(customerData);
@@ -87,12 +83,10 @@ export class CustomerActionsComponent implements OnInit {
       if (this.selectedExFile) {
         this.exlService.importCustomerFromExcel(this.selectedExFile)
           .then((customers: Customer[]) => {
+            const allCustomersHaveRequiredFields = customers.every(customer => customer.numero);
 
-            const allCustomersHaveRequiredFields = customers.every(customer =>
-              customer.prenom && customer.numero
-            );
             if (!allCustomersHaveRequiredFields) {
-              this.generalError = "Les colonnes 'Prénom' et 'Numero' du fichier exel sont requis. Veuillez les revoirs puis réesayer.";
+              this.generalError = "La colonne 'Numero' du fichier exel sont requis. Veuillez le revoir puis réesayer.";
               return;
             }
             // const allEmailsAreValid = customers.every(customer =>
@@ -122,9 +116,9 @@ export class CustomerActionsComponent implements OnInit {
           let customer = {
             prenom: formData.prenom,
             nom: formData.nom,
-            email: formData.contacts.email,
-            numero: formData.contacts.numero,
-            adresse: formData.contacts.adresse,
+            // email: formData.email,
+            numero: formData.numero,
+            adresse: formData.adresse,
             boutique: this.boutiqueName,
           }
           this.customerService.addCustomer(customer);
@@ -141,8 +135,8 @@ export class CustomerActionsComponent implements OnInit {
         let customer = {
           prenom: formData.prenom,
           nom: formData.nom,
-          email: formData.contacts.email,
-          adresse: formData.contacts.adresse,
+          // email: formData.email,
+          adresse: formData.adresse,
         }
         this.customerService.updateCustomer(customer,this.customerId);
         this.snackBar.open("Le client a été mis à jour avec succès.",'x',{ panelClass: 'success', verticalPosition: 'top', duration: 3500 });
@@ -172,22 +166,12 @@ export class CustomerActionsComponent implements OnInit {
     const controls = this.form.controls;
 
     if (enable) {
-      controls['prenom'].setValidators([Validators.required]);
-
-      const contactControls = this.form.get('contacts') as FormGroup;
-      contactControls.controls['email'].setValidators([
-        Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
-      ]);
-      contactControls.controls['numero'].setValidators([
+      controls['numero'].setValidators([
         Validators.required,
         Validators.pattern(/^\d+$/),
       ]);
     } else {
-      controls['prenom'].clearValidators();
-
-      const contactControls = this.form.get('contacts') as FormGroup;
-      contactControls.controls['email'].clearValidators();
-      contactControls.controls['numero'].clearValidators();
+      controls['numero'].clearValidators();
     }
 
     // Update validity after modifying validators
@@ -199,7 +183,7 @@ export class CustomerActionsComponent implements OnInit {
     let template = [{
       Prénom: '',
       Nom: '',
-      Email: '',
+      // Email: '',
       Numéro: '',
       Adresse: '',
     }];

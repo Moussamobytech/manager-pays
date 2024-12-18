@@ -53,7 +53,7 @@ export class ExcelOperationService {
 
           let errorFieldIndex = 0;
           const actualHeaders = jsonData[0];
-          const modeleExpectedKeys = ['prenom', 'nom', 'email', 'numero', 'adresse'];
+          const modeleExpectedKeys = ['prenom', 'nom' /*, 'email'*/, 'numero', 'adresse'];
 
           const isValid = modeleExpectedKeys.every((header, index) => {
             const normalizedHeader = header.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -76,9 +76,9 @@ export class ExcelOperationService {
           const processedData = jsonData.slice(1).map((row) => ({
             prenom: row[0],
             nom: row[1],
-            email: row[2],
-            numero: row[3],
-            adresse: row[4],
+            // email: row[2],
+            numero: row[2],
+            adresse: row[3],
             boutique: thisBoutique
           }));
 
