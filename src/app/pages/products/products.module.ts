@@ -11,9 +11,11 @@ import { ProductComponent } from './product/product.component';
 import { ProductZoomComponent } from './product/product-zoom/product-zoom.component';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { SellerComponent } from './seller/seller.component';
 
 export const routes: Routes = [
   { path: '', component: ProductsComponent, pathMatch: 'full' },
+  { path: 'seller/:name', component: SellerComponent },
   { path: ':name', component: ProductsComponent },
   { path: ':id/:name', component: ProductComponent }
 ];
@@ -33,6 +35,7 @@ export const routes: Routes = [
     ],
     declarations: [
         ProductsComponent,
+        SellerComponent,
         ProductComponent,
         ProductZoomComponent
     ]
