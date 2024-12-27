@@ -1,0 +1,119 @@
+<div class="p-2">
+    <mat-card>
+      <div class="mat-mdc-table orders-table">
+        <div class="mat-mdc-header-row">
+          <div class="mat-mdc-header-cell image">Image</div>
+          <div class="mat-mdc-header-cell">
+            Code
+            <mat-icon class="sortable" (click)="sortBy('codeCommande')">
+              {{ sortKey === 'codeCommande' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Date
+            <mat-icon class="sortable" (click)="sortBy('dateCommande')">
+              {{ sortKey === 'dateCommande' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Produit
+            <mat-icon class="sortable" (click)="sortBy('produitNom')">
+              {{ sortKey === 'produitNom' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Quantité
+            <mat-icon class="sortable" (click)="sortBy('quantite')">
+              {{ sortKey === 'quantite' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Total
+            <mat-icon class="sortable" (click)="sortBy('montant')">
+              {{ sortKey === 'montant' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+  
+          <div class="mat-mdc-header-cell">
+            Status
+            <mat-icon class="sortable" (click)="sortBy('idStatutCommande')">
+              {{ sortKey === 'idStatutCommande' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Client
+            <mat-icon class="sortable" (click)="sortBy('clientUsername')">
+              {{ sortKey === 'clientUsername' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+        
+          <div class="mat-mdc-header-cell">Autre</div>
+        </div>
+  
+      
+  
+        <div *ngFor="let order of sortedOrders() | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+          <div class="mat-mdc-cell image" >
+            <img [src]="order.produitImage" alt="" width="50">
+          </div>
+          <div class="mat-mdc-cell"><span class="order">{{order.codeCommande}}</span></div>
+          <div class="mat-mdc-cell">{{ order.dateCommande | date: 'dd/MM/yy' }}</div>
+          <div class="mat-mdc-cell">{{order.produitNom}}</div>
+          <div class="mat-mdc-cell">{{order.quantite}}</div>
+          <div class="mat-mdc-cell">{{order.montant}}</div>
+          <div class="mat-mdc-cell select"> 
+            <mat-select [value]="order.statutCommande.id">
+              @for (st of status; track status) {
+                <mat-option [value]="st.id" (onSelectionChange)="setStatusT(order.id,st.id)">{{Status(st.name)}}</mat-option>
+              }
+            </mat-select>
+        </div>
+          <div class="mat-mdc-cell">{{order.clientUsername}}</div>
+          <div class="mat-mdc-cell">
+            <div class="p-2 actions">
+               <button  mat-mini-fab color="warn" matTooltip="View invoice" class="btn-invoice" (click)="openOrderDetails(order)" >
+                <mat-icon>remove_red_eye</mat-icon>
+              </button>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  
+    <div *ngIf="orders.length > 0" class="py-3 paginate centered">
+      <mat-card class="text-center">
+        <pagination-controls 
+          class="product-pagination" 
+          [autoHide]="true" 
+          lang="fr"
+          [maxSize]="5"
+          (pageChange)="onPageChanged($event)">
+        </pagination-controls>
+      </mat-card>
+    </div>
+  </div>
+  
+  
+  <ng-template #popupDetailsC>
+    <h1 mat-dialog-title>Détails de la commande</h1>
+    <div mat-dialog-content *ngIf="selectedOrder">
+      <div class="mat-mdc-cell image center">
+        <img [src]="selectedOrder.produitImage" alt="" width="120" height="120">
+      </div>
+      <p><strong>Commande : </strong>{{ selectedOrder.codeCommande }}</p>
+      <p><strong>Date : </strong>{{ selectedOrder.dateCommande | date: 'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Produit : </strong>{{ selectedOrder.produitNom }}</p>
+      <p><strong>Quantité : </strong>{{ selectedOrder.quantite }}</p>
+      <p><strong>Montant : </strong>{{ selectedOrder.montant }}</p>
+      <p><strong>Status : </strong>{{ Status(selectedOrder.statutCommande.name) }}</p>
+      <p><strong>Client : </strong>{{ selectedOrder.clientUsername }}</p>
+    </div>
+    <div mat-dialog-actions class="buttons space-around">
+      <button mat-button color="success" (click)="phoneCall(selectedOrder.clientUsername)">
+        <mat-icon>call</mat-icon>
+      </button>
+      <button mat-button color="warn" (click)="onNoClick()">Fermer</button>
+    </div>
+    
+  </ng-template>

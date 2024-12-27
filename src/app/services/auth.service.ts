@@ -90,7 +90,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
         if (this.user == null || this.user == undefined) {
             this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
         }
-        console.log(this.user);
+        console.log("In Current User ",this.user);
 
         return this.user;
     }
@@ -160,7 +160,6 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * @param password password of user
      */
     signup(formData: any): any {
-      console.log(formData)
         return this.api.post(`/users/register`, formData);
     }
 
@@ -190,6 +189,10 @@ resetPassword(username: string, newpassword: string): Observable<any> {
 
     public setStatus(id: string, etat: string): Observable<any> {
       return this.api.put(`/users/etat/${id}?state=${etat}`, null).pipe();
+    }
+
+    getUserByPhone(phone: string): Observable<any> {
+      return this.api.get(`/users/get-by-phone/${phone}`);
     }
 
 

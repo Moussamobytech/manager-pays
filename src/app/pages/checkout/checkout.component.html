@@ -1,48 +1,85 @@
 <mat-stepper #horizontalStepper [orientation]="stepperOrientation" linear="true" class="mat-elevation-z2">
-  <mat-step [stepControl]="billingForm" label="Billing address">
+ <mat-step [stepControl]="billingForm" label="Informations personnelles">
     <form [formGroup]="billingForm">
       <div fxLayout="row wrap" class="py-3">
-        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+
+        <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+          <!-- Champ Pays -->
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="country" (selectionChange)="onCountryChange($event.value)">
+              <mat-option [value]="'mali'">🇲🇱 Mali (+223)</mat-option>
+              <mat-option [value]="'civ'">🇨🇮 Côte d'Ivoire (+225)</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+          <!-- Champ Téléphone -->
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Phone</mat-label>
+            <input 
+              matInput 
+              [placeholder]="phonePlaceholder" 
+              formControlName="phone" 
+              [maxlength]="phoneMaxLength" 
+              [minlength]="phoneMinLength" 
+              required>
+            <mat-error *ngIf="billingForm.controls.phone.errors?.required">Phone is required</mat-error>
+            <mat-error *ngIf="billingForm.controls.phone.errors?.minlength">
+              Phone number must be at least {{ phoneMinLength }} digits.
+            </mat-error>
+            <mat-error *ngIf="billingForm.controls.phone.errors?.maxlength">
+              Phone number cannot exceed {{ phoneMaxLength }} digits.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>First name</mat-label>
               <input matInput placeholder="First name" formControlName="firstName" required>
               <mat-error *ngIf="billingForm.controls.firstName.errors?.required">First name is required</mat-error>
           </mat-form-field>
         </div>
-        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Last name</mat-label>
               <input matInput placeholder="Last name" formControlName="lastName" required>
               <mat-error *ngIf="billingForm.controls.lastName.errors?.required">Last name is required</mat-error>
           </mat-form-field>
         </div>
-        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+       <!-- <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Middle Name/Initial</mat-label>
               <input matInput placeholder="Middle Name/Initial" formControlName="middleName">
           </mat-form-field>
-        </div>
-        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+        </div> 
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Company</mat-label>
               <input matInput placeholder="Company" formControlName="company">
           </mat-form-field>
         </div>
-        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+          <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="Email" formControlName="email" >
+              <mat-error *ngIf="billingForm.controls.email.errors?.required">Email is required</mat-error>
+          </mat-form-field>
+       </div>-->
+      
+       <!-- 
+         <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Email</mat-label>
               <input matInput placeholder="Email" formControlName="email" required>
               <mat-error *ngIf="billingForm.controls.email.errors?.required">Email is required</mat-error>
           </mat-form-field>
         </div>
-        <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-          <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Phone</mat-label>
-              <input matInput placeholder="Phone" formControlName="phone" required>
-              <mat-error *ngIf="billingForm.controls.phone.errors?.required">Phone is required</mat-error>
-          </mat-form-field>
-        </div>
-        <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+       
+       <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Country</mat-label>
             <mat-select placeholder="Country" formControlName="country" required>
@@ -66,27 +103,28 @@
               <input matInput placeholder="State/Province" formControlName="state">
           </mat-form-field>
         </div>
-        <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+       <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Zip/Postal Code</mat-label>
               <input matInput placeholder="Zip/Postal Code" formControlName="zip" required>
               <mat-error *ngIf="billingForm.controls.zip.errors?.required">Zip/Postal Code is required</mat-error>
           </mat-form-field>
-        </div>
-        <div fxFlex="100" class="px-1">
+        </div> 
+        <div fxFlex="50" class="px-1">
           <mat-form-field appearance="outline" class="w-100">
               <mat-label>Address</mat-label>
               <input matInput placeholder="Address (street, apartment, suite, unit etc.)" formControlName="address" required>
               <mat-error *ngIf="billingForm.controls.address.errors?.required">Address is required</mat-error>
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
         <button mat-mini-fab matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after"><mat-icon>navigate_next</mat-icon></button>
       </div>
     </form>
-  </mat-step>
-  <mat-step [stepControl]="deliveryForm" label="Delivery method">
+  </mat-step> 
+  <!--
+    <mat-step [stepControl]="deliveryForm" label="Delivery method">
     <form [formGroup]="deliveryForm" class="p-2">
       <mat-radio-group formControlName="deliveryMethod" fxLayout="column" fxLayoutAlign="center" required name="methods">
         <mat-radio-button *ngFor="let method of deliveryMethods" color="primary" [value]="method" class="mt-1"><b>{{method.name}}</b> {{method.desc}}</mat-radio-button>
@@ -97,6 +135,7 @@
       </div>
     </form>
   </mat-step>
+
   <mat-step [stepControl]="paymentForm" label="Payment method">
     <form [formGroup]="paymentForm">
       <div fxLayout="row wrap">
@@ -154,7 +193,57 @@
       </div>
     </form>
   </mat-step>
-  <mat-step label="Review Order">
+  */-->
+
+  <!--:::::::::::::::::::::::::: PAYEMENT METHODE:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: PAYEMENT METHODE:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: PAYEMENT METHODE:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: PAYEMENT METHODE:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+
+    <mat-step [stepControl]="deliveryForm" label="Mode de Payement">
+    <form [formGroup]="deliveryForm" class="p-2">
+     
+      <mat-radio-group formControlName="deliveryMethods" fxLayout="column" fxLayoutAlign="center" required name="methods">
+        <mat-radio-button  color="primary"  [value]="modePayement"  checked="check" class="mt-1"><b>A la livraison</b> Des frais de livraison peuvent s'appliquer</mat-radio-button>
+        <mat-radio-button disabled="disabled"  color="primary"  class="mt-1"><b>Orange Money</b> Des frais de transfert peuvent s'appliquer</mat-radio-button>
+        <mat-radio-button  disabled="disabled" color="primary"  class="mt-1"><b>Carte VISA</b> Des frais de livraison peuvent s'appliquer</mat-radio-button>
+      </mat-radio-group>
+
+      <!-- 
+       <mat-radio-group formControlName="deliveryMethod" fxLayout="column" fxLayoutAlign="center" required name="methods">
+        <mat-radio-button *ngFor="let method of deliveryMethods" color="primary" [value]="method" class="mt-1"><b>{{method.name}}</b> {{method.desc}}</mat-radio-button>
+      </mat-radio-group>
+      
+
+
+
+
+      
+      <div fxLayout="row" fxLayoutAlign="center center" class="mt-2 p-1">
+        <button mat-mini-fab matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
+        <button mat-mini-fab matStepperNext color="primary" matTooltip="Next" matTooltipPosition="after"><mat-icon>navigate_next</mat-icon></button>
+      </div>
+      -->
+    </form>
+
+    <div class="mat-mdc-cell">
+      <div fxLayout="column" fxLayoutAlign="center start" class="grand-total">
+         <span> <strong>Sous-total:</strong>  {{ grandTotal | number : '1.2-2'}} FCFA</span>
+         <span class="text-muted"><strong class="text-muted">Réduction:</strong>  15%</span>
+         <span class="new-price"><strong class="new-price">Total:</strong>  {{ (grandTotal - (grandTotal*0.15)) | number : '1.2-2'}} FCFA</span>
+      </div>
+    </div>
+   <div fxLayout="row" fxLayoutAlign="center center" class="mt-3 p-2">
+     <button mat-mini-fab matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
+     <button mat-raised-button matStepperNext color="primary" (click)="commander()">Commander</button>
+   </div>
+
+  </mat-step>
+  <!--:::::::::::::::::::::::::: SHOPING REVIEW ORDER:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: SHOPING REVIEW ORDER:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: SHOPING REVIEW ORDER:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: SHOPING REVIEW ORDER:::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--<mat-step label="Review Order">
     <div fxLayout="row wrap">
       <div fxFlex="100" class="p-1">
         <h3 class="text-muted">Shopping Cart</h3>
@@ -167,19 +256,25 @@
             <div class="mat-mdc-header-cell">Quantity</div>
             <div class="mat-mdc-header-cell">Total</div>
           </div>
-          <div *ngFor="let product of appService.Data.cartList" class="mat-mdc-row">
-            <div class="mat-mdc-cell"><img [src]="product.image1[0].small"></div>
+          <div *ngFor="let product of productList" class="mat-mdc-row">
+            <div class="mat-mdc-cell samall"><img [src]="product.image1"></div>
             <div class="mat-mdc-cell">{{product.nom}}</div>
-            <div class="mat-mdc-cell">${{product.newPrice | number : '1.2-2'}}</div>
+            <div class="mat-mdc-cell">  <p class="text-muted" *ngIf="product.pricePromotion == null || product.pricePromotion == '' ||  product.pricePromotion == 'null'">
+              <span>{{product.priceBasic | number}} FCFA</span>
+          </p>
+          <p class="text-muted" *ngIf="product.pricePromotion != null && product.pricePromotion != '' && product.pricePromotion != 'null' ">
+              <span>{{product.pricePromotion | number}} FCFA</span>
+          </p>
+    </div>
             <div class="mat-mdc-cell text-muted"> {{product.cartCount}} </div>
-            <div class="mat-mdc-cell">${{ (product.newPrice*product.cartCount) | number : '1.2-2'}}</div>
+            <div class="mat-mdc-cell">${{total[product.id] | number : '1.2-2'}}</div>
           </div>
         </div>
       </div>
     </div>
     <div fxLayout="row wrap">
       <div fxFlex="100" class="p-2">
-        <h3 class="text-muted mt-3">Billing information</h3>
+        <h3 class="text-muted mt-3">Information personnelle</h3>
         <div class="divider"></div>
       </div>
       <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="25" class="p-2">
@@ -189,7 +284,7 @@
       <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="25" class="p-2">
         <p class="text-muted">Email:</p>
         <p>{{billingForm.controls.email.value}}</p>
-      </div>
+      </div> 
       <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="25" class="p-2">
         <p class="text-muted">Phone:</p>
         <p>{{billingForm.controls.phone.value}}</p>
@@ -210,6 +305,7 @@
         <p class="text-muted">Zip/PostalCode:</p>
         <p>{{billingForm.controls.zip.value}}</p>
       </div>
+    
       <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="25" class="p-2">
         <p class="text-muted">Address:</p>
         <p>{{billingForm.controls.address.value}}</p>
@@ -217,27 +313,35 @@
     </div>
     <div fxLayout="row">
       <div fxFlex="100" class="p-2">
-        <h3 class="text-muted mt-3">Delivery information</h3>
+        <h3 class="text-muted mt-3">Informations de facturation</h3>
         <div class="divider"></div>
         <p class="py-2">{{deliveryForm.controls.deliveryMethod.value['name']}} <span class="text-muted">{{deliveryForm.controls.deliveryMethod.value['desc']}}</span></p>
+        
+       <p class="py-2">{{modePayement}} <span class="text-muted">Des frais de livraison peuvent s'appliquer</span></p>
       </div>
     </div>
-    <div fxLayout="row">
+     <div fxLayout="row">
       <div fxFlex="100" class="p-2">
         <h3 class="text-muted mt-3">Payment information</h3>
         <div class="divider"></div>
         <p class="py-2"><span class="text-muted mr-1">Card number:</span><span>XXX-XXX-XXX-7224</span></p>
       </div>
-    </div>
+    </div> 
     <div fxLayout="row" fxLayoutAlign="center center" class="p-2">
-       <h2><span class="text-muted mr-1">Total Price:</span><span>${{grandTotal | number : '1.2-2'}}</span></h2>
+       <h2><span class="text-muted mr-1">Total Price:</span><span>{{grandTotal | number : '1.2-2'}} FCFA</span></h2>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" class="mt-3 p-2">
       <button mat-mini-fab matStepperPrevious color="primary" matTooltip="Back" matTooltipPosition="before" class="mr-1"><mat-icon>navigate_before</mat-icon></button>
-      <button mat-raised-button matStepperNext color="primary" (click)="placeOrder()">Place order now</button>
+      <button mat-raised-button matStepperNext color="primary" (click)="placeOrder()">Commander</button>
     </div>
-  </mat-step>
-  <mat-step label="Confirmation">
+  </mat-step> -->
+
+
+  <!--:::::::::::::::::::::::::: CONFIRMATION :::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: CONFIRMATION :::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: CONFIRMATION :::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::: CONFIRMATION :::::::::::::::::::::::::::::::::::::::::::::::::::-->
+ <!-- <mat-step label="Confirmation">
     <div fxLayout="column" fxLayoutAlign="center center" class="p-2 text-center">
       <button mat-fab color="primary"><mat-icon>check</mat-icon></button>
       <h2 class="py-3">Congratulation! Your order has been processed</h2>
@@ -247,5 +351,5 @@
       <a [routerLink]="['/']" mat-raised-button color="primary">Return to Shop</a>
     </div>
 
-  </mat-step>
+  </mat-step> -->
 </mat-stepper>

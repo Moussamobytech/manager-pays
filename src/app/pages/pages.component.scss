@@ -108,3 +108,25 @@ div.scrollmenu a {
   }
 
 }
+.cart-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .cart-count {
+    position: absolute;
+    top: -10px; /* Ajustez pour placer le nombre correctement */
+    right: 15px; /* Ajustez pour placer le nombre correctement */
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  

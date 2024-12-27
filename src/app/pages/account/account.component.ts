@@ -35,7 +35,9 @@ export class AccountComponent implements OnInit {
   public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
     { name: 'Information', href: 'information', icon: 'info' },
+    { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
     { name: 'Produits', href: 'products-seller', icon: 'add_shopping_cart' },
+    { name: 'Commande', href: 'orders', icon: 'shop' },
     { name: 'Logout', href: '/sign-in', icon: 'power_settings_new' },
   ];
 
@@ -57,8 +59,10 @@ export class AccountComponent implements OnInit {
     this.links = [
       { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
       { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
+      { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
       { name: 'Informations', href: 'information', icon: 'info_outline' },
       { name: 'Comment ca marche?', href: 'how_works', icon: 'help_outline' },
+      { name: 'Commandes', href: 'orders', icon: 'shop' },
       { name: 'Déconnection', href: '/sign-in', icon: 'power_settings_new' },
     ];
 

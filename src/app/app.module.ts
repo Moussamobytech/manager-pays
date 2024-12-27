@@ -61,7 +61,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
 
   ],
   imports: [

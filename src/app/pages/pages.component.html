@@ -111,6 +111,16 @@
 							</div>
           </div>
 
+          <div class="cart-container">
+            <span class="cart-count">{{ this.totalPanier }}</span>
+            <button [routerLink]="['/cart']" mat-icon-button matTooltip="Mon panier">
+              <mat-icon>shopping_cart</mat-icon>
+            </button>
+          </div>
+          
+
+          
+
       </mat-toolbar-row>
       <!-- <mat-toolbar-row fxLayoutAlign="space-between center" class="logo-toolbar bg-primary" style="height: 55px !important;">
         <div  fxFlex="20" fxFlex fxShow="false" fxShow.xs="true"  fxShow.gt-md="false" fxShow.gt-sm="false">

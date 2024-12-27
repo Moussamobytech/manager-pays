@@ -15,6 +15,7 @@ import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { AuthGuard } from 'src/app/helpers/auth.guard';
 import { HowWorksComponent } from './how_works/how_works.component';
+import { OrdersManageComponents } from './orders-manage/orders-manage.components';
 const config: InputFileConfig = {
   fileAccept: '*'
 };
@@ -32,9 +33,9 @@ export const routes: Routes = [
           { path: 'add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
           { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
           { path: 'how_works', component: HowWorksComponent, data: { breadcrumb: 'Comment ca marche ?' } },
-
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
-          { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
+          { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } }, 
+          { path: 'orders-manage', component: OrdersManageComponents, data: {  breadcrumb: 'Gestion commandes' } },
       ]
   }
 ];
@@ -59,7 +60,9 @@ export const routes: Routes = [
     AddProductComponent,
     ProductsComponent,
     HowWorksComponent,
-    OrdersComponent
+    OrdersComponent,
+    OrdersManageComponents
+    //OrdersManageComponent
   ]
 })
 export class AccountModule { }
