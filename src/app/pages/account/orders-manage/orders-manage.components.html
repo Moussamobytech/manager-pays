@@ -47,7 +47,7 @@
             </mat-icon>
           </div>
         
-          <div class="mat-mdc-header-cell">Autre</div>
+          <div class="mat-mdc-header-cell">Details</div>
         </div>
   
       
@@ -61,10 +61,10 @@
           <div class="mat-mdc-cell">{{order.produitNom}}</div>
           <div class="mat-mdc-cell">{{order.quantite}}</div>
           <div class="mat-mdc-cell">{{order.montant}}</div>
-          <div class="mat-mdc-cell select"> 
+          <div class="mat-mdc-cell {{order.statutCommande.name}}" [ngClass]="order.statutCommande.name"> 
             <mat-select [value]="order.statutCommande.id">
               @for (st of status; track status) {
-                <mat-option [value]="st.id" (onSelectionChange)="setStatusT(order.id,st.id)">{{Status(st.name)}}</mat-option>
+                <mat-option [value]="st.id" (onSelectionChange)="setStatusT(order.id,st.id,order)">{{Status(st.name)}}</mat-option>
               }
             </mat-select>
         </div>

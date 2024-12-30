@@ -93,13 +93,21 @@ export class OrdersManageComponents implements OnInit {
     });
   }
 
-  setStatusT(idPanier:string,status:string){
-    this.commandeService.setStatus(idPanier,status).subscribe(datas => {
-     datas;
-    }, error => {
-      console.error('Error during recharge:', error);
-    });
+  setStatusT(idPanier: string, status: string, order: any) {
+    this.commandeService.setStatus(idPanier, status).subscribe(
+      () => {
+        // Mettre à jour le statut localement
+        const updatedStatus = this.status.find(st => st.id === status);
+        if (updatedStatus) {
+          order.statutCommande = updatedStatus;
+        }
+      },
+      error => {
+        console.error('Error during recharge:', error);
+      }
+    );
   }
+  
 
   public onPageChanged(event) {
     this.page = event;

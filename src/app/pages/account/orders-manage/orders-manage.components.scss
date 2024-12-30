@@ -1,7 +1,7 @@
 .orders-table.mat-mdc-table {
     display: block;
     overflow-x:auto;
-    align-items: start;
+    align-items: center;
     width: 100%;
     .mat-mdc-row, .mat-mdc-header-row {
         display: flex;
@@ -59,7 +59,7 @@
   }
   .select{
     padding: 5px;
-    background-color: #c54896;
+    background-color: #feb930;
     align-items: start;
     width: 10px;
     border-radius: 10px;
@@ -67,5 +67,34 @@
         background-color: red;
     }
   }
+
+  mat-icon{
+    color: #feb930;
+  }
+
+
+  .DELIVERED{
+    padding: 5px;
+    background-color: #7CB888;
+    align-items: start;
+    width: 10px;
+    border-radius: 10px; 
+   }
+  .PENDING{
+    padding: 5px;
+    background-color: #FFB930;
+    align-items: start;
+    width: 10px;
+    border-radius: 10px;  }
+  .CANCEL{
+    padding: 5px;
+    background-color: rgb(241, 63, 63);
+    align-items: start;
+    width: 10px;
+    border-radius: 10px;}
   
-  
+    .mat-mdc-row {
+      display: flex;
+      gap: 20px; /* Ajustez l'espacement entre les colonnes */
+    }
+    
