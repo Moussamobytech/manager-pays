@@ -1,5 +1,10 @@
 <div class="p-2">
-    <mat-card>
+
+  <mat-card >
+    <input class="search-card" type="text" placeholder="Recherche..." [(ngModel)]="searchText" (keyup)="search()">
+  </mat-card>
+
+    <mat-card>      
       <div class="mat-mdc-table orders-table">
         <div class="mat-mdc-header-row">
           <div class="mat-mdc-header-cell image">Image</div>

@@ -34,7 +34,7 @@ export const routes: Routes = [
           { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
           { path: 'how_works', component: HowWorksComponent, data: { breadcrumb: 'Comment ca marche ?' } },
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
-          { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Mes commandes effectuées' } }, 
+          { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Mes achats' } }, 
           { path: 'orders-manage', component: OrdersManageComponents, data: {  breadcrumb: 'Gestion commandes' } },
       ]
   }

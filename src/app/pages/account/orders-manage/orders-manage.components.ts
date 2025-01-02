@@ -28,6 +28,8 @@ export class OrdersManageComponents implements OnInit {
   public count:any;
   public sortings = ['Sort by Default', 'Best match', 'Lowest first', 'Highest first'];
   public sort:any;
+  searchText: string = '';
+
 
   public page:any;
   public settings: Settings;
@@ -107,6 +109,20 @@ export class OrdersManageComponents implements OnInit {
       }
     );
   }
+
+  search() {
+    if (this.searchText.trim()) {
+      this.orders = this.orders.filter(order =>
+        order.codeCommande.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        order.produitNom.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        order.clientPhoneNumber.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        order.clientUsername.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    } else {
+      this.getAllCommande(); // Recharge les commandes si la recherche est vide
+    }
+  }
+  
   
 
   public onPageChanged(event) {
