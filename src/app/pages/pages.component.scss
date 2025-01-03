@@ -35,6 +35,13 @@ div.scrollmenu a {
 // div.scrollmenu a:hover {
 //     // background-color: #777;
 // }
+
+.truncate-btnp {
+  max-width: 130px;
+  overflow: hidden ;
+  text-overflow: ellipsis;
+  white-space: nowrap ;
+}
 .suggestion-container{
   position: relative;
 }

@@ -191,7 +191,7 @@
     "PAGE_SELLER_TITLE":"Détails des contacts effectuées par les clients",
     "LAST": "Derniers produits",
     "LIBELLE": "Libelle",
-    "PRICE": "Prix",
+    "PRICE": "Prix de base",
     "PRICE_PROMOTION": "Prix promotion",
     "DESC": "Description",
     "ADDITIONAL_INFO": "Information additionel",
@@ -224,9 +224,10 @@
     "PRICE": "Prix"
   },
   "SORTINGS": {
-    "SORT_BY_DEFAULT": "Trier par défaut",
+    "SORT_BY_DEFAULT": "Défaut",
+    "MOST_RECENT": "Plus récent",
     "BEST_MATCH": "Meilleure produits",
-    "LOWEST_FIRST": "Prix les plus bas en premier",
-    "HIGHEST_FIRST": "Prix les plus élevés en premier"
+    "LOWEST_FIRST": "Prix bas",
+    "HIGHEST_FIRST": "Prix élevés"
   }
 }

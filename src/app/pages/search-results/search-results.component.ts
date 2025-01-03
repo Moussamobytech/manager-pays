@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 // import { Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { Product } from 'src/app/models/product.models';
@@ -29,7 +29,10 @@ export class SearchResultsComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
         const searchTerm = params['q'];
         if (searchTerm) {
-          return this.AppService.searchProducts(searchTerm).subscribe(products => {
+          return this.AppService.searchProducts(searchTerm).pipe(
+            map(products => products.filter(product => product.etat !== "INACTIF")),
+            map(filteredProducts => filteredProducts.slice(0, 15))
+          ).subscribe(products => {
             this.products = products;
           });
         } else {

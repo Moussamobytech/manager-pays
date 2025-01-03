@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data, AppService } from '../../app.service';
 import { Product } from 'src/app/models/product.models';
+import { DomHandlerService } from 'src/app/dom-handler.service';
 // import { Product } from '../../app.models';
 
 @Component({
@@ -12,70 +13,30 @@ import { Product } from 'src/app/models/product.models';
 export class ControlsComponent implements OnInit {
   @Input() product: Product;
   @Input() type: string;
-  @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter();
+  @Input() viewCol;
+  // @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter();
   @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
   public count:number = 1;
-  public align = 'center center';
+  // public align = 'center center';
+  styleConditions: boolean;
+
   constructor(public appService:AppService, public snackBar: MatSnackBar) { }
-
   ngOnInit() {
-    if(this.product){
-      if(this.product.cartCount > 0){
-        this.count = this.product.cartCount;
-      }
-    }
-    this.layoutAlign();
+    // if(this.product){
+    //   if(this.product.cartCount > 0){
+    //     this.count = this.product.cartCount;
+    //   }
+    // }
+    // this.layoutAlign();
+    this.styleConditions = ((window.innerWidth<=370&&this.viewCol==25)||(window.innerWidth<860&&window.innerWidth>=600&&!(this.viewCol==33.3)));
   }
 
-  public layoutAlign(){
-    if(this.type == 'all'){
-      this.align = 'space-between center';
-    }
-    else if(this.type == 'wish'){
-      this.align = 'start center';
-    }
-    else{
-      this.align = 'center center';
-    }
-  }
-
-
-
-  public increment(){
-    if(this.count < this.product.availibilityCount){
-      this.count++;
-      let obj = {
-        productId: this.product.id,
-        soldQuantity: this.count,
-        total: this.count * this.product.newPrice
-      }
-      this.changeQuantity(obj);
-    }
-    else{
-      this.snackBar.open('You can not choose more items than available. In stock ' + this.count + ' items.', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-    }
-  }
-
-  public decrement(){
-    if(this.count > 1){
-      this.count--;
-      let obj = {
-        productId: this.product.id,
-        soldQuantity: this.count,
-        total: this.count * this.product.newPrice
-      }
-      this.changeQuantity(obj);
-    }
-  }
-
-  public addToCompare(product:Product){
-    this.appService.addToCompare(product);
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.styleConditions = this.styleConditions;
   }
 
   public openWA(product:Product){
-    console.log(window);
-    console.log(window.navigator);
-
     this.appService.saveLogs({
       'username' : window.navigator.product,
       'utilisateur' : window.navigator.productSub,
@@ -90,41 +51,85 @@ export class ControlsComponent implements OnInit {
       'dateAction' : '',
       'language' : window.navigator.language
     });
-    let url = "https://wa.me/"+((((product.contact).length == 8)? "+223"+product.contact : "+225"+product.contact) || '+22376007979')+"?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20"+product?.nom+".%20Prix%20%3A%20"+product?.priceBasic+""
-    window.open(url,"_blank");
+    let url = "https://wa.me/" + ((product.contact.length === 8 ? "223" + product.contact : "225" + product.contact) || "22376007979") +
+    "?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20" + encodeURIComponent(product?.nom || "") + ".%20Prix%20%3A%20" + encodeURIComponent(product?.priceBasic || "");
+      window.open(url,"_blank");
   }
 
-  public addToWishList(product: Product) {
-    this.appService.addToWishList(product);
-  }
+  // public layoutAlign(){
+  //   if(this.type == 'all'){
+  //     this.align = 'space-between center';
+  //   }
+  //   else if(this.type == 'wish'){
+  //     this.align = 'start center';
+  //   }
+  //   else{
+  //     this.align = 'center center';
+  //   }
+  // }
 
-  public addToCart(product: Product): void {
-    const currentProduct = this.appService.Data.cartList.find(item => item.id === product.id);
-    if (currentProduct) {
-      const availableCount = this.product.availibilityCount;
-      const addedCount = currentProduct.cartCount + this.count;
+  // public increment(){
+  //   if(this.count < this.product.availibilityCount){
+  //     this.count++;
+  //     let obj = {
+  //       productId: this.product.id,
+  //       soldQuantity: this.count,
+  //       total: this.count * this.product.newPrice
+  //     }
+  //     this.changeQuantity(obj);
+  //   }
+  //   else{
+  //     this.snackBar.open('You can not choose more items than available. In stock ' + this.count + ' items.', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+  //   }
+  // }
 
-      if (addedCount <= availableCount) {
-        product.cartCount = addedCount;
-      }
-      else{
-        const errorMessage = `You cannot add more items than available. In stock ${availableCount} items and you already added ${currentProduct.cartCount} item(s) to your cart`;
-        this.snackBar.open(errorMessage, '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
-        return;
-      }
-    }
-    else{
-      product.cartCount = this.count;
-    }
-    this.appService.addToCart(product);
-  }
+  // public decrement(){
+  //   if(this.count > 1){
+  //     this.count--;
+  //     let obj = {
+  //       productId: this.product.id,
+  //       soldQuantity: this.count,
+  //       total: this.count * this.product.newPrice
+  //     }
+  //     this.changeQuantity(obj);
+  //   }
+  // }
+  // public addToCompare(product:Product){
+  //   this.appService.addToCompare(product);
+  // }
 
-  public openProductDialog(event){
-    this.onOpenProductDialog.emit(event);
-  }
 
-  public changeQuantity(value){
-      this.onQuantityChange.emit(value);
-  }
+  // public addToWishList(product: Product) {
+  //   this.appService.addToWishList(product);
+  // }
+
+  // public addToCart(product: Product): void {
+  //   const currentProduct = this.appService.Data.cartList.find(item => item.id === product.id);
+  //   if (currentProduct) {
+  //     const availableCount = this.product.availibilityCount;
+  //     const addedCount = currentProduct.cartCount + this.count;
+
+  //     if (addedCount <= availableCount) {
+  //       product.cartCount = addedCount;
+  //     }
+  //     else{
+  //       const errorMessage = `You cannot add more items than available. In stock ${availableCount} items and you already added ${currentProduct.cartCount} item(s) to your cart`;
+  //       this.snackBar.open(errorMessage, '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
+  //       return;
+  //     }
+  //   }
+  //   else{
+  //     product.cartCount = this.count;
+  //   }
+  //   this.appService.addToCart(product);
+  // }
+
+  // public openProductDialog(event){
+  //   this.onOpenProductDialog.emit(event);
+  // }
+
+  // public changeQuantity(value){
+  //     this.onQuantityChange.emit(value);
+  // }
 
 }

@@ -28,7 +28,7 @@ export class AccountComponent implements OnInit {
     public sidenavOpen:boolean = true;
     public currentUser:any = this.auth.currentUser();
     public LogoForm: UntypedFormGroup;
-    defaultLogo ='../assets/images/icons/shop_icon.png';
+    defaultLogo ='../../../assets/images/icons/shop_icon.png';
     selectedLogo: File | null = null ;
     selectedLogoName : string = null;
 

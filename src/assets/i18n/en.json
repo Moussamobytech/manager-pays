@@ -228,9 +228,9 @@
     "PRICE": "Prix"
   },
   "SORTINGS": {
-    "SORT_BY_DEFAULT": "Trier par défaut",
-    "BEST_MATCH": "Meilleure correspondance",
-    "LOWEST_FIRST": "Prix les plus bas en premier",
-    "HIGHEST_FIRST": "Prix les plus élevés en premier"
+    "MOST_RECENT": "Plus récent",
+    "BEST_MATCH": "Meilleure produits",
+    "LOWEST_FIRST": "Prix bas en premier",
+    "HIGHEST_FIRST": "Prix élevés en premier"
   }
 }

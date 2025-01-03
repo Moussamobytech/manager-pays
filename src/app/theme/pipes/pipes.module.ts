@@ -12,6 +12,7 @@ import { UserTypePipe } from './userType.pipe';
 import { SafePipe } from './safe.pipe';
 import { ExportButtonShowPipe } from './export-button-show.pipe';
 import { CustomerSearchPipe } from './customer-search.pipe';
+import { DiscountConverterPipe } from './discountConverter.pipe';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { CustomerSearchPipe } from './customer-search.pipe';
       SafePipe,
       ExportButtonShowPipe,
       CustomerSearchPipe,
+      DiscountConverterPipe
    ],
     exports: [
       FilterByIdPipe,
@@ -42,6 +44,7 @@ import { CustomerSearchPipe } from './customer-search.pipe';
       SafePipe,
       ExportButtonShowPipe,
       CustomerSearchPipe,
+      DiscountConverterPipe
     ]
 })
 export class PipesModule { }

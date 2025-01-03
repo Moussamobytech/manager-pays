@@ -1,11 +1,4 @@
 <p>Résultats de recherche</p>
-<!-- <div *ngIf="products.length > 0; else noResults">
-  <div *ngFor="let product of products">
-    <h2>{{ product.nom }}</h2>
-    <p>{{ product.description }}</p>
-    <p>Prix: {{ product.prix }}</p>
-  </div>
-</div> -->
 
 <div class="grid-list" *ngIf="products.length > 0; else noResults">
   <div fxLayout="row wrap">
@@ -17,6 +10,6 @@
   </div>
 </div>
 <ng-template #noResults>
-  <p>Aucun produit trouvé</p>
+  <p>Aucun produit trouvé.</p>
 </ng-template>
 

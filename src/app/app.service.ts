@@ -40,9 +40,14 @@ export class AppService {
     public apiService: ApiService
   ) {}
 
-
-
-
+  infoSeller(username: string):Observable<any> {
+    try {
+      return this.apiService.get(`/users/info-for-seller?username=`+username);
+    } catch (error) {
+      console.log(error)
+      return null;
+    }
+  }
 
   getImage(fullUrl: any): Observable<any> {
     let reqOpts: any = {
@@ -88,42 +93,42 @@ export class AppService {
     return this.apiService.get('/produit/list');
   }
   public searchProducts(term: string): Observable<Product[]> {
-    return this.getAllProducts().pipe(
+    let products = this.getAllProducts().pipe(
       map(products =>
         products.filter((product: Product) =>
-          product.nom.toLowerCase().includes(term.toLowerCase()) || product.description.toLowerCase().includes(term.toLowerCase())
-          || product.categorieNom.toLowerCase().includes(term.toLowerCase())
+          product.nom.toLowerCase().includes(term.toLowerCase())
         )
       )
     );
+    return products;
   }
 
   private cache = new Map<string, any>();
 
   public searchProducts1(categories: Category[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
     const lowerTerm = term.toLowerCase().trim();
-
     if (this.cache.has(lowerTerm)) {
         return of(this.cache.get(lowerTerm)!);
     }
 
-    const startingProducts = products.filter(product => product.nom.toLowerCase().startsWith(lowerTerm))
-                                     .map(product => ({ type: 'product', item: product }));
-    const startingCategories = categories.filter(category => category.nom.toLowerCase().startsWith(lowerTerm))
-                                         .map(category => ({ type: 'category', item: category }));
+    const filterItems = <T extends { nom: string }>(items: T[], type: string): { type: string, item: T }[] => {
+      // first i check if element starts with the term
+      const startsWithTerm = items
+        .filter(item => item.nom.toLowerCase().startsWith(lowerTerm))
+        .map(item => ({ type, item }));
+      //Then element that contains the searchTerm but excluding the one starting with the term
+      const includesTerm = items
+        .filter(item =>
+          !item.nom.toLowerCase().startsWith(lowerTerm) && item.nom.toLowerCase().includes(lowerTerm))
+        .map(item => ({ type, item }));
+      return [...startsWithTerm, ...includesTerm];
+    };
+    // filtered products and categories
+    const matchingProducts = filterItems(products, 'product');
+    const matchingCategories = filterItems(categories, 'category');
+    let combinedResults: { type: string, item: Category | Product }[] = [...matchingProducts, ...matchingCategories];
 
-    // Then include items that contain the term anywhere
-    let combinedResults: { type: string, item: Category | Product }[] = [...startingProducts, ...startingCategories];
-
-    if (combinedResults.length === 0) {
-        const includingProducts = products.filter(product => product.nom.toLowerCase().includes(lowerTerm))
-                                          .map(product => ({ type: 'product', item: product }));
-        const includingCategories = categories.filter(category => category.nom.toLowerCase().includes(lowerTerm))
-                                              .map(category => ({ type: 'category', item: category }));
-        combinedResults = [...includingProducts, ...includingCategories];
-    }
-
-    // Deduplicate results based on the name
+    // remoing deduplicated results
     const uniqueResults: { type: string, item: Category | Product }[] = [];
     const seenNames = new Set<string>();
 
@@ -135,11 +140,11 @@ export class AppService {
         }
     });
 
-    this.cache.set(lowerTerm, uniqueResults); // Cache combined results
-
+    // cache the combined results for future researches
+    this.cache.set(lowerTerm, uniqueResults);
     return of(uniqueResults);
-  }
 
+  }
 
   public getProductById(id): Observable<any> {
     return this.apiService.get('/produit/find/' + id);
@@ -365,23 +370,6 @@ export class AppService {
   public getBrands(): Observable<any> {
     return this.apiService.get('/brand/liste');
   }
-  // public getBrands(){
-  //     return [
-  //         { name: 'aloha', image: 'assets/images/brands/aloha.png' },
-  //         { name: 'dream', image: 'assets/images/brands/dream.png' },
-  //         { name: 'congrats', image: 'assets/images/brands/congrats.png' },
-  //         { name: 'best', image: 'assets/images/brands/best.png' },
-  //         { name: 'original', image: 'assets/images/brands/original.png' },
-  //         { name: 'retro', image: 'assets/images/brands/retro.png' },
-  //         { name: 'king', image: 'assets/images/brands/king.png' },
-  //         { name: 'love', image: 'assets/images/brands/love.png' },
-  //         { name: 'the', image: 'assets/images/brands/the.png' },
-  //         { name: 'easter', image: 'assets/images/brands/easter.png' },
-  //         { name: 'with', image: 'assets/images/brands/with.png' },
-  //         { name: 'special', image: 'assets/images/brands/special.png' },
-  //         { name: 'bravo', image: 'assets/images/brands/bravo.png' }
-  //     ];
-  // }
 
   public getCountries() {
     return [

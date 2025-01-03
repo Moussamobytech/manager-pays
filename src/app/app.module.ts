@@ -44,10 +44,11 @@ import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminConnectionComponent } from './pages/admin-connection/admin-connection.component';
-import { SearchResultsComponent } from './pages/search-results/search-results.component';
+// import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { AnalyticsService } from './services/analitycs.service';
 import { InfluencerService } from './services/influencer.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { SearchResultsModule } from './pages/search-results/search-results.module';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
-    SearchResultsComponent
+    // SearchResultsComponent
 
   ],
   imports: [
@@ -89,7 +90,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    SearchResultsModule
   ],
   providers: [
     // provideClientHydration(),

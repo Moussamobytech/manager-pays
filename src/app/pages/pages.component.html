@@ -50,24 +50,26 @@
                   </button>
               </form> -->
               <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
-                <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="mat-elevation-z0 categories">{{ category?.nom }}<mat-icon iconPositionEnd>arrow_drop_down</mat-icon></button>
+                <button mat-raised-button [matMenuTriggerFor]="categoriesMenu" #categoriesMenuTrigger="matMenuTrigger" type="button" class="categories">
+                  <p class="truncate-btnp">{{ category?.nom }}</p><mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+                </button>
                 <mat-menu #categoriesMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="categories-dropdown">
                     <span (mouseleave)="categoriesMenuTrigger.closeMenu()" >
-                        <app-category-list [categories]="categories" [categoryParentId]="0" (change)="changeCategory($event)"></app-category-list>
+                        <app-category-list [categories]="categories" (change)="changeCategory($event)"></app-category-list>
                     </span>
                 </mat-menu>
-                <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex>
+                <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" autocomplete="off" fxFlex>
                 <button mat-mini-fab type="submit"  class="search-btn mat-elevation-z0 text-muted">
                   <mat-icon>search</mat-icon>
-              </button>
+                </button>
               </form>
               <div class="suggestion-container" *ngIf="showSuggestions && suggestions.length > 0">
                 <div class="suggestions-list" appClickOutside="onClickOutside()" #suggestionsContainer>
                     <ul>
                         <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
                             <mat-icon>search</mat-icon>
-                            <span *ngIf="suggestion.type === 'product'"><b>Produit: </b> {{ suggestion.item.nom }}</span>
-                            <span *ngIf="suggestion.type === 'category'"><b>Categorie: </b> {{ suggestion.item.nom }}</span>
+                            <span class="text-truncate" *ngIf="suggestion.type === 'product'"><b>Produit: </b> {{ suggestion.item.nom }}</span>
+                            <span class="text-truncate" *ngIf="suggestion.type === 'category'"><b>Categorie: </b> {{ suggestion.item.nom }}</span>
                         </li>
                     </ul>
                 </div>

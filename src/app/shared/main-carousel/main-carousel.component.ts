@@ -8,14 +8,14 @@ import { SwiperConfigInterface, SwiperPaginationInterface } from '../../theme/co
 })
 export class MainCarouselComponent implements OnInit {
   @Input('slides') slides: Array<any> = [];
- 
+
   public config: SwiperConfigInterface = {};
 
   private pagination: SwiperPaginationInterface = {
     el: '.swiper-pagination',
     clickable: true
   };
-  
+
   constructor() { }
 
   ngOnInit() { }
@@ -23,14 +23,14 @@ export class MainCarouselComponent implements OnInit {
   ngAfterViewInit(){
     this.config = {
       slidesPerView: 1,
-      spaceBetween: 0,         
+      spaceBetween: 0,
       keyboard: true,
       navigation: true,
       pagination: this.pagination,
-      grabCursor: true,        
+      grabCursor: true,
       loop: false,
       preloadImages: false,
-      lazy: true,     
+      lazy: true,
       autoplay: {
         delay: 6000,
         disableOnInteraction: false

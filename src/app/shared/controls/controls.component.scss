@@ -1,9 +1,31 @@
 .overflow-auto i {
-  font-size: 25px; /* Définir la taille de la police */
-  margin: 0 10px; /* Ajouter une marge horizontale de 5 pixels autour de chaque icône */
+  font-size: 25px;
+  margin: 0 10px;
 }
 
-.rose{
+.buy-btn{
   background-color: #c54896;
   color: white;
+}
+
+@media screen and (max-width: 420px) {
+  .buy-btn{
+    font-size: smaller;
+  }
+  @media screen and (max-width: 380px) {
+    .buy-btn{
+      font-size:xx-small;
+    }
+  }
+  @media screen and (max-width: 370px) {
+    .product-contact{
+      text-align: center;
+      .buy-btn{
+        font-size:15px;
+      }
+      // a {
+      //   display:block;margin-top:15px;
+      // }
+    }
+  }
 }

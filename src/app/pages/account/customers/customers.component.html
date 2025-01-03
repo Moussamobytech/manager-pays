@@ -145,7 +145,7 @@
 <div *ngIf="customers" fxLayout="row wrap">
   <div fxFlex="100" class="p-2">
       <mat-card class="text-center">
-          <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'Précédent'" [nextLabel]="'Suivant'" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+          <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'Précédent'" [nextLabel]="'Suivant'" [maxSize]="3" (pageChange)="onPageChanged($event)"></pagination-controls>
       </mat-card>
   </div>
 </div>

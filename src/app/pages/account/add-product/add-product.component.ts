@@ -42,9 +42,6 @@ export class AddProductComponent implements OnInit {
       "weight": "5",
       "user": this.currentUser.username,
       "categorie": [null, Validators.required ]
-      // "discount": null,
-      // "color": null,
-      // "size": null,
     });
     this.getCategories();
     this.sub = this.activatedRoute.params.subscribe(params => {
@@ -64,10 +61,8 @@ export class AddProductComponent implements OnInit {
   }
   public getCategories(){
     this.category.categories().subscribe(data => {
-    // this.appService.getCategories().subscribe(data => {
       console.log(data)
       this.categories = data;
-      // this.categories.shift();
     });
   }
 
@@ -145,7 +140,7 @@ export class AddProductComponent implements OnInit {
         }
 
         if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
-          this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
+          this.commonService.errorToast("Le prix promo ne peut pas être supérieur au prix de base")
           return;
         }
         // data.append('images', this.form.value.images);
@@ -226,7 +221,7 @@ export class AddProductComponent implements OnInit {
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
         // data.append('weight', "5");
-        // console.log("images ::: ",this.form.value.images)
+        console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",JSON.stringify(data))
         let res = await this.productService.edit(this.id,data);
         console.log("res save product :::::::: ",res)

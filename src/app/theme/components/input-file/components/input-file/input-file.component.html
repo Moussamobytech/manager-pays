@@ -1,22 +1,20 @@
 <div class="input-file-container">
-    <label class="mat-orphan-label" [for]="id" [class.active]="files?.length" [innerHtml]="placeholder" *ngIf="placeholder"></label>
-    <div class="files-container">
+  <label class="mat-orphan-label" [for]="id" [class.active]="files?.length" [innerHtml]="placeholder" *ngIf="placeholder"></label>
+  <div class="files-container" fxFlexFill fxLayoutAlign="center center">
+    <ng-container *ngFor="let file of files; let i = index">
+      <div fxflex="50" class="file-container" [ngClass]="classAnimation">
+          <ng-container *ngTemplateOutlet="fileTemplate; context: { $implicit: file, index: i }"></ng-container>
+      </div>
+    </ng-container>
 
-        <ng-container *ngFor="let file of files; let i = index">
-            <div class="file-container" [ngClass]="classAnimation">
-                <ng-container *ngTemplateOutlet="fileTemplate; context: { $implicit: file, index: i }"></ng-container>
-            </div>
+    <ng-container *ngIf="canAddFile">
+      <div fxflex="50" class="file-container">
+        <ng-container *ngIf="!addLink; else linkTemplate">
+            <ng-container *ngTemplateOutlet="addTemplate"></ng-container>
         </ng-container>
-
-        <ng-container *ngIf="canAddFile">
-            <div class="file-container">
-                <ng-container *ngIf="!addLink; else linkTemplate">
-                    <ng-container *ngTemplateOutlet="addTemplate"></ng-container>
-                </ng-container>
-            </div>
-        </ng-container>
-    </div>
-
+      </div>
+    </ng-container>
+  </div>
 </div>
 
 <ng-template #addTemplate>

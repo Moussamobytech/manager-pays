@@ -30,8 +30,8 @@ export const routes: Routes = [
           { path: 'dashboard', component: DashboardComponent, data: {  breadcrumb: 'Dashboard' } },
           { path: 'information', component: InformationComponent, data: {  breadcrumb: 'Information' } },
           { path: 'products-seller', component: ProductsComponent, data: {  breadcrumb: 'Produits' } },
-          { path: 'add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
-          { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
+          { path: 'products-seller/add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
+          { path: 'products-seller/edit-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
           { path: 'how_works', component: HowWorksComponent, data: { breadcrumb: 'Comment ca marche ?' } },
 
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },

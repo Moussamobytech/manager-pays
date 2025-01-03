@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { throwError, from, Observable } from 'rxjs';
+import {HttpClient,HttpHeaders,HttpParams,HttpErrorResponse} from '@angular/common/http';
+import { throwError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { NgxSpinnerService } from 'ngx-spinner';

@@ -91,6 +91,10 @@ export class AddProductComponent implements OnInit {
             data.append('images', file);
           });
         });
+        if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
+          this.commonService.errorToast("Le prix promo ne peut pas être supérieur au prix de base")
+          return;
+        }
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
         data.append('weight', "5");
