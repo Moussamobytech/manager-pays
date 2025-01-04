@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class ImageCompressService {
   constructor() {}
 
-  async compressImage(file: File, maxWidth: number, maxHeight: number, quality: number = 80): Promise<Blob> {
+  async compressImage(file: File, maxWidth: number=1200, maxHeight: number=800, quality: number = 80, normal: boolean = true ): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const image = new Image();
       const reader = new FileReader();
@@ -15,13 +15,9 @@ export class ImageCompressService {
         image.src = event.target.result;
 
         image.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d')!;
-
           let { width, height } = image;
 
-          // Resize maintaining aspect ratio
-          if (width > maxWidth || height > maxHeight) {
+          if (normal && (width > maxWidth || height > maxHeight)) {
             if (width > height) {
               height = (maxHeight / width) * height;
               width = maxWidth;
@@ -31,12 +27,15 @@ export class ImageCompressService {
             }
           }
 
-          canvas.width = width;
-          canvas.height = height;
+          // Create canvas
+          const canvas = document.createElement('canvas');
+          canvas.width = normal ? width : image.width;
+          canvas.height = normal ? height : image.height;
 
-          ctx.drawImage(image, 0, 0, width, height);
+          const ctx = canvas.getContext('2d')!;
+          ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-          // Blob conversion
+          // Convert canvas to blob
           canvas.toBlob(
             (blob) => {
               if (blob) {
@@ -46,7 +45,9 @@ export class ImageCompressService {
               }
             },
             'image/jpeg',
-            (file.size/1000>350/*if more than 350kb*/)?(quality/100):(100/100) //values expected (0.1 - 1)
+            file.size / 1000 > 350 // Compression quality if file > 350 KB
+              ? quality / 100
+              : 1 // Use highest quality for smaller files
           );
         };
 
@@ -59,4 +60,5 @@ export class ImageCompressService {
       reader.readAsDataURL(file);
     });
   }
+
 }

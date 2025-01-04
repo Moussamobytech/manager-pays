@@ -116,7 +116,7 @@ export class AddProductComponent implements OnInit {
   compressAndPrepareImages () {
 
     const compressedImagePromises = this.form.value.images.map(async (item: { file: File }) => {
-      const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 0.7);
+      const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 70);
       const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
       const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
       return compressedFile;
