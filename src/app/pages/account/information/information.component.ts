@@ -139,10 +139,10 @@ export class InformationComponent implements OnInit {
   compressAndPrepareImages () {
     const compressedImagePromises = this.infoForm.value.banners.map(async (item: any) => {
       if(item.file){
-        const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 0.7);
-        const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-        const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
-        return compressedFile;
+        // const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 0.7);
+        // const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+        // const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
+        return item.file;
       }else{
         let compressedFile = await this.convertUrlToFile(item.preview);
         return compressedFile;
