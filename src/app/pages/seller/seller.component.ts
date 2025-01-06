@@ -101,7 +101,9 @@ export class SellerComponent implements OnInit {
         (this.sellerInfo.bg2)?{ image: this.imgsLink+this.sellerInfo.bg2}:null,
         (this.sellerInfo.bg3)?{ image: this.imgsLink+this.sellerInfo.bg3}:null,
       ].filter((item)=>item!=null);
-      // console.log("sellerInfo :::: ",this.sellerInfo)
+      if(!this.sellerInfo?.nom){
+        this.cm.goTo("/sellers/denied/not-allowed");
+      }
     });
   }
 

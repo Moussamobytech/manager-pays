@@ -76,7 +76,7 @@
             </mat-form-field>
           </div>
           <div *ngIf="domHandlerService.window?.innerWidth<700">
-            <h3>Lien du boutique</h3>
+            <h3>Partager lien boutique</h3>
             <div fxLayout="row" fxLayoutAlign="space-between center" class="copy-container">
               <input matInput type="text" [value]="fullUrl" class="copy-input" #linkInput readonly>
               <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
