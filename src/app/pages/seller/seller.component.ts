@@ -101,7 +101,7 @@ export class SellerComponent implements OnInit {
         (this.sellerInfo.bg2)?{ image: this.imgsLink+this.sellerInfo.bg2}:null,
         (this.sellerInfo.bg3)?{ image: this.imgsLink+this.sellerInfo.bg3}:null,
       ].filter((item)=>item!=null);
-      console.log("sellerInfo :::: ",this.sellerInfo)
+      // console.log("sellerInfo :::: ",this.sellerInfo)
     });
   }
 
@@ -165,6 +165,7 @@ export class SellerComponent implements OnInit {
 
   public async toggleAllCategories(isChecked: boolean) {
     this.checkedCategories = isChecked? this.usedCategories.map((category) => category.id) : [];
+    this.updateAllBoxSelection();
     await this.filterProductsByCheckedCategories();
   }
 
@@ -192,6 +193,7 @@ export class SellerComponent implements OnInit {
       const price = Number(product.pricePromotion) || Number(product.priceBasic);
       return (price >= Math.min(this.priceFrom, this.priceTo) && price <= Math.max(this.priceFrom, this.priceTo));
     });
+    this.sortProducts()
   }
 
   private sortProducts() {
@@ -245,6 +247,13 @@ export class SellerComponent implements OnInit {
   selectSuggestion(suggestion: any,type:string): void {
     if(type == 'product'){
       this.searchTerm = suggestion.nom;
+      this.sellerProducts = this.unchangedSellerProducts.filter((product) =>
+        product.nom.toLocaleLowerCase().localeCompare(suggestion.nom.toLocaleLowerCase(), 'fr', { sensitivity: 'base' }) === 0
+      );
+      this.checkedCategories = Array.from(
+        new Set(this.sellerProducts.map((product) => product.categorie))
+      );
+      this.updateAllBoxSelection();
     }else{
       this.searchTerm = suggestion.nom;
       this.checkedCategories = [suggestion.id];

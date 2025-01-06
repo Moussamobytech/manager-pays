@@ -106,7 +106,9 @@ export class AppService {
   private cache = new Map<string, any>();
 
   public searchProducts1(categories: Category[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
-    const lowerTerm = term.toLowerCase().trim();
+    // accents insensitivity
+    const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const lowerTerm = normalizeString(term).trim();
     if (this.cache.has(lowerTerm)) {
         return of(this.cache.get(lowerTerm)!);
     }
@@ -114,12 +116,12 @@ export class AppService {
     const filterItems = <T extends { nom: string }>(items: T[], type: string): { type: string, item: T }[] => {
       // first i check if element starts with the term
       const startsWithTerm = items
-        .filter(item => item.nom.toLowerCase().startsWith(lowerTerm))
+        .filter(item => normalizeString(item.nom).startsWith(lowerTerm))
         .map(item => ({ type, item }));
       //Then element that contains the searchTerm but excluding the one starting with the term
       const includesTerm = items
         .filter(item =>
-          !item.nom.toLowerCase().startsWith(lowerTerm) && item.nom.toLowerCase().includes(lowerTerm))
+          !normalizeString(item.nom).startsWith(lowerTerm) && normalizeString(item.nom).includes(lowerTerm))
         .map(item => ({ type, item }));
       return [...startsWithTerm, ...includesTerm];
     };
