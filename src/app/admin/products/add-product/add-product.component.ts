@@ -29,9 +29,6 @@ export class AddProductComponent implements OnInit {
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
     private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router, private imgCompressService: ImageCompressService ) { }
 
-  // constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute ) { }
-
-
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
     console.log("currentUser :::::::: ",this.currentUser)
@@ -44,9 +41,6 @@ export class AddProductComponent implements OnInit {
       "weight": "5",
       "user": this.currentUser?.username || null,
       "categorie": [null, Validators.required ]
-      // "discount": null,
-      // "color": null,
-      // "size": null,
     });
     this.getCategories();
     this.getUsers();
@@ -116,6 +110,18 @@ export class AddProductComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  compressAndPrepareImages () {
+
+    const compressedImagePromises = this.form.value.images.map(async (item: { file: File }) => {
+      const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 70);
+      const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+      const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
+      return compressedFile;
+    });
+
+    return Promise.all(compressedImagePromises);
   }
 
   async edit(){

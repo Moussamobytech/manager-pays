@@ -19,60 +19,58 @@ export class AuthenticationService {
 
     public async updateUserInfo(id : any, data : any){
         try {
-            let res : any = await this.api.put('/users/update-user?id='+id,data).toPromise()
-            console.log("res updateUserInfo :::: ",res);
+            let res : any = await this.api.putFile('/users/update-user?id='+id,data).toPromise()
+            // console.log("res updateUserInfo :::: ",res);
             if (res) {
                 sessionStorage.setItem('currentUser', JSON.stringify(res));
             }
             return "OK"
         } catch (error : any) {
-            console.log(error);
+            console.error(error);
             return "KO"
         }
     }
 
     public async updateUser(id : any, data : any){
       try {
-        console.log(data)
+        // console.log(data)
           let res : any = await this.api.put('/users/update-user?id='+id,data).toPromise()
           return "OK"
       } catch (error : any) {
-          console.log(error);
+          console.error(error);
           return "KO"
       }
   }
 
   public async updatePassword(data : any){
     try {
-      console.log("::::::::::",data)
+      // console.log("::::::::::",data)
         let res : any = await this.api.post('/users/change-password',data).toPromise()
-        console.log("::::::RESSSSSSSSSSSS::::",res)
+        // console.log("::::::RESSSSSSSSSSSS::::",res)
 
         return "OK"
     } catch (error : any) {
-        console.log(error);
+        console.error(error);
         return "KO"
     }
   }
 
   public reset(username : any){
-      console.log("::::::::::",username)
+      // console.log("::::::::::",username)
       return this.api.get('/users/reset-forgoten-password?username='+username)
 
   }
 
   public delete(username : any){
-      console.log("::::::::::",username)
+      // console.log("::::::::::",username)
       return this.api.get('/users/delete-user?username='+username)
 
   }
 
   public uploadImange(username : any, file: File){
-
     const formdata = new FormData();
     formdata.append("file", file, file.name);
-      return this.api.postFile('/users/update-user-image?username='+username,formdata)
-
+      return this.api.postFile('/users/update-user-image?username='+username,formdata);
   }
 
 
@@ -90,21 +88,20 @@ resetPassword(username: string, newpassword: string): Observable<any> {
         if (this.user == null || this.user == undefined) {
             this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
         }
-        console.log(this.user);
+        // console.log(this.user);
 
         return this.user;
     }
 
     async info(username: string): Promise<any> {
-        try {
-            let currentUser = await this.api.get(`/users/info-user-by-username?username=`+username).toPromise();
-            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-            return currentUser;
-        } catch (error) {
-            console.log(error)
-            return null;
-        }
-
+      try {
+        let currentUser = await this.api.get(`/users/info-user-by-username?username=`+username).toPromise();
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        return currentUser;
+      } catch (error) {
+        console.error(error)
+        return null;
+      }
     }
 
     getAllUsers():Observable<User[]> {
@@ -112,7 +109,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
         let users:Observable<User[]> = this.api.get("users/list");
         return users;
       }catch(error){
-        console.log("getAllusers() error: "+error)
+        console.error("getAllusers() error: "+error)
         return null;
       }
     }
@@ -135,7 +132,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
               // login successful if there's a jwt token in the response
               if (user && user.token) {
                   let roles = user.authorities[0].authority
-                  console.log("roles :: ", roles);
+                  // console.log("roles :: ", roles);
                   // store user details and jwt in session
                   sessionStorage.setItem('currentUser', JSON.stringify(user));
                   sessionStorage.setItem('auth-token', JSON.stringify(user.token));
@@ -160,7 +157,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * @param password password of user
      */
     signup(formData: any): any {
-      console.log(formData)
+      // console.log(formData)
         return this.api.post(`/users/register`, formData);
     }
 
@@ -179,7 +176,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
 
 
     recharge(amount: number, userId: string): Observable<any> {
-      console.log('Request URL:', `/users/recharge/${userId}?amount=${amount}`); // Debugging line
+      // console.log('Request URL:', `/users/recharge/${userId}?amount=${amount}`); // Debugging line
 
       return this.api.post(`/users/recharge/${userId}?amount=${amount}`, {});
     }

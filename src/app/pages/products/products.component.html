@@ -16,7 +16,7 @@
                     <!-- <div class="categories-wrapper categories-dropdown" > -->
 
                         <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false" >
-                            <app-category-list [categories]="allCategories"  [categoryParentId]="0"  (change)="onChangeCategory($event)"></app-category-list>
+                            <app-category-list [categories]="allCategories"  (change)="onChangeCategory($event)"></app-category-list>
                         </ng-scrollbar>
                     </div>
                 </mat-expansion-panel>

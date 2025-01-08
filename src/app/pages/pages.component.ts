@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Settings, AppSettings } from '../app.settings';
 import { AppService } from '../app.service';
 // import { Category, Product } from '../app.models';
@@ -10,7 +10,7 @@ import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.models';
 import { Product } from '../models/product.models';
 import { FormControl } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, of, Subject, Subscription, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, of, Subject, Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pages',
@@ -21,7 +21,7 @@ import { catchError, debounceTime, distinctUntilChanged, of, Subject, Subscripti
 export class PagesComponent implements OnInit {
   public showBackToTop:boolean = false;
   public categories:Category[];
-  public category:Category;
+  public category:Category;//categorie selectionnée au  niveau de la bar de recherche
   public sidenavMenuItems:Array<any>;
   @ViewChild('sidenav', { static: true }) sidenav:any;
   @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
@@ -45,6 +45,7 @@ export class PagesComponent implements OnInit {
               public produitService : ProductService,
               public sidenavMenuService:SidenavMenuService,
               public router:Router,
+              public activatedRoute:ActivatedRoute,
               public domHandlerService: DomHandlerService,
               private cdRef: ChangeDetectorRef) {
     this.settings = this.appSettings.settings;
@@ -53,11 +54,10 @@ export class PagesComponent implements OnInit {
 
 
   async ngOnInit() {
-    // this.getCategoriesSidenav();
-    let res = await this.appService.getCategoriesSidenav().toPromise()
-    this.getAllProduit();
     // console.log("this.menuItems res :::::: ",res)
+    let res = await this.appService.getCategoriesSidenav().toPromise()
     this.sidenavMenuItems = res;
+    this.getAllProduits();
     this.getCategories();
     setTimeout(() => {
       this.settings.theme = 'fidelity';
@@ -118,7 +118,7 @@ export class PagesComponent implements OnInit {
 
       data.push({"nom":"Tous", "cle":"all"})
       this.appService.Data.categories = data;
-    })
+    });
   }
 
   public async getCategoriesSidenav(){
@@ -141,26 +141,18 @@ export class PagesComponent implements OnInit {
   //   }
   // }
   public changeCategory(event) {
-    if (event.target) {
-      const selectedCategory = this.categories.find(category => category.nom === event.target.innerText);
+    if (event) {
+      const selectedCategory = this.categories.find(category => (category.cle === event)||category.id === event);
       if (selectedCategory) {
         this.category = selectedCategory;
-        this.router.navigate(['/products', this.category.nom]); // Naviguer vers la page des produits avec l'ID de la catégorie
+        // Naviguer vers la page des produits avec l'ID de la catégorie
+        this.router.navigate(['/products', this.category.cle]);
       }
     }
     if (this.domHandlerService.window?.innerWidth < 960) {
       this.stopClickPropagate(event);
     }
   }
-
-  // public changeCategory(event){
-  //   if(event.target){
-  //     this.category = this.categories.filter(category => category.nom == event.target.innerText)[0];
-  //   }
-  //   if(this.domHandlerService.window?.innerWidth < 960){
-  //     this.stopClickPropagate(event);
-  //   }
-  // }
 
   public remove(product) {
       const index: number = this.appService.Data.cartList.indexOf(product);
@@ -195,21 +187,20 @@ export class PagesComponent implements OnInit {
   public onSearch(event: Event): void {
     event.preventDefault();
     if (this.searchTerm) {
-      console.log(":::::::::searchTerm ",this.searchTerm.value)
+      // console.log(":::::::::searchTerm ",this.searchTerm.value)
       this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
-
     }
   }
 
 
-  public async getProduit() {
-    let res : Array<Product> = await this.produitService.products()
-    console.log("res product :::::::: ",res)
-    this.produit = res
-    // this.appService.getAllProducts().subscribe(data => {
-    //   this.produit = data;
-    // });
-  }
+  // public async getProduit() {
+  //   let res : Array<Product> = await this.produitService.products()
+  //   console.log("res product :::::::: ",res)
+  //   this.produit = res
+  //   // this.appService.getAllProducts().subscribe(data => {
+  //   //   this.produit = data;
+  //   // });
+  // }
   public scrollToTop(){
     var scrollDuration = 200;
     var scrollStep = -this.domHandlerService.window?.pageYOffset / (scrollDuration / 20);
@@ -263,10 +254,15 @@ export class PagesComponent implements OnInit {
   }
 
 
-  async getAllProduit() {
+  async getAllProduits() {
     try {
-      this.appService.getAllProducts().subscribe((produits: any) => {
-        this.AllProduits = produits || [];
+      this.appService.getAllProducts()
+      .pipe(
+        map((products) => products.filter((product) => product.etat !== "INACTIF"))
+      )
+      .subscribe((filteredProducts) => {
+        this.AllProduits = filteredProducts || [];
+        // console.log("Filtered Products: ", this.AllProduits);
       });
     } catch (error) {
       console.error("Erreur lors de la récupération des produits :", error);

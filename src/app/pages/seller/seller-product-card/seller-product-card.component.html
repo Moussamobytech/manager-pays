@@ -1,0 +1,35 @@
+<mat-card *ngIf="product" class="product-item modern-card">
+  <div class="item-image">
+    <div *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic" class="discount-badge">
+      -{{ product.priceBasic|discount:product.pricePromotion }}% OFF
+    </div>
+    <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
+      <img [src]="product.image1" alt="Product Image" class="card-image">
+    </a>
+  </div>
+
+  <div class="item-content">
+    <h4 class="category text-truncate">
+      {{ product.categorieNom }}
+    </h4>
+    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
+      {{ product.nom }}
+    </a>
+    <div class="price-section">
+      <p *ngIf="!product.pricePromotion||product.pricePromotion==product.priceBasic" class="price-basic">
+        {{ product.priceBasic | number : '1.0-2' }} FCFA
+      </p>
+      <p *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic" class="price-promotion text-truncate">
+        {{ product.pricePromotion | number : '1.0-2' }} FCFA
+        <span class="original-price">
+          {{ product.priceBasic | number : '1.0-2' }} F
+        </span>
+        <!-- <br> -->
+      </p>
+    </div>
+    <div class="divider"></div>
+    <div class="icons">
+      <app-controls [product]="product" [viewCol]="viewCol"></app-controls>
+    </div>
+  </div>
+</mat-card>

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, ActivatedRouteSnapshot, UrlSegment, NavigationE
 import { Title } from '@angular/platform-browser';
 import { MenuService } from '../menu/menu.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
-import { ExcelExportService } from 'src/app/services/excel-export.service';
+import { ExcelOperationService } from 'src/app/services/excel-operation.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -26,7 +26,7 @@ export class BreadcrumbComponent implements OnInit{
               public activatedRoute: ActivatedRoute,
               public title:Title,
               private menuService: MenuService,
-              private excelExportService: ExcelExportService
+              private excelExportService: ExcelOperationService
             ){
       this.settings = this.appSettings.settings;
       this.router.events.subscribe(event => {

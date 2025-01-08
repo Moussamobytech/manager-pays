@@ -1,0 +1,158 @@
+.customer-name{
+  padding: 0 12px;
+  font-weight: 400;
+}
+.customer-content{
+  padding: 10px;
+  .customer-img{
+      position: relative;
+      img{
+          border-radius: 50%;
+          width: 80px;
+          height: 80px;
+      }
+      .mat-icon{
+          position: absolute;
+          top: -8px;
+          left: -8px;
+          font-size: 96px;
+          height: 96px;
+          width: 96px;
+      }
+  }
+  .mat-mdc-slide-toggle{
+      margin-top: 15px;
+  }
+  .customer-details{
+    width: 100%;
+      p{
+       line-height: 2rem;
+      }
+  }
+}
+
+.customer-search{
+  width: 100%;
+  transition: 0.3s;
+  text-align: center;
+  .mat-mdc-form-field{
+      width: 96% !important;
+      height: 90%;
+      vertical-align: bottom;
+      text-align: center !important;
+      .mat-mdc-form-field-infix {
+          min-height: 36px;
+          padding: 8px 0 !important;
+      }
+      .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+      }
+  }
+  .mat-mdc-input-element{
+      text-align: center;
+  }
+}
+
+.grid-list{
+  margin-left: 15px;
+}
+
+.customer-spinner{
+  position: absolute;
+  top:0; right: 0; bottom: 0; left:0;
+}
+
+.mat-mdc-card{
+  overflow: hidden;
+}
+.grid-list .mat-mdc-card{
+height: 230px;
+margin-top: 10px;
+}
+.customer-content .mat-icon{
+overflow:visible;
+}
+.table-list{
+.admin-table{
+  .bg-primary{
+    border-radius: 5px;
+  }
+  .filter-cell a{
+    cursor:pointer;
+    transition: .1s all ease-in;
+    mat-icon{
+      color: #fff;
+    }
+    &:active{
+      color: #d81b60;
+    }
+  }
+
+  display: table;
+  width: max-content;
+  min-width: 100%;
+}
+// border: 1px solid rgba(0, 0, 0, 0.3);
+border-radius: 15px;
+box-shadow: rgba(0, 0, 0, 0.1) 0px -2px 4px -1px, rgba(0, 0, 0, 0.06) 0px -4px 6px -1px;}
+.actions {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 5px;
+}
+
+.d-hidden{
+  display: none;
+}
+
+.table-scroll-wrapper {
+overflow-x: auto;
+width: 100%;
+}
+
+.header-row, .data-row {
+display: table-row;
+}
+
+.header-cell, .data-cell {
+display: table-cell;
+padding: 8px 16px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.data-cell {
+border-bottom: 1px solid #ddd;
+}
+
+.header-cell {
+font-weight: bold;
+background-color: #25224a;
+color: #fff;
+}
+.fixed-width {
+min-width: 130px;
+}
+
+mat-icon{
+  color: #25224a ;
+}
+
+.mt-size{
+  font-size: 18px;
+}
+
+.loyalty-badge {
+  padding: 4px 8px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2.5px solid transparent;
+  transition: .4 all;
+  &:hover, &:active {
+    border-color: #25224a;
+  }
+}

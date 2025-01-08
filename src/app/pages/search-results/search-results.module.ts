@@ -23,7 +23,6 @@ export const routes: Routes = [
   ],
   declarations: [
     SearchResultsComponent,
-
   ],
 
   exports: [

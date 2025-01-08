@@ -1,0 +1,104 @@
+<div class="customer-form-container">
+  <h1 class="text-center">
+    <span *ngIf="action === 'update'">Modifier un client</span>
+    <span *ngIf="action === 'delete'">Suppression de Client</span>
+    <span *ngIf="action === 'add'">Ajout de Client(s)</span>
+  </h1>
+
+  <div *ngIf="action === 'delete' && customer" class="delete-user-div">
+    <p class="delete-warning">
+      Êtes-vous sûr de vouloir supprimer définitivement le client {{ (customer.prenom! + ' ' + customer.nom!) }} ?
+    </p>
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="confirmDelete()">Confirmer</button>
+      <button mat-raised-button color="warn" (click)="cancel()">Annuler</button>
+    </div>
+  </div>
+
+  <form *ngIf="action !== 'delete'" [formGroup]="form" class="user-form" autocomplete="off">
+    <ng-container *ngIf="selectedExFile">
+      <div class="success-message">
+        <mat-icon color="success">check_circle</mat-icon>
+        <span>Le fichier ({{ SelectedExlFileName || '' }})</span> a été importé avec succès.
+        <button mat-button (click)="removeSelectedFile($event)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <div class="form-field-outer" *ngIf="!selectedExFile">
+      <!-- Prénom -->
+      <mat-form-field class="full-width">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="prenom" />
+        <!-- <mat-error *ngIf="form.controls.prenom.errors?.required">
+          Le prénom est obligatoire
+        </mat-error> -->
+      </mat-form-field>
+
+      <!-- Nom -->
+      <mat-form-field class="full-width">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="nom" />
+        <!-- <mat-error *ngIf="form.controls.nom.errors?.required">
+          Le nom est obligatoire
+        </mat-error> -->
+      </mat-form-field>
+
+      <!-- Email -->
+      <!-- <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="form.controls.email.errors?.pattern">
+              Email non valide
+            </mat-error>
+          </mat-form-field> -->
+
+      <!-- Numéro -->
+      <mat-form-field class="full-width" *ngIf="action === 'add'">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="numero" [required]="!selectedExFile" />
+        <mat-error *ngIf="form.controls.numero.errors?.required">
+          Le numéro de téléphone est obligatoire.
+        </mat-error>
+        <mat-error *ngIf="form.controls.numero.errors?.pattern">
+          Doit être un numéro valide.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Adresse -->
+      <mat-form-field class="full-width">
+        <mat-label>Adresse</mat-label>
+        <input matInput formControlName="adresse" />
+      </mat-form-field>
+    </div>
+
+    <!-- General Error -->
+    <ng-container *ngIf="generalError">
+      <div class="error-message">
+        <span>{{ generalError }}</span>
+      </div>
+    </ng-container>
+
+    <!-- Import/Export section -->
+    <ng-container *ngIf="action === 'add'">
+      <div class="import-export-container">
+        <button mat-raised-button matTooltip="Télécharger le modèle Excel" (click)="exportXlsCustomerTemplate($event)">
+          Télécharger le modèle <mat-icon>download</mat-icon>
+        </button>
+        <input formControlName="exldata" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx" class="d-none" />
+        <button mat-raised-button matTooltip="Importer une liste de clients (format Excel)" color="primary" (click)="triggerImportInput($event)">
+          Importer une liste <mat-icon>file_upload</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- Actions section -->
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="submitForm()">
+        {{ action === 'add' ? 'Ajouter' : 'Sauvegarder' }}
+      </button>
+      <button mat-raised-button color="warn" (click)="cancel()">Annuler</button>
+    </div>
+  </form>
+</div>

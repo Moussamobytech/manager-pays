@@ -42,9 +42,6 @@ export class AddProductComponent implements OnInit {
       "weight": "5",
       "user": this.currentUser.username,
       "categorie": [null, Validators.required ]
-      // "discount": null,
-      // "color": null,
-      // "size": null,
     });
     this.getCategories();
     this.sub = this.activatedRoute.params.subscribe(params => {
@@ -64,10 +61,8 @@ export class AddProductComponent implements OnInit {
   }
   public getCategories(){
     this.category.categories().subscribe(data => {
-    // this.appService.getCategories().subscribe(data => {
       console.log(data)
       this.categories = data;
-      // this.categories.shift();
     });
   }
 
@@ -129,19 +124,15 @@ export class AddProductComponent implements OnInit {
           this.commonService.errorToast("Choississez une image au minimum")
           return;
         }
-        this.form.value.images.forEach(item=>{
-          // console.log(item)
-          // console.log(typeof(item))
-          // console.log(item)
-          data.append('images', item.file);
-          size += item.file.size
-          // this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
-          //   const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-          //   let editedImg = new File([blobImg], randomName, { type: blobImg.type });
-          //   console.log("editedImg :::::: ",editedImg)
-          //   data.append('images', editedImg);
-          // });
-        })
+
+        await this.compressAndPrepareImages().then((compressedFiles) => {
+          compressedFiles.forEach((file) => {
+            console.log("images before adding: ",file);
+            data.append('images', file);
+            size += file.size;
+          });
+        });
+
         // console.log("size ::::::: ",size)
         if(size > 8388608){
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
@@ -149,7 +140,7 @@ export class AddProductComponent implements OnInit {
         }
 
         if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
-          this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
+          this.commonService.errorToast("Le prix promo ne peut pas être supérieur au prix de base")
           return;
         }
         // data.append('images', this.form.value.images);
@@ -169,6 +160,18 @@ export class AddProductComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  compressAndPrepareImages () {
+
+    const compressedImagePromises = this.form.value.images.map(async (item: { file: File }) => {
+      const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 70);
+      const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+      const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
+      return compressedFile;
+    });
+
+    return Promise.all(compressedImagePromises);
   }
 
   async edit(){
@@ -218,7 +221,7 @@ export class AddProductComponent implements OnInit {
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
         // data.append('weight', "5");
-        // console.log("images ::: ",this.form.value.images)
+        console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",JSON.stringify(data))
         let res = await this.productService.edit(this.id,data);
         console.log("res save product :::::::: ",res)

@@ -110,7 +110,7 @@ getTotalViewsYear(): Observable<any> {
   supprimer(id: string): Observable<any> {
     return this.api.delete(`/produit/supprimer/${id}`);
   }
-  
+
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }
@@ -144,8 +144,8 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/list-by-category/' + id);
   }
 
-  public getProductBySeller(id: string) {
-    return this.api.get('/produit/list-by-user/' + id).toPromise();
+  public getProductBySeller(id: string):Observable<any> {
+    return this.api.get('/produit/list-by-user/' + id);
   }
 
   public getProductByCategorieName(categorie: string) {
@@ -193,5 +193,4 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/top-rates').toPromise();
   }
 
-  
 }

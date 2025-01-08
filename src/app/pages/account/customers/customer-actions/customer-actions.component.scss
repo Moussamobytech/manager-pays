@@ -1,0 +1,54 @@
+.customer-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-field-outer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.delete-warning {
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 16px;
+}
+
+.success-message {
+  align-items: center;
+  margin: 15% 0;
+  color: green;
+  font-size: 1.1rem;
+}
+
+.success-message mat-icon {
+  margin-right: 10px;
+}
+
+.error-message{
+  color: #d81b60;
+  text-align: center;
+  font-style: italic;
+}
+
+.error-message{
+  width: 90%;
+}
+
+.import-export-container button{
+  margin-top: 15px;
+  margin-right: 15px;
+}
+

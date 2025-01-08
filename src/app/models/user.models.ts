@@ -1,17 +1,21 @@
 export class User {
-  id?: string;
+  id: string;
   username: string;
   firstname?: string|null;
   lastname?: string|null;
   email?: string|null;
   phoneNumber?: string|null;
   adresse?: string|null;
-  boutique?: string|null;
+  name?: string|null;
   password?: string;
+  description?: string;
   profiles?: Profile[];
   avatar?: string;
   points?: number|null;
   enabled?: boolean;
+  bg1:any;
+  bg2:any;
+  bg3:any;
   createdAt?: string;
   updatedAt?: string;
 }

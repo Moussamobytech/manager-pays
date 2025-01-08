@@ -52,6 +52,7 @@
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "node_modules/ngx-sharebuttons/themes/circles.scss",
               "node_modules/ngx-sharebuttons/themes/modern.scss",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.scss"
             ],
             "scripts": [

@@ -67,9 +67,10 @@ a{
     transition: 0.3s;
 }
 .text-truncate{
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
 }
 .text-center{
     text-align: center;

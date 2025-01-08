@@ -1,9 +1,10 @@
 
 <div *ngFor="let category of categories">
-  <button mat-menu-item (click)="changeCategory(category.cle || category.id)">
+  <button mat-menu-item class="text-truncate" (click)="changeCategory(category.cle || category.id)">
       <span>{{category.nom}}</span>
   </button>
-   <div *ngIf="category" class="sub-category">
+  <!-- PAs de sous categories pour l'instant -->
+  <!-- <div *ngIf="category" class="sub-category">
       <app-category-list [categories]="tous" [categoryParentId]="categorie" (change)="changeCategory($event)"></app-category-list>
-  </div>
+  </div> -->
 </div>

@@ -22,7 +22,8 @@ const routes: Routes = [
           { path: 'sign-in', loadChildren: () => import('./pages/session/sign-in/sign-in.module').then(m => m.SignInModule), data: { breadcrumb: 'Se connecter' } },
           { path: 'sign-up', loadChildren: () => import('./pages/sign-up/sign-up.module').then(m => m.SignUpModule), data: { breadcrumb: 'S\'inscrire ' } },
           { path: 'brands', loadChildren: () => import('./pages/brands/brands.module').then(m => m.BrandsModule), data: { breadcrumb: 'Brands' } },
-          { path: 'products', loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule), data: { breadcrumb: 'All Products' } },
+          { path: 'products', loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule), data: { breadcrumb: 'Produits' } },
+          { path: 'sellers', loadChildren: () => import('./pages/seller/seller.module').then(m => m.SellerModule), data: { breadcrumb: 'Boutiques' } },
           { path: 'faq', loadChildren: () => import('./theme/faq/faq.module').then(m => m.FaqModule), data: { breadcrumb: 'FAQ' } },
           // { path: 'search-results', loadChildren: () => import('./pages/search-results/search-results.module').then(m => m.SearchResultsModule), data: { breadcrumb: 'search-results' } },
           { path: 'search-results', component: SearchResultsComponent }, // Ajouter cette ligne pour la route de recherche
@@ -48,7 +49,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    anchorScrolling: 'enabled',
+    scrollPositionRestoration: 'enabled',
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

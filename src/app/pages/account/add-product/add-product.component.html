@@ -63,15 +63,14 @@
                         </div> -->
 
 
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>{{'PRODUCTS.PRICE' | translate}}</mat-label>
-                              <input matInput formControlName="priceBasic">
-                              <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
-                              <mat-error *ngIf="form.controls.priceBasic.errors?.pattern">Le prix doit etre un nombre </mat-error>
-                              <mat-error *ngIf="!form.controls.priceBasic.errors?.pattern&&form.controls.priceBasic.errors?.minlength">Le prix minimum est 100FCFA</mat-error>
-                              <!-- <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
-                          </mat-form-field>
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'PRODUCTS.PRICE' | translate}}</mat-label>
+                            <input matInput formControlName="priceBasic">
+                            <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
+                            <mat-error *ngIf="form.controls.priceBasic.errors?.pattern">Le prix doit etre un nombre </mat-error>
+                            <mat-error *ngIf="!form.controls.priceBasic.errors?.pattern&&form.controls.priceBasic.errors?.minlength">Le prix minimum est 100FCFA</mat-error>
+                        </mat-form-field>
                       </div>
                       <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                           <mat-form-field appearance="outline" class="w-100">
@@ -79,7 +78,6 @@
                               <input matInput formControlName="pricePromotion">
                               <mat-error *ngIf="form.controls.pricePromotion.errors?.pattern">Le prix de promo doit etre un nombre</mat-error>
                               <mat-error *ngIf="form.controls.pricePromotion.errors?.minlength">Le prix de promo minimum est 100FCFA</mat-error>
-                              <!-- <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
                           </mat-form-field>
                       </div>
                       <!-- <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">

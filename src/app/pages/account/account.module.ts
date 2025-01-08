@@ -15,6 +15,7 @@ import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { AuthGuard } from 'src/app/helpers/auth.guard';
 import { HowWorksComponent } from './how_works/how_works.component';
+import { CustomersModule } from './customers/customers.module';
 const config: InputFileConfig = {
   fileAccept: '*'
 };
@@ -29,12 +30,13 @@ export const routes: Routes = [
           { path: 'dashboard', component: DashboardComponent, data: {  breadcrumb: 'Dashboard' } },
           { path: 'information', component: InformationComponent, data: {  breadcrumb: 'Information' } },
           { path: 'products-seller', component: ProductsComponent, data: {  breadcrumb: 'Produits' } },
-          { path: 'add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
-          { path: 'add-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
+          { path: 'products-seller/add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
+          { path: 'products-seller/edit-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
           { path: 'how_works', component: HowWorksComponent, data: { breadcrumb: 'Comment ca marche ?' } },
 
           { path: 'addresses', component: AddressesComponent, data: {  breadcrumb: 'Addresses' } },
           { path: 'orders', component: OrdersComponent, data: {  breadcrumb: 'Orders' } },
+          { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule), data: {  breadcrumb: 'Clients' } }
       ]
   }
 ];
@@ -50,6 +52,7 @@ export const routes: Routes = [
     SwiperModule,
     InputFileModule.forRoot(config),
     InputFileModule,
+    // CustomersModule
   ],
   declarations: [
     AccountComponent,

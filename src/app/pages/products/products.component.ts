@@ -103,7 +103,7 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     this.count = this.counts[0];
     this.sort = this.sortings[0];
-    
+
 
     // Gérez les fenêtres redimensionnées
     if (this.domHandlerService.window?.innerWidth < 960) {
@@ -148,8 +148,8 @@ export class ProductsComponent implements OnInit {
     } catch (error) {
       this.common.errorToast("Une erreur s'est produite lors du chargement de la liste, merci de réessayer")
     }
-    
-    
+
+
     // this.produitService.getProductByCategorieName(categoryId).subscribe(data=>{
     //   this.products = data;
     //   console.log("Produit ::::: ", this.products)
@@ -168,14 +168,14 @@ export class ProductsComponent implements OnInit {
     });
 
     // console.log("sortedArray :::: ",sortedArray);
-    
+
     // return sortedArray || stringArray
     return sortedArray
   }
 
   public getCategories(){
     console.log("this.appService.Data.categories.length ::::: ",this.appService.Data.categories.length);
-    
+
     if(this.appService.Data.categories.length == 0) {
       this.appService.getCategories().subscribe(data => {
         this.categories = data;
@@ -191,7 +191,7 @@ export class ProductsComponent implements OnInit {
   }
 
 
-  
+
 
 
   public getBrands(){
@@ -252,6 +252,7 @@ export class ProductsComponent implements OnInit {
 
   public onChangeCategory(categoryId: string) {
     this.selectedCategoryId = categoryId;
+    console.log(categoryId)
     this.getProductsByCetegorie(categoryId); // Vérifiez cette ligne pour vous assurer que categoryId est correctement passé
 
 
