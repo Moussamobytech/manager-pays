@@ -38,8 +38,8 @@ export class AddProductComponent implements OnInit {
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
-      "pricePromotion": [null, [Validators.pattern('/0-9/'),Validators.minLength(3)]],
-      "priceBasic": [null, [Validators.required, Validators.pattern('/0-9/'), Validators.minLength(3)] ],
+      "pricePromotion": [null, [Validators.pattern('^[0-9]*$'),Validators.minLength(3)]],
+      "priceBasic": [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)] ],
       "description": null,
       "weight": "5",
       "user": this.currentUser?.username || null,
@@ -92,16 +92,17 @@ export class AddProductComponent implements OnInit {
           return;
         }
         this.form.value.images.forEach(item=>{
-          this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
-            const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-            let editedImg = new File([blobImg], randomName, { type: blobImg.type });
-            data.append('image', editedImg);
-          });
+          data.append('images', item.file);
+          // this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
+          //   const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
+          //   let editedImg = new File([blobImg], randomName, { type: blobImg.type });
+          //   data.append('image', editedImg);
+          // });
         })
         // data.append('images', this.form.value.images);
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
-        data.append('weight', "5");
+        data.append('weight', this.form.value.weight || "5");
         // console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",data)
         let res = await this.productService.add(data);
