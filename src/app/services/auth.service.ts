@@ -112,7 +112,6 @@ resetPassword(username: string, newpassword: string): Observable<any> {
         let users:Observable<User[]> = this.api.get("users/list");
         return users;
       }catch(error){
-        console.log("getAllusers() error: "+error)
         return null;
       }
     }

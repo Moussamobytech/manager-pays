@@ -11,6 +11,8 @@ import { RoundNamePipe } from './roundName.pipe';
 import { UserTypePipe } from './userType.pipe';
 import { SafePipe } from './safe.pipe';
 import { ExportButtonShowPipe } from './export-button-show.pipe';
+import { CommandeSearchPipe } from './commandeSearche.pipe';
+import { OrderSearchPipe } from './orderSearch.pipe';
 
 @NgModule({
     imports: [
@@ -27,6 +29,8 @@ import { ExportButtonShowPipe } from './export-button-show.pipe';
       UserTypePipe,
       SafePipe,
       ExportButtonShowPipe,
+      CommandeSearchPipe,
+      OrderSearchPipe
    ],
     exports: [
       FilterByIdPipe,
@@ -39,6 +43,8 @@ import { ExportButtonShowPipe } from './export-button-show.pipe';
       UserTypePipe,
       SafePipe,
       ExportButtonShowPipe,
+      CommandeSearchPipe,
+      OrderSearchPipe
     ]
 })
 export class PipesModule { }
