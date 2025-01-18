@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="main-title">
+    <h2>Categories Disponibles</h2>
+    <a routerLink="">Voir les boutiques <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
+  </div>
+  <div fxFlex="47" fxFlex.gt-xs="30" fxFlex.gt-sm="22" fxFlex.gt-md="17" *ngFor="let category of categories" class="card">
+    <div>
+
+    </div>
+    <img [src]="category.image" alt="{{ category.nom }}" class="card-image" />
+    <div class="card-title">{{ category.nom }}</div>
+    <div class="card-footer">
+      <p>Status: {{ category.status }}</p>
+      <small>Created At: {{ category.createdAt | date: 'short' }}</small>
+    </div>
+  </div>
+</div>

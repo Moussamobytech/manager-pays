@@ -79,24 +79,119 @@
             }
         }
     }
-
 }
 
 @media (min-width: 576px) and (max-width: 767px) {
     .footer .subscribe-block{
-        .subscribe-search-form{
-            margin-top: 16px;
-        }
+      .subscribe-search-form{
+          margin-top: 16px;
+      }
     }
     .footer{
       .map-container{
         width: 100%;
         align-content: center;
       }
-      // iframe {
-      //   align-content: center;
-      //   width: 100%;
-      //   height: 100%;
-      // }
     }
+}
+
+.mobile-container{
+  .footer-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #25224a;
+    padding: 10px 0;
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .footer-menu nav ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-menu nav ul li {
+    text-align: center;
+  }
+
+  .nav-item {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  .icon-container {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+  }
+
+  .icon-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+  }
+
+  .white-img {
+    opacity: 1;
+  }
+
+  .active-img {
+    opacity: 0;
+  }
+
+  .nav-item:hover .white-img, .nav-item.active .white-img {
+    opacity: 0;
+  }
+
+  .nav-item:hover .active-img, .nav-item.active .active-img {
+    opacity: 1;
+  }
+
+  .nav-item span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #d1d1d1;
+    transition: color 0.3s ease;
+  }
+
+  .nav-item:hover span, .nav-item.active span {
+    color: #feb930;
+  }
+
+  .nav-item.active::before {
+    top: 0px;
+    width: 40px;
+    height: 3.5px;
+    content: "";
+    background-color: #feb930;
+    border-bottom-right-radius: 10px ;
+    border-bottom-left-radius: 10px;
+    position: absolute;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .icon-container {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-item {
+      font-size: 0.75rem;
+    }
+  }
+
 }

@@ -68,11 +68,11 @@
           <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px" class="filter-price">
             <mat-form-field appearance="outline" class="price-input">
               <mat-label>Prix Min</mat-label>
-              <input matInput type="number" [(ngModel)]="priceFrom" value="" (change)="filterProductsByPrice()" [min]="100"/>
+              <input matInput [step]="950" type="number" [(ngModel)]="priceFrom" value="" (change)="filterProductsByPrice()" [min]="100"/>
             </mat-form-field>
             <mat-form-field appearance="outline" class="price-input">
               <mat-label>Prix Max</mat-label>
-              <input matInput type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
+              <input matInput [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
             </mat-form-field>
           </div>
           <div *ngIf="domHandlerService.window?.innerWidth<700">

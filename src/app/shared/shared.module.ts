@@ -51,6 +51,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { LangComponent } from './lang/lang.component';
 import { ProductsCardComponent } from './product-card/product-card.component';
 import { SearchResultsComponent } from '../pages/search-results/search-results.component';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 @NgModule({
   imports: [
@@ -92,7 +93,8 @@ import { SearchResultsComponent } from '../pages/search-results/search-results.c
     MatTooltipModule,
     MatStepperModule,
     NgScrollbarModule,
-    PipesModule
+    PipesModule,
+    SlickCarouselModule
   ],
   exports: [
     RouterModule,

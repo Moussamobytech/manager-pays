@@ -52,6 +52,9 @@
     .fid_green-color{
       color: $fid_green;
     }
+    .fid_amber-color{
+      color: $fid_amber;
+    }
     .warn-color{
       color: mat.get-color-from-palette($warn);
     }
@@ -63,7 +66,7 @@
     .filter-sidenav .mat-expansion-panel-header-title,
     .mat-tab-body-content,
     .account-card-title {
-        color: mat.get-color-from-palette($accent, darker);
+        color: mat.get-color-from-palette($accent, darker) !important;
     }
     .app-dropdown, .lang {
     background-color: mat.get-color-from-palette($primary) !important;
@@ -73,7 +76,7 @@
 
     }
     .mat-mdc-menu-item{
-      color: mat.get-color-from-palette($warn) ;
+      color: mat.get-color-from-palette($warn) !important;
     }
     .mat-mdc-menu-item:hover{
       background-color: rgba($color: mat.get-color-from-palette($warn), $alpha: 0.7) !important;
@@ -269,7 +272,7 @@
     .filter-sidenav .mat-expansion-panel-header-title,
     .mat-tab-body-content,
     .account-card-title {
-         color: mat.get-color-from-palette($primary, default-contrast);
+         color: mat.get-color-from-palette($primary, default-contrast) !important;
     }
 
     .top-toolbar.mat-toolbar-row{

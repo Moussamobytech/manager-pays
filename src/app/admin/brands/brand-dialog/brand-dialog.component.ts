@@ -47,7 +47,7 @@ export class BrandDialogComponent implements OnInit {
           console.log("Ma brand : ",values);
 
           if (values.id) {
-              this.appService.updateBrand(values.id,values.libelle, values.description, this.selectedImage).subscribe(
+              this.appService.updateBrand(values.id,values.name, values.description, this.selectedImage).subscribe(
                   response => {
                       console.log('Bran mise à jour avec succès:', response);
                       console.log("logo : ", values.logo);

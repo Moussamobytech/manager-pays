@@ -81,12 +81,12 @@ export class  Campagne {
 
 export class  Brand {
   constructor (
-               public id: string,
-               public libelle: string,
-               public description: string,
-               public etat: boolean,
-               public logo : string,
-               ) {}
+    public logo : string,
+    public id?: string,
+    public name?: string,
+    public description?: string,
+    public etat?: boolean,
+  ) {}
 }
 
 

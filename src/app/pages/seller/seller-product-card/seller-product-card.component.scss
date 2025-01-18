@@ -17,19 +17,6 @@
   .item-image {
     position: relative;
 
-    .discount-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #d81b60;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 5px 10px;
-      border-radius: 20px;
-      box-shadow: 3px 6px 10px rgba(0, 0, 0, 0.2);
-    }
-
     .image-link {
       display: block;
       height: 150px;
@@ -52,7 +39,6 @@
     .category {
       font-family: "Roboto 400";
       font-size: 13px;
-      // color: #757575;
       text-transform: uppercase;
     }
 
