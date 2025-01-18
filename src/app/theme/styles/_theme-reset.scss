@@ -180,6 +180,11 @@
             background: #E53935;
         }
     }
+    .mat-mdc-snack-bar-container.warning {
+      .mdc-snackbar__surface {
+          background: darken($color: $fid_amber, $amount: 13);
+      }
+    }
 
     .new-price{
         color: mat.get-color-from-palette($warn);
@@ -308,6 +313,12 @@
         .mdc-snackbar__surface {
             background: #E53935;
         }
+    }
+
+    .mat-mdc-snack-bar-container.warning {
+      .mdc-snackbar__surface {
+        background: darken($color: $fid_amber, $amount: 13);
+      }
     }
 
     .new-price{

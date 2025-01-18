@@ -3,7 +3,7 @@
     <mat-chip-listbox *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic">
       <mat-chip-option color="warn" highlighted selectable="false">-{{product.priceBasic|discount: product.pricePromotion}}% OFF</mat-chip-option>
     </mat-chip-listbox>
-    <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
+    <a [routerLink]="['/products', product.id, product.nom]" [ngStyle]="secondView ? { height: '200px' } : {}" class="image-link">
       <img [src]="product.image1" alt="Product Image" class="card-image">
     </a>
   </div>

@@ -2,7 +2,10 @@
   <div class="logo-container">
     <img [src]="(sellerInfo?.logo)?imgsLink+sellerInfo.logo:'../../../assets/images/icons/shop_icon.png'" alt="Shop Logo" class="logo" />
   </div>
-  <h1 class="shop-name">{{sellerInfo?.nom||'Nom du boutique'}}</h1>
+  <div class="shopname-section">
+    <h1 class="shop-name">{{sellerInfo?.nom||'Nom du boutique'}}</h1>
+    <button mat-icon-button class="text-muted" (click)="shareLink()"><mat-icon>share</mat-icon></button>
+  </div>
   <div class="seller-carousel">
     <app-seller-caroussel *ngIf="sellerInfo" [sellerBanners]="sellerBanners" [sellerId]="sellerId"></app-seller-caroussel>
   </div>
@@ -30,7 +33,7 @@
             <mat-panel-title> <h4>Categories</h4> </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="categories-wrapper">
-            <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false">
+            <!-- <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false"> -->
               <div class="category-checkbox">
                 <mat-checkbox color="warn"
                   [checked]="isAllBoxSelected"
@@ -46,7 +49,7 @@
                   {{ category.nom }}
                 </mat-checkbox>
               </div>
-            </ng-scrollbar>
+            <!-- </ng-scrollbar> -->
           </div>
         </mat-expansion-panel>
         <mat-expansion-panel class="sidenav-content" expanded>
@@ -75,10 +78,10 @@
               <input matInput [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
             </mat-form-field>
           </div>
-          <div *ngIf="domHandlerService.window?.innerWidth<700">
+          <div *ngIf="domWidth<700">
             <h3>Partager lien boutique</h3>
             <div fxLayout="row" fxLayoutAlign="space-between center" class="copy-container">
-              <input matInput type="text" [value]="fullUrl" class="copy-input" #linkInput readonly>
+              <input matInput type="text" [value]="shopLink" class="copy-input" #linkInput readonly>
               <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
               <mat-icon matSuffix *ngIf="isCopied">check</mat-icon>
             </div>
@@ -106,29 +109,18 @@
               </span>
             </mat-menu>
           </div>
-          <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
-            {{ 'SHOW' | translate }} {{ viewCount }}
-            <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-          </a>
-          <mat-menu #countsMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
-            <span (mouseleave)="countsMenuTrigger.closeMenu()">
-              <button mat-menu-item *ngFor="let count of viewCounts" (click)="changeCount(count)">
-                <span>{{ count }}</span>
-              </button>
-            </span>
-          </mat-menu>
-          <button matTooltip="Afficher par carreaux" mat-icon-button (click)="changeViewType(33.3)">
+          <button matTooltip="Afficher par carreaux" mat-icon-button (click)="changeViewType(33.3)" *ngIf="domWidth>360">
             <mat-icon>view_module</mat-icon>
           </button>
-          <button matTooltip="Afficher par petit carreaux" mat-icon-button (click)="changeViewType(25)" *ngIf="domHandlerService.window?.innerWidth>350">
+          <button matTooltip="Afficher par petit carreaux" mat-icon-button (click)="changeViewType(25)" *ngIf="domWidth>360">
             <mat-icon>view_comfy</mat-icon>
           </button>
         </div>
 
-        <div fxLayout="row" fxLayoutAlign="end center" class="copy-container" *ngIf="domHandlerService.window?.innerWidth>700">
+        <div fxLayout="row" fxLayoutAlign="end center" class="copy-container" *ngIf="domWidth>700">
           <h3>Lien</h3>&nbsp;&nbsp;
           <div fxLayout="row" class="copy-container">
-            <input matInput type="text" [value]="fullUrl" class="copy-input" #linkInput readonly>
+            <input matInput type="text" [value]="shopLink" class="copy-input" #linkInput readonly>
             <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
             <mat-icon matSuffix *ngIf="isCopied">check</mat-icon>
           </div>
@@ -156,22 +148,40 @@
         </div>
       </div>
 
-      <div fxLayout="row wrap" class="products-wrapper">
-        <div *ngFor="let product of sellerProducts | paginate: { itemsPerPage: viewCount, currentPage: page }"
-        [fxFlex]="(viewCol==25)?50:100" [fxFlex.gt-xs]="viewCol" class="col">
-          <app-seller-product-card [product]="product" [viewCol]="viewCol"></app-seller-product-card>
+
+      <div class="onLarge-screen" *ngIf="usePagination">
+        <div fxLayout="row wrap" class="products-wrapper">
+          <div *ngFor="let product of sellerProducts | paginate: { itemsPerPage: viewCount, currentPage: page }"
+          [fxFlex]="(viewCol==25&&domWidth>360)?50:100" [fxFlex.gt-xs]="viewCol" class="col">
+            <app-seller-product-card [product]="product" [viewCol]="viewCol==25?50:100"></app-seller-product-card>
+          </div>
+        </div>
+        <div fxLayout="row wrap">
+          <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+              <pagination-controls class="product-pagination" previousLabel=" " nextLabel=" " [autoHide]="true" [maxSize]="3"
+              (pageChange)="onPageChanged($event)">
+              </pagination-controls>
+            </mat-card>
+          </div>
         </div>
       </div>
 
-      <div *ngIf="sellerProducts.length > 0" fxLayout="row wrap">
-        <div fxFlex="100">
-          <mat-card class="p-0 text-center">
-            <pagination-controls class="product-pagination" previousLabel=" " nextLabel=" " [autoHide]="true" [maxSize]="3"
-            (pageChange)="onPageChanged($event)">
-            </pagination-controls>
-          </mat-card>
+      <div class="onSmall-screen" *ngIf="!usePagination">
+        <div fxLayout="row wrap" class="products-wrapper">
+          <div *ngFor="let product of sellerProducts"
+               [fxFlex]="(viewCol==25&&domWidth>360)?50:100"
+               [fxFlex.gt-xs]="viewCol"
+               class="col">
+            <app-seller-product-card [product]="product" [viewCol]="viewCol==25?50:100">
+            </app-seller-product-card>
+          </div>
+        </div>
+        <div class="load-more-wrapper" *ngIf="sellerProducts.length < unchangedSellerProducts.length">
+          <a (click)="loadMore()">Voir plus</a>
         </div>
       </div>
+
       <div *ngIf="sellerProducts.length === 0" fxLayout="row wrap" class="products-wrapper">
         <div fxFlex="100" class="text-center">
           <p>Aucun produit trouvé, veuillez réessayer ultérieurement</p>

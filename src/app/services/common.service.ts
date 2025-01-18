@@ -40,9 +40,9 @@ export class CommonService {
     config.duration = 3000;
     config.verticalPosition = "top";
     config.horizontalPosition = "center";
-    config.panelClass = ['red-snackbar', 'login-snackbar'];
+    config.panelClass = ['error', 'login-snackbar'];
     this.snackBar.open(message, this.action && this.actionButtonLabel, config);
-   }
+  }
 
   openSuccessSnackBar(message){
     this.snackBar.open("Login Successful", "OK", {
@@ -53,7 +53,16 @@ export class CommonService {
     config.duration = 3000;
     config.verticalPosition = "top";
     config.horizontalPosition = "center";
-    config.panelClass = ['green-snackbar', 'login-snackbar'];
+    config.panelClass = ['success', 'login-snackbar'];
+    this.snackBar.open(message, this.action && this.actionButtonLabel, config);
+  }
+
+  openWarningSnackBar(message){
+    const config = new MatSnackBarConfig();
+    config.duration = 3000;
+    config.verticalPosition = "top";
+    config.horizontalPosition = "center";
+    config.panelClass = ['warning'];
     this.snackBar.open(message, this.action && this.actionButtonLabel, config);
   }
 
