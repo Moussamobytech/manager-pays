@@ -174,7 +174,7 @@
                 <button title="Afficher par carreaux" mat-icon-button (click)="changeViewType('grid', 33.3)">
                     <mat-icon>view_module</mat-icon>
                 </button>
-                <button title="Afficher par petit carreaux" mat-icon-button (click)="changeViewType('grid', 25)">
+                <button title="Afficher par petit carreaux" *ngIf="screenWidth > 500" mat-icon-button (click)="changeViewType('grid', 25)">
                     <mat-icon>view_comfy</mat-icon>
                 </button>
             </div>

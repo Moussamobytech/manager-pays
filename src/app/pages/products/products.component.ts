@@ -38,6 +38,7 @@ export class ProductsComponent implements OnInit {
   public brands : any;
   public priceFrom: number = 0;
   public priceTo: number = Number.MAX_SAFE_INTEGER;
+  public screenWidth = window?.innerWidth
   public colors = [
     { name: "#5C6BC0", selected: false },
     { name: "#66BB6A", selected: false },
@@ -84,12 +85,10 @@ export class ProductsComponent implements OnInit {
 
 
   constructor(public appSettings:AppSettings, private common: CommonMessageService,
-              private activatedRoute: ActivatedRoute,
-              public appService:AppService, private produitService : ProductService,
-              public dialog: MatDialog,
-              public translate: TranslateService,
-              private router: Router,
-              public domHandlerService: DomHandlerService) {
+              private activatedRoute: ActivatedRoute, public appService:AppService,
+              private produitService : ProductService, public domHandlerService:DomHandlerService,
+              public dialog: MatDialog,public translate: TranslateService,private router: Router
+  ) {
     this.settings = this.appSettings.settings;
       // Assurez-vous que sortings contient les valeurs correctes
       console.log('Sortings: ', this.sortings);
@@ -106,10 +105,10 @@ export class ProductsComponent implements OnInit {
 
 
     // Gérez les fenêtres redimensionnées
-    if (this.domHandlerService.window?.innerWidth < 960) {
+    if (this.screenWidth < 960) {
         this.sidenavOpen = false;
     };
-    if (this.domHandlerService.window?.innerWidth < 1280) {
+    if (this.screenWidth < 1280) {
         this.viewCol = 33.3;
     };
     this.priceFrom = 0; // Mettez la valeur par défaut que vous préférez
@@ -209,8 +208,8 @@ export class ProductsComponent implements OnInit {
 
   @HostListener('window:resize')
   public onWindowResize():void {
-    (this.domHandlerService.window?.innerWidth < 960) ? this.sidenavOpen = false : this.sidenavOpen = true;
-    (this.domHandlerService.window?.innerWidth < 1280) ? this.viewCol = 33.3 : this.viewCol = 25;
+    (this.screenWidth < 960) ? this.sidenavOpen = false : this.sidenavOpen = true;
+    (this.screenWidth < 1280) ? this.viewCol = 33.3 : this.viewCol = 25;
   }
 
   public changeCount(count){
