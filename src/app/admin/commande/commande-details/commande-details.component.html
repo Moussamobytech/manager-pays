@@ -96,6 +96,9 @@
                                     <button  (click)="remove(order)" mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate">
                                         <mat-icon>delete</mat-icon>
                                     </button>
+                                    <button  (click)="addNote(order)" mat-mini-fab color="warn" matTooltip="Note">
+                                        <mat-icon>book</mat-icon>
+                                    </button>
                                     <!--(change)="setStatus(order.id, $event)"
                                     <mat-slide-toggle [color]="order.enabled ? 'primary' : 'warn'"
                                         [checked]="order.enabled">

@@ -14,6 +14,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommandeDialogComponent } from '../commande-dialog/commande-dialog.component';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { CommandeAddNoteComponent } from '../commande-add-note/commande-add-note.component';
 
 @Component({
   selector: 'app-commande-details',
@@ -209,7 +210,25 @@ export class CommandeDetailsComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(dialogResult => {
         if (dialogResult) {
-          console.log("verify ::::")
+         // this.deleteCommande(commande.id)
+        
+        }
+      });
+    }
+
+    public addNote(order: any) {
+      const dialogRef = this.dialog.open(CommandeAddNoteComponent, {
+        maxWidth: "500px",
+        width:"500px",
+        data: {
+          title: "Ajouter un commentaire",
+          order:order
+         // message: "Le commentaire sera ajouté"
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(dialogResult => {
+        if (dialogResult) {
          // this.deleteCommande(commande.id)
         
         }

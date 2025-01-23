@@ -19,8 +19,6 @@ export class CommandeDialogComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("DATA :::::::::::::::::::: ", JSON.stringify(this.data));
-
   }
 
   public Status(key) {
