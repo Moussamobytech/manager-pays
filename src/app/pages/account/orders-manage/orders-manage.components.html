@@ -73,7 +73,7 @@
               }
             </mat-select>
         </div>
-          <div class="mat-mdc-cell">{{order.clientUsername}}</div>
+          <div class="mat-mdc-cell">{{order.clientPhoneNumber}}</div>
           <div class="mat-mdc-cell">
             <div class="p-2 actions">
                <button  mat-mini-fab color="warn" matTooltip="View invoice" class="btn-invoice" (click)="openOrderDetails(order)" >
@@ -112,10 +112,10 @@
       <p><strong>Quantité : </strong>{{ selectedOrder.quantite }}</p>
       <p><strong>Montant : </strong>{{ selectedOrder.montant }}</p>
       <p><strong>Status : </strong>{{ Status(selectedOrder.statutCommande.name) }}</p>
-      <p><strong>Client : </strong>{{ selectedOrder.clientUsername }}</p>
+      <p><strong>Client : </strong>{{ selectedOrder.clientPhoneNumber }}</p>
     </div>
     <div mat-dialog-actions class="buttons space-around">
-      <button mat-button color="success" (click)="phoneCall(selectedOrder.clientUsername)">
+      <button mat-button color="success" (click)="phoneCall(selectedOrder.clientPhoneNumber)">
         <mat-icon>call</mat-icon>
       </button>
       <button mat-button color="warn" (click)="onNoClick()">Fermer</button>

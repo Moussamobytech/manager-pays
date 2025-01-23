@@ -112,7 +112,7 @@ export class CommandeDetailsComponent implements OnInit {
     this[ascKey] = !isAscending;
   }
 
-public Status(key) {
+  public Status(key) {
     let res = ""
     switch (key) {
       case "DELIVERED":
@@ -126,6 +126,9 @@ public Status(key) {
       case "PENDING":
         res = "En attente"
         break;
+        case "VALIDE":
+          res = "Validée"
+          break;
 
       default:
         res = "N/A"

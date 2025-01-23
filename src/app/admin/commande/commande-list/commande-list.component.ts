@@ -206,7 +206,6 @@ export class CommandeListComponent implements OnInit {
           // This sorting way allows us to account every french characters even accentuated ones
           return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
         }
-
         if (valueA < valueB) return -sortOrder;
         if (valueA > valueB) return sortOrder;
         return 0;
