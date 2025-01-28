@@ -43,6 +43,7 @@ export class CommandeListComponent implements OnInit {
     ascLastname: boolean = true;
     ascType: boolean = true;
     ascMember: boolean = true;
+  status: any;
 
     constructor(
       public appSettings: AppSettings,
@@ -71,6 +72,7 @@ export class CommandeListComponent implements OnInit {
 
         // fetch all the users from the server
         this.getCommandes();
+        this.getAllStatus();
     }
 
     public async getCommandes() {
@@ -246,6 +248,52 @@ getSortValue(commande: Commande, keyWord: string): any {
     } else {
       this.getCommandes();    }
   }
+  public Status(key) {
+    let res = ""
+    switch (key) {
+      case "DELIVERED":
+        res = "Livrer"
+        break;
 
+      case "CANCEL":
+        res = "Annuler"
+        break;
+
+      case "PENDING":
+        res = "En attente"
+        break;
+        case "VALIDE":
+          res = "Validée"
+          break;
+
+      default:
+        res = "N/A"
+        break;
+    }
+    return res
+  }
+
+  getAllStatus(){
+    this.commandeService.getAllStatusCommander().subscribe(datas => {
+      this.status = datas;
+    }, error => {
+      console.error('Error during recharge:', error);
+    });
+  }
+
+  setStatusT(id: string, status: string, order: any) {
+    this.commandeService.setStatusCommande(id, status).subscribe(
+      () => {
+        // Mettre à jour le statut localement
+        const updatedStatus = this.status.find(st => st.id === status);
+        if (updatedStatus) {
+          order.statutCommande = updatedStatus;
+        }
+      },
+      error => {
+        console.error('Error during recharge:', error);
+      }
+    );
+  }
 
 }

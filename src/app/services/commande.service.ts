@@ -26,6 +26,10 @@ export class CommandeService {
   
     }
 
+    public setStatusCommande(id:string,status:string): Observable<any> {
+      return this.api.put(`/commande/set-status/${id}/${status}`,null);
+    }
+
   public getAllCommandeByFournisseur(username): Observable<any> {
     return this.api.get('/panier/get-all-by-fournisseur/' + username);
   }

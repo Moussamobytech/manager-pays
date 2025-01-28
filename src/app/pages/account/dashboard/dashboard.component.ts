@@ -3,9 +3,14 @@ import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/f
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { map, catchError, finalize } from 'rxjs';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { CommandeService } from 'src/app/services/commande.service';
+import { CommonMessageService } from 'src/app/services/common-message.service';
 import { ProductService } from 'src/app/services/product.service';
+import { CommandeSearchPipe } from 'src/app/theme/pipes/commandeSearche.pipe';
 // import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -18,7 +23,7 @@ export class DashboardComponent implements OnInit {
   rechargeForm: FormGroup;
   rechargeAmount: number;
   public form: UntypedFormGroup;
-  public username : any;
+  public username: any;
   points: any = 0;
   currentUser: any;
   statsNumber: any = {
@@ -26,20 +31,30 @@ export class DashboardComponent implements OnInit {
     actif: 0,
     inactif: 0,
     pending: 0,
-    contact:0,
+    contact: 0,
 
   }
-  constructor(private auth: AuthenticationService, private productService: ProductService,
-    private router: Router, public dialog: MatDialog, private fb: FormBuilder, private snackBar:MatSnackBar) {
+  commandes: any;
+
+
+  commandeTotal: any = 0;
+  venteTotal: any = 0;
+  montantTotal: any = 0;
+  commandeTotalMensuel: any = 0;;
+  montantTotalMensuel: any = 0;;
+
+
+  constructor(private auth: AuthenticationService, private productService: ProductService, private ngxSpinnerService: NgxSpinnerService,
+    private router: Router, public dialog: MatDialog, private fb: FormBuilder, private snackBar: MatSnackBar,
+    private commandeService: CommandeService, private commonService: CommonMessageService) {
 
   }
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser()
     //this.username = this.auth.currentUser();
-   // this.points = this.currentUser.points
+    // this.points = this.currentUser.points
 
-    // console.log("currentUser :::::::: ", this.currentUser)
     if (this.currentUser == null || this.currentUser.profiles == null || this.currentUser.profiles == undefined) {
       this.router.navigate(["/sign-in"]);
     }
@@ -49,10 +64,11 @@ export class DashboardComponent implements OnInit {
       amount: ['', Validators.required]
 
     });
-    this.getUserById()
+    this.getUserById();
+    this.getCommandes(this.currentUser.username);
   }
 
-  public add(){
+  public add() {
     this.router.navigate(["/account/add-product"])
   }
 
@@ -111,13 +127,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getUserById(){
+  getUserById() {
     this.auth.info(this.currentUser.username).then((data: any) => {
       // console.log("Username ",data)
-     this.username= data;
-     this.points = data.points
+      this.username = data;
+      this.points = data.points
 
-    //  console.log("Username ",data)
+      //  console.log("Username ",data)
 
 
     })
@@ -151,5 +167,72 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+
+  public async getCommandes(id) {
+    /// this.ngxSpinnerService.show(); // Assurez-vous d'afficher le spinner avant la requête
+
+    await this.commandeService.getAllCommandeByFournisseur(id).pipe(
+      map((commande: any) => {
+        return commande;
+      }),
+      catchError((error: any) => {
+        console.error("Erreur lors de la récupération des commandes : ", error);
+        this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
+        return []; // Retourne une liste vide en cas d'erreur pour éviter les plantages
+      }),
+      finalize(() => {
+        this.ngxSpinnerService.hide(); // Masquez le spinner une fois la requête terminée (succès ou erreur)
+      })
+    ).subscribe(
+      (data: any) => {
+        this.commandes = data;
+      
+        // Obtenir le mois et l'année en cours
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth(); // Mois en cours (0 = Janvier)
+        const currentYear = currentDate.getFullYear(); // Année en cours
+      
+        // Filtrer les commandes pour le mois en cours
+        const commandesMensuelles = data.filter((commande: any) => {
+          const dateCommande = new Date(commande.dateCommande);
+          return (
+            dateCommande.getMonth() === currentMonth &&
+            dateCommande.getFullYear() === currentYear
+          );
+        });
+      
+        // Calculer les totaux pour toutes les commandes
+        const commandeParCode = data.reduce(
+          (acc: any, commande: any) => {
+            acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
+            acc.montantTotal += commande.montant;
+            return acc;
+          },
+          { codes: {}, montantTotal: 0 }
+        );
+      
+        // Calculer les totaux pour les commandes mensuelles
+        const commandeParCodeMensuel = commandesMensuelles.reduce(
+          (acc: any, commande: any) => {
+            acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
+            acc.montantTotal += commande.montant;
+            return acc;
+          },
+          { codes: {}, montantTotal: 0 }
+        );
+      
+        this.venteTotal = data.length; // Total des commandes
+        this.commandeTotal = Object.keys(commandeParCode.codes).length; // Nombre de commandes uniques
+        this.montantTotal = commandeParCode.montantTotal; // Montant total des commandes
+      
+        // Valeurs mensuelles
+        this.commandeTotalMensuel = Object.keys(commandeParCodeMensuel.codes).length; // Nombre de commandes uniques pour le mois en cours
+        this.montantTotalMensuel = commandeParCodeMensuel.montantTotal; // Montant total des commandes pour le mois en cours
+      
+        this.ngxSpinnerService.hide();
+      
+      }    
+);
+  }
 
 }
