@@ -33,6 +33,9 @@ export class CommandeService {
   public getAllCommandeByFournisseur(username): Observable<any> {
     return this.api.get('/panier/get-all-by-fournisseur/' + username);
   }
+  public getAllPanier(): Observable<any> {
+    return this.api.get('/panier/get-all');
+  }
 
   public getAllByIdCommande(id:string): Observable<any> {
     return this.api.get('/panier/get-all-by-id/' + id);

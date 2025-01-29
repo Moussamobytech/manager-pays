@@ -93,7 +93,6 @@ export class CommandeListComponent implements OnInit {
       ).subscribe(
         (data: any) => {
           this.commandes = data;
-          console.log("Commandes récupérées :", JSON.stringify(this.commandes));
           this.ngxSpinnerService.hide();
         }
       );
