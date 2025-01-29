@@ -185,22 +185,27 @@ export class DashboardComponent implements OnInit {
       })
     ).subscribe(
       (data: any) => {
-        this.commandes = data;
-      
+
+        // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
+        const deliveredData = data.filter((commande: any) => {
+          return commande.statutCommande.name === 'DELIVERED';
+        });
+        this.commandes = deliveredData;
+
         // Obtenir le mois et l'année en cours
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth(); // Mois en cours (0 = Janvier)
         const currentYear = currentDate.getFullYear(); // Année en cours
-      
+
         // Filtrer les commandes pour le mois en cours
-        const commandesMensuelles = data.filter((commande: any) => {
+        const commandesMensuelles = deliveredData.filter((commande: any) => {
           const dateCommande = new Date(commande.dateCommande);
           return (
             dateCommande.getMonth() === currentMonth &&
             dateCommande.getFullYear() === currentYear
           );
         });
-      
+
         // Calculer les totaux pour toutes les commandes
         const commandeParCode = data.reduce(
           (acc: any, commande: any) => {
@@ -210,7 +215,7 @@ export class DashboardComponent implements OnInit {
           },
           { codes: {}, montantTotal: 0 }
         );
-      
+
         // Calculer les totaux pour les commandes mensuelles
         const commandeParCodeMensuel = commandesMensuelles.reduce(
           (acc: any, commande: any) => {
@@ -220,19 +225,19 @@ export class DashboardComponent implements OnInit {
           },
           { codes: {}, montantTotal: 0 }
         );
-      
-        this.venteTotal = data.length; // Total des commandes
+
+        this.venteTotal = deliveredData.length; // Total des commandes
         this.commandeTotal = Object.keys(commandeParCode.codes).length; // Nombre de commandes uniques
         this.montantTotal = commandeParCode.montantTotal; // Montant total des commandes
-      
+
         // Valeurs mensuelles
         this.commandeTotalMensuel = Object.keys(commandeParCodeMensuel.codes).length; // Nombre de commandes uniques pour le mois en cours
         this.montantTotalMensuel = commandeParCodeMensuel.montantTotal; // Montant total des commandes pour le mois en cours
-      
+
         this.ngxSpinnerService.hide();
-      
-      }    
-);
+
+      }
+    );
   }
 
 }

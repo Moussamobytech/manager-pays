@@ -19,18 +19,18 @@ import { of } from 'rxjs'; // Ajoutez cette importation
   templateUrl: './info-cards.component.html',
   styleUrls: ['./info-cards.component.scss']
 })
-export class InfoCardsComponent implements OnInit { 
+export class InfoCardsComponent implements OnInit {
   public orders: any[];
   public ordersMensuel: any[];
   public products: any[];
   public customers: any[];
-  public  refunds: any[];
+  public refunds: any[];
   public colorScheme: any = {
     domain: ['rgba(255,255,255,0.8)']
-  }; 
+  };
   public autoScale = true;
-  @ViewChild('resizedDiv') resizedDiv:ElementRef;
-  public previousWidthOfResizedDiv:number = 0; 
+  @ViewChild('resizedDiv') resizedDiv: ElementRef;
+  public previousWidthOfResizedDiv: number = 0;
   totalOrders: any = 0;
   totalMontantOrders: any = 0;
   totalOrdersMensuelles: any;
@@ -41,74 +41,74 @@ export class InfoCardsComponent implements OnInit {
   venteTotalMensuel: number;
   montantTotalMensuel: any;
   productsMensuel: { name: string; series: any; }[];
-  
- 
-  constructor(
-       public appSettings: AppSettings,
-       public dialog: MatDialog, private commonService: CommonMessageService,
-       private ngxSpinnerService: NgxSpinnerService,
-       private auth: AuthenticationService,
-       private commandeService: CommandeService
-     ){
-     }
 
-  ngOnInit(){
-  //  this.orders = orders;
+
+  constructor(
+    public appSettings: AppSettings,
+    public dialog: MatDialog, private commonService: CommonMessageService,
+    private ngxSpinnerService: NgxSpinnerService,
+    private auth: AuthenticationService,
+    private commandeService: CommandeService
+  ) {
+  }
+
+  ngOnInit() {
+    //  this.orders = orders;
     this.products = products;
-   // this.customers = customers;
-    this.refunds = refunds;
-   // this.orders = this.addRandomValue('orders');     
+    // this.customers = customers;
+   // this.refunds = refunds;
+    // this.orders = this.addRandomValue('orders');     
     //this.customers = this.addRandomValue('customers');
     this.getCommandes()
     this.getAllPaniers();
   }
-  
+
   public onSelect(event) {
     console.log(event);
   }
 
   public addRandomValue(param) {
-    switch(param) {
+    switch (param) {
       case 'orders':
-        for (let i = 1; i < 30; i++) { 
-          this.orders[0].series.push({"name": 1980+i, "value": Math.ceil(Math.random() * 1000000)});
-        } 
+        for (let i = 1; i < 30; i++) {
+          this.orders[0].series.push({ "name": 1980 + i, "value": Math.ceil(Math.random() * 1000000) });
+        }
         return this.orders;
       case 'customers':
-        for (let i = 1; i < 15; i++) { 
-          this.customers[0].series.push({"name": 2000+i, "value": Math.ceil(Math.random() * 1000000)});
-        } 
+        for (let i = 1; i < 15; i++) {
+          this.customers[0].series.push({ "name": 2000 + i, "value": Math.ceil(Math.random() * 1000000) });
+        }
         return this.customers;
       default:
         return this.orders;
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.orders[0].series.length = 0;
     this.customers[0].series.length = 0;
   }
 
-  ngAfterViewChecked() {    
-    if(this.previousWidthOfResizedDiv != this.resizedDiv.nativeElement.clientWidth){
-     setTimeout(() => this.orders = [...orders] ); 
-      setTimeout(() => this.products = [...products] ); 
-     // setTimeout(() => this.customers = [...customers] ); 
-      setTimeout(() => this.refunds = [...refunds] );
+  ngAfterViewChecked() {
+    if (this.previousWidthOfResizedDiv != this.resizedDiv.nativeElement.clientWidth) {
+      setTimeout(() => this.orders = [...orders]);
+      setTimeout(() => this.products = [...products]);
+      // setTimeout(() => this.customers = [...customers] ); 
+      setTimeout(() => this.refunds = [...refunds]);
     }
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
   }
 
   public async getCommandes() {
     this.ngxSpinnerService.show(); // Afficher le spinner avant la requête
-  
+
     await this.commandeService.getAllCommande().pipe(
       map((commandes: any[]) => {
         // Obtenir le mois et l'année en cours
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth(); // Mois en cours (0 = Janvier)
         const currentYear = currentDate.getFullYear(); // Année en cours
-  
+
         // Filtrer les commandes pour le mois en cours
         const commandesMensuelles = commandes.filter((commande: any) => {
           const dateCommande = new Date(commande.dateCommande); // Utiliser `dateCommande` au lieu de `codeCommande`
@@ -117,9 +117,8 @@ export class InfoCardsComponent implements OnInit {
             dateCommande.getFullYear() === currentYear
           );
         });
-  
-        console.log("Commandes mensuelles ::::::::::::::::::::::::::: ", commandesMensuelles);
-  
+
+
         // Transformer les données pour les adapter à la structure de `orders`
         const transformedOrders = [
           {
@@ -130,7 +129,7 @@ export class InfoCardsComponent implements OnInit {
             }))
           }
         ];
-//:::::::::::::::::::::::::::::: TRANSFORME ORDER MENSUEL ::::::::::::::::: 
+        //:::::::::::::::::::::::::::::: TRANSFORME ORDER MENSUEL ::::::::::::::::: 
         const transformedOrdersMensuel = [
           {
             name: 'Commande',
@@ -140,12 +139,12 @@ export class InfoCardsComponent implements OnInit {
             }))
           }
         ];
-  
+
         // Calculer le total des commandes mensuelles
         const totalMontantMensuelles = commandesMensuelles.reduce((total: number, commande: any) => {
           return total + commande.montant;
         }, 0);
-  
+
         // Retourner les données transformées et les totaux mensuels
         return {
           transformedOrders,
@@ -157,11 +156,11 @@ export class InfoCardsComponent implements OnInit {
       catchError((error: any) => {
         console.error("Erreur lors de la récupération des commandes : ", error);
         this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
-        
+
         // Retourner un Observable avec des valeurs par défaut
         return of({
           transformedOrders: [],
-          transformedOrdersMensuel:[],
+          transformedOrdersMensuel: [],
           totalOrdersMensuelles: 0,
           totalMontantMensuelles: 0
         });
@@ -171,8 +170,8 @@ export class InfoCardsComponent implements OnInit {
       })
     ).subscribe(
       (result: any) => {
-        const { transformedOrders,transformedOrdersMensuel, totalOrdersMensuelles, totalMontantMensuelles } = result;
-  
+        const { transformedOrders, transformedOrdersMensuel, totalOrdersMensuelles, totalMontantMensuelles } = result;
+
         // Mettre à jour les variables du composant
         this.orders = transformedOrders;
         this.ordersMensuel = transformedOrdersMensuel;
@@ -180,13 +179,10 @@ export class InfoCardsComponent implements OnInit {
         this.totalMontantOrders = this.orders[0].series.reduce((total: number, serie: any) => {
           return total + serie.value;
         }, 0);
-  
+
         // Mettre à jour les totaux mensuels
         this.totalOrdersMensuelles = totalOrdersMensuelles;
         this.totalMontantMensuelles = totalMontantMensuelles;
-  
-        console.log("Total des commandes mensuelles :", this.totalOrdersMensuelles);
-        console.log("Montant total des commandes mensuelles :", this.totalMontantMensuelles);
       }
     );
   }
@@ -194,20 +190,20 @@ export class InfoCardsComponent implements OnInit {
 
   public async getAllPaniers() {
     this.ngxSpinnerService.show(); // Afficher le spinner avant la requête
-  
+
     await this.commandeService.getAllPanier().pipe(
       map((data: any) => {
         // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
         const deliveredData = data.filter((commande: any) => {
           return commande.statutCommande.name === 'DELIVERED';
         });
-  
-// Transformer les données pour les adapter à la structure de `Products`
-const transformedProducts = deliveredData.map(product => ({
-  name: product.dateCommande.split('T')[0], // Utiliser la date comme nom
-  value: product.montant // Utiliser le montant comme valeur
-}));
-this.products = transformedProducts;
+
+        // Transformer les données pour les adapter à la structure de `Products`
+        const transformedProducts = deliveredData.map(product => ({
+          name: product.dateCommande.split('T')[0], // Utiliser la date comme nom
+          value: product.montant // Utiliser le montant comme valeur
+        }));
+        this.products = transformedProducts;
 
 
         return deliveredData; // Retourner les données filtrées
@@ -223,12 +219,12 @@ this.products = transformedProducts;
     ).subscribe(
       (filteredData: any) => {
         this.paniers = filteredData;
-  
+
         // Obtenir le mois et l'année en cours
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth(); // Mois en cours (0 = Janvier)
         const currentYear = currentDate.getFullYear(); // Année en cours
-  
+
         // Filtrer les commandes pour le mois en cours
         const commandesMensuelles = filteredData.filter((commande: any) => {
           const dateCommande = new Date(commande.dateCommande);
@@ -239,15 +235,15 @@ this.products = transformedProducts;
         });
 
         //:::::::::::::::::::::::::::::: TRANSFORME ORDER MENSUEL ::::::::::::::::: 
- const transformedProductsMensuel = commandesMensuelles.map(product => ({
-  name: product.dateCommande.split('T')[0], // Utiliser la date comme nom
-  value: product.montant // Utiliser le montant comme valeur
-}));
+        const transformedProductsMensuel = commandesMensuelles.map(product => ({
+          name: product.dateCommande.split('T')[0], // Utiliser la date comme nom
+          value: product.montant // Utiliser le montant comme valeur
+        }));
 
-console.log(transformedProductsMensuel);
- 
-this.productsMensuel = transformedProductsMensuel;
-  
+        console.log(transformedProductsMensuel);
+
+        this.productsMensuel = transformedProductsMensuel;
+
         // Calculer les totaux pour toutes les commandes (DELIVERED uniquement)
         const commandeParCode = filteredData.reduce(
           (acc: any, commande: any) => {
@@ -257,7 +253,7 @@ this.productsMensuel = transformedProductsMensuel;
           },
           { codes: {}, montantTotal: 0 }
         );
-  
+
         // Calculer les totaux pour les commandes mensuelles (DELIVERED uniquement)
         const commandeParCodeMensuel = commandesMensuelles.reduce(
           (acc: any, commande: any) => {
@@ -267,45 +263,17 @@ this.productsMensuel = transformedProductsMensuel;
           },
           { codes: {}, montantTotal: 0 }
         );
-  
+
         this.venteTotal = filteredData.length; // Total des commandes DELIVERED
         this.montantVenteTotal = commandeParCode.montantTotal; // Montant total des commandes DELIVERED
-  
+
         // Valeurs mensuelles
         this.venteTotalMensuel = commandesMensuelles.length; // Nombre de commandes uniques pour le mois en cours
         this.montantTotalMensuel = commandeParCodeMensuel.montantTotal; // Montant total des commandes pour le mois en cours
-  /*
-        console.log("Total des commandes DELIVERED :", this.venteTotal);
-        console.log("Montant total des commandes DELIVERED :", this.montantVenteTotal);
-        console.log("Total des commandes mensuelles DELIVERED :", this.venteTotalMensuel);
-        console.log("Montant total des commandes mensuelles DELIVERED :", this.montantTotalMensuel);
-     */
+
       }
     );
   }
 
- /* public async getCommandes() {
-       /// this.ngxSpinnerService.show(); // Assurez-vous d'afficher le spinner avant la requête
-      
-        await this.commandeService.getAllCommande().pipe(
-          map((commande: any) => {           
-            return commande;
-          }),
-          catchError((error: any) => {
-            console.error("Erreur lors de la récupération des commandes : ", error);
-            this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
-            return []; // Retourne une liste vide en cas d'erreur pour éviter les plantages
-          }),
-          finalize(() => {
-            this.ngxSpinnerService.hide(); // Masquez le spinner une fois la requête terminée (succès ou erreur)
-          })
-        ).subscribe(
-          (data: any) => {
-            console.log("Commandes récupérées :", JSON.stringify(data));
-            this.ngxSpinnerService.hide();
-          }
-        );
-      }
-      */
 
 }
