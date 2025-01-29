@@ -1,12 +1,20 @@
 <!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
    À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
-   <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
+  <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
     <button mat-raised-button class="bleu mr-2" matTooltip="Ajouter un produit" (click)="add()">
       {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
     </button>
     <button mat-raised-button class="mr-2" color="warn" matTooltip="Recharger mon compte" (click)="openDialog()">
       Recharger mon compte
     </button>
+    <!-- <div fxLayout="row" fxLayoutAlign="end center">
+      <h3>Boutique</h3> -->
+      <div fxLayout="row" class="copy-container">
+        <input matInput type="text" [value]="shopLink" class="copy-input" #linkInput readonly>
+        <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
+        <mat-icon matSuffix *ngIf="isCopied">check</mat-icon>
+      </div>
+    <!-- </div> -->
   </div>
 
   <ng-template #popupTemplate>

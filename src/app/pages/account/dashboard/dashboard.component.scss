@@ -37,3 +37,32 @@
 .vert{
   background-color: #7db88a;
 }
+
+////////////////////////////// Copy Container //////////////////////////////
+.copy-container {
+  position: relative;
+  // margin-top: 5px;
+  .copy-input {
+    width: 100%;
+    padding: 8px 35px 8px 8px;
+    font-size: 13px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    color: #333;
+    &:focus{
+      outline: 1.5px solid #25224a;
+    }
+  }
+  mat-icon{
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    color: #25224a;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    &:hover {
+      color: #c54896;
+    }
+  }
+}

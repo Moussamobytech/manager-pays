@@ -27,15 +27,18 @@ export class DashboardComponent implements OnInit {
     inactif: 0,
     pending: 0,
     contact:0,
-
   }
+  isCopied: boolean = false;
+  shopLink: string = null;
+
   constructor(private auth: AuthenticationService, private productService: ProductService,
     private router: Router, public dialog: MatDialog, private fb: FormBuilder, private snackBar:MatSnackBar) {
 
   }
 
   ngOnInit() {
-    this.currentUser = this.auth.currentUser()
+    this.currentUser = this.auth.currentUser();
+    this.shopLink = "https://fidelity-market.com/#/sellers/"+this.currentUser.username;
     //this.username = this.auth.currentUser();
    // this.points = this.currentUser.points
 
@@ -151,5 +154,17 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  copyLink(inputElement: HTMLInputElement): void {
+    inputElement.style.transition = '.3s';
+    navigator.clipboard.writeText(this.shopLink).then(
+      () => {
+        this.isCopied = true;
+        setTimeout(() => (this.isCopied = false), 3000);
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+      }
+    );
+  }
 
 }
