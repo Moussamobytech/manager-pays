@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public add(){
-    this.router.navigate(["/account/add-product"])
+    this.router.navigate(["/account/products-seller/add-product"])
   }
 
   currentProfile(roles) {
