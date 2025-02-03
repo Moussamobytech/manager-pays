@@ -60,36 +60,40 @@ export class AnalyticsComponent implements OnInit {
 
   public async getAllPaniers() {
     this.ngxSpinnerService.show();
-  
+
     try {
       const data: any = await firstValueFrom(this.commandeService.getAllPanier());
-  
+
       // Filtrer les commandes livrées
       const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
-  
+
       // Fonction pour formater la date en "YYYY-MM"
       const getMonthYear = (dateStr: string) => {
         const date = new Date(dateStr);
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       };
-  
+
       // Regrouper les montants des ventes par mois
       const groupedByMonth = deliveredData.reduce((acc, product) => {
         const month = getMonthYear(product.dateCommande);
         acc[month] = (acc[month] || 0) + product.montant;
         return acc;
       }, {} as Record<string, number>);
-  
+
       // Transformer les données pour le graphique
+      const series = Object.entries(groupedByMonth)
+      .map(([month, montant]) => ({
+          name: month,
+          value: montant
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)); // Tri des dates du plus ancien au plus récent
+
       this.analytics = [
         {
-          name: 'Évolution des Ventes',
-          series: Object.entries(groupedByMonth).map(([month, montant]) => ({
-            name: month,
-            value: montant
-          }))
+            name: 'Évolution des ventes',
+            series: series
         }
-      ];
+    ];
     } catch (error) {
       console.error("Erreur lors de la récupération des commandes :", error);
       this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
@@ -97,6 +101,6 @@ export class AnalyticsComponent implements OnInit {
       this.ngxSpinnerService.hide();
     }
   }
-  
+
 
 }

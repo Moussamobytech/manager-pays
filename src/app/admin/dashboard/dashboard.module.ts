@@ -13,6 +13,7 @@ import { SellerInfoComponent } from './seller-info/seller-info.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
+import { CAnalyticsComponent } from './c-analytics/c-analytics.component';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -28,7 +29,8 @@ export const routes: Routes = [
     AnalyticsComponent,
     MontlySalesComponent,
     SellerInfoComponent,
-    LatestOrdersComponent
+    LatestOrdersComponent,
+    CAnalyticsComponent
   ],
   imports: [
     NgxPaginationModule,

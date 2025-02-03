@@ -54,7 +54,7 @@ export class InfoCardsComponent implements OnInit {
 
   ngOnInit() {
     //  this.orders = orders;
-    this.products = products;
+    //this.products = products;
     // this.customers = customers;
    // this.refunds = refunds;
     // this.orders = this.addRandomValue('orders');     
@@ -86,7 +86,7 @@ export class InfoCardsComponent implements OnInit {
 
   ngOnDestroy() {
     this.orders[0].series.length = 0;
-    this.customers[0].series.length = 0;
+   // this.customers[0].series.length = 0;
   }
 
   ngAfterViewChecked() {
