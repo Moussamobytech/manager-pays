@@ -35,12 +35,16 @@ export class DashboardComponent implements OnInit {
 
   }
   commandes: any;
+  commandePending:any
+  commandePendingTotal:any = 0;
 
 
   commandeTotal: any = 0;
   venteTotal: any = 0;
   montantTotal: any = 0;
-  commandeTotalMensuel: any = 0;;
+  commandeTotalMensuel: any = 0;
+  pourcentageEvolution: any;
+;
   montantTotalMensuel: any = 0;;
 
 
@@ -71,6 +75,7 @@ export class DashboardComponent implements OnInit {
   public add() {
     this.router.navigate(["/account/add-product"])
   }
+
 
   currentProfile(roles) {
     // console.log("roles :::::::: ",roles)
@@ -186,6 +191,13 @@ export class DashboardComponent implements OnInit {
     ).subscribe(
       (data: any) => {
 
+          // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
+          const pendingData = data.filter((commande: any) => {
+            return commande.statutCommande.name === 'PENDING';
+          });
+          this.commandePending = pendingData
+          this.commandePendingTotal = pendingData.length
+
         // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
         const deliveredData = data.filter((commande: any) => {
           return commande.statutCommande.name === 'DELIVERED';
@@ -234,6 +246,34 @@ export class DashboardComponent implements OnInit {
         this.commandeTotalMensuel = Object.keys(commandeParCodeMensuel.codes).length; // Nombre de commandes uniques pour le mois en cours
         this.montantTotalMensuel = commandeParCodeMensuel.montantTotal; // Montant total des commandes pour le mois en cours
 
+       
+       // Obtenir le mois et l'année du mois précédent
+const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+// Filtrer les commandes pour le mois précédent
+const commandesMoisPrecedent = deliveredData.filter((commande: any) => {
+  const dateCommande = new Date(commande.dateCommande);
+  return (
+    dateCommande.getMonth() === previousMonth &&
+    dateCommande.getFullYear() === previousYear
+  );
+});
+
+// Calculer le montant total des ventes du mois précédent
+const montantTotalMoisPrecedent = commandesMoisPrecedent.reduce(
+  (total: number, commande: any) => total + commande.montant,
+  0
+);
+
+// Calcul de la variation en pourcentage
+if (montantTotalMoisPrecedent > 0) {
+  this.pourcentageEvolution = (((this.montantTotalMensuel - montantTotalMoisPrecedent) / montantTotalMoisPrecedent) * 100).toFixed(2);
+} else {
+  this.pourcentageEvolution = this.montantTotalMensuel > 0 ? 100 : 0; // Si le mois précédent était vide, la croissance est de 100%
+}
+
+       
         this.ngxSpinnerService.hide();
 
       }

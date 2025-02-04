@@ -1,42 +1,42 @@
 <!-- <p class="text-muted">Hello, <b>{{currentUser.firstname + " "+ currentUser.lastname}} !</b>
    À partir de votre tableau de bord, vous avez la possibilité de voir un aperçu de votre activité, de mettre à jour les informations de votre compte. Sélectionnez un lien ci-dessous pour afficher ou modifier les informations.</p> -->
-   <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
-    <button mat-raised-button class="bleu mr-2" matTooltip="Ajouter un produit" (click)="add()">
-      {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
-    </button>
-    <button mat-raised-button class="mr-2" color="warn" matTooltip="Recharger mon compte" (click)="openDialog()">
-      Recharger mon compte
-    </button>
+<div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
+  <button mat-raised-button class="bleu mr-2" matTooltip="Ajouter un produit" (click)="add()">
+    {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
+  </button>
+  <button mat-raised-button class="mr-2" color="warn" matTooltip="Recharger mon compte" (click)="openDialog()">
+    Recharger mon compte
+  </button>
+</div>
+
+<ng-template #popupTemplate>
+  <h1 mat-dialog-title>Recharger mon compte</h1>
+  <div mat-dialog-content>
+    <!-- <p>Entrez les détails pour recharger votre compte.</p> -->
+    <form [formGroup]="form" (ngSubmit)="onRecharge()" autocomplete="off">
+      <div mat-dialog-content>
+        <div fxLayout="row wrap">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Montant</mat-label>
+            <input matInput formControlName="amount" required type="number">
+            <mat-error *ngIf="form.get('amount').hasError('required')">
+              {{"FIELD_ERROR.AMOUNT_REQUIRED" | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
+
+          <button mat-raised-button class="bleu" type="submit">Recharge</button>
+        </div>
+      </div>
+    </form>
   </div>
+</ng-template>
 
-  <ng-template #popupTemplate>
-    <h1 mat-dialog-title>Recharger mon compte</h1>
-    <div mat-dialog-content>
-      <!-- <p>Entrez les détails pour recharger votre compte.</p> -->
-      <form [formGroup]="form" (ngSubmit)="onRecharge()" autocomplete="off">
-        <div mat-dialog-content>
-          <div fxLayout="row wrap">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Montant</mat-label>
-              <input matInput formControlName="amount" required type="number">
-              <mat-error *ngIf="form.get('amount').hasError('required')">
-                {{"FIELD_ERROR.AMOUNT_REQUIRED" | translate}}
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div mat-dialog-actions>
-          <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
-            <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
-
-            <button mat-raised-button class="bleu" type="submit">Recharge</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </ng-template>
-
-
+<!--
 <div fxLayout="row wrap">
 
   <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
@@ -47,7 +47,6 @@
   </mat-card>  </div>
   <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="bleu tile p-2">
-      <!-- <mat-card class="gradient-green tile p-2"> -->
         <mat-icon>check_circle</mat-icon>
         <h2>{{statsNumber.actif}}</h2>
         <p> Produits actif</p>
@@ -61,13 +60,14 @@
     </mat-card>
   </div>
 </div>
+-->
 
-<div fxLayout="row wrap">
-  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+
+  <!--<div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-gray tile p-2">
-        <mat-icon>star</mat-icon>
-         <h2>0</h2>
-        <p>Meilleurs produits</p>
+      <mat-icon>star</mat-icon>
+      <h2>0</h2>
+      <p>Meilleurs produits</p>
     </mat-card>
   </div>
 
@@ -84,9 +84,42 @@
       <h2>{{statsNumber.contact}}</h2>
       <p>Clients Acquis</p>
     </mat-card>
+  </div> -->
+  <!--//::::::::::::::::::::::::::::::::::::::::::::-->
+  <div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-teal tile p-2" routerLink = "/account/orders-manage">
+            <mat-icon>shop</mat-icon>
+      <h2>{{commandePendingTotal || '0'}}</h2>
+      <p>Commandes en attente</p>
+    </mat-card>
   </div>
 
-<!--! :::::::::::::::::::::::::::::::::::::::: Commande :::::::::::::::::::::::::::::::::::!-->
+  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="gradient-brown tile p-2" >
+      <mat-icon>score</mat-icon>
+      <h2>{{montantTotalMensuel || '0'}} Fcfa</h2>
+      <p>Vente du mois {{pourcentageEvolution}}%</p>
+    </mat-card>
+  </div>
+
+  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="rose tile p-2" routerLink = "/account/products-seller">
+      <mat-icon>check_circle</mat-icon>
+      <h2>{{statsNumber.actif}}</h2>
+      <p>Produits actif</p>
+    </mat-card>
+  </div>
+
+  <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+    <mat-card class="bleu tile p-2">
+      <mat-icon>check_circle</mat-icon>
+      <h2>{{statsNumber.actif}}</h2>
+      <p>Visiteurs pour mes produits</p>
+    </mat-card>
+  </div>
+
+  <!--! :::::::::::::::::::::::::::::::::::::::: Commande :::::::::::::::::::::::::::::::::::!
 
  <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-gray tile p-2">
@@ -110,12 +143,22 @@
     <p>Evolution des ventes/mois ({{commandeTotalMensuel || '0'}})</p>
 </mat-card>
 </div>
-<!-- <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
+
+-->
+
+  <!-- <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">
 <mat-card class="gradient-brown tile p-2">
   <mat-icon>event_note</mat-icon>
   <h2>0</h2>
   <p>Visites par an</p>
 </mat-card>
 </div>  -->
-</div>
 
+  <div fxLayout="row wrap" fxFlex="100">
+    <div fxFlex="100" fxFlex.gt-sm="100" class="p-2">
+      <app-analytics></app-analytics>
+    </div>
+
+  </div>
+
+</div>
