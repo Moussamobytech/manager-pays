@@ -67,33 +67,44 @@ export class AnalyticsComponent implements OnInit {
       // Filtrer les commandes livrées
       const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
 
-      // Fonction pour formater la date en "YYYY-MM"
-      const getMonthYear = (dateStr: string) => {
-        const date = new Date(dateStr);
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-      };
+     // Fonction pour formater la date en "Mois Année" (ex: "Janvier 2024")
+const getMonthYear = (dateStr: string) => {
+  const date = new Date(dateStr);
+  return {
+    formatted: date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }),
+    timestamp: date.getTime() // Stocker un timestamp pour le tri
+  };
+};
 
-      // Regrouper les montants des ventes par mois
-      const groupedByMonth = deliveredData.reduce((acc, product) => {
-        const month = getMonthYear(product.dateCommande);
-        acc[month] = (acc[month] || 0) + product.montant;
-        return acc;
-      }, {} as Record<string, number>);
+// Initialiser groupedByMonth avec un type explicite
+const groupedByMonth: Record<string, { value: number; timestamp: number }> = {};
 
-      // Transformer les données pour le graphique
-      const series = Object.entries(groupedByMonth)
-      .map(([month, montant]) => ({
-          name: month,
-          value: montant
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name)); // Tri des dates du plus ancien au plus récent
+// Regrouper les montants des ventes par mois
+deliveredData.forEach((product: any) => {
+  const { formatted, timestamp } = getMonthYear(product.dateCommande);
+  if (!groupedByMonth[formatted]) {
+    groupedByMonth[formatted] = { value: 0, timestamp };
+  }
+  groupedByMonth[formatted].value += product.montant;
+});
 
-      this.analytics = [
-        {
-            name: 'Évolution des ventes',
-            series: series
-        }
-    ];
+// Transformer les données pour le graphique et trier par date croissante
+const series = Object.entries(groupedByMonth)
+  .map(([month, data]) => ({
+    name: month.charAt(0).toUpperCase() + month.slice(1), // Mettre la première lettre en majuscule
+    value: data.value,
+    timestamp: data.timestamp
+  }))
+  .sort((a, b) => a.timestamp - b.timestamp) // Tri des dates du plus ancien au plus récent
+  .map(({ name, value }) => ({ name, value })); // Supprimer timestamp après tri
+
+this.analytics = [
+  {
+    name: 'Évolution des ventes',
+    series: series
+  }
+];
+
     } catch (error) {
       console.error("Erreur lors de la récupération des commandes :", error);
       this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");

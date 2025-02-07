@@ -18,7 +18,6 @@ import { HowWorksComponent } from './how_works/how_works.component';
 import { OrdersManageComponents } from './orders-manage/orders-manage.components';
 import { ParrainageComponent } from './parrainage/parrainage.component';
 import { AddParrainageComponent } from './add-parrainage/add-parrainage.component';
-import { CAnalyticsComponent } from './c-analytics/c-analytics.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AnalyticsComponent } from './analytics/analytics.component';
 const config: InputFileConfig = {
@@ -71,7 +70,6 @@ export const routes: Routes = [
     OrdersManageComponents,
     ParrainageComponent,
     AddParrainageComponent,
-    CAnalyticsComponent,
     AnalyticsComponent
     //OrdersManageComponent
   ]
