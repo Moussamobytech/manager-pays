@@ -51,5 +51,12 @@ export class ProductsCardComponent implements OnInit {
   }
 
 
+  setProductViewCount(id){
+    this.produitService.viewProductById(id).then(data => {
+    data      
+    })
+  }
+
+
 
 }

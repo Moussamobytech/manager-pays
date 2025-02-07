@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
   commandeTotalMensuel: any = 0;
   pourcentageEvolution: any = 0;
   montantTotalMensuel: any = 0;
+  visitTotal: any;
 
 
   constructor(private auth: AuthenticationService, private productService: ProductService, private ngxSpinnerService: NgxSpinnerService,
@@ -55,6 +56,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser()
+    this.getProductViewCount(this.currentUser.username);
     //this.username = this.auth.currentUser();
     // this.points = this.currentUser.points
 
@@ -277,6 +279,14 @@ if (montantTotalMoisPrecedent > 0) {
 
       }
     );
+  }
+
+
+
+  getProductViewCount(username){
+    this.productService.getViewsForCurrentMonthOfProduct(username).then(data => {
+   this.visitTotal = data;          
+    })
   }
 
 }
