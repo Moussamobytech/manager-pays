@@ -154,7 +154,7 @@
 </mat-card>
 </div>  -->
 
-  <div fxLayout="row wrap" fxFlex="100">
+  <div fxLayout="row wrap" fxFlex="100" *ngIf="montantTotalMensuel != 0"> 
     <div fxFlex="100" fxFlex.gt-sm="100" class="p-2">
       <app-analytics></app-analytics>
     </div>

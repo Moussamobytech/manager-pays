@@ -43,9 +43,8 @@ export class DashboardComponent implements OnInit {
   venteTotal: any = 0;
   montantTotal: any = 0;
   commandeTotalMensuel: any = 0;
-  pourcentageEvolution: any;
-;
-  montantTotalMensuel: any = 0;;
+  pourcentageEvolution: any = 0;
+  montantTotalMensuel: any = 0;
 
 
   constructor(private auth: AuthenticationService, private productService: ProductService, private ngxSpinnerService: NgxSpinnerService,
