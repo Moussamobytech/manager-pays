@@ -99,7 +99,8 @@
     <mat-card class="gradient-brown tile p-2" >
       <mat-icon>score</mat-icon>
       <h2>{{montantTotalMensuel || '0'}} Fcfa</h2>
-      <p>Vente du mois {{pourcentageEvolution}}%</p>
+      <p *ngIf="pourcentageEvolution > 0">Vente du mois +{{pourcentageEvolution}}%</p>
+      <p *ngIf="pourcentageEvolution < 0">Vente du mois {{pourcentageEvolution}}%</p>
     </mat-card>
   </div>
 

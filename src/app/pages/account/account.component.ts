@@ -37,7 +37,7 @@ export class AccountComponent implements OnInit {
     { name: 'Information', href: 'information', icon: 'info' },
     { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
     { name: 'Produits', href: 'products-seller', icon: 'add_shopping_cart' },
-    { name: 'Mon achat', href: 'Mes commandes effectuées', icon: 'shop' },
+   // { name: 'Mon achat', href: 'Mes commandes effectuées', icon: 'shop' },
     { name: 'Logout', href: '/sign-in', icon: 'power_settings_new' },
   ];
 
@@ -58,10 +58,10 @@ export class AccountComponent implements OnInit {
 
     this.links = [
       { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-      { name: 'Parrainage', href: 'parrainage', icon: 'people' },
+     // { name: 'Parrainage', href: 'parrainage', icon: 'people' },
       { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
       { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
-      { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
+      //{ name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
       { name: 'Informations', href: 'information', icon: 'info_outline' },
       { name: 'Comment ca marche?', href: 'how_works', icon: 'help_outline' },
       { name: 'Déconnection', href: '/sign-in', icon: 'power_settings_new' },
