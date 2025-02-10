@@ -7,6 +7,7 @@ import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommandeService } from 'src/app/services/commande.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
 import { firstValueFrom } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-c-analytics',
@@ -41,8 +42,18 @@ export class CAnalyticsComponent implements OnInit {
   ) {
   }
 
+allData: any[] = []; // Stocker toutes les commandes pour filtrage dynamique
+
+selectedYear = new FormControl(new Date().getFullYear()); // Année actuelle par défaut
+availableYears: any ; // Liste des années disponibles
+
+
+
+
   ngOnInit(): void {
-    this.getCommandes()
+    this.getCommandes();
+  //  this.generateYearList();
+
   }
 
   onSelect(event) {
@@ -51,7 +62,7 @@ export class CAnalyticsComponent implements OnInit {
 
 
 
-
+/*
   public async getCommandes() {
     this.ngxSpinnerService.show(); // Afficher le spinner avant la requête
     try {
@@ -102,6 +113,72 @@ this.analytics = [
       this.ngxSpinnerService.hide();
     }
   }
+*/
+
+public async getCommandes() {
+  this.ngxSpinnerService.show();
+  try {
+    const data: any = await firstValueFrom(this.commandeService.getAllCommande());
+    
+    // Stocker toutes les commandes
+    this.allData = data;
+
+    // Extraire les années uniques des commandes
+    this.availableYears = [...new Set(data.map((cmd: any) => new Date(cmd.dateCommande).getFullYear()))]
+      .sort((a:any, b:any) => b - a); // Trier les années du plus récent au plus ancien
+
+    // Filtrer et afficher les données pour l'année sélectionnée
+    this.filterByYear();
+
+  } catch (error) {
+    console.error("Erreur lors de la récupération des commandes :", error);
+    this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
+  } finally {
+    this.ngxSpinnerService.hide();
+  }
+}
+
+
+
+  filterByYear() {
+    const getMonthYear = (dateStr: string) => {
+      const date = new Date(dateStr);
+      return {
+        formatted: date.toLocaleDateString('fr-FR', { month: 'long' }),
+        timestamp: date.getTime(),
+        year: date.getFullYear()
+      };
+    };
+  
+    const groupedByMonth: Record<string, { value: number; timestamp: number }> = {};
+  
+    this.allData
+    .filter((cmd) => getMonthYear(cmd.dateCommande).year === this.selectedYear.value)
+      .forEach((cmd: any) => {
+        const { formatted, timestamp } = getMonthYear(cmd.dateCommande);
+        if (!groupedByMonth[formatted]) {
+          groupedByMonth[formatted] = { value: 0, timestamp };
+        }
+        groupedByMonth[formatted].value += cmd.montant;
+      });
+  
+    const series = Object.entries(groupedByMonth)
+      .map(([month, data]) => ({
+        name: month.charAt(0).toUpperCase() + month.slice(1),
+        value: data.value,
+        timestamp: data.timestamp
+      }))
+      .sort((a, b) => a.timestamp - b.timestamp)
+      .map(({ name, value }) => ({ name, value }));
+  
+    this.analytics = [
+      {
+        name: 'Évolution des ventes',
+        series: series
+      }
+    ];
+  }
+  
 
 
 }

@@ -1,4 +1,11 @@
-<mat-card>
+<mat-card>    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Sélectionner une année</mat-label>
+        <mat-select [formControl]="selectedYear" (selectionChange)="filterByYear()">
+            <mat-option *ngFor="let year of availableYears" [value]="year">
+                {{ year }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
     <mat-card-header fxLayoutAlign="center">                
         <mat-card-title>Progression des ventes</mat-card-title>
     </mat-card-header>

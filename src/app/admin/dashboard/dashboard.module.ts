@@ -14,6 +14,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { CAnalyticsComponent } from './c-analytics/c-analytics.component';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -30,17 +31,20 @@ export const routes: Routes = [
     MontlySalesComponent,
     SellerInfoComponent,
     LatestOrdersComponent,
-    CAnalyticsComponent
+    CAnalyticsComponent,
   ],
   imports: [
     NgxPaginationModule,
     SwiperModule,
     InputFileModule,
-
+FormsModule,
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
-    NgxChartsModule
+    NgxChartsModule,
+    ReactiveFormsModule,
+    
+
   ]
 })
 export class DashboardModule { }
