@@ -109,7 +109,7 @@ export class AppService {
 
   private cache = new Map<string, any>();
 
-  public searchProducts1(categories: Category[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
+  public searchProductsAndCategories(categories: Category[]=[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
     // accents insensitivity
     const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const lowerTerm = normalizeString(term).trim();
@@ -334,19 +334,19 @@ export class AppService {
     // Parse the stringified JSON array
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
-  
+
     let existingProduct = this.productList.find((item) => item.id === product.id);
-  
+
     if (existingProduct) {
       existingProduct.cartCount += product.cartCount;
-      console.log("Already in cart, new count:", existingProduct.cartCount);
+      // console.log("Already in cart, new count:", existingProduct.cartCount);
     } else {
       this.productList.push({ ...product });
     }
-  
+
     this.updateCartData();
-  
-    const message = `The product ${product.nom} has been added to cart.`;
+
+    const message = `Le produit ${product.nom} a été ajouté au panier.`;
     const status = 'success';
     this.snackBar.open(message, '×', {
       panelClass: [status],
@@ -354,68 +354,68 @@ export class AppService {
       duration: 3000,
     });
   }
-  
+
   public increment(product: Product): void {
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
-  
+
     let existingProduct = this.productList.find((item) => item.id === product.id);
-  
+
     if (existingProduct) {
       existingProduct.cartCount += 1;
     } else {
       this.productList.push({ ...product, cartCount: 1 });
     }
-  
+
     this.updateCartData();
   }
-  
+
   public decrement(product: Product): void {
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
-  
+
     let existingProduct = this.productList.find((item) => item.id === product.id);
-  
+
     if (existingProduct && existingProduct.cartCount > 1) {
       existingProduct.cartCount -= 1;
     } else if (existingProduct) {
       // Remove product from cart if count reaches 0
       this.productList = this.productList.filter((item) => item.id !== product.id);
     }
-  
+
     this.updateCartData();
   }
-  
+
   public remove(product: Product): void {
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
-  
+
     const index: number = this.productList.findIndex((item) => item.id === product.id);
     if (index !== -1) {
       this.productList.splice(index, 1);
     }
-  
+
     this.updateCartData();
   }
-  
+
   private updateCartData(): void {
     this.Data.totalPrice = 0;
     this.Data.totalCartCount = 0;
-  
+
     this.productList.forEach((product) => {
       const productPrice = product.priceBasic != null ? parseFloat(product.priceBasic) : parseFloat(product.pricePromotion);
       this.Data.totalPrice += product.cartCount * productPrice;
       this.Data.totalCartCount += product.cartCount;
     });
-  
+
     sessionStorage.setItem('totalCartCount', JSON.stringify(this.Data.totalCartCount));
     sessionStorage.setItem('panier', JSON.stringify(this.productList));
-  
+
     // Update the cart count using CartService
     this.cartService.updateCartCount(this.Data.totalCartCount);
   }
-  
-  
+
+
 
 
 

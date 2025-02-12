@@ -103,9 +103,9 @@
         }
 
         &.btns {
+          margin-left: 10px;
           text-align: end;
           mat-icon{
-            margin-left: 10px;
             cursor: pointer;
           }
         }
@@ -215,16 +215,16 @@
     }
   }
 }
+
 .cart-container {
-    position: relative;
-    display: inline-block;
-  }
-  
+  position: relative;
+  display: inline-block;
+
   .cart-count {
     position: absolute;
-    top: -10px; /* Ajustez pour placer le nombre correctement */
-    right: 15px; /* Ajustez pour placer le nombre correctement */
-    background-color: red;
+    top: 5px;
+    right: 5px;
+    background-color: #d81b60;
     color: white;
     font-size: 12px;
     font-weight: bold;
@@ -235,5 +235,7 @@
     justify-content: center;
     align-items: center;
     z-index: 10;
+    cursor: pointer;
   }
-  
+}
+

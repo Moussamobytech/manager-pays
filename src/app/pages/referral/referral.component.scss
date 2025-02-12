@@ -1,0 +1,208 @@
+$primary_color: #25224a;
+$amber_color: #feb930;
+
+.referal-container {
+  font-family: Arial, sans-serif;
+  padding: 2%;
+  margin-bottom: 60px;
+
+  // .main-title {
+  //   color: $primary_color;
+  //   text-align: left;
+  //   margin-bottom: 20px;
+  //   font-size: 24px;
+  // }
+
+  .referal-header {
+    text-align: center;
+    padding: 0 5% 5px;
+
+    .gift-icon {
+      font-size: 30px;
+    }
+
+    .referal-details {
+      h2 {
+        text-align: center;
+        @media only screen and (max-width:500px) {
+          text-align: left;
+        }
+        margin: 10px 0;
+        padding: 3px;
+        color: $primary_color;
+      }
+
+      p {
+        text-align: center;
+        color: $primary_color;
+      }
+
+      .referal-link {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        gap: 10px;
+
+        .copy-container {
+          position: relative;
+          margin-top: 5px;
+
+          .copy-input {
+            width: 100%;
+            padding: 13px 35px 13px 8px;
+            font-size: 13px;
+            border: none;
+            border-radius: 4px;
+            color: $primary_color;
+            background-color: #eee;
+
+            &:focus {
+              outline: 1px solid $primary_color;
+            }
+          }
+
+          mat-icon {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+            color: $primary_color;
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+            &:hover {
+              color: $amber_color;
+            }
+          }
+        }
+
+        .share-icons {
+          display: flex;
+          gap: 10px;
+
+          i, mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            border: none;
+            color: white;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+
+            &.wa-icon {
+              background-color: forestgreen;
+
+              &:hover {
+                background-color: darken(forestgreen, 10%);
+              }
+            }
+
+            &.ph-icon {
+              background-color: $amber_color;
+
+              &:hover {
+                background-color: darken($amber_color, 10%);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .referal-link {
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .copy-container {
+        width: 90%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      max-width: 80%;
+      border-radius: 10px;
+      background-color: #eee;
+      margin: auto;
+      padding: 15px 25px 10px 25px;
+
+      .gift-icon {
+        font-size: 50px;
+      }
+
+      .referal-details {
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px 10px 0 10px;
+
+        h2 {
+          background-color: $amber_color;
+          color: $primary_color;
+          border-radius: 5px;
+          font-size: 20px;
+        }
+
+        p {
+          padding: 0 10px;
+        }
+
+        .share-icons {
+          margin-bottom: 10px;
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+
+    @media (max-width: 400px) {
+      .referal-details h2 {
+        font-size: 18px;
+      }
+
+      .share-icons {
+        display: inline-flex;
+      }
+    }
+  }
+
+
+
+
+  .referal-benefits {
+    // margin-top: 20px;
+
+    .benefit {
+      height: 180px;
+      margin-top: 16px;
+      // background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+
+      .icon {
+        font-size: 40px;
+        color: $amber_color;
+        // margin-bottom: 10px;
+      }
+
+      h3 {
+        color: $amber_color;
+      }
+
+      p {
+        color: $primary_color;
+        margin: 5px 0 0;
+        @media only screen and (max-width:470px) {
+          font-size: x-small;
+        }
+      }
+    }
+  }
+}
+

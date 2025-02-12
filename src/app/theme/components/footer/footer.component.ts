@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from 'express';
 import { Newsletter } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AnalyticsService } from 'src/app/services/analitycs.service';
@@ -13,7 +14,8 @@ export class FooterComponent implements OnInit {
 public newsletter: Newsletter[];
 contactForm: UntypedFormGroup;
 
-  constructor(public formBuilder: UntypedFormBuilder, public appService : AppService, private analitycsService: AnalyticsService) { }
+  constructor(public formBuilder: UntypedFormBuilder, public appService : AppService,
+    private analitycsService: AnalyticsService) { }
 
   ngOnInit() {
     this.initForm()
@@ -48,6 +50,10 @@ contactForm: UntypedFormGroup;
         console.error('Adresse e-mail non valide');
       }
     }
+  }
+
+  isOtherRouteActive(): boolean {
+    return window.location.href.includes('account-customer')|| window.location.href.includes('account-seller');
   }
 
 }

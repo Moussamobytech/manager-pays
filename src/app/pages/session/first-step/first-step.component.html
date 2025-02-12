@@ -1,0 +1,38 @@
+<div class="account-container">
+  <p class="account-text">Identifie-toi et profite d’outils simples pour acheter, vendre et gagner de l’argent sur Fidelity Market</p>
+
+  <div class="account-buttons" fxLayout="row wrap">
+    <button fxFlex="100" fxFlex.gt-xs="48" class="account-btn sign-in" routerLink="sign-in">
+      <i class="fa-solid fa-right-to-bracket"></i> &nbsp;&nbsp;Se Connecter
+    </button>
+    <button fxFlex="100" fxFlex.gt-xs="48" class="account-btn sign-up" routerLink="sign-up">
+      <i class="fa-solid fa-user-plus"></i> &nbsp;&nbsp;S'inscrire
+    </button>
+  </div>
+
+  <ul class="account-options">
+    <li routerLink="/referal">🎁
+      <span>Parrainage</span> <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+    <li routerLink="/sign-in/second-step">
+      💰 <span>Mes gains et bonus</span> <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+    <li routerLink="/sign-in/second-step">
+      🛒 <span>Historique des achats</span> <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+  </ul>
+
+  <hr />
+
+  <ul class="account-options">
+    <li (click)="WhatsAppUs('Reseller')">
+      <i class="fas fa-truck"></i> <span>Devenir revendeur dropshipping</span> <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+    <li routerLink="/sign-in/second-step">
+      <i class="fas fa-box-open"></i> <span>Gérer les produits et commandes</span> <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+    <li (click)="WhatsAppUs('Ask')">
+      <i class="fa-solid fa-question"></i> <span>Poser une question</span> <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+  </ul>
+</div>

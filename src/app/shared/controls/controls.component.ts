@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { AppService } from '../../app.service';
 import { Product } from 'src/app/models/product.models';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-controls',
   templateUrl: './controls.component.html',
-  styleUrls: ['./controls.component.scss']
+  styleUrls: ['./controls.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ControlsComponent implements OnInit {
   @Input() product: Product;
@@ -15,28 +16,16 @@ export class ControlsComponent implements OnInit {
   @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter<any>();
   @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
   public count: number = 1;
-  public align: string = 'center center';
 
-  constructor(public appService: AppService, public snackBar: MatSnackBar) {}
+  constructor(public appService: AppService, public cm: CommonService) {}
 
   ngOnInit() {
     if (this.product) {
       if (this.product.cartCount > 0) {
         this.count = this.product.cartCount;
+        // console.log(this.count);
       }
     }
-    this.layoutAlign();
-  }
-
-  public layoutAlign() {
-    if (this.type === 'all') {
-      this.align = 'space-between center';
-    } else if (this.type === 'wish') {
-      this.align = 'start center';
-    } else {
-      this.align = 'center center';
-    }
-    console.log(this.align);
   }
 
   public increment() {
@@ -44,15 +33,7 @@ export class ControlsComponent implements OnInit {
       this.count++;
       this.updateQuantity(this.count, 'increment');
     } else {
-      this.snackBar.open(
-        `You cannot choose more items than available. In stock ${this.product.quantite} items.`,
-        '×',
-        {
-          panelClass: 'error',
-          verticalPosition: 'top',
-          duration: 3000,
-        }
-      );
+      this.cm.openFailureSnackBar(`Vous ne pouvez pas choisir plus d'articles que ce qui est disponible. En stock ${this.product.quantite} articles.`);
     }
   }
 
@@ -66,11 +47,7 @@ export class ControlsComponent implements OnInit {
   private updateQuantity(count: number, action: string) {
     const price = parseFloat(this.product.priceBasic || this.product.pricePromotion);
     if (isNaN(price)) {
-      this.snackBar.open('Invalid product price. Please check the product details.', '×', {
-        panelClass: 'error',
-        verticalPosition: 'top',
-        duration: 3000,
-      });
+      this.cm.openFailureSnackBar('Prix ​​du produit non valide. Veuillez vérifier les détails du produit.');
       return;
     }
 
@@ -96,11 +73,7 @@ export class ControlsComponent implements OnInit {
       if (addedCount <= availableCount) {
         product.cartCount = addedCount;
       } else {
-        this.snackBar.open(
-          `You cannot add more items than available. In stock ${availableCount} items and you already added ${currentProduct.cartCount} item(s) to your cart.`,
-          '×',
-          { panelClass: 'error', verticalPosition: 'top', duration: 5000 }
-        );
+          this.cm.openFailureSnackBar("Vous ne pouvez pas ajouter plus d'articles que ce qui est disponible. En stock ${availableCount} articles et vous avez déjà ajouté ${currentProduct.cartCount} article(s) à votre panier.")
         return;
       }
     } else {
@@ -146,5 +119,9 @@ export class ControlsComponent implements OnInit {
   public changeQuantityDec(value: any, product: Product) {
     this.appService.decrement(product);
     this.onQuantityChange.emit(value);
+  }
+
+  toggleLike(product:any){
+
   }
 }

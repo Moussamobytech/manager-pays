@@ -1,9 +1,10 @@
 $primary_color: #25224a;
+$amber_color: #feb930;
 // products container
 .products-container {
   h2{
     color: $primary_color;
-    margin-left: 20px;
+    margin-left: 16px;
   }
   .subcategory-carousel{
     height: 50px;
@@ -17,6 +18,9 @@ $primary_color: #25224a;
         background-color: $primary_color;
         border-radius: 5px;
         font-size: smaller;
+        @media only screen and (max-width:400px){
+          font-size: 9px;
+        }
       }
     }
   }
@@ -24,7 +28,9 @@ $primary_color: #25224a;
     // background: rgba(0,0,0,0.03);
     position: relative;
     padding: 8px 0;
-    margin-top: 30px;
+    .with-sub{
+      margin-top: 30px;
+    }
     margin-bottom: 20px;
     .more-item{
 
@@ -34,9 +40,9 @@ $primary_color: #25224a;
         align-items: center;
         justify-content: center;
         font-size: 14px;
-        color: $primary_color;
+        color: $amber_color;
         mat-icon{
-          border: 1px solid $primary_color;
+          border: 1px solid $amber_color;
           border-radius: 50%;
           margin-left: 5px;
           font-size: 14px;
@@ -58,18 +64,30 @@ $primary_color: #25224a;
     position: relative;
     transition-property: transform;
   }
-  .swiper-button-prev{
-    left: 0;
+  .subcategory-prev{
+    left: 3px;
   }
-  .swiper-button-next{
-    right: 0;
+  .subcategory-next{
+    right: 1.5px;
   }
-  .swipe-arrow{
-    top: 46%;
 
-    mat-icon{
-      background-color: #feb930;
-      border-radius: 50%;
+  .swipe-arrow{
+    @media screen and (max-width: 500px){
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      top: 85%;
     }
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    top: 80%;
+    background-color: #feb930;
+    color: black;
+    border-radius: 50%;
+  }
+
+  .swiper-button-disabled{
+    display: none;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { Data, AppService } from '../../app.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from 'src/app/models/product.models';
@@ -16,6 +16,10 @@ export class CartComponent implements OnInit {
   @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() product: Product;
   @Input() type: string;
+  @ViewChild('simillarContainer1', { static: false }) simillarContainer1!: ElementRef;
+  @ViewChild('simillarContainer2', { static: false }) simillarContainer2!: ElementRef;
+  showSimilarNav1 = false;
+  showSimilarNav2 = false;
 
   public align = 'center center';
   total = [];
@@ -25,10 +29,16 @@ export class CartComponent implements OnInit {
   user :User ;
   idUser :string;
   isSmallScreen: boolean = false;
+  scrollAmount: number = 0;
 
   constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
     private authService:AuthenticationService,
   ) { }
+  // ngAfterViewInit(): void {
+  //   if (!this.simillarContainer) {
+  //     console.error('simillarContainer is not available!');
+  //   }
+  // }
   public count:number = 1;
   public productList: Product[];
 
@@ -42,12 +52,22 @@ export class CartComponent implements OnInit {
     this.getAllArticleInPanier();
   }
 
+  @HostListener('window:resize')
+  onResize() {
+    if (this.simillarContainer1||this.simillarContainer2) {
+      const containerEl1 = this.simillarContainer1.nativeElement;
+      const containerEl2 = this.simillarContainer1.nativeElement;
+      this.showSimilarNav1 = containerEl1.scrollWidth > containerEl1.clientWidth;
+      this.showSimilarNav2 = containerEl1.scrollWidth > containerEl1.clientWidth;
+    }
+  }
+
   getAllArticleInPanier(){
         // Parse the stringified JSON array
         const panierString = sessionStorage.getItem('panier');
         this.productList = panierString ? JSON.parse(panierString) : [];
-      
-      
+
+
         // Check if the productList is an array
         if (Array.isArray(this.productList)) {
           this.productList.forEach(product => {
@@ -61,7 +81,7 @@ export class CartComponent implements OnInit {
           console.error("Product list is not an array.");
         }
   }
-  
+
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -89,7 +109,7 @@ monPanierContient(){
   );
 
 }
-  
+
 
 public updateCart(value){
     if(value){
@@ -135,6 +155,32 @@ public updateCart(value){
     sessionStorage.removeItem('totalCartCount');
   }
 
+  public getProductDiscount(product: any): number {
+    const priceBasic = parseFloat(product.priceBasic);
+    const pricePromotion = parseFloat(product.pricePromotion);
+    if (isNaN(priceBasic) || isNaN(pricePromotion)) {
+      return 0;
+    }
+    return priceBasic - pricePromotion;
+  }
+
+  swipeSimillarProduct(direction: string, containerNumb) {
+    let containerRef = (containerNumb === 1)? this.simillarContainer1 : this.simillarContainer2;
+    if (!containerRef) return;
+
+    const container = containerRef.nativeElement;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    const scrollStep = window.innerWidth >= 830 ? 180 : 115;
+
+    let newScrollPosition = direction === 'left'
+      ? container.scrollLeft - scrollStep
+      : container.scrollLeft + scrollStep;
+
+    if (newScrollPosition < 0) newScrollPosition = 0;
+    if (newScrollPosition > maxScroll) newScrollPosition = 0;
+
+    container.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
+  }
 
 }
 

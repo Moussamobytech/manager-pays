@@ -21,7 +21,7 @@ export class ProductComponent implements OnInit {
   @ViewChild(SwiperDirective, { static: true }) directiveRef: SwiperDirective;
   public config: SwiperConfigInterface={};
   public product: Product;
-  public image: any;
+  public selectedImage: any;
   public path: any;
   public zoomImage: any;
   private sub: any;
@@ -33,53 +33,52 @@ export class ProductComponent implements OnInit {
     private productService : ProductService,
               private activatedRoute: ActivatedRoute,
               public dialog: MatDialog,
-              public produitService : ProductService,
               public formBuilder: UntypedFormBuilder,
               public domHandlerService: DomHandlerService) {  }
 
   ngOnInit() {
-    console.log(window.location.href)
     this.path = window.location.href
     this.sub = this.activatedRoute.params.subscribe(params => {
       this.getProductById(params['id']);
     });
-    this.form = this.formBuilder.group({
-      'review': [null, Validators.required],
-      'name': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
-      'email': [null, Validators.compose([Validators.required, emailValidator])]
-    });
-    this.getRelatedProducts();
-    // this.inscrementViewsProduit()
+    // this.getRelatedProducts();
   }
 
   ngAfterViewInit(){
     this.config = {
       observer: false,
       slidesPerView: 4,
-      spaceBetween: 10,
+      spaceBetween: 8,
       keyboard: true,
       navigation: true,
       pagination: false,
       loop: false,
       preloadImages: false,
       lazy: true,
-      breakpoints: {
-        480: {
-          slidesPerView: 2
-        },
-        600: {
-          slidesPerView: 3,
-        }
-      }
+      // breakpoints: {
+      //   // 480: {
+      //   //   slidesPerView: 4
+      //   // },
+      //   600: {
+      //     slidesPerView:6 ,
+      //   }
+      // }
     }
   }
 
   public getProductById(id:any){
 
-    this.appService.getProductById(id).subscribe(data=>{
-      this.product = data;
-      console.log("Produit :", this.product)
-      this.image = data.image1;
+    this.appService.getProductById(id).subscribe((data:any)=>{
+      let product = data;
+      let nom = (product.nom).toLowerCase();
+      this.product = {
+        ...product,
+        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+        pricePromotion: this.parsePrice(product.pricePromotion),
+        priceBasic: this.parsePrice(product.priceBasic),
+      };
+      // console.log("Produit :", this.product)
+      this.selectedImage = data.image1;
       this.zoomImage = data.image1;
       setTimeout(() => {
         this.config.observer = true;
@@ -89,23 +88,24 @@ export class ProductComponent implements OnInit {
     });
   }
 
+  parsePrice (price: any) {
+    const parsedPrice = parseFloat(price);
+    return isNaN(parsedPrice) ? null : parsedPrice;
+  }
 
   public async getRelatedProducts(){
     console.log("res related :::::: ",this.product);
     console.log("res related :::::: ",this.product?.categorie);
     if (this.product && this.product?.categorie) {
-      let res = await this.productService.getProductByCategorieName(this.product.categorie)
+      // this enpoint does not work at all
+      let res = await this.productService.getProductByCategorieName(this.product.categorieNom)
       console.log("res related :::::: ",res);
       this.relatedProducts = res;
     }
-
-    // this.appService.getProducts('related').subscribe(data => {
-    //   this.relatedProducts = data;
-    // })
   }
 
   public selectImage(image){
-    this.image = image;
+    this.selectedImage = image;
     this.zoomImage = image;
   }
 
@@ -147,13 +147,4 @@ export class ProductComponent implements OnInit {
       //email sent
     }
   }
-
-
-  // public inscrementViewsProduit(){
-  //   this.produitService.incrementProductViews(this.product.id).then((data =>{
-  //     this.views = data;
-  //     console.log("Viewsssssssss ",this.views);
-  //     }))
-  //  }
-
 }

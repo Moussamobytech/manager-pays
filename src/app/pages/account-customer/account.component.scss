@@ -1,0 +1,196 @@
+$primary_color: #25224a;
+$amber_color: #feb930;
+$warn_color: #d81b60;
+$accent_color: #548580 ;
+
+.main-container {
+  margin-bottom: 50px;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .customer_account_logo{
+      width: 90px;
+      height: 90px;
+      position:relative;
+      margin: 10px 0px 10px 0px;
+      border: 2px dashed #aaa;
+      border-radius: 50%;
+      padding: 5px 5px 0px 5px;
+      cursor: pointer;
+
+      .profile-icon{
+        width: 99%;
+        height: 96%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.05s ease;
+      }
+
+      &:hover .profile-icon {
+        filter: contrast(60%);
+      }
+
+      .camera-icon{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border: 4px solid white;
+        background-color: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        transition: transform 0.03s ease;
+      }
+
+      &:hover .camera-icon {
+        transform: scale(1.05);
+      }
+    }
+
+    h2 {
+      color: $primary_color;
+    }
+
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .card {
+      height: 110px;
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+
+      .card-icon{
+        padding: 5px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+
+        i {
+          font-size: 1.5em;
+        }
+      }
+
+      &.amber {
+        color: $primary_color;
+        background-color: $amber_color;
+        .card-icon{
+          background-color: $primary_color;
+
+          i {
+            color: $amber_color;
+          }
+        }
+      }
+
+      &.primary {
+        color: white;
+        background-color: $primary_color;
+
+        .card-icon{
+          background-color: white;
+
+          i {
+            color: $primary_color;
+          }
+        }
+      }
+
+      h3 {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      @media screen and (max-width: 500px) {
+        p{
+          font-size: 11px;
+        }
+        h3{
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+
+  .historique {
+    margin-top: 30px;
+
+    h3 {
+      color: $primary_color;
+      margin-bottom: 20px;
+    }
+
+    .historique-item {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+
+      img {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        margin-right: 10px;
+      }
+
+      div {
+        flex-grow: 1;
+
+        p {
+          margin: 3px 0;
+        }
+
+        button {
+          background-color: $amber_color;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+
+          &:hover,&:focus {
+            background-color: darken($amber_color, 15%);
+          }
+        }
+      }
+
+      .status {
+        text-align: right;
+
+        p {
+          margin: 3px 0;
+          font-size: 0.8em;
+          color: #777;
+
+          &.accent{
+            color: $accent_color;
+          }
+
+          &.amber{
+            color: $amber_color;
+          }
+
+          &.warn{
+            color: $warn_color;
+          }
+        }
+      }
+    }
+  }
+}

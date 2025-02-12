@@ -57,25 +57,27 @@
             <mat-panel-title> <h4>Filtre de prix</h4> </mat-panel-title>
           </mat-expansion-panel-header>
           <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)">
-            <span> De: <b>{{ priceFrom }} FCFA</b> </span>
-            <span> À: <b>{{ priceTo }} FCFA</b> </span>
+            <span> De: <b>{{ priceFrom }} F</b> </span>
+            <span> À: <b>{{ priceTo }} F</b> </span>
           </div>
           <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)" class="filter-price">
             <mat-slider color="primary" [step]="950" [max]="250000" [min]="100" thumb-label="true">
               <input matSliderThumb [(ngModel)]="priceFrom" (change)="filterProductsByPrice()"/>
             </mat-slider>
             <mat-slider color="warn" [step]="950" [max]="250000" [min]="100" thumb-label="true">
-              <input matSliderThumb [(ngModel)]="priceTo" (change)="filterProductsByPrice ()"/>
+              <input matSliderThumb [(ngModel)]="priceTo" (change)="filterProductsByPrice()"/>
             </mat-slider>
           </div>
           <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px" class="filter-price">
             <mat-form-field appearance="outline" class="price-input">
               <mat-label>Prix Min</mat-label>
-              <input matInput [step]="950" type="number" [(ngModel)]="priceFrom" value="" (change)="filterProductsByPrice()" [min]="100"/>
+              <input matInput (keypress)="validateNumberPrice($event)" (paste)="validatePastePrice($event)"
+              [step]="950" type="number" [(ngModel)]="priceFrom" (change)="filterProductsByPrice()" [min]="100"/>
             </mat-form-field>
             <mat-form-field appearance="outline" class="price-input">
               <mat-label>Prix Max</mat-label>
-              <input matInput [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
+              <input matInput (keypress)="validateNumberPrice($event)" (paste)="validatePastePrice($event)"
+              [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
             </mat-form-field>
           </div>
           <div *ngIf="domWidth<700">
@@ -137,13 +139,12 @@
         </div>
         <div class="suggestion-container" *ngIf="showSuggestions && suggestions.length > 0">
           <div class="suggestions-list" #suggestionsContainer>
-              <ul>
-                  <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
-                      <mat-icon>search</mat-icon>
-                      <span class="text-truncate" *ngIf="suggestion.type === 'product'"><b>Produit: </b> {{ suggestion.item.nom }}</span>
-                      <span class="text-truncate" *ngIf="suggestion.type === 'category'"><b>Categorie: </b> {{ suggestion.item.nom }}</span>
-                  </li>
-              </ul>
+            <ul>
+              <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
+                <mat-icon>search</mat-icon>
+                <b>{{ suggestion.type === 'product' ? 'Produit' : 'Categorie' }} :</b> {{ suggestion.item.nom }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -159,8 +160,8 @@
         <div fxLayout="row wrap">
           <div fxFlex="100">
             <mat-card class="p-0 text-center">
-              <pagination-controls class="product-pagination" previousLabel=" " nextLabel=" " [autoHide]="true" [maxSize]="3"
-              (pageChange)="onPageChanged($event)">
+              <pagination-controls class="product-pagination" previousLabel=" " nextLabel=" "
+              [autoHide]="true" [maxSize]="3"(pageChange)="onPageChanged($event)">
               </pagination-controls>
             </mat-card>
           </div>
@@ -173,8 +174,7 @@
                [fxFlex]="(viewCol==25&&domWidth>360)?50:100"
                [fxFlex.gt-xs]="viewCol"
                class="col">
-            <app-seller-product-card [product]="product" [viewCol]="viewCol==25?50:100">
-            </app-seller-product-card>
+            <app-seller-product-card [product]="product" [viewCol]="viewCol==25?50:100"></app-seller-product-card>
           </div>
         </div>
         <div class="load-more-wrapper" *ngIf="sellerProducts.length < unchangedSellerProducts.length">

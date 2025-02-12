@@ -145,7 +145,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     BannersComponent,
     CategoryListComponent,
     ConfirmDialogComponent,
-    LangComponent
+    LangComponent,
+    SlickCarouselModule
   ],
   declarations: [
     RatingComponent,

@@ -1,27 +1,132 @@
-.auth{
-    white-space: nowrap;
+////////////////////// Next step ///////////////////////
+$primary_color: #25224a;
+$amber_color: #feb930;
+
+// .back-btn{
+//   flex: 1;
+//   padding: 10px;
+//   border-radius: 5px;
+//   font-size: 14px;
+//   cursor: pointer;
+//   font-weight: bold;
+//   color: white;
+//   background-color: $primary_color;
+//   width: initial;
+// }
+// .auth{
+//     white-space: nowrap;
+//     text-align: center;
+//     padding: 7px 14px;
+//     font-weight: 500;
+// }
+
+// .logo{
+//     width: 60%;
+// }
+
+
+// .auth {
+//     white-space: normal;
+// }
+
+// @media only screen and (max-width: 600px) {
+//     .auth {
+//         white-space: normal;
+//     }
+// }
+// @media only screen and (min-width: 768px) {
+//     /* For desktop: */
+//     .auth{
+//         white-space: nowrap;
+//     }
+// }
+
+
+.sign-in-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+
+  .main-title{
+    width: 100%;
     text-align: center;
-    padding: 7px 14px;
-    font-weight: 500;
-}
 
-.logo{
-    width: 60%;
-}
-
-
-.auth {
-    white-space: normal;
-}
-
-@media only screen and (max-width: 600px) {
-    .auth {
-        white-space: normal;
+    .logo {
+      width: 120px;
+      display: inline-block;
     }
-}
-@media only screen and (min-width: 768px) {
-    /* For desktop: */
-    .auth{
-        white-space: nowrap;
+
+    h3{
+      margin: 10px;
+      color: $primary_color;
     }
+
+    .divider{
+      margin-bottom: 40px;
+    }
+  }
+
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .phone-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .forgot-password {
+    text-align: center;
+    color:$amber_color;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    text-decoration: underline;
+    &:hover, &:focus {
+      color: darken($color: $amber_color, $amount: 15%);
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: $primary_color;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .back-btn{
+      background-color: #ddd;
+    }
+    .vld-btn:not(:disabled) {
+      background-color: $amber_color;
+      color: $primary_color;    }
+  }
 }
+
+@media (max-width: 600px) {
+  .sign-in-container {
+    padding: 15px;
+  }
+
+  .phone-group {
+    flex-direction: column;
+  }
+
+  .phone-group .country-select,
+  .phone-group .phone-number {
+    width: 100%;
+  }
+}
+
+

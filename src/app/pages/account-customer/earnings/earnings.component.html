@@ -1,0 +1,45 @@
+<div class="balance-referral-container">
+  <div class="balance-header">
+    <div class="balance">
+      Solde disponible
+      <div class="amount">{{ balance }}</div>
+    </div>
+    <button class="withdraw-button">
+      <i class="fas fa-arrow-alt-circle-down"></i> Retirer
+    </button>
+  </div>
+
+  <div class="referral-history">
+    <h3>Historique Parrainage</h3>
+    <table class="referral-table">
+      <thead>
+        <tr>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Gain</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let referral of referralHistory">
+          <td>{{ referral.firstName }}</td>
+          <td>{{ referral.lastName }}</td>
+          <td>{{ referral.type }}</td>
+          <td>{{ referral.gain }}</td>
+          <td>{{ referral.date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="button-container">
+    <button mat-button class="back-button" routerLink="/account-customer">
+      <mat-icon>arrow_back</mat-icon>Retour
+    </button>
+    <button mat-raised-button class="submit-button">Valider
+      <i class="fa-solid fa-share"></i>
+    </button>
+  </div>
+</div>
+
+

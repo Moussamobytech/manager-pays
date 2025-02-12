@@ -1,335 +1,270 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { ProductDialogComponent } from '../../shared/products-carousel/product-dialog/product-dialog.component';
-import { AppService } from '../../app.service';
-// import { Products, Category, Brand } from "../../app.models";
-import { Settings, AppSettings } from 'src/app/app.settings';
+import {Component,OnInit,ViewChild,HostListener,ElementRef} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AppSettings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
-import { TranslateService } from '@ngx-translate/core';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.models';
 import { Category } from 'src/app/models/category.models';
 import { CommonMessageService } from 'src/app/services/common-message.service';
-// import { Product } from 'src/app/models/product.models';
+import { AppService } from 'src/app/app.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
-  selector: 'app-products',
+  selector: 'app-categories-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
+
   @ViewChild('sidenav', { static: true }) sidenav: any;
-  public sidenavOpen:boolean = true;
-  private sub: any;
-  public viewType: string = 'grid';
-  public viewCol: number = 25;
-  public counts = [12, 24, 36];
-  public count:any;
-  // public sortings = ['Sort by Default', 'Best match', 'Lowest first', 'Highest first'];
-  public sortings = ['SORTINGS.SORT_BY_DEFAULT',  'SORTINGS.LOWEST_FIRST', 'SORTINGS.HIGHEST_FIRST'];
-  // public selectedSorting: string = this.sortings[0];
-  public selectedSorting: string;
-  public sort:any;
-  public products: Array<Product> = [];
-  public produit : Array<Product>= []
-  public productsw : Array<Product>
-  public categories:Category[];
-  public brands : any;
-  public priceFrom: number = 0;
-  public priceTo: number = Number.MAX_SAFE_INTEGER;
-  public colors = [
-    { name: "#5C6BC0", selected: false },
-    { name: "#66BB6A", selected: false },
-    { name: "#EF5350", selected: false },
-    { name: "#BA68C8", selected: false },
-    { name: "#FF4081", selected: false },
-    { name: "#9575CD", selected: false },
-    { name: "#90CAF9", selected: false },
-    { name: "#B2DFDB", selected: false },
-    { name: "#DCE775", selected: false },
-    { name: "#FFD740", selected: false },
-    { name: "#00E676", selected: false },
-    { name: "#FBC02D", selected: false },
-    { name: "#FF7043", selected: false },
-    { name: "#F5F5F5", selected: false },
-    { name: "#696969", selected: false }
-  ];
-  public sizes = [
-    { name: "S", selected: false },
-    { name: "M", selected: false },
-    { name: "L", selected: false },
-    { name: "XL", selected: false },
-    { name: "2XL", selected: false },
-    { name: "32", selected: false },
-    { name: "36", selected: false },
-    { name: "38", selected: false },
-    { name: "46", selected: false },
-    { name: "52", selected: false },
-    { name: "13.3\"", selected: false },
-    { name: "15.4\"", selected: false },
-    { name: "17\"", selected: false },
-    { name: "21\"", selected: false },
-    { name: "23.4\"", selected: false }
-  ];
-  public page:any;
-  public settings: Settings;
-  tous:any;
-  idCat:any;
- public allCategories:any;
-  selectedCategoryId: any;
-  public produits: Product[];
+  @ViewChild('suggestionsContainer', { static: false }) suggestionsContainer!: ElementRef;
 
-  categoryId: string;
+  public sidenavOpen = true;
+  public viewCol = 25;//pourcentage du fxflex de chaque produit
+  public viewCount: number = 8; // nombre de produits à charger après chaque clic sur <charger plus>
+  public sortings = [ 'SORTINGS.MOST_RECENT', 'SORTINGS.LOWEST_FIRST', 'SORTINGS.HIGHEST_FIRST', 'SORTINGS.PROMO' ];
+  public selectedSorting: string;//sorting selectionné
+  public promoProducts: Product[] = [];// produits apres tous les filtres et sortings
+  public unchangedProducts: Product[] = [];// produits jamais filtrés
+  public priceFrom = 100;//prix min de filtre
+  public priceTo = 250000;
+  public usedCategories: Category[] = []; // categories des produits
+  public checkedCategories: string[] = []; // categories selectionnées par l'utilisateur
+  public isAllBoxSelected = false;  // true si toutes les catégories sont selectionnées/ false sinon
+  public page: number;
+  public searchTerm: string;// terme de recherche
+  public showSuggestions: boolean;// afficher les suggestions de recherche
+  public suggestions: any;// var conenant les suggestions de recherche
+  private searchTimeout: NodeJS.Timeout; // duree avant de relancer la fonction searchProducts1 un nouvelle fois
+  domWidth: number = window?.innerWidth;
+  loadedProductCount:number; // nombre de produit actuellement chargee
+  public usePagination = this.domWidth > 430; // basculer entre la pagination et le Voir plus
 
 
-  constructor(public appSettings:AppSettings, private common: CommonMessageService,
-              private activatedRoute: ActivatedRoute,
-              public appService:AppService, private produitService : ProductService,
-              public dialog: MatDialog,
-              public translate: TranslateService,
-              private router: Router,
-              public domHandlerService: DomHandlerService) {
-    this.settings = this.appSettings.settings;
-      // Assurez-vous que sortings contient les valeurs correctes
-      console.log('Sortings: ', this.sortings);
-      this.selectedSorting = this.sortings[0];
-      // Vérifiez la valeur de selectedSorting
-      console.log('Selected sorting initial: ', this.selectedSorting);
-
-
+  constructor(
+    public appSettings: AppSettings,
+    private common: CommonMessageService,
+    private appService: AppService,
+    private produitService: ProductService,
+    public domHandlerService: DomHandlerService,
+    private cm: CommonService,
+  ) {
+    this.selectedSorting = this.sortings[0];
   }
 
-  ngOnInit() {
-    this.count = this.counts[0];
-    this.sort = this.sortings[0];
-
-
-    // Gérez les fenêtres redimensionnées
-    if (this.domHandlerService.window?.innerWidth < 960) {
-        this.sidenavOpen = false;
-    };
-    if (this.domHandlerService.window?.innerWidth < 1280) {
-        this.viewCol = 33.3;
-    };
-    this.priceFrom = 0; // Mettez la valeur par défaut que vous préférez
-    this.priceTo = 2000000;
-
-    this.getCategories();
-    this.getBrands();
-    // this.getProductsByCetegorie(this.selectedCategoryId)
-
-    // this.AllProduct();
-    // this.loadProducts();
-
-    // Abonnez-vous aux paramètres de l'URL
-    this.sub = this.activatedRoute.params.subscribe(params => {
-      console.log(params['name']);
-      this.selectedCategoryId = params['name']
-      this.getProductsByCetegorie(this.selectedCategoryId);
-    });
+  async ngOnInit() {
+    this.sortProducts();
+    this.getDataFromBackend();
+    this.onWindowResize();
   }
 
-  public getProductByCategorie(categoryId: string){
-    this.produitService.getProductByCategorie(categoryId).subscribe((data=>{
-      this.products = data;
-      this.produits = data;
-      console.log("productName ::::::::: ",this.products)
-
-    }))
-  }
-  public async getProductsByCetegorie(categoryId: string){
-
+  public async getDataFromBackend() {
     try {
-      let res = await this.produitService.getProductByCategorieName(categoryId)
-      console.log("res Produit :::::: ",res);
-      this.products = res;
-      this.produits = res;
+      await this.getProducts();
+      this.getCategories();
     } catch (error) {
-      this.common.errorToast("Une erreur s'est produite lors du chargement de la liste, merci de réessayer")
+      this.common.errorToast(
+        "Une erreur s'est produite lors du chargement. Merci de réessayer."
+      );
     }
-
-
-    // this.produitService.getProductByCategorieName(categoryId).subscribe(data=>{
-    //   this.products = data;
-    //   console.log("Produit ::::: ", this.products)
-    //   //for show more product
-    //   // for (var index = 0; index < 3; index++) {
-    //   //   this.products = this.products.concat(this.products);
-    //   // }
-    // });
   }
 
-  formatListCategorie(stringArray){
-    var sortedArray: Category[] = stringArray.sort((a,b) => {
-      if(a.title < b.title) { return -1; }
-      if(a.title > b.title) { return 1; }
-      return 0;
+  private async getProducts() {
+    const products = await this.produitService.getProductByBest();
+    const filteredProducts = products.filter((p) => p.etat === "ACTIF");
+    this.promoProducts = filteredProducts.slice(0, !this.usePagination ? this.viewCount : undefined);
+    this.unchangedProducts = filteredProducts;
+    this.loadedProductCount = this.viewCount;
+  }
+
+  private getCategories() {
+    this.appService.getCategories().subscribe((categories) => {
+      const productCategoriesId = Array.from(
+        new Set(this.promoProducts.map((product) => product.categorie))
+      );
+      this.usedCategories = categories.filter((category) =>
+        productCategoriesId.includes(category.id)
+      );
+
+      this.checkedCategories = this.usedCategories.map((category) => category.id);
+      this.updateAllBoxSelection();
     });
-
-    // console.log("sortedArray :::: ",sortedArray);
-
-    // return sortedArray || stringArray
-    return sortedArray
-  }
-
-  public getCategories(){
-    console.log("this.appService.Data.categories.length ::::: ",this.appService.Data.categories.length);
-
-    if(this.appService.Data.categories.length == 0) {
-      this.appService.getCategories().subscribe(data => {
-        this.categories = data;
-        this.allCategories = data;
-        this.appService.Data.categories = data;
-
-      });
-    }
-    else{
-      this.categories = this.appService.Data.categories;
-    }
-
-  }
-
-
-
-
-
-  public getBrands(){
-    this.appService.getBrands().subscribe(data=>{
-      this.brands =data;
-      this.brands.forEach(brand => { brand.selected = false });
-      console.log("Brands ",data);
-    });
-    // this.brands.forEach(brand => { brand.selected = false });
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
   @HostListener('window:resize')
-  public onWindowResize():void {
-    (this.domHandlerService.window?.innerWidth < 960) ? this.sidenavOpen = false : this.sidenavOpen = true;
-    (this.domHandlerService.window?.innerWidth < 1280) ? this.viewCol = 33.3 : this.viewCol = 25;
+  public onWindowResize(): void {
+    this.sidenavOpen = window.innerWidth >= 960;
+    this.domWidth = window.innerWidth;
+    this.usePagination = this.domWidth > 430;
+    this.viewCol = window.innerWidth < 361 ? 33.3 : 25;
   }
 
-  public changeCount(count){
-    this.count = count;
-    this.getProductsByCetegorie(this.selectedCategoryId);
+  public changeCount(count: number) {
+    this.viewCount = count;
   }
 
-  public changeSorting(sort){
+  public changeSorting(sort: string) {
     this.selectedSorting = sort;
-    console.log('Selected sorting changed: ', this.selectedSorting);
     this.sortProducts();
   }
 
-  public changeViewType(viewType, viewCol){
-    this.viewType = viewType;
+  public changeViewType( viewCol: number) {
     this.viewCol = viewCol;
   }
 
-  public openProductDialog(product){
-    let dialogRef = this.dialog.open(ProductDialogComponent, {
-        data: product,
-        panelClass: 'product-dialog',
-        direction: (this.settings.rtl) ? 'rtl' : 'ltr'
-    });
-    dialogRef.afterClosed().subscribe(product => {
-      if(product){
-
-        this.router.navigate(['/products', product.id, product.nom]);
-      }
-    });
-  }
-
-  public onPageChanged(event){
+  public onPageChanged(event: number) {
     this.page = event;
-    // this.getProductsByCetegorie(this.selectedCategoryId);
-    this.domHandlerService.winScroll(0,0);
+    this.domHandlerService.winScroll(0, 0);
   }
 
-
-  public onChangeCategory(categoryId: string) {
-    this.selectedCategoryId = categoryId;
-    console.log(categoryId)
-    this.getProductsByCetegorie(categoryId); // Vérifiez cette ligne pour vous assurer que categoryId est correctement passé
-
-
-    // Recherche du texte de la catégorie en fonction de son ID
-    const selectedCategory = this.allCategories.find(category => category.id === categoryId);
-    if (selectedCategory) {
-        this.router.navigate(['/products', selectedCategory.nom.toLowerCase()]); // Assurez-vous d'utiliser la propriété correcte pour le nom de la catégorie (probablement nom, plutôt que name)
+  public async onCategoryChange(isChecked: boolean, categoryId: string) {
+    if (isChecked) {
+      this.checkedCategories.push(categoryId);
+    } else {
+      this.checkedCategories = this.checkedCategories.filter((id) => id !== categoryId);
     }
-}
-
-
-
-AllProduct(){
-  this.appService.getAllProducts().subscribe(data=>{
-    this.produits = data;
-    this.products = data
-    console.log("Tous les produits", this.produits);
-  })
-}
-filterProductsByPrice() {
-  console.log("Starting filterProductsByPrice :::::::::: ");
-  console.log("Starting filterProductsByPrice :::::::::: ", this.products);
-  console.log("Starting filterProductsByPrice :::::::::: ", this.produits);
-  // Filtrer les produits en fonction des prix sélectionnés
-  this.products = this.produits;
-  this.products = this.products.filter(product => {
-      const priceBasic = Number(product.priceBasic); // Conversion en number
-      if (this.priceFrom <= this.priceTo) {
-          return priceBasic >= this.priceFrom && priceBasic <= this.priceTo;
-      } else {
-          // Inverser les valeurs de priceFrom et priceTo si nécessaire
-          return priceBasic >= this.priceTo && priceBasic <= this.priceFrom;
-      }
-  });
-}
-
-onChangePriceFrom() {
-
-    this.filterProductsByPrice();
-}
-
-onChangePriceTo() {
-
-    this.filterProductsByPrice();
-
-}
-
-loadProducts() {
-  this.appService.getAllProducts().subscribe((data: any[]) => {
-    this.products = data;
-    this.sortProducts();
-  });
-}
-sortProducts() {
-  console.log("::::::::::::::: selectedSorting ", this.selectedSorting);
-  switch (this.selectedSorting) {
-
-    // case 'SORTINGS.BEST_MATCH':
-    //   console.log("::::::::::::: BEST ");
-    //   // Implémentez votre logique de tri pour BEST_MATCH
-    //   this.products.sort((a, b)=> Number(a.priceBasic) - Number(a.priceBasic)); // Sorting by highest rating
-
-    //   console.log("::::::::::::: BEST 1 ", this.products);
-    //   break;
-    case 'SORTINGS.LOWEST_FIRST':
-      this.products.sort((a, b) => Number(a.priceBasic) - Number(b.priceBasic));
-      console.log("::::::::::::::: lowest ", this.products);
-      break;
-    case 'SORTINGS.HIGHEST_FIRST':
-      this.products.sort((a, b) => Number(b.priceBasic) - Number(a.priceBasic));
-      console.log("::::::::::::::: HIGHEST_FIRST ", this.products);
-      break;
-      case 'SORTINGS.SORT_BY_DEFAULT':
-      default:
-        this.products.sort((a, b) => Number(b.priceBasic) - Number(a.priceBasic));
-        break;
+    this.filterProductsByCheckedCategories();
+    this.updateAllBoxSelection();
   }
-}
 
+  public async toggleAllCategories(isChecked: boolean) {
+    this.checkedCategories = isChecked? this.usedCategories.map((category) => category.id) : [];
+    this.updateAllBoxSelection();
+    await this.filterProductsByCheckedCategories();
+  }
+
+  private updateAllBoxSelection() {
+    this.isAllBoxSelected = this.checkedCategories.length === this.usedCategories.length;
+  }
+
+  private async filterProductsByCheckedCategories() {
+    if (this.checkedCategories.length === 0) {
+      this.promoProducts = [];
+      return;
+    }
+
+    this.promoProducts = this.unchangedProducts.filter((product) =>
+      this.checkedCategories.some((categoryId) =>
+        product.categorieNom.includes(
+          this.usedCategories.find((category) => category.id === categoryId)?.nom
+        )
+      )
+    ).slice(0,!this.usePagination ? this.loadedProductCount : undefined);
+  }
+
+  public filterProductsByPrice() {
+    console.log(this.priceFrom,this.priceTo);
+    this.promoProducts = this.unchangedProducts.filter((product) => {
+      const price = Number(product.pricePromotion) || Number(product.priceBasic);
+      return (price >= Math.min(this.priceFrom, this.priceTo) && price <= Math.max(this.priceFrom, this.priceTo));
+    }).slice(0,!this.usePagination ? this.loadedProductCount : undefined);
+    this.sortProducts()
+  }
+
+  private sortProducts() {
+    switch (this.selectedSorting) {
+      case 'SORTINGS.LOWEST_FIRST':
+        this.promoProducts.sort((a, b) => Number(a.priceBasic) - Number(b.priceBasic));
+        break;
+      case 'SORTINGS.HIGHEST_FIRST':
+        this.promoProducts.sort((a, b) => Number(b.priceBasic) - Number(a.priceBasic));
+        break;
+      case 'SORTINGS.PROMO':
+        this.promoProducts.sort((a, b) => {
+          const hasPromotionA = a.pricePromotion && (a.pricePromotion!=a.priceBasic) ? 1 : 0;
+          const hasPromotionB = b.pricePromotion && (b.pricePromotion!=b.priceBasic) ? 1 : 0;
+          if (hasPromotionA != hasPromotionB) {
+            return hasPromotionB - hasPromotionA;
+          }
+          return a.nom.localeCompare(b.nom);
+        });
+        console.log(this.promoProducts)
+        break;
+      case 'SORTINGS.MOST_RECENT':
+      default:
+        this.promoProducts.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+    }
+  }
+
+  onSearchChange() {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    //timeout pour déclencher la recherche apres 300ms d'inactivité
+    this.searchTimeout = setTimeout(() => {
+      this.showSuggestions = this.searchTerm.length >= 1;
+      if (this.showSuggestions) {
+        this.appService.searchProductsAndCategories(this.usedCategories, this.unchangedProducts, this.searchTerm).subscribe(
+          results => {
+            this.suggestions = results;
+          },
+          error => {
+            console.error('Erreur lors de la recherche: ', error);
+            this.suggestions = [];
+          }
+        );
+      } else {
+          this.suggestions = [];
+      }
+    }, 300);
+  }
+
+  onSearchClick(event) {
+    event.preventDefault();
+    if (this.searchTerm) {
+      this.promoProducts = this.suggestions.filter((suggestion: any) => suggestion.type === "product")
+      .map((suggestion: any) => suggestion.item);
+    }
+  }
+
+  selectSuggestion(suggestion: any,type:string): void {
+    if(type == 'product'){
+      this.searchTerm = suggestion.nom;
+      this.promoProducts = this.unchangedProducts.filter((product) =>
+        product.nom.toLocaleLowerCase().localeCompare(suggestion.nom.toLocaleLowerCase(), 'fr', { sensitivity: 'base' }) === 0
+      );
+      this.checkedCategories = Array.from(
+        new Set(this.promoProducts.map((product) => product.categorie))
+      );
+      this.updateAllBoxSelection();
+    }else{
+      this.searchTerm = suggestion.nom;
+      this.checkedCategories = [suggestion.id];
+      this.updateAllBoxSelection();
+      this.filterProductsByCheckedCategories();
+    }
+    // annuller les suggestions apres la sélection
+    this.showSuggestions = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.suggestionsContainer && !this.suggestionsContainer.nativeElement.contains(event.target)) {
+      this.showSuggestions = false;
+    }
+  }
+
+  loadMore(): void {
+    const nextIndex = this.promoProducts.length + this.viewCount;
+    this.loadedProductCount = nextIndex;
+    this.promoProducts = this.unchangedProducts.slice(0, nextIndex);
+  }
+
+  validateNumberPrice(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Enter'];
+    const isNumber = /^[0-9]$/.test(event.key);
+    if (!isNumber && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  validatePastePrice(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData?.getData('text');
+    if (clipboardData && !/^\d+$/.test(clipboardData)) {
+      event.preventDefault();
+    }
+  }
 }

@@ -1,12 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { SwiperConfigInterface } from '../../theme/components/swiper/swiper.module';
-import { MatDialog } from '@angular/material/dialog';
-import { AppService } from '../../app.service';
-// import { Product } from "../../app.models";
-import { Settings, AppSettings } from 'src/app/app.settings';
-import { ProductService } from 'src/app/services/product.service';
-import { ProductDialogComponent } from '../products-carousel/product-dialog/product-dialog.component';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Product } from 'src/app/models/product.models';
 
 @Component({
@@ -16,40 +8,19 @@ import { Product } from 'src/app/models/product.models';
 })
 export class ProductsCardComponent implements OnInit {
 
-  @Input('product') product: Product = null;
-  @Input('cat') cat: string = "ok";
-  @Input('onePrice') onePrice: boolean = false;
-  public config: SwiperConfigInterface = {};
-  public settings: Settings;
+  @Input() product: Product;
+  @Input() viewCol: number;
+  secondView: boolean;
+  constructor() { }
 
-  imageData: string | ArrayBuffer | null = null;
-  constructor(public appSettings: AppSettings, public appService: AppService, public dialog: MatDialog,
-    private router: Router,  public produitService : ProductService) {
-    this.settings = this.appSettings.settings;
+  ngOnInit(): void {
+    this.secondView= (this.viewCol == 100)&&(window.innerWidth<=600);
   }
 
-  ngOnInit() {
-    // this.incrementProductView(this.product.id);
-
-
-   }
-
-
-
-  public openProductDialog(product: any) {
-    let dialogRef = this.dialog.open(ProductDialogComponent, {
-      data: product,
-      panelClass: 'product-dialog',
-      direction: (this.settings.rtl) ? 'rtl' : 'ltr'
-    });
-    dialogRef.afterClosed().subscribe(product => {
-      if (product) {
-        // this.incrementProductView(product.id)
-        this.router.navigate(['/products', product.id, product.nom]);
-      }
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['viewCol']) {
+      this.secondView= (this.viewCol == 100)&&(window.innerWidth<=600);
+    }
   }
-
-
 
 }

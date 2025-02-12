@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayout.xs="column" [fxLayoutAlign]="align" class="text-muted">
+<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" class="text-muted">
     <div *ngIf="product?.quantite > 0 && (type=='all' || type=='wish')">
         <bdi fxLayout="row" fxLayoutAlign="start center">
             <span *ngIf="type!='wish'" class="fw-500">Quantity:</span>
@@ -7,14 +7,13 @@
             <button mat-icon-button matTooltip="Add" (click)="increment()"><mat-icon>add</mat-icon></button>
         </bdi>
     </div>
-    <div class="product-contact d-flex flex-nowrap overflow-auto">
-        <button matTooltip="Add to cart" *ngIf="pageName !='cart'"  mat-raised-button class="rose mr-2" matTooltip="Add to cart" (click)="addToCart(product)">
-             Ajouter <mat-icon>shopping_cart</mat-icon>
-        </button>
-        <a *ngIf="pageName !='cart'" [href]="'tel:' + '+223'+product?.contact " class="light_primary-color text-sm"
-        [ngStyle]="{'display': styleConditions
-        ? 'block' : 'inline', 'margin-top': styleConditions ? '10px' : '0'}">
-            <i class="fas fa-phone-volume fa-lg me-2"></i>
-        </a>
+    <div class="product-contact">
+      <button matTooltip="Ajouter au panier" *ngIf="pageName !='cart'" mat-raised-button class="bg-fid_amber mr-2 buy-btn" (click)="addToCart(product)">
+        Ajouter <mat-icon>shopping_cart</mat-icon>
+      </button>
+      <span *ngIf="pageName !='cart'" class="like-btn" (click)="toggleLike(product)">
+        <i class="fa-regular fa-heart like-icon" [class.liked]=""></i>
+        <i class="fa-solid fa-heart like-icon filled" [class.liked]=""></i>
+      </span>
     </div>
 </div>

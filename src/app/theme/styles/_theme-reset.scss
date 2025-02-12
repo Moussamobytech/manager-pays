@@ -27,7 +27,10 @@
     .bg-button{
       background: #c54896;
       color: mat.get-color-from-palette($primary, default-contrast);
-
+    }
+    .bg-fid_amber{
+      background-color: $fid_amber;
+      color: #25224a; ;
     }
 
     .text-muted {
@@ -39,7 +42,7 @@
     }
 
     .primary-color{
-        color: mat.get-color-from-palette($primary);
+        color: #25224a;
     }
   @if(map-get($theme, 'name') == 'fidelity'){
     .bg-fid-primary {
@@ -66,10 +69,10 @@
     .filter-sidenav .mat-expansion-panel-header-title,
     .mat-tab-body-content,
     .account-card-title {
-        color: mat.get-color-from-palette($accent, darker) !important;
+        color: mat.get-color-from-palette($accent, darker);
     }
     .app-dropdown, .lang {
-    background-color: mat.get-color-from-palette($primary) !important;
+    background-color: mat.get-color-from-palette($primary) ;
     }
     .app-dropdown .mat-icon{
     color: $fid_green;
@@ -190,7 +193,7 @@
         color: mat.get-color-from-palette($warn);
     }
     .primary-text{
-        color: mat.get-color-from-palette($primary);
+        color: #25224a;
     }
 
     .active-link{
@@ -325,7 +328,8 @@
         color: mat.get-color-from-palette($warn);
     }
     .primary-text{
-        color: mat.get-color-from-palette($primary);
+        color:#25224a;
+
     }
 
     .active-link{

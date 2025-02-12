@@ -26,8 +26,9 @@ export class HomeComponent implements OnInit {
   promotion:any;
   best:any;
   productNames:any;
-  topRateProducts:any;
-  newArrivals: any;
+  topRateProducts: Product[];
+  newArrivals: Product[];
+  promoProducts: Product[];
   public ProductConfig: SwiperConfigInterface = { };
   public SubCategoryConfig: SwiperConfigInterface = { };
   subCategories: string [] = ['Vetements Femme','Telephone', 'Sacs', 'Vetement Homme', 'Montres', 'Pentalons', 'Chaussures'];
@@ -48,7 +49,7 @@ export class HomeComponent implements OnInit {
     this.ProductConfig = {
       spaceBetween: 12,
       keyboard: true,
-      navigation: true,
+      navigation: false,
       pagination: false,
       grabCursor: true,
       preloadImages: false,
@@ -76,9 +77,12 @@ export class HomeComponent implements OnInit {
     this.SubCategoryConfig = {
       spaceBetween: 25,
       keyboard: true,
-      navigation: true,
+      navigation: {
+        prevEl: ".subcategory-prev",
+        nextEl: ".subcategory-next"
+      },
       pagination: false,
-      loop: true,
+      loop: false,
       lazy: true,
       effect: "slide",
       breakpoints: {
@@ -127,21 +131,39 @@ export class HomeComponent implements OnInit {
   }
 
   public async getNewArrivalsProducts() {
-    const products = await this.produitService.getProductByNewArrival(100);
+    const products = await this.produitService.getProductByTop();
     this.newArrivalsProducts = products.map(product => {
+      let nom = (product.nom).toLowerCase();
       return {
         ...product,
+        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
         priceBasic: this.parsePrice(product.priceBasic),
         pricePromotion: this.parsePrice(product.pricePromotion),
       };
-    });
+    }).sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
+
+    this.promoProducts = products
+    .map(product => {
+      let nom = (product.nom).toLowerCase();
+      return {
+        ...product,
+        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+        priceBasic: this.parsePrice(product.priceBasic),
+        pricePromotion: this.parsePrice(product.pricePromotion),
+      };
+    })
+    .filter(product => (product.pricePromotion !== null)&&(product.pricePromotion < product.priceBasic));
+    console.log("promo: ",this.promoProducts)
   }
+
 
   public async getTopRatedProducts() {
     const products = await this.produitService.getProductByBest();
-    this.topRateProducts = products.map(product => {
+    this.topRateProducts = products.map((product:Product) => {
+      let nom = (product.nom).toLowerCase();
       return {
         ...product,
+        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
         priceBasic: this.parsePrice(product.priceBasic),
         pricePromotion: this.parsePrice(product.pricePromotion),
       };

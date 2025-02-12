@@ -1,0 +1,69 @@
+<div class="main-container">
+  <div class="header">
+    <div class="customer_account_logo" (click)="fileInput.click()">
+      <input accept="image/*" #fileInput type="file" (change)="onFileSelected($event)" class="d-none">
+      <img [src]="defaultLogoUrl" class="profile-icon" alt="logo">
+      <!-- <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="logo"> -->
+      <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
+    </div>
+    <!-- <img [src]="defaultLogoUrl" alt="Logo" class="logo"> -->
+    <h2>Gaoussou Diarra</h2>
+  </div>
+  <div fxLayout="row wrap" class="card-container">
+    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+      <div class="card amber" routerLink="earnings">
+        <span class="card-icon">
+          <i class="fas fa-sack-dollar"></i>
+        </span>
+        <h3>Mes gains</h3>
+        <p>20000F</p>
+      </div>
+    </div>
+    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+      <div class="card primary">
+        <span class="card-icon">
+          <i class="fas fa-exchange-alt"></i>
+        </span>
+        <h3>Invite tes amis</h3>
+        <p>Gagne jusqu'à 5000 F par ami invité !</p>
+      </div>
+    </div>
+    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+      <div class="card primary">
+        <span class="card-icon">
+          <i class="fa-solid fa-phone"></i>
+        </span>
+        <h3>Mettre à jour</h3>
+        <p>Mon numéro de téléphone</p>
+      </div>
+    </div>
+    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+      <div class="card amber">
+        <span class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </span>
+        <h3>Devenir revendeur</h3>
+        <p>Gagner des commissions sur chaque vente !</p>
+      </div>
+    </div>
+  </div>
+  <div class="historique">
+    <h3>Historique des commandes</h3>
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
+      <div *ngFor="let data of historiqueData" fxFlex="100" fxFlex.gt-sm="32">
+        <div class="historique-item">
+          <img [src]="data.image" alt="Image Produit">
+          <div>
+            <p>{{ data.name }}</p>
+            <p>{{ data.price }}</p>
+            <button>Acheter</button>
+          </div>
+          <div class="status">
+            <p [ngClass]="data.color">{{ data.status }}</p>
+            <p>{{ data.date }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

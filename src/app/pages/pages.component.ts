@@ -2,10 +2,8 @@ import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, ElementR
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Settings, AppSettings } from '../app.settings';
 import { AppService } from '../app.service';
-// import { Category, Product } from '../app.models';
 import { SidenavMenuService } from '../theme/components/sidenav-menu/sidenav-menu.service';
 import { DomHandlerService } from '../dom-handler.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.models';
 import { Product } from '../models/product.models';
@@ -28,7 +26,7 @@ export class PagesComponent implements OnInit {
   @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
   public produit: any;
   public AllProduits: Product[] = [];
-  // public produits: Product[] = [];
+  public filterItems = [ '1', '2', '3', '4' ];
 
   public sort : any;
   public settings: Settings;
@@ -83,7 +81,7 @@ export class PagesComponent implements OnInit {
         switchMap(term => {
             this.showSuggestions = term.length >= 1;
             return this.showSuggestions
-                ? this.appService.searchProducts1(this.categories, this.AllProduits, term)
+                ? this.appService.searchProductsAndCategories(this.categories, this.AllProduits, term)
                 : of([]);
         }),
         catchError(error => {
@@ -276,19 +274,9 @@ export class PagesComponent implements OnInit {
     document.removeEventListener('click', this.onGlobalClick.bind(this));
   }
 
-  // async getAllProduit() {
-  //   try {
-  //     this.produitService.getAllProducts().subscribe(produits => {
-  //       this.AllProduits = produits || [];
-  //       this.produits = this.AllProduits;
-  //       this.produits.sort = this.sort;
-  //     });
-  //   } catch (error) {
-  //     console.error("Erreur lors de la récupération des produits :", error);
-  //     this.AllProduits = [];
-  //     this.produits = [];
-  //   }
-  // }
+  changeFilter(filterItem:string){
+
+  }
 
 
 }

@@ -1,0 +1,81 @@
+<div fxLayout="row wrap" fxLayoutAlign="center center">
+  <div fxFlex="100" class="p-2" fxLayout="column">
+    <h2 class="text-muted text-center">Détails du compte</h2>
+    <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit(infoForm.value)" fxLayout="row wrap">
+      <div fxFlex="100" fxLayoutGap.gt-xs="16px"  fxLayout.xs="column">
+        <div fxFlex="100" fxFlex.gt-xs="47">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Prenom" formControlName="firstname" required>
+            <mat-error *ngIf="infoForm.controls.firstname.errors?.required">Le prénom est obligatoire</mat-error>
+            <mat-error *ngIf="infoForm.controls.firstname.hasError('minlength')"> Le prénom n'est pas assez long, minimum 3 caractères</mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Nom" formControlName="lastname" required>
+            <mat-error *ngIf="infoForm.controls.lastname.errors?.required">Le nom est obligatoire</mat-error>
+            <mat-error *ngIf="infoForm.controls.lastname.hasError('minlength')">Le nom n'est pas assez long, minimum 3 caractères</mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Numéro de téléphone" formControlName="phoneNumber" required>
+            <mat-error *ngIf="infoForm.controls.phoneNumber.errors?.required">Le numéro de contact est obligatoire</mat-error>
+            <mat-error *ngIf="infoForm.controls.phoneNumber.hasError('minlength')">Le numéro n'est pas assez long, minimum 8 caractères</mat-error>
+            <mat-error *ngIf="infoForm.controls.phoneNumber.hasError('maxlength')">Le numéro est trop long, maximum 8 caractères</mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Nom de la boutique" formControlName="boutiqueName">
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Adresse" formControlName="adresse">
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="Email" formControlName="email">
+            <mat-error *ngIf="infoForm.controls.email.errors?.pattern">Adresse mail invalide</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" fxFlex.gt-xs="47" >
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Description</mat-label>
+            <textarea (keypress)="onDescriptionInput($event)" (input)="updateDescriptionWordCount($event)" matInput formControlName="description" rows="2"></textarea>
+            <mat-hint align="end">{{ wordCount }} / {{ maxWords }} Mots</mat-hint>
+          </mat-form-field>
+          <p class="mt-1">
+            <span class="uppercase fw-500">Bannières</span>
+            <span class="text-muted px-1">(max 3 images)</span>
+          </p>
+          <div class="input-file" >
+            <input-file formControlName="banners" [fileLimit]="3" fileAccept="image/*"></input-file>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100" class="text-center mt-2">
+        <button mat-raised-button color="warn">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+
+  <div fxFlex="100" fxFlex.gt-sm="60" class="p-2">
+    <h2 class="text-muted text-center">Changement de mot de passe</h2>
+    <form [formGroup]="passwordForm" (ngSubmit)="onPasswordFormSubmit(passwordForm.value)" fxLayout="column" fxLayoutGap="16px">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Mot de passe actuel" formControlName="currentPassword" [type]="hide ? 'password' : 'text'" minlength="6" required>
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordForm.controls.currentPassword.errors?.required">Mot de passe actuel est obligatoire</mat-error>
+        <mat-error *ngIf="passwordForm.controls.currentPassword.hasError('minlength')">Mot de passe actuel n'est pas assez long, minimum 6 caractères</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Nouveau mot de passe" formControlName="newPassword" [type]="hide1 ? 'password' : 'text'" minlength="6" required>
+        <mat-icon matSuffix (click)="hide1 = !hide1">{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordForm.controls.newPassword.errors?.required">Nouveau mot de passe est obligatoire</mat-error>
+        <mat-error *ngIf="passwordForm.controls.newPassword.hasError('minlength')">Nouveau mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Confirmer le nouveau mot de passe" formControlName="confirmNewPassword" [type]="hide2 ? 'password' : 'text'" required>
+        <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordForm.controls.confirmNewPassword.errors?.required">Confirmer le nouveau mot de passe est obligatoire</mat-error>
+        <mat-error *ngIf="passwordForm.controls.confirmNewPassword.hasError('mismatchedPasswords')">Les mots de passe ne correspondent pas</mat-error>
+      </mat-form-field>
+      <div fxFlex="100" class="text-center mt-2">
+        <button mat-raised-button color="warn">Changement</button>
+      </div>
+    </form>
+  </div>
+</div>

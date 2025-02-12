@@ -1,0 +1,65 @@
+<div class="p-2">
+  <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h2>Mes produits</h2>
+          <button mat-raised-button color="warn" matTooltip="ajouter un produit" (click)="add()">
+            <!-- <mat-icon>add</mat-icon> -->
+            {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
+          </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mat-mdc-table admin-table">
+          <div class="mat-mdc-header-row">
+              <div class="mat-mdc-header-cell image">Image</div>
+              <div class="mat-mdc-header-cell">Nom</div>
+              <div class="mat-mdc-header-cell">Prix</div>
+              <div class="mat-mdc-header-cell">Date création</div>
+              <div class="mat-mdc-header-cell">Etat</div>
+              <div class="mat-mdc-header-cell">Action</div>
+          </div>
+          <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+              <div class="mat-mdc-cell image">
+                  <img [src]="product.image1" alt="" width="50">
+              </div>
+              <div class="mat-mdc-cell">{{product.nom}}</div>
+              <div class="mat-mdc-cell">{{product.priceBasic}}</div>
+              <div class="mat-mdc-cell">{{product.createdAt | date}}</div>
+              <div class="mat-mdc-cell">{{etat(product.etat)}}</div>
+              <div class="mat-mdc-cell">
+                  <div class="p-2 actions">
+                    <button mat-mini-fab color="accent" matTooltip="Modifier" (click)="edit(product.id)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="primary" matTooltip="Modifier" (click)="remove(product)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'primary' : 'warn'" [checked]="product.etat == 'ACTIF'" (change)="setStatus(product.id, $event)"> </mat-slide-toggle>
+                  </div>
+              </div>
+          </div>
+          <!-- <div *ngFor="let follower of followers | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+              <div class="mat-mdc-cell image">
+                  <img [src]="follower.image" alt="" width="50">
+              </div>
+              <div class="mat-mdc-cell">{{follower.name}}</div>
+              <div class="mat-mdc-cell">{{ ( stores | filterById : follower.storeId )?.name }}</div>
+              <div class="mat-mdc-cell">
+                  <div class="p-2 actions">
+                      <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(follower)">
+                          <mat-icon>delete</mat-icon>
+                      </button>
+                  </div>
+              </div>
+          </div> -->
+      </div>
+  </mat-card>
+
+  <div *ngIf="products.length>4" fxLayout="row wrap">
+      <div fxFlex="100">
+          <mat-card class="text-center">
+              <pagination-controls previousLabel=" " nextLabel=" " class="product-pagination" [autoHide]="true" [maxSize]="3" (pageChange)="onPageChanged($event)"></pagination-controls>
+          </mat-card>
+      </div>
+  </div>
+</div>
+

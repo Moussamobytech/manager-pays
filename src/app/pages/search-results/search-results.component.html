@@ -4,7 +4,7 @@
   <div fxLayout="row wrap">
     <div *ngFor="let product of products" fxFlex="100" fxFlex.md="20" fxFlex.gt-md="20">
       <div class="p-2">
-        <app-product-card [onePrice]="true" [cat]="'nok'" [product]="product"></app-product-card>
+        <app-product-card [product]="product"></app-product-card>
       </div>
     </div>
   </div>

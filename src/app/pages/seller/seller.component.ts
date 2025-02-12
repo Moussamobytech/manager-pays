@@ -38,8 +38,8 @@ export class SellerComponent implements OnInit {
   public priceFrom = 100;//prix min de filtre
   public priceTo = 250000;
   public sellerId: string;
-  public usedCategories: Category[] = [];//categories des produits du vendeur
-  public checkedCategories: string[] = [];//categories selectionnées par l'utilisateur
+  public usedCategories: Category[] = []; // categories des produits du vendeur
+  public checkedCategories: string[] = []; // categories selectionnées par l'utilisateur
   public isAllBoxSelected = false;  // true si toutes les catégories sont selectionnées/ false sinon
   public page: number;
   public searchTerm: string;// terme de recherche
@@ -123,8 +123,8 @@ export class SellerComponent implements OnInit {
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
         this.unchangedSellerProducts = products;
         this.loadedProductCount = this.viewCount;
-        console.log(this.usePagination)
-        console.log(this.sellerProducts.length)
+        // console.log(this.usePagination)
+        // console.log(this.sellerProducts.length)
       })
     );
   }
@@ -146,9 +146,9 @@ export class SellerComponent implements OnInit {
   @HostListener('window:resize')
   public onWindowResize(): void {
     this.sidenavOpen = window.innerWidth >= 960;
-    this.usePagination = this.domWidth > 430;
-    this.viewCol = window.innerWidth < 350 ? 33.3 : 25;
     this.domWidth = window.innerWidth;
+    this.usePagination = this.domWidth > 430;
+    this.viewCol = window.innerWidth < 361 ? 33.3 : 25;
   }
 
   public changeCount(count: number) {
@@ -205,6 +205,7 @@ export class SellerComponent implements OnInit {
   }
 
   public filterProductsByPrice() {
+    console.log(this.priceFrom,this.priceTo);
     this.sellerProducts = this.unchangedSellerProducts.filter((product) => {
       const price = Number(product.pricePromotion) || Number(product.priceBasic);
       return (price >= Math.min(this.priceFrom, this.priceTo) && price <= Math.max(this.priceFrom, this.priceTo));
@@ -248,7 +249,7 @@ export class SellerComponent implements OnInit {
     this.searchTimeout = setTimeout(() => {
       this.showSuggestions = this.searchTerm.length >= 1;
       if (this.showSuggestions) {
-        this.appService.searchProducts1(this.usedCategories, this.unchangedSellerProducts, this.searchTerm).subscribe(
+        this.appService.searchProductsAndCategories(this.usedCategories, this.unchangedSellerProducts, this.searchTerm).subscribe(
           results => {
             this.suggestions = results;
           },
@@ -300,6 +301,7 @@ export class SellerComponent implements OnInit {
 
   copyLink(inputElement: HTMLInputElement): void {
     inputElement.style.transition = '.3s';
+    inputElement.select();
     navigator.clipboard.writeText(this.shopLink).then(
       () => {
         this.isCopied = true;
@@ -331,5 +333,22 @@ export class SellerComponent implements OnInit {
     const nextIndex = this.sellerProducts.length + this.viewCount;
     this.loadedProductCount = nextIndex;
     this.sellerProducts = this.unchangedSellerProducts.slice(0, nextIndex);
+  }
+
+  validateNumberPrice(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Enter'];
+    const isNumber = /^[0-9]$/.test(event.key);
+
+    if (!isNumber && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+
+  }
+
+  validatePastePrice(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData?.getData('text');
+    if (clipboardData && !/^\d+$/.test(clipboardData)) {
+      event.preventDefault();
+    }
   }
 }

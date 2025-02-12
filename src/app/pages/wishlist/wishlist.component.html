@@ -1,42 +1,19 @@
-<mat-chip-listbox *ngIf="appService.Data.wishList.length == 0">
-    <mat-chip-option color="warn" highlighted selectable="false">YOU HAVE NO ITEMS IN WISH LIST.</mat-chip-option>
-</mat-chip-listbox>
+<div class="main-container">
+  <mat-chip-listbox *ngIf="promoProducts?.length == 0">
+      <mat-chip-option color="warn" highlighted selectable="false">YOU HAVE NO ITEMS IN WISH LIST.</mat-chip-option>
+  </mat-chip-listbox>
 
-<mat-card *ngIf="appService.Data.wishList?.length > 0" class="p-0">
-
-  <div class="mat-mdc-table wishlist-table">
-    <div class="mat-mdc-header-row">
-      <div class="mat-mdc-header-cell">Product</div>
-      <div class="mat-mdc-header-cell">Name</div>
-      <div class="mat-mdc-header-cell">Price</div>
-      <div class="mat-mdc-header-cell">Availability</div>
-      <div class="mat-mdc-header-cell">Quantity</div>
-      <div class="mat-mdc-header-cell">
-        <div class="px-2">
-          <button mat-raised-button color="warn" (click)="clear()">Clear All</button>
-        </div>
-      </div>
-    </div>
-    <div *ngFor="let product of appService.Data.wishList" class="mat-mdc-row">
-      <div class="mat-mdc-cell"><img [src]="product.image1[0].small"></div>
-      <div class="mat-mdc-cell"><a [routerLink]="['/products', product.id, product.nom]" class="product-name">{{product.nom}}</a></div>
-      <div class="mat-mdc-cell">${{product.newPrice | number : '1.2-2'}}</div>
-      <div class="mat-mdc-cell">{{ (product.availibilityCount > 0) ? 'In stock':'Unavailable'}}</div>
-      <div class="mat-mdc-cell text-muted">
-        <app-controls [product]="product" [type]="'wish'" (onQuantityChange)="getQuantity($event)"></app-controls>
-      </div>
-      <div class="mat-mdc-cell">
-        <div class="p-2">
-          <button mat-mini-fab color="primary" (click)="addToCart(product)" matTooltip="Add to cart">
-              <mat-icon>add_shopping_cart</mat-icon>
-          </button>
-          <button mat-mini-fab color="warn" (click)="remove(product)" matTooltip="Clear" class="remove">
-              <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</mat-card>
+  <div class="container">
+		<div class="main-title">
+			<h2>Ma Liste de Souhaits ✨</h2>
+		</div>
+		<div class="card" *ngFor="let product of promoProducts" fxFlex="47" fxFlex.gt-xs="30"fxFlex.gt-sm="22" fxFlex.gt-md="17">
+			<app-product-card [product]="product"></app-product-card>
+		</div>
+	</div>
+	<div *ngIf="promoProducts" class="load-container">
+		<div class="load-more-wrapper" *ngIf="promoProducts?.length < unchangedProducts?.length">
+			<a (click)="loadMore()">Voir plus</a>
+		</div>
+	</div>
+</div>

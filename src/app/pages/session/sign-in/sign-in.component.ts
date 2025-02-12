@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-// import { emailValidator, matchingPasswords } from '../../theme/utils/app-validators';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { validateEmail } from 'src/app/helpers';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,113 +11,67 @@ import { validateEmail } from 'src/app/helpers';
 })
 export class SignInComponent implements OnInit {
   loginForm: UntypedFormGroup;
-  registerForm: UntypedFormGroup;
-  formSubmitted: boolean = false;
-  toSubmit: boolean = false;
-  loading: boolean = false;
+  selectedCountry: any;
+  phoneMask: string = '00 00 00 00'; // Default mask for Mali
 
-  countries : any[] = [{id : "mali", nom: "Mali"}, {id:"civ", nom:"Côte d'ivoire"}];
-  mask = '00 00 00 00'
-  maskPlaceholder = 'XX XX XX XX'
+  countries = [
+    { code: 'ML', name: 'Mali', phoneCode: '+223', placeholder: 'XX XX XX XX', mask: '00 00 00 00' },
+    { code: 'CI', name: 'Côte d’Ivoire', phoneCode: '+225', placeholder: 'XX XX XX XXXX', mask: '00 00 00 0000' }
+  ];
 
-  constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder,
-    public router:Router, public snackBar: MatSnackBar) { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    public formBuilder: UntypedFormBuilder,
+    public router: Router,
+    public snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.authenticationService.logout();
+
+    this.selectedCountry = this.countries.find(c => c.code === 'ML');
+
     this.loginForm = this.formBuilder.group({
-      'country': ['mali'],
-      'phone': ['', Validators.compose([Validators.required])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      'username': ['', Validators.required]
+      country: ['ML'],
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
-
-
   }
 
-  handleChange($event){
-    console.log("handleChange :::::::: ", $event);
-    this.formValues.phone.setValue("")
-    if ($event.value == 'mali') {
-      this.mask ='00 00 00 00'
-      this.maskPlaceholder = 'XX XX XX XX'
-    }
+  get loginFormControls() { return this.loginForm.controls; }
 
-    if ($event.value == 'civ') {
-      this.maskPlaceholder = 'XX XX XX XXXX'
-    }
-
+  handleChange(event: any) {
+    this.selectedCountry = this.countries.find(c => c.code === event.value);
+    this.phoneMask = this.selectedCountry.mask;
+    this.loginForm.controls['username'].setValue('');
   }
 
-  public onLoginFormSubmit(values:Object):void {
-    console.log("values ::::::: ",values)
-    console.log("values ::::::: ",values["phone"])
-    console.log("values ::::::: ",values["password"])
-    if (values["phone"] != '' && values["password"] != '') {
-      // this.loading = true;
-      let phone = ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone']
-      let pwd = this.formValues.password?.value
-      // this.formValues.phone.setValue( ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'] )
-      this.authenticationService.login(phone, pwd)
-        .subscribe(
-          async (data: any) => {
-            // console.log("data ::::::: ",data)
-            let userInfo = await this.authenticationService.info(data.username);
-            // this.loading = false;
-            // console.log("userInfo ::::::: ",userInfo)
-            if (userInfo == null) {
-              this.snackBar.open('Impossible de récuperer les informations du client, merci de réessayer à nouveau', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-              return;
-            }
-            this.router.navigate(["/account/dashboard"]);
-          },
-          (error: any) => {
-            // console.log(error);
-            // console.log(error.message);
-            // console.log(error.status);
-            // console.log(error == "Erreur d'accès au serveur");
-            // console.log(error === "Erreur d'accès au serveur");
-            if (error == "Erreur d'accès au serveur") {
-              this.snackBar.open('Accès incorrect merci de vérifier les infos fournis !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-            }else{
-              this.snackBar.open('Une erreur interne s\'est produite, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-            }
-
-            // this.loading = false;
-          });
-    }
-  }
-
-  /**
-   * convenience getter for easy access of form fields
-  */
-  get formValues() { return this.loginForm.controls; }
-
-  onSubmit(): void {
-    this.formSubmitted = true;
+  public onLoginFormSubmit(values: any): void {
     if (this.loginForm.valid) {
-      this.loading = true;
-      this.authenticationService.login(this.formValues.phone?.value, this.formValues.password?.value)
-        .subscribe(
-          (data: any) => {
-            // console.log("data ::::::: ",data)
-            this.router.navigate(["account/dashboard"]);
-          },
-          (error: any) => {
-            this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-            console.log(error);
-            this.loading = false;
+      let phone = this.selectedCountry.phoneCode + values['username'];
+      let pwd = values['password'];
+
+      this.authenticationService.login(phone, pwd).subscribe(
+        async (data: any) => {
+          let userInfo = await this.authenticationService.info(data.username);
+          if (!userInfo) {
+            this.snackBar.open('Erreur de récupération des informations', '×', {
+              panelClass: 'error',
+              verticalPosition: 'top',
+              duration: 3000
+            });
+            return;
+          }
+          this.router.navigate(['/account-customer']);
+        },
+        () => {
+          this.snackBar.open('Erreur de connexion, veuillez réessayer', '×', {
+            panelClass: 'error',
+            verticalPosition: 'top',
+            duration: 3000
           });
+        }
+      );
     }
   }
-
-  reset($event : Event){
-    console.log("resetting process ::::::::");
-
-    this.formValues.phone.setValue("")
-    this.formValues.password.setValue("")
-    this.toSubmit = false;
-  }
-
-
 }

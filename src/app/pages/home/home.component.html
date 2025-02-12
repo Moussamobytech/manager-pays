@@ -13,40 +13,60 @@
             </div>
           </div>
         </div>
-        <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
-        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
+        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button> -->
+        <mat-icon class="swiper-button-prev swipe-arrow subcategory-prev">keyboard_arrow_left</mat-icon>
+        <mat-icon class="swiper-button-next swipe-arrow subcategory-next">keyboard_arrow_right</mat-icon>
       </div>
     </div>
 
-    <div class="products-carousel">
+    <div class="products-carousel with-sub" *ngIf="newArrivalsProducts">
       <div class="swiper-container " [swiper]="ProductConfig">
         <div class="swiper-wrapper">
           <div *ngFor="let product of newArrivalsProducts" class="swiper-slide">
-            <app-product-card [onePrice]="true" [product]="product"></app-product-card>
+            <app-product-card  [product]="product"></app-product-card>
           </div>
         </div>
-        <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
-        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
+        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button> -->
       </div>
       <div class="more-item">
-        <a routerLink="">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
+        <a routerLink="/products">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
       </div>
     </div>
   </div>
-  <div class="home-section">
+
+  <div class="home-section" *ngIf="topRateProducts">
     <h2>Tendances</h2>
     <div class="products-carousel">
       <div class="swiper-container " [swiper]="ProductConfig">
         <div class="swiper-wrapper">
           <div *ngFor="let product of topRateProducts" class="swiper-slide">
-            <app-product-card [onePrice]="true" [product]="product"></app-product-card>
+            <app-product-card  [product]="product"></app-product-card>
           </div>
         </div>
-        <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
-        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
+        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button> -->
       </div>
       <div class="more-item">
-        <a routerLink="">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
+        <a routerLink="/products">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-section" *ngIf="promoProducts">
+    <h2>Promo</h2>
+    <div class="products-carousel">
+      <div class="swiper-container " [swiper]="ProductConfig">
+        <div class="swiper-wrapper">
+          <div *ngFor="let product of promoProducts" class="swiper-slide">
+            <app-product-card [product]="product"></app-product-card>
+          </div>
+        </div>
+        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button> -->
+      </div>
+      <div class="more-item">
+        <a routerLink="/promo">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
       </div>
     </div>
   </div>
