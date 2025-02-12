@@ -13,6 +13,11 @@
   <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Promouvoir" (click)="WhatsAppUs()">
     <i class="fa-solid fa-bullhorn"></i> Promouvoir mes produits
   </button>
+  <div fxLayout="row" class="copy-container">
+    <input matInput type="text" [value]="shopLink" class="copy-input" #linkInput readonly>
+    <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
+    <mat-icon matSuffix *ngIf="isCopied">check</mat-icon>
+  </div>
 </div>
 
   <!-- <ng-template #popupTemplate>
@@ -40,7 +45,6 @@
       </form>
     </div>
   </ng-template> -->
-
 
 <div fxLayout="row wrap">
   <div fxFlex="100" fxFlex.xl="33.3" fxFlex.lg="33.3" fxFlex.md="50" fxFlex.sm="100" class="p-2">

@@ -1,8 +1,8 @@
-.quick-buttons{
+.quick-buttons {
   justify-content: center;
   gap: 10px;
 
-  button{
+  button {
     font-size: 13px;
     @media screen and (max-width: 500px) {
       font-size: 10px;
@@ -10,42 +10,76 @@
   }
 }
 
-.tile{
+.tile {
   text-align: right;
-  .mat-icon{
-      position: absolute;
-      left: 4px;
-      top: 8px;
-      line-height: 54px;
-      font-size: 54px;
-      width: 54px;
-      height: 54px;
-      opacity: 0.3;
+  .mat-icon {
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    line-height: 54px;
+    font-size: 54px;
+    width: 54px;
+    height: 54px;
+    opacity: 0.3;
   }
-  h2{
-      font-weight: 500;
+  h2 {
+    font-weight: 500;
   }
-  p{
-      text-transform: uppercase;
+  p {
+    text-transform: uppercase;
   }
 }
+
 /* Réduire la taille du texte pour les écrans de moins de 600 pixels de large */
 @media screen and (max-width: 700px) {
   body {
     font-size: 10px; /* Ajustez la taille du texte selon vos besoins */
   }
 }
-.rose{
+
+.rose {
   background-color: #c54896;
   color: white;
 }
-.bleu{
+
+.bleu {
   background-color: #25224a;
   color: white;
 }
-.jaune{
+
+.jaune {
   background-color: #feb930;
 }
-.vert{
+
+.vert {
   background-color: #7db88a;
+}
+
+/* Additional Copy Container styles from the other branch */
+.copy-container {
+  position: relative;
+  // margin-top: 5px;
+  .copy-input {
+    width: 100%;
+    padding: 8px 35px 8px 8px;
+    font-size: 13px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    color: #333;
+    &:focus {
+      outline: 1.5px solid #25224a;
+    }
+  }
+  mat-icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    color: #25224a;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    &:hover {
+      color: #c54896;
+    }
+  }
 }

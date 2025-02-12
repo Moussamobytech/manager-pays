@@ -315,8 +315,8 @@ export class SellerComponent implements OnInit {
 
   shareLink(){
     const shareData = {
-      title: 'Découvrez cette boutique sur Fidelity-Market 💥!',
-      text: 'Discover incredible discounts and offers at the shop '+this.sellerInfo.nom+' !',
+      title: '',
+      text: 'Découvrez cette boutique sur Fidelity-Market 💥! '+this.sellerInfo.nom+' !',
       url: this.shopLink
     };
 

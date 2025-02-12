@@ -1,6 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-how_works',
@@ -29,7 +30,7 @@ export class HowWorksComponent {
     },
   ];
 
-  constructor(private sanitizer: DomSanitizer, private auth:AuthenticationService) {}
+  constructor(private sanitizer: DomSanitizer, private auth:AuthenticationService, private cm:CommonService) {}
 
   sanitize(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -58,13 +59,16 @@ export class HowWorksComponent {
       }
     }
   }
-  askHelp() {
-    let user:any = this.auth.currentUser();
-    let url = "https://wa.me/+22376007979?text=" + encodeURIComponent(
-      "bonjour je m'appelle " + user.firstname + ' ' + user.lastname +
-      " j'ai besoin d'aide à propos de Fidelity Market."
-    );
-    window.open(url,"_blank");
-  }
+  askHelp(): void {
+    const user = this.auth.currentUser();
+    if (!user) {
+        console.error("Les informations utilisateur sont manquantes.");
+        this.cm.goTo("/login");
+    }
+    const message = `Bonjour, je m'appelle ..., J'ai besoin d'aide à propos de Fidelity Market.`;
+    const url = `https://wa.me/+22376007979?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+}
+
 }
 
