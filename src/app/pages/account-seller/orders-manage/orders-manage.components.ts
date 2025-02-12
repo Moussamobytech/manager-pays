@@ -208,6 +208,9 @@ export class OrdersManageComponents implements OnInit {
       case "PENDING":
         res = "En attente"
         break;
+        case "VALIDE":
+          res = "Validée"
+          break;
 
       default:
         res = "N/A"

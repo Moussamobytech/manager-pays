@@ -10,7 +10,7 @@ export const orders = [
   }
 ]
 
-export const products = [
+/*export const products = [
   {
     "name": "Product-1",
     "value": 69400
@@ -84,10 +84,11 @@ export const products = [
     "value": 62700
   }
 ]
+*/
 
-export const customers = [
+export const products = [
    {
-    name: 'Customers',
+    name: 'Products',
     series: [
       {
         name: "2000",

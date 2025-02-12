@@ -1,0 +1,33 @@
+<mat-card>
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Sélectionner une année</mat-label>
+        <mat-select [formControl]="selectedYear" (selectionChange)="filterByYear()">
+            <mat-option *ngFor="let year of availableYears" [value]="year">
+                {{ year }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    <mat-card-header fxLayoutAlign="center">                
+        <mat-card-title>Progression des commandes</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="pt-2">
+        <div class="w-100 h-300p" #resizedDiv>
+            <ngx-charts-line-chart
+                [scheme]="colorScheme"
+                [results]="analytics"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                [autoScale]="autoScale"
+                [roundDomains]="roundDomains"
+                (select)="onSelect($event)">
+            </ngx-charts-line-chart>             
+        </div>
+    </mat-card-content>
+</mat-card>

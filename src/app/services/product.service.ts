@@ -173,6 +173,12 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/find/' + id).toPromise();
   }
 
+  public viewProductById(id) {
+    return this.api.post(`/produit/view-product/${id}`,null).toPromise();
+  }
+
+
+
   public getProductByNewArrival(limit) {
     return this.api.get('/produit/new-arrivals?limit='+limit).toPromise();
   }
@@ -191,6 +197,10 @@ getTotalViewsYear(): Observable<any> {
 
   public getProductByTop() {
     return this.api.get('/produit/top-rates').toPromise();
+  }
+
+  public getViewsForCurrentMonthOfProduct(username) {
+    return this.api.get('/produit/views-month/'+username).toPromise();
   }
 
 }

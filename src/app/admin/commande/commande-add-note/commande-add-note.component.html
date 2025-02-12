@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{data?.title}}</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<div mat-dialog-content class="commente">
+
+    
+        <textarea formControlName="note" name="note" id="note" cols="60" rows="10"></textarea>
+   
+
+    <p>{{data?.message}}</p>
+</div>
+
+<div mat-dialog-actions>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+        <button mat-raised-button color="warn" (click)="onDismiss()">Annuler</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onConfirm()">Ajouter</button>
+    </div>
+</div>
+ </form>

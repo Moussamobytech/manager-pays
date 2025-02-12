@@ -117,11 +117,11 @@ export class OrdersComponent implements OnInit {
       console.error('Numéro de téléphone invalide.');
       return;
     }
-  
+
     const telUrl = `tel:+${phoneNumber}`;
     window.open(telUrl, '_self');
   }
-  
+
 
   onNoClick(): void {
     this.dialog.closeAll();
@@ -141,6 +141,9 @@ export class OrdersComponent implements OnInit {
       case "PENDING":
         res = "En attente"
         break;
+        case "VALIDE":
+          res = "Validée"
+          break;
 
       default:
         res = "N/A"

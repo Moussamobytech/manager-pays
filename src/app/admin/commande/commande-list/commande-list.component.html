@@ -49,6 +49,10 @@
                 <a (click)="sortCommandes('clientUsername')"><mat-icon>swap_vert</mat-icon></a>
               </div>
               <div class="header-cell filter-cell fixed-width">
+                Status
+                <a (click)="sortCommandes('statutCommande')"><mat-icon>swap_vert</mat-icon></a>
+            </div>
+              <div class="header-cell filter-cell fixed-width">
                 {{ "Date commande" | translate }}
                 <a (click)="sortCommandes('dateCommande')"><mat-icon>swap_vert</mat-icon></a>
               </div>
@@ -63,7 +67,17 @@
               <div class="data-cell fixed-width"> {{ commande.codeCommande | capitalCase }} </div>
               <div class="data-cell fixed-width"> {{ commande.quantite }} </div>
               <div class="data-cell fixed-width" > {{ commande.montant }} </div>
-              <div class="data-cell fixed-width" > {{ commande.clientUsername }} </div>
+              <div class="data-cell fixed-width" > {{ commande.clientPhone }} </div>
+
+                  <!--   <div class="data-cell fixed-width"> {{Status(order.statutCommande.name)}}</div>-->
+                  <div class="  {{commande.statutCommande.name}}" [ngClass]="commande.statutCommande.name"> 
+                    <mat-select [value]="commande.statutCommande.id">
+                      @for (st of status; track status) {
+                        <mat-option [value]="st.id" (onSelectionChange)="setStatusT(commande.id,st.id,commande)">{{Status(st.name)}}</mat-option>
+                      }
+                    </mat-select>
+                </div>
+
               <div class="data-cell fixed-width"> {{ commande.dateCommande | date: "dd-MM-yyyy à HH:mm" }} </div>
               <div class="data-cell fixed-width center">
                 <div class="actions">

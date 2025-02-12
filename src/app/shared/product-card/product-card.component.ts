@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Product } from 'src/app/models/product.models';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-product-card',
@@ -11,7 +12,7 @@ export class ProductsCardComponent implements OnInit {
   @Input() product: Product;
   @Input() viewCol: number;
   secondView: boolean;
-  constructor() { }
+  constructor(private produitService:ProductService) { }
 
   ngOnInit(): void {
     this.secondView= (this.viewCol == 100)&&(window.innerWidth<=600);
@@ -23,4 +24,9 @@ export class ProductsCardComponent implements OnInit {
     }
   }
 
+  setProductViewCount(id){
+    this.produitService.viewProductById(id).then(data => {
+    data
+    })
+  }
 }

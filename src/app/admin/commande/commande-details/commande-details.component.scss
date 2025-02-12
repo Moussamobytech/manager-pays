@@ -140,3 +140,28 @@ img{
 .toogle{
   display: none;
 }
+.VALIDE{
+  padding: 5px;
+  background-color: #C54897;
+  align-items: start;
+ // width: 10px;
+  border-radius: 10px;  }
+.DELIVERED{
+  padding: 5px;
+  background-color: #7CB888;
+  align-items: start;
+  //width: 10px;
+  border-radius: 10px; 
+ }
+.PENDING{
+  padding: 5px;
+  background-color: #FFB930;
+  align-items: start;
+  //width: 10px;
+  border-radius: 10px;  }
+.CANCEL{
+  padding: 5px;
+  background-color: rgb(241, 63, 63);
+  align-items: start;
+  //width: 10px;
+  border-radius: 10px;}

@@ -13,6 +13,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { PipesModule } from 'src/app/theme/pipes/pipes.module';
 import { UsersData } from '../users/users.data';
 import { CommandeDetailsComponent } from './commande-details/commande-details.component';
+import { CommandeAddNoteComponent } from './commande-add-note/commande-add-note.component';
 
 export const routes: Routes = [
     { path: '', component: CommandeListComponent, pathMatch: 'full' },
@@ -25,6 +26,7 @@ export const routes: Routes = [
     declarations: [
         CommandeListComponent,
         CommandeDetailsComponent,
+        CommandeAddNoteComponent
     ],
     imports: [
         NgxPaginationModule,

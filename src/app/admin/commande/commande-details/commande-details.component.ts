@@ -14,6 +14,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommandeDialogComponent } from '../commande-dialog/commande-dialog.component';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { CommandeAddNoteComponent } from '../commande-add-note/commande-add-note.component';
+import { ExcelExportService } from 'src/app/services/excel-export.service';
 
 @Component({
   selector: 'app-commande-details',
@@ -22,6 +24,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 })
 export class CommandeDetailsComponent implements OnInit {
   codeCommande: string;
+  status: any;
 
 
   constructor(
@@ -30,6 +33,7 @@ export class CommandeDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private breakpointObserver:BreakpointObserver,
     public dialog: MatDialog,
+    private excelExportService: ExcelExportService
   ) {
     this.settings = this.appSettings.settings;
   }
@@ -70,7 +74,7 @@ export class CommandeDetailsComponent implements OnInit {
             .pipe(
               map(result => result.matches)
             );
-   
+   this.getAllStatus();
   }
 
   public async getPanierById(id: string) {
@@ -112,7 +116,7 @@ export class CommandeDetailsComponent implements OnInit {
     this[ascKey] = !isAscending;
   }
 
-public Status(key) {
+  public Status(key) {
     let res = ""
     switch (key) {
       case "DELIVERED":
@@ -126,6 +130,9 @@ public Status(key) {
       case "PENDING":
         res = "En attente"
         break;
+        case "VALIDE":
+          res = "Validée"
+          break;
 
       default:
         res = "N/A"
@@ -206,11 +213,58 @@ public Status(key) {
   
       dialogRef.afterClosed().subscribe(dialogResult => {
         if (dialogResult) {
-          console.log("verify ::::")
          // this.deleteCommande(commande.id)
         
         }
       });
+    }
+
+    public addNote(order: any) {
+      const dialogRef = this.dialog.open(CommandeAddNoteComponent, {
+        maxWidth: "700px",
+        width:"700px",
+        data: {
+          title: "Ajouter un commentaire",
+          order:order
+         // message: "Le commentaire sera ajouté"
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(dialogResult => {
+        if (dialogResult) {
+         // this.deleteCommande(commande.id)
+        
+        }
+      });
+    }
+
+    getAllStatus(){
+      this.commandeService.getAllStatusCommander().subscribe(datas => {
+        this.status = datas;
+      }, error => {
+        console.error('Error during recharge:', error);
+      });
+    }
+  
+    setStatusT(idPanier: string, status: string, order: any) {
+      this.commandeService.setStatus(idPanier, status).subscribe(
+        () => {
+          // Mettre à jour le statut localement
+          const updatedStatus = this.status.find(st => st.id === status);
+          if (updatedStatus) {
+            order.statutCommande = updatedStatus;
+          }
+        },
+        error => {
+          console.error('Error during recharge:', error);
+        }
+      );
+    }
+    exportAsExel(){
+      console.log("Exportation...");
+      
+      this.excelExportService.exportToExcel(this.paniers, 'La commande n°'+ this.codeCommande);
+      console.log("Exportation finish...");  
     }
   
 }

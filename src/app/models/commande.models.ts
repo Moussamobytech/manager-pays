@@ -6,5 +6,6 @@ export class Commande {
     dateCommande?: Date | null; 
     codeCommande?: string | null; 
     clientUsername?:string | null;
+    clientPhone?:string | null;
   }
   

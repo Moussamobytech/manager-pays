@@ -19,8 +19,6 @@ export class CommandeDialogComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("DATA :::::::::::::::::::: ", JSON.stringify(this.data));
-
   }
 
   public Status(key) {
@@ -37,6 +35,9 @@ export class CommandeDialogComponent implements OnInit {
       case "PENDING":
         res = "En attente"
         break;
+        case "VALIDE":
+          res = "Validée"
+          break;
 
       default:
         res = "N/A"

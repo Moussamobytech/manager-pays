@@ -26,8 +26,15 @@ export class CommandeService {
   
     }
 
+    public setStatusCommande(id:string,status:string): Observable<any> {
+      return this.api.put(`/commande/set-status/${id}/${status}`,null);
+    }
+
   public getAllCommandeByFournisseur(username): Observable<any> {
     return this.api.get('/panier/get-all-by-fournisseur/' + username);
+  }
+  public getAllPanier(): Observable<any> {
+    return this.api.get('/panier/get-all');
   }
 
   public getAllByIdCommande(id:string): Observable<any> {
@@ -44,6 +51,10 @@ export class CommandeService {
 
   public setStatus(idPanier:string,status:string): Observable<any> {
     return this.api.put(`/panier/set-status/${idPanier}/${status}`,null);
+  }
+
+  public setNote(idPanier:string,note:string): Observable<any> {
+    return this.api.put(`/panier/set-note/${idPanier}/${note}`,null);
   }
 }
 
