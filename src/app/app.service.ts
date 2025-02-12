@@ -8,6 +8,7 @@ import { ApiService } from './services/api.service';
 import { Category } from './models/category.models';
 import { Product } from './models/product.models';
 import { Contact, Newsletter } from './app.models';
+import { CartService } from './services/carte.service';
 
 export class Data {
   constructor(
@@ -16,7 +17,7 @@ export class Data {
     public wishList: Product[],
     public cartList: Product[],
     public totalPrice: number,
-    public totalCartCount: number
+    public totalCartCount: number,
   ) {}
 }
 
@@ -33,11 +34,14 @@ export class AppService {
 
   // public url = "http://localhost:8590/ecommerce/api/v1" ;
   public url = environment.url;
+  productList: Product[];
 
   constructor(
     public http: HttpClient,
     public snackBar: MatSnackBar,
-    public apiService: ApiService
+    public apiService: ApiService,
+    private cartService:CartService,
+
   ) {}
 
   infoSeller(username: string):Observable<any> {
@@ -326,32 +330,103 @@ export class AppService {
     });
   }
 
-  public addToCart(product: Product) {
-    let message, status;
-
-    this.Data.totalPrice = null;
-    this.Data.totalCartCount = null;
-
-    if (this.Data.cartList.filter((item) => item.id == product.id)[0]) {
-      let item = this.Data.cartList.filter((item) => item.id == product.id)[0];
-      item.cartCount = product.cartCount;
+  public addToCart(product: Product): void {
+    // Parse the stringified JSON array
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+  
+    let existingProduct = this.productList.find((item) => item.id === product.id);
+  
+    if (existingProduct) {
+      existingProduct.cartCount += product.cartCount;
+      console.log("Already in cart, new count:", existingProduct.cartCount);
     } else {
-      this.Data.cartList.push(product);
+      this.productList.push({ ...product });
     }
-    this.Data.cartList.forEach((product) => {
-      this.Data.totalPrice =
-        this.Data.totalPrice + product.cartCount * product.newPrice;
-      this.Data.totalCartCount = this.Data.totalCartCount + product.cartCount;
-    });
-
-    message = 'The product ' + product.nom + ' has been added to cart.';
-    status = 'success';
+  
+    this.updateCartData();
+  
+    const message = `The product ${product.nom} has been added to cart.`;
+    const status = 'success';
     this.snackBar.open(message, '×', {
       panelClass: [status],
       verticalPosition: 'top',
       duration: 3000,
     });
   }
+  
+  public increment(product: Product): void {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+  
+    let existingProduct = this.productList.find((item) => item.id === product.id);
+  
+    if (existingProduct) {
+      existingProduct.cartCount += 1;
+    } else {
+      this.productList.push({ ...product, cartCount: 1 });
+    }
+  
+    this.updateCartData();
+  }
+  
+  public decrement(product: Product): void {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+  
+    let existingProduct = this.productList.find((item) => item.id === product.id);
+  
+    if (existingProduct && existingProduct.cartCount > 1) {
+      existingProduct.cartCount -= 1;
+    } else if (existingProduct) {
+      // Remove product from cart if count reaches 0
+      this.productList = this.productList.filter((item) => item.id !== product.id);
+    }
+  
+    this.updateCartData();
+  }
+  
+  public remove(product: Product): void {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+  
+    const index: number = this.productList.findIndex((item) => item.id === product.id);
+    if (index !== -1) {
+      this.productList.splice(index, 1);
+    }
+  
+    this.updateCartData();
+  }
+  
+  private updateCartData(): void {
+    this.Data.totalPrice = 0;
+    this.Data.totalCartCount = 0;
+  
+    this.productList.forEach((product) => {
+      const productPrice = product.priceBasic != null ? parseFloat(product.priceBasic) : parseFloat(product.pricePromotion);
+      this.Data.totalPrice += product.cartCount * productPrice;
+      this.Data.totalCartCount += product.cartCount;
+    });
+  
+    sessionStorage.setItem('totalCartCount', JSON.stringify(this.Data.totalCartCount));
+    sessionStorage.setItem('panier', JSON.stringify(this.productList));
+  
+    // Update the cart count using CartService
+    this.cartService.updateCartCount(this.Data.totalCartCount);
+  }
+  
+  
+
+
+
+  public addCommande(id: string, product:Product[]): Observable<any> {
+
+    return this.apiService.post(`/commande/addTest?id=${id}`, product);
+  }
+
+
+
+
 
   public resetProductCartCount(product: Product) {
     product.cartCount = 0;
@@ -660,17 +735,17 @@ export class AppService {
     return [
       {
         value: 'free',
-        name: 'Free Delivery',
+        name: 'A la livraison',
         desc: '$0.00 / Delivery in 7 to 14 business Days',
       },
       {
         value: 'standard',
-        name: 'Standard Delivery',
+        name: 'Orange Money',
         desc: '$7.99 / Delivery in 5 to 7 business Days',
       },
       {
         value: 'express',
-        name: 'Express Delivery',
+        name: 'Carte VISA',
         desc: '$29.99 / Delivery in 1 business Days',
       },
     ];

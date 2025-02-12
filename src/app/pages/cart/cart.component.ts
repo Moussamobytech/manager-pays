@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Data, AppService } from '../../app.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Product } from 'src/app/models/product.models';
+import { User } from '../../models/user.models';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { id } from '@swimlane/ngx-charts';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-cart',
@@ -7,22 +13,85 @@ import { Data, AppService } from '../../app.service';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
+  @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
+  @Input() product: Product;
+  @Input() type: string;
+
+  public align = 'center center';
   total = [];
   grandTotal = 0;
   cartItemCount = [];
   cartItemCountTotal = 0;
-  constructor(public appService:AppService) { }
+  user :User ;
+  idUser :string;
+  isSmallScreen: boolean = false;
+
+  constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
+    private authService:AuthenticationService,
+  ) { }
+  public count:number = 1;
+  public productList: Product[];
+
+  pageName:string="cart";
 
   ngOnInit() {
-    this.appService.Data.cartList.forEach(product=>{
-      this.total[product.id] = product.cartCount*product.newPrice;
-      this.grandTotal += product.cartCount*product.newPrice;
-      this.cartItemCount[product.id] = product.cartCount;
-      this.cartItemCountTotal += product.cartCount;
-    })
+    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.Handset])
+    .subscribe(result => {
+      this.isSmallScreen = result.matches;
+    });
+    this.getAllArticleInPanier();
   }
 
-  public updateCart(value){
+  getAllArticleInPanier(){
+        // Parse the stringified JSON array
+        const panierString = sessionStorage.getItem('panier');
+        this.productList = panierString ? JSON.parse(panierString) : [];
+      
+      
+        // Check if the productList is an array
+        if (Array.isArray(this.productList)) {
+          this.productList.forEach(product => {
+            this.total[product.id] = product.cartCount * parseFloat(product.priceBasic);
+            this.grandTotal += product.cartCount * parseFloat(product.priceBasic);
+            this.cartItemCount[product.id] = product.cartCount;
+            this.cartItemCountTotal += product.cartCount;
+            this.product = product;
+          });
+        } else {
+          console.error("Product list is not an array.");
+        }
+  }
+  
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+monPanierContient(){
+  this.appService.addCommande(this.idUser, this.productList).subscribe(
+    () => {
+      this.snackBar.open('Commande effectuée avec succès', '×', {
+        panelClass: 'success',
+        verticalPosition: 'top',
+        duration: 3000
+      });
+      this.clear()
+       sessionStorage.removeItem('panier');
+    sessionStorage.removeItem('totalCartCount');
+        },
+    error => {
+      this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
+        panelClass: 'error',
+        verticalPosition: 'top',
+        duration: 3000
+      });
+      console.error("Erreur lors du réglage du statut de la campagne:", error);
+    }
+  );
+
+}
+  
+
+public updateCart(value){
     if(value){
       this.total[value.productId] = value.total;
       this.cartItemCount[value.productId] = value.soldQuantity;
@@ -50,35 +119,23 @@ export class CartComponent implements OnInit {
   }
 
   public remove(product) {
-    const index: number = this.appService.Data.cartList.indexOf(product);
-    if (index !== -1) {
-      this.appService.Data.cartList.splice(index, 1);
-      this.grandTotal = this.grandTotal - this.total[product.id];
-      this.appService.Data.totalPrice = this.grandTotal;
-      this.total.forEach(val => {
-        if(val == this.total[product.id]){
-          this.total[product.id] = 0;
-        }
-      });
+   this.appService.remove(product);
+   this.getAllArticleInPanier();
 
-      this.cartItemCountTotal = this.cartItemCountTotal - this.cartItemCount[product.id];
-      this.appService.Data.totalCartCount = this.cartItemCountTotal;
-      this.cartItemCount.forEach(val=>{
-        if(val == this.cartItemCount[product.id]){
-          this.cartItemCount[product.id] = 0;
-        }
-      });
-      this.appService.resetProductCartCount(product);
-    }
   }
 
   public clear(){
-    this.appService.Data.cartList.forEach(product=>{
+    this.productList.forEach(product=>{
       this.appService.resetProductCartCount(product);
     });
-    this.appService.Data.cartList.length = 0;
+    this.productList.length = 0;
     this.appService.Data.totalPrice = 0;
     this.appService.Data.totalCartCount = 0;
+    sessionStorage.removeItem('panier');
+    sessionStorage.removeItem('totalCartCount');
   }
 
+
 }
+
+

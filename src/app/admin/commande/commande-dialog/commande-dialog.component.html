@@ -1,0 +1,42 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
+    <div class="image">
+        <img [src]="data.product.produitImage" alt="" sizes="" srcset="" width="200" height="200">
+    </div>
+
+    <div class="list">
+        <strong>Produit:</strong>
+        <p>{{data.product.produitNom}}</p>
+    </div>
+    <div class="list">
+        <strong>Code commande:</strong>
+        <p>{{data.product.codeCommande}}</p>
+        
+    </div>
+    <div class="list">
+        <strong>Prix unitaire:</strong>
+        <p>{{data.product.prixUnitaire}}</p>
+        
+    </div>
+    <div class="list">
+        <strong>Quantité</strong>
+        <p>{{data.product.quantite}}</p>
+        
+    </div>
+
+    <div class="list">
+        <strong>Montant:</strong>
+        <p>{{data.product.montant}}</p>
+        
+    </div>
+    <div class="list">
+        <strong>Status:</strong>
+        <p>{{Status(data.product.statutCommande.name)}}</p>
+        
+    </div>
+
+    <div class="list">
+        <strong>Fournisseur</strong>
+        <p>{{data.product.fournisseurUsername}}</p>
+        
+    </div>
+</div>

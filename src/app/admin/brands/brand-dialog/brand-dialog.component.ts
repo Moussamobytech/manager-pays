@@ -21,7 +21,8 @@ export class BrandDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<BrandDialogComponent>,public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public fb: UntypedFormBuilder, public appService : AppService, private router: Router){}
-  ngOnInit(): void {
+  
+    ngOnInit(): void {
     this.isUpdateMode = !!this.data.brand;
 
     this.form = this.fb.group({

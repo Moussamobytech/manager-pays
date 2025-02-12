@@ -17,6 +17,8 @@
     }
     .mat-mdc-header-cell {
         font-size: 14px;
+        font-weight: bold;
+        text-align: center;
     }
     .mat-mdc-cell{
         .order{
@@ -32,3 +34,26 @@
         }
     }
 }
+.paginate.centered {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+  }
+  .sortable {
+    cursor: pointer;
+    //margin-left: 5px;
+    font-size: 15px;
+  }
+  .center{
+    align-content: center;
+    text-align: center;
+  }
+  .buttons.space-around {
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Aligne les boutons verticalement au centre */
+  }
+  
+  mat-icon{
+    color: #feb930;
+  }

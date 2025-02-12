@@ -10,7 +10,8 @@ import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.models';
 import { Product } from '../models/product.models';
 import { FormControl } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, filter, map, of, Subject, Subscription, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, of, Subject, Subscription, switchMap } from 'rxjs';
+import { CartService } from '../services/carte.service';
 
 @Component({
   selector: 'app-pages',
@@ -40,6 +41,7 @@ export class PagesComponent implements OnInit {
   public showSuggestions: boolean = false;
   public clickOutsideSubject = new Subject<Event>();
 
+  totalPanier:any = 0;
   constructor(public appSettings:AppSettings,
               public appService:AppService,
               public produitService : ProductService,
@@ -47,6 +49,7 @@ export class PagesComponent implements OnInit {
               public router:Router,
               public activatedRoute:ActivatedRoute,
               public domHandlerService: DomHandlerService,
+              private cartService:CartService,
               private cdRef: ChangeDetectorRef) {
     this.settings = this.appSettings.settings;
     this.getCategoriesSidenav()
@@ -66,6 +69,11 @@ export class PagesComponent implements OnInit {
 
     this.initializeSearch();
     document.addEventListener('click', this.onGlobalClick.bind(this));
+
+    this.cartService.cartCount$.subscribe((count) => {
+      this.totalPanier = count;
+    });
+
   }
 
   private initializeSearch(): void {
@@ -154,24 +162,17 @@ export class PagesComponent implements OnInit {
     }
   }
 
-  public remove(product) {
-      const index: number = this.appService.Data.cartList.indexOf(product);
-      if (index !== -1) {
-          this.appService.Data.cartList.splice(index, 1);
-          this.appService.Data.totalPrice = this.appService.Data.totalPrice - product.newPrice*product.cartCount;
-          this.appService.Data.totalCartCount = this.appService.Data.totalCartCount - product.cartCount;
-          this.appService.resetProductCartCount(product);
-      }
-  }
+  // public changeCategory(event){
+  //   if(event.target){
+  //     this.category = this.categories.filter(category => category.nom == event.target.innerText)[0];
+  //   }
+  //   if(this.domHandlerService.window?.innerWidth < 960){
+  //     this.stopClickPropagate(event);
+  //   }
+  // }
 
-  public clear(){
-    this.appService.Data.cartList.forEach(product=>{
-      this.appService.resetProductCartCount(product);
-    });
-    this.appService.Data.cartList.length = 0;
-    this.appService.Data.totalPrice = 0;
-    this.appService.Data.totalCartCount = 0;
-  }
+
+
 
 
   public changeTheme(theme: any){

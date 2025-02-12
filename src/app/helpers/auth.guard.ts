@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate, CanLoad {
       
       let user  = JSON.parse(sessionStorage.getItem('currentUser')!);
       // this.username = sessionStorage.getItem('username')!;
-      console.log("user :::: ",user);
+      console.log("user adama bbbb :::: ",user);
 
       if (user == null || user == undefined || JSON.stringify(user) === '{}' || user == "") {
         this.router.navigate(['/sign-in'])
