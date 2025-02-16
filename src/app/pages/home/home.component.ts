@@ -31,7 +31,16 @@ export class HomeComponent implements OnInit {
   promoProducts: Product[];
   public ProductConfig: SwiperConfigInterface = { };
   public SubCategoryConfig: SwiperConfigInterface = { };
-  subCategories: string [] = ['Vetements Femme','Telephone', 'Sacs', 'Vetement Homme', 'Montres', 'Pentalons', 'Chaussures'];
+  subCategories: any [] = [
+    { id: 0, name: "Vetements Femme" },
+    { id: 1, name: "Telephone" },
+    { id: 2, name: "Sacs" },
+    { id: 3, name: "Vetement Homme" },
+    { id: 4, name: "Montres" },
+    { id: 5, name: "Pentalons" },
+    { id: 6, name: "Chaussures" }
+  ]
+  selectedSubCategory: any = this.subCategories[0];
 
   constructor(public appService:AppService, public produitService : ProductService, public campagneService : CampagneService) { }
 
@@ -100,6 +109,10 @@ export class HomeComponent implements OnInit {
         }
       }
     }
+  }
+
+  onSubCategoryClick(subCategory:any): void {
+    this.selectedSubCategory = subCategory;
   }
 
   public getCategorie(){

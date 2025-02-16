@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,8 +13,8 @@ import { AuthenticationService } from 'src/app/services/auth.service';
 export class SignInComponent implements OnInit {
   loginForm: UntypedFormGroup;
   selectedCountry: any;
-  phoneMask: string = '00 00 00 00'; // Default mask for Mali
-
+  phoneMask: string = '00 00 00 00';
+  hidePassword = true;
   countries = [
     { code: 'ML', name: 'Mali', phoneCode: '+223', placeholder: 'XX XX XX XX', mask: '00 00 00 00' },
     { code: 'CI', name: 'Côte d’Ivoire', phoneCode: '+225', placeholder: 'XX XX XX XXXX', mask: '00 00 00 0000' }
@@ -23,7 +24,7 @@ export class SignInComponent implements OnInit {
     private authenticationService: AuthenticationService,
     public formBuilder: UntypedFormBuilder,
     public router: Router,
-    public snackBar: MatSnackBar
+    private cm:CommonService
   ) {}
 
   ngOnInit() {
@@ -55,21 +56,13 @@ export class SignInComponent implements OnInit {
         async (data: any) => {
           let userInfo = await this.authenticationService.info(data.username);
           if (!userInfo) {
-            this.snackBar.open('Erreur de récupération des informations', '×', {
-              panelClass: 'error',
-              verticalPosition: 'top',
-              duration: 3000
-            });
+            this.cm.openFailureSnackBar('Une erreur est survenue, veuillez réessayer');
             return;
           }
           this.router.navigate(['/account-customer']);
         },
         () => {
-          this.snackBar.open('Erreur de connexion, veuillez réessayer', '×', {
-            panelClass: 'error',
-            verticalPosition: 'top',
-            duration: 3000
-          });
+          this.cm.openFailureSnackBar('Numéro de telephone ou mot de passe incorrect');
         }
       );
     }

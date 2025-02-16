@@ -14,11 +14,12 @@ export class SessionGuard implements CanActivate {
       state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
         const user = JSON.parse(sessionStorage.getItem('currentUser') ?? 'null');
+        console.log(user);
 
-        if (user.profiles[0].name.toLowerCase().includes('boutique')) {
+        if (user && user.profiles[0].name.toLowerCase().includes('boutique')) {
           this.router.navigate(['/account-seller/dashboard']);
           return false;
-        }else{
+        }else if (user && !user.profiles[0].name.toLowerCase().includes('boutique')){
           this.router.navigate(['/account-customer']);
           return false;
         }

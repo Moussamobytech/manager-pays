@@ -1,4 +1,4 @@
-////////////////////// Sign-in page ///////////////////////
+////////////////////// Setting page ///////////////////////
 $primary_color: #25224a;
 $amber_color: #feb930;
 
@@ -10,25 +10,17 @@ $amber_color: #feb930;
   max-width: 400px;
   margin: auto;
 
-  .main-title{
-    width: 100%;
-    text-align: center;
+  .main-title {
 
-    .logo {
-      width: 120px;
-      display: inline-block;
-    }
-
-    h3{
-      margin: 10px;
+    h2 {
       color: $primary_color;
-    }
+      font-weight: bold;
 
-    .divider{
-      margin-bottom: 40px;
+      @media (max-width: 500px) {
+        font-size: 17px;
+      }
     }
   }
-
 
   form {
     width: 100%;
@@ -42,17 +34,17 @@ $amber_color: #feb930;
     gap: 10px;
   }
 
-  .forgot-password {
-    text-align: center;
-    color:$amber_color;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 14px;
-    text-decoration: underline;
-    &:hover, &:focus {
-      color: darken($color: $amber_color, $amount: 15%);
-    }
-  }
+  // .forgot-password {
+  //   text-align: center;
+  //   color:$amber_color;
+  //   cursor: pointer;
+  //   text-decoration: none;
+  //   font-size: 14px;
+  //   text-decoration: underline;
+  //   &:hover, &:focus {
+  //     color: darken($color: $amber_color, $amount: 15%);
+  //   }
+  // }
 
   .buttons {
     display: flex;

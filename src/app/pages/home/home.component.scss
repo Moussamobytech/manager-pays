@@ -18,8 +18,26 @@ $amber_color: #feb930;
         background-color: $primary_color;
         border-radius: 5px;
         font-size: smaller;
+        cursor: pointer;
         @media only screen and (max-width:400px){
           font-size: 9px;
+        }
+      }
+      &.selected{
+        position: relative;
+        span{
+          outline: 2px solid #d81b60;
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #d81b60; /* Amber color */
+          }
         }
       }
     }

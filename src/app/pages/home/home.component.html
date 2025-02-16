@@ -7,9 +7,9 @@
     <div class="subcategory-carousel">
       <div class="swiper-container" [swiper]="SubCategoryConfig">
         <div class="swiper-wrapper">
-          <div *ngFor="let subCategory of subCategories" class="swiper-slide">
-            <div class="subcategory-item">
-              <span>{{subCategory}}</span>
+          <div *ngFor="let subCategory of subCategories; let i = index" class="swiper-slide">
+            <div class="subcategory-item" [class.selected]="i === selectedSubCategory.id" (click)="onSubCategoryClick(subCategory)">
+              <span>{{subCategory.name}}</span>
             </div>
           </div>
         </div>

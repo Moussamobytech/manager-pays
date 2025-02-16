@@ -1,0 +1,63 @@
+<div class="sign-in-container">
+  <div class="main-title">
+    <h2>Paramètres</h2>
+  </div>
+
+  <form [formGroup]="settingForm" (ngSubmit)="onSettingFormSubmit(settingForm.value)">
+    <mat-form-field appearance="outline">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="firstname" >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="lastname" >
+    </mat-form-field>
+
+    <div class="phone-group" fxLayout="row">
+      <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
+        <mat-label>Pays</mat-label>
+        <mat-select formControlName="country">
+          <mat-option [value]="selectedCountry.code">
+            {{ selectedCountry.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="phone-number" fxFlex="63.6">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="username" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" required>
+      <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="settingFormControls?.password.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mot de passe de confirmation</mat-label>
+      <input matInput formControlName="confirmPassword" [type]="hideConfirm ? 'password' : 'text'" required>
+      <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hideConfirm">
+        <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="settingFormControls?.confirmPassword.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+      <mat-error *ngIf="settingFormControls?.confirmPassword.errors?.mismatchedPasswords">Les deux mot passes doivent correspondre.</mat-error>
+    </mat-form-field>
+
+    <div class="buttons">
+      <button mat-button class="back-btn" routerLink="/account-customer">
+        <mat-icon>arrow_back</mat-icon> Retour
+      </button>
+
+      <button mat-flat-button type="submit" class="vld-btn" [disabled]="!settingForm.valid">
+        Valider <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+  </form>
+</div>

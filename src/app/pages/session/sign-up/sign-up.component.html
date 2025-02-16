@@ -208,8 +208,9 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="phone-input" fxFlex="63.6">
-        <mat-label>{{selectedClientCountry?.phoneCode}}</mat-label>
-        <input matInput formControlName="clientPhone" required [placeholder]="selectedClientCountry?.placeholder" [mask]="selectedClientCountry?.mask">
+        <mat-label>Numéro</mat-label>
+        <span matPrefix>&nbsp;&nbsp;{{ selectedClientCountry?.phoneCode }}</span>
+        <input matInput formControlName="clientPhone" [placeholder]="selectedClientCountry?.placeholder" [mask]="selectedClientCountry?.mask">
         <mat-error *ngIf="clientFormValues.clientPhone.errors?.required">Le numéro est obligatoire</mat-error>
       </mat-form-field>
     </div>
@@ -244,30 +245,39 @@
         <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
           <mat-label>Pays</mat-label>
           <mat-select formControlName="vendeurCountry" (selectionChange)="handleVendeurCountryChange($event)">
-            <mat-option *ngFor="let country of countries" [value]="country.code"> {{country.name}}</mat-option>
+            <mat-option *ngFor="let country of countries" [value]=" country.code"> {{country.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="phone-input" fxFlex="63.6">
-          <mat-label>{{selectedVendeurCountry?.phoneCode}}</mat-label>
-          <input matInput formControlName="vendeurPhone" [mask]="selectedVendeurCountry?.mask" [placeholder]="selectedVendeurCountry?.placeholder" >
+          <mat-label>Numéro</mat-label>
+          <span matPrefix>&nbsp;&nbsp;{{ selectedVendeurCountry?.phoneCode }}</span>
+          <input matInput formControlName="vendeurPhone" [mask]="selectedVendeurCountry?.mask" [placeholder]="selectedVendeurCountry?.placeholder">
           <mat-error *ngIf="vendeurFormValues?.vendeurPhone.errors?.required">Le numéro est obligatoire</mat-error>
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline">
         <mat-label>Mot de passe</mat-label>
-        <input matInput formControlName="vendeurPassword" type="password" required>
-        <mat-error *ngIf="vendeurFormValues?.vendeurPassword.errors?.required">Mot de passe est obligatoire</mat-error>
-        <mat-error *ngIf="vendeurFormValues?.vendeurPassword.errors?.minlength">Mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
+        <input matInput formControlName="vendeurPassword" [type]="hidePassword ? 'password' : 'text'" required>
+        <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="vendeurFormValues?.vendeurPassword.errors?.required"> Mot de passe est obligatoire </mat-error>
+        <mat-error *ngIf="vendeurFormValues?.vendeurPassword.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
       </mat-form-field>
+
       <mat-form-field appearance="outline">
-        <mat-label>Mot de passe de cofirmation</mat-label>
-        <input matInput formControlName="confirmPassword" type="password" required>
-        <mat-error *ngIf="vendeurFormValues?.confirmPassword.errors?.required">Mot de passe de cofirmation obligatoire</mat-error>
-        <mat-error *ngIf="vendeurFormValues?.confirmPassword.errors?.minlength">Mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
-        <mat-error *ngIf="vendeurFormValues?.confirmPassword.errors?.mismatchedPasswords">Mot de passe de cofirmation ne correspondent pas</mat-error>
+        <mat-label>Mot de passe de confirmation</mat-label>
+        <input matInput formControlName="confirmPassword" [type]="hideConfirm ? 'password' : 'text'" required>
+        <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hideConfirm">
+          <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="vendeurFormValues?.confirmPassword.errors?.required"> Mot de passe de confirmation obligatoire </mat-error>
+        <mat-error *ngIf="vendeurFormValues?.confirmPassword.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+        <mat-error *ngIf="vendeurFormValues?.confirmPassword.errors?.mismatchedPasswords"> Mot de passe de confirmation ne correspondent pas </mat-error>
       </mat-form-field>
+
 
       <div class="button-container">
         <button mat-button class="back-button" routerLink="/authentication">
@@ -312,7 +322,7 @@
         <button mat-button class="back-button" (click)="previousPage()">
           <mat-icon>arrow_back</mat-icon> Retour
         </button>
-        <button mat-raised-button class="submit-button" type="submit">
+        <button mat-raised-button class="submit-button" type="submit" >
           <mat-progress-spinner *ngIf="loading" diameter="20" mode="indeterminate"></mat-progress-spinner>
           Terminer
         </button>

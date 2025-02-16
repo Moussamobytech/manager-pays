@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
-import { Data, AppService } from '../../app.service';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { AppService } from '../../app.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from 'src/app/models/product.models';
 import { User } from '../../models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { id } from '@swimlane/ngx-charts';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
@@ -16,12 +15,8 @@ export class CartComponent implements OnInit {
   @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() product: Product;
   @Input() type: string;
-  @ViewChild('simillarContainer1', { static: false }) simillarContainer1!: ElementRef;
-  @ViewChild('simillarContainer2', { static: false }) simillarContainer2!: ElementRef;
-  showSimilarNav1 = false;
-  showSimilarNav2 = false;
-
-  public align = 'center center';
+  @ViewChild('simillarContainer', { static: false }) simillarContainer!: ElementRef;
+  showSimilarNav = false;
   total = [];
   grandTotal = 0;
   cartItemCount = [];
@@ -34,11 +29,6 @@ export class CartComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
     private authService:AuthenticationService,
   ) { }
-  // ngAfterViewInit(): void {
-  //   if (!this.simillarContainer) {
-  //     console.error('simillarContainer is not available!');
-  //   }
-  // }
   public count:number = 1;
   public productList: Product[];
 
@@ -50,36 +40,44 @@ export class CartComponent implements OnInit {
       this.isSmallScreen = result.matches;
     });
     this.getAllArticleInPanier();
+    setTimeout(() => {
+      this.onResize();
+    });
   }
+
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => {
+  //     this.onResize();
+  //     console.log(this.showSimilarNav);
+  //   });
+  // }
 
   @HostListener('window:resize')
   onResize() {
-    if (this.simillarContainer1||this.simillarContainer2) {
-      const containerEl1 = this.simillarContainer1.nativeElement;
-      const containerEl2 = this.simillarContainer1.nativeElement;
-      this.showSimilarNav1 = containerEl1.scrollWidth > containerEl1.clientWidth;
-      this.showSimilarNav2 = containerEl1.scrollWidth > containerEl1.clientWidth;
+    if (this.simillarContainer) {
+      const containerEl = this.simillarContainer.nativeElement;
+      this.showSimilarNav = containerEl.scrollWidth > containerEl.clientWidth;
     }
   }
 
   getAllArticleInPanier(){
-        // Parse the stringified JSON array
-        const panierString = sessionStorage.getItem('panier');
-        this.productList = panierString ? JSON.parse(panierString) : [];
+    // Parse the stringified JSON array
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
 
 
-        // Check if the productList is an array
-        if (Array.isArray(this.productList)) {
-          this.productList.forEach(product => {
-            this.total[product.id] = product.cartCount * parseFloat(product.priceBasic);
-            this.grandTotal += product.cartCount * parseFloat(product.priceBasic);
-            this.cartItemCount[product.id] = product.cartCount;
-            this.cartItemCountTotal += product.cartCount;
-            this.product = product;
-          });
-        } else {
-          console.error("Product list is not an array.");
-        }
+    // Check if the productList is an array
+    if (Array.isArray(this.productList)) {
+      this.productList.forEach(product => {
+        this.total[product.id] = product.cartCount * parseFloat(product.priceBasic);
+        this.grandTotal += product.cartCount * parseFloat(product.priceBasic);
+        this.cartItemCount[product.id] = product.cartCount;
+        this.cartItemCountTotal += product.cartCount;
+        this.product = product;
+      });
+    } else {
+      console.error("Product list is not an array.");
+    }
   }
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -111,7 +109,7 @@ monPanierContient(){
 }
 
 
-public updateCart(value){
+  public updateCart(value){
     if(value){
       this.total[value.productId] = value.total;
       this.cartItemCount[value.productId] = value.soldQuantity;
@@ -141,7 +139,6 @@ public updateCart(value){
   public remove(product) {
    this.appService.remove(product);
    this.getAllArticleInPanier();
-
   }
 
   public clear(){
@@ -161,27 +158,29 @@ public updateCart(value){
     if (isNaN(priceBasic) || isNaN(pricePromotion)) {
       return 0;
     }
+
     return priceBasic - pricePromotion;
   }
 
-  swipeSimillarProduct(direction: string, containerNumb) {
-    let containerRef = (containerNumb === 1)? this.simillarContainer1 : this.simillarContainer2;
-    if (!containerRef) return;
+  swipeSimilarProduct(direction: 'left' | 'right'): void {
+    const container = this.simillarContainer?.nativeElement;
+    if (!container) return;
+    const mobileStep = 120;
+    const desktopStep = 180;
 
-    const container = containerRef.nativeElement;
+    const scrollStep = window.innerWidth >= 830 ? desktopStep : mobileStep;
     const maxScroll = container.scrollWidth - container.clientWidth;
-    const scrollStep = window.innerWidth >= 830 ? 180 : 115;
 
-    let newScrollPosition = direction === 'left'
-      ? container.scrollLeft - scrollStep
-      : container.scrollLeft + scrollStep;
+    let newScrollPosition = container.scrollLeft + (direction === 'left' ? -scrollStep : scrollStep);
 
-    if (newScrollPosition < 0) newScrollPosition = 0;
-    if (newScrollPosition > maxScroll) newScrollPosition = 0;
+    if(newScrollPosition === (mobileStep+maxScroll)|| newScrollPosition === (desktopStep+maxScroll)){
+      newScrollPosition = 0;
+    }else{
+      newScrollPosition = Math.max(0, Math.min(newScrollPosition, maxScroll));
+    }
 
     container.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
   }
 
+
 }
-
-
