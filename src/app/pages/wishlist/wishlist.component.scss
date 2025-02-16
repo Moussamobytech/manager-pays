@@ -1,6 +1,4 @@
 $primary_color: #25224a;
-$link_color: #0056b3;
-$link_hover_color: lighten($primary_color, 20%);
 $gap_size: 16px;
 
 .main-container{
@@ -40,23 +38,7 @@ $gap_size: 16px;
     }
 
     .load-more-wrapper {
-      display: flex;
-      justify-content: center;
       margin: 20px 0;
-
-      a {
-        color: $link_color;
-        text-decoration: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: color 0.3s ease;
-
-        &:focus,
-        &:hover {
-          color: $link_hover_color;
-          text-decoration: underline;
-        }
-      }
     }
   }
 

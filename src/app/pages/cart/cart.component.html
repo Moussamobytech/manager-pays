@@ -125,167 +125,98 @@
   </mat-card> -->
 <!-- </div> -->
 
-<div class="desktop-container" *ngIf="productList?.length > 0" fxLayout="column" fxFlex fxShow="false" ffxShow.gt.xs="true">
-  <div class="cart-container">
-    <h2 class="cart-title">Mon Panier</h2>
+<div class="cart-container" *ngIf="productList?.length > 0" fxFlex="100">
+  <h2 class="cart-title">Mon Panier</h2>
 
-    <!-- Product List -->
-    <div class="cart-items" fxLayout="row" >
-      <div class="cart-item" *ngFor="let product of productList" fxFlex="48">
-        <div class="product-info">
-          <img [src]="product.image1" alt="Product Image" class="product-image" />
-          <div>
-            <p class="product-name">{{ product?.nom }}</p>
-            <p class="product-price">{{ product?.pricePromotion }} F</p>
-          </div>
-        </div>
-        <div class="product-actions">
-          <app-controls [product]="product" [pageName]="pageName" [type]="'wish'"
-              (onQuantityChange)="updateCart($event)"></app-controls>
-          <button class="delete-button" (click)="remove(product)">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+  <!-- Mobile-only: Back Button -->
+  <button class="back-button" fxShow.xs fxShow.lt.xs>
+    <i class="fa-solid fa-chevron-left"></i> Ajouter Nouveau Produit
+  </button>
 
-    <!-- Order Summary & Form -->
-    <div class="summary-form-container">
-      <div class="summary">
-        <h3>Résumé de la commande</h3>
-        <div class="summary-item">
-          <p>Montant</p>
-          <p>{{ grandTotal }} F</p>
-        </div>
-        <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion != product?.priceBasic">
-          <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
-          <p>-{{ getProductDiscount(product) }} F</p>
-        </div>
-        <div class="summary-item total">
-          <p>Total</p>
-          <p>{{ (grandTotal - (grandTotal * (product?.priceBasic | discount: product?.pricePromotion))) }} F</p>
-        </div>
-      </div>
-
-      <!-- Payment Form -->
-      <form class="payment-form" fxLayout="row">
-        <input type="text" placeholder="* Numéro de téléphone" fxFlex="48" fxLayout.gt-md="49"/>
-        <input type="text" placeholder="* Prénom" fxFlex="48" fxLayout.gt-md="49" />
-        <input type="text" placeholder="* Nom" fxFlex="48" fxLayout.gt-md="49"/>
-        <select fxFlex="48" fxLayout.gt-md="49">
-          <option multiple>Mode de paiement</option>
-          <option value="cash">À la livraison</option>
-          <option value="Orange">Orange Money</option>
-          <option value="credit_card">Carte de Crédit Bancaire</option>
-        </select>
-      </form>
-
-      <div class="actions">
-        <button class="back" routerLink="/">Retour</button>
-        <button class="validate" routerLink="/">Valider</button>
-      </div>
-    </div>
-
-    <!-- Similar Products Section -->
-    <div class="similar-products">
-      <div class="main-title">
-        <h3 class="primary-color">Produits Similaires</h3>
-        <a routerLink="">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
-      </div>
-      <div class="product-wrapper">
-        <mat-icon *ngIf="showSimilarNav1" (click)="swipeSimillarProduct('left',1)" class="simillar-prev">keyboard_arrow_left</mat-icon>
-        <div class="product-list" #simillarContainer1>
-          <div class="similar-product" *ngFor="let similarProduct of productList">
-            <img [src]="similarProduct.image1" alt="Similar Product" />
-            <p class="similar-name text-truncate">{{ similarProduct.nom }}</p>
-            <p class="similar-price">{{ similarProduct.pricePromotion || similarProduct.priceBasic }} F</p>
-            <button class="buy-button">Acheter</button>
-          </div>
-        </div>
-        <mat-icon *ngIf="showSimilarNav1" (click)="swipeSimillarProduct('right',1)" class="simillar-next">keyboard_arrow_right</mat-icon>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="mobile-container" *ngIf="productList?.length > 0" fxFlex="100" fxShow="false" fxShow.xs="true" fxShow.lt.xs="true">
-  <div class="cart-container">
-    <h2 class="cart-title">Mon Panier</h2>
-    <button class="back-button"><i class="fa-solid fa-chevron-left"></i> Ajouter Nouveau Produit</button>
-
-    <div class="cart-item" *ngFor="let product of productList">
+  <!-- Product List: row on desktop, column on mobile -->
+  <div class="cart-items" fxLayout="row wrap">
+    <div class="cart-item" *ngFor="let product of productList" fxFlex.xs="100" fxFlex.gt-sm="48">
       <div class="product-info">
-        <img [src]="product?.image1" alt="Product Image" class="product-image" />
+        <img [src]="product.image1" alt="Product Image" class="product-image" />
         <div>
           <p class="product-name">{{ product?.nom }}</p>
-          <p class="product-price">{{ product?.pricePromotion }} F</p>
+          <p class="product-price">{{ product?.pricePromotion || product?.priceBasic }} F</p>
         </div>
       </div>
       <div class="product-actions">
-        <app-controls [product]="product" [pageName]="pageName" [type]="'wish'"
-            (onQuantityChange)="updateCart($event)"></app-controls>
+        <app-controls [product]="product" [pageName]="pageName" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>
         <button class="delete-button" (click)="remove(product)"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
+  </div>
 
-    <!-- <hr /> -->
-
+  <!-- Order Summary & Payment Form -->
+  <div class="summary-form-container">
     <div class="summary">
-      <!-- <div fxLayout="column" fxLayoutAlign="center start" class="grand-total">
-        <span>{{ grandTotal | number : '1.2-2'}} FCFA</span>
-        <span class="text-muted">15%</span>
-        <span class="new-price">{{ (grandTotal - (grandTotal*0.15)) | number : '1.2-2'}} FCFA</span>
-      </div> -->
+      <h3>Résumé de la commande</h3>
       <div class="summary-item">
         <p>Montant</p>
         <p>{{ grandTotal }} F</p>
       </div>
-      <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion != product?.priceBasic">
-        <p>Reduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
+      <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
+        <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
         <p>-{{ getProductDiscount(product) }} F</p>
       </div>
       <div class="summary-item total">
         <p>Total</p>
-        <p>{{ (grandTotal - (grandTotal* (product?.priceBasic | discount: product?.pricePromotion))) }} F</p>
+        <p>{{ grandTotal - (grandTotal * (product?.priceBasic | discount: product?.pricePromotion) / grandTotal) }} F</p>
       </div>
     </div>
 
-    <form class="payment-form">
-      <input type="text" placeholder="* Numero de telephone" />
-      <input type="text" placeholder="* Prenom" />
-      <input type="text" placeholder="* Nom" />
-      <select>
-        <option multiple>Mode de paiement</option>
-        <option value="cash">A la livraison</option>
-        <option value="Orange">Orange Money</option>
-        <option value="credit_card">Carte de Credit Bancaire</option>
-      </select>
+    <!-- Payment Form: horizontal on desktop, vertical on mobile -->
+    <form class="payment-form" fxLayout="row">
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>* Numéro de téléphone</mat-label>
+        <input matInput type="text" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>* Prénom</mat-label>
+        <input matInput type="text" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>* Nom</mat-label>
+        <input matInput type="text" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>Mode de paiement</mat-label>
+        <mat-select required>
+          <mat-option value="cash">À la livraison</mat-option>
+          <mat-option value="Orange">Orange Money</mat-option>
+          <mat-option value="credit_card">Carte de Crédit Bancaire</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="actions" fxFlex>
+        <button class="back" routerLink="/">Retour</button>
+        <button class="validate" type="submit" routerLink="/">Valider</button>
+      </div>
     </form>
+  </div>
 
-    <div class="actions">
-      <button class="back">Retour</button>
-      <button class="validate">Valider</button>
+  <!-- Similar Products Section -->
+  <div class="similar-products">
+    <div class="main-title">
+      <h3 class="primary-color">Produits Similaires</h3>
+      <a routerLink="">Voir plus<mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
     </div>
+    <div class="product-wrapper">
+      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('left')" class="simillar-prev">keyboard_arrow_left</mat-icon>
 
-    <div class="similar-products">
-      <div class="main-title">
-        <h3 class="primary-color">Produits similaires</h3>
-        <a routerLink="">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
-      </div>
-
-      <div class="product-wrapper">
-        <mat-icon *ngIf="showSimilarNav2" (click)="swipeSimillarProduct('left',2)" class="simillar-prev">keyboard_arrow_left</mat-icon>
-        <div class="product-list" #simillarContainer2>
-          <div class="similar-product" *ngFor="let similarProduct of productList">
-            <img [src]="similarProduct.image1" alt="Similar Product" />
-            <p class="similar-name text-truncate">{{ similarProduct.nom }}</p>
-            <p class="similar-price">{{ similarProduct.pricePromotion || similarProduct.priceBasic }} F</p>
-            <button class="buy-button">Acheter</button>
-          </div>
+      <div class="product-list" #simillarContainer>
+        <div class="similar-product" *ngFor="let similarProduct of productList">
+          <img [src]="similarProduct.image1" alt="Similar Product" />
+          <p class="similar-name text-truncate">{{ similarProduct.nom }}</p>
+          <p class="similar-price">{{ similarProduct.pricePromotion || similarProduct.priceBasic }} F</p>
+          <button class="buy-button">Acheter</button>
         </div>
-        <mat-icon *ngIf="showSimilarNav2" (click)="swipeSimillarProduct('right',2)" class="simillar-next">keyboard_arrow_right</mat-icon>
       </div>
+
+      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('right')" class="simillar-next">keyboard_arrow_right</mat-icon>
     </div>
   </div>
 </div>
+

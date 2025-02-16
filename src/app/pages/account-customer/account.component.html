@@ -2,48 +2,18 @@
   <div class="header">
     <div class="customer_account_logo" (click)="fileInput.click()">
       <input accept="image/*" #fileInput type="file" (change)="onFileSelected($event)" class="d-none">
-      <img [src]="defaultLogoUrl" class="profile-icon" alt="logo">
-      <!-- <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="logo"> -->
+      <img *ngIf="!currentUser.logo" [src]="defaultLogoUrl" class="profile-icon" alt="logo">
+      <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="logo">
       <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
     </div>
-    <!-- <img [src]="defaultLogoUrl" alt="Logo" class="logo"> -->
     <h2>Gaoussou Diarra</h2>
   </div>
   <div fxLayout="row wrap" class="card-container">
-    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
-      <div class="card amber" routerLink="earnings">
-        <span class="card-icon">
-          <i class="fas fa-sack-dollar"></i>
-        </span>
-        <h3>Mes gains</h3>
-        <p>20000F</p>
-      </div>
-    </div>
-    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
-      <div class="card primary">
-        <span class="card-icon">
-          <i class="fas fa-exchange-alt"></i>
-        </span>
-        <h3>Invite tes amis</h3>
-        <p>Gagne jusqu'à 5000 F par ami invité !</p>
-      </div>
-    </div>
-    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
-      <div class="card primary">
-        <span class="card-icon">
-          <i class="fa-solid fa-phone"></i>
-        </span>
-        <h3>Mettre à jour</h3>
-        <p>Mon numéro de téléphone</p>
-      </div>
-    </div>
-    <div fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
-      <div class="card amber">
-        <span class="card-icon">
-          <i class="fas fa-chart-line"></i>
-        </span>
-        <h3>Devenir revendeur</h3>
-        <p>Gagner des commissions sur chaque vente !</p>
+    <div *ngFor="let card of cards" fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+      <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
+        <span class="card-icon"><i [class]="card.icon"></i></span>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.content }}</p>
       </div>
     </div>
   </div>
