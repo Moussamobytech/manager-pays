@@ -30,6 +30,10 @@
   }
 }
 
+mat-card{
+  cursor: pointer;
+}
+
 /* Réduire la taille du texte pour les écrans de moins de 600 pixels de large */
 @media screen and (max-width: 700px) {
   body {

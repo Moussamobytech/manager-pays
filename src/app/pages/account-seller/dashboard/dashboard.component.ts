@@ -3,9 +3,14 @@ import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/f
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { map, catchError, finalize } from 'rxjs';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { ProductService } from 'src/app/services/product.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CommandeService } from 'src/app/services/commande.service';
+import { CommonMessageService } from 'src/app/services/common-message.service';
+import { CommandeSearchPipe } from 'src/app/theme/pipes/commandeSearche.pipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,45 +34,65 @@ export class DashboardComponent implements OnInit {
     contact: 0,
   };
 
-  // Extra properties from branch 2
+  // Extra properties from the first branch (e.g. shop link and copy functionality)
   isCopied: boolean = false;
   shopLink: string = null;
+
+  // Extra properties from the second branch (order statistics and views)
+  commandes: any;
+  commandePending: any;
+  commandePendingTotal: any = 0;
+  commandeTotal: any = 0;
+  venteTotal: any = 0;
+  montantTotal: any = 0;
+  commandeTotalMensuel: any = 0;
+  pourcentageEvolution: any = 0;
+  montantTotalMensuel: any = 0;
+  visitTotal: any;
 
   constructor(
     private auth: AuthenticationService,
     private productService: ProductService,
+    private ngxSpinnerService: NgxSpinnerService,
     private router: Router,
     public dialog: MatDialog,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private commandeService: CommandeService,
+    private commonService: CommonMessageService
   ) {}
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser();
 
-    // Initialize shopLink (this version uses the /sellers/ URL – adjust as needed)
+    // Initialize shopLink (using the seller URL pattern)
     this.shopLink = "https://fidelity-market.com/#/sellers/" + this.currentUser.username;
 
-    // Check if the user is logged in and has profiles; otherwise redirect to sign in
+    // If user is not logged in or profiles are missing, redirect to sign-in.
     if (this.currentUser == null || this.currentUser.profiles == null || this.currentUser.profiles == undefined) {
       this.router.navigate(["/sign-in"]);
     }
 
+    // Retrieve product statistics.
     this.stats(this.currentUser.username);
 
-    // Build the recharge form
+    // Build the recharge form.
     this.form = this.fb.group({
       amount: ['', Validators.required]
     });
 
     this.getUserById();
+
+    // Extra functionality from branch 2:
+    this.getProductViewCount(this.currentUser.username);
+    this.getCommandes(this.currentUser.username);
   }
 
   /**
    * Navigates to the add product page.
-   * (From branch 2 – adjust the route if needed.)
    */
   public add() {
+    // Using the account-seller route as per the current branch.
     this.router.navigate(["/account-seller/products-seller/add-product"]);
   }
 
@@ -121,8 +146,7 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Opens a dialog using the provided template and, upon closing, navigates to the dashboard.
-   * (Note: This uses `/account/dashboard` as the route – change to `/account-seller/dashboard` if needed.)
+   * Opens the recharge dialog.
    */
   openDialog(): void {
     const dialogRef = this.dialog.open(this.popupTemplate, {
@@ -135,7 +159,7 @@ export class DashboardComponent implements OnInit {
   }
 
   /**
-   * Retrieves user details by ID.
+   * Retrieves user details by username.
    */
   getUserById() {
     this.auth.info(this.currentUser.username).then((data: any) => {
@@ -147,27 +171,30 @@ export class DashboardComponent implements OnInit {
   /**
    * Executes a recharge request if the form is valid.
    */
-  onRecharge() {
-    if (this.form.valid) {
-      const amount: number = +this.form.get('amount').value; // Convert the amount to a number
-      this.auth.recharge(amount, this.currentUser.id).subscribe(
-        response => {
-          this.points = response.points;
-          setTimeout(() => {
-            this.dialog.closeAll();
-          }, 3000);
-        },
-        error => {
-          this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-          console.error('Error during recharge:', error);
-        }
-      );
-    }
-  }
+  // onRecharge() {
+  //   if (this.form.valid) {
+  //     const amount: number = +this.form.get('amount').value;
+  //     this.auth.recharge(amount, this.currentUser.id).subscribe(
+  //       response => {
+  //         this.points = response.points;
+  //         setTimeout(() => {
+  //           this.dialog.closeAll();
+  //         }, 3000);
+  //       },
+  //       error => {
+  //         this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', {
+  //           panelClass: 'error',
+  //           verticalPosition: 'top',
+  //           duration: 3000
+  //         });
+  //         console.error('Error during recharge:', error);
+  //       }
+  //     );
+  //   }
+  // }
 
   /**
    * Opens WhatsApp with a preset message.
-   * (From branch 1)
    */
   WhatsAppUs() {
     let message = "Bonjour, j’aimerais promouvoir mes produits sur Fidelity Market.";
@@ -177,7 +204,6 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Copies the shop link to the clipboard and toggles a visual flag.
-   * (From branch 2)
    */
   copyLink(inputElement: HTMLInputElement): void {
     inputElement.style.transition = '.3s';
@@ -190,5 +216,93 @@ export class DashboardComponent implements OnInit {
         console.error('Could not copy text: ', err);
       }
     );
+  }
+
+  /**
+   * Retrieves orders (commandes) for the given user and computes statistics.
+   */
+  public async getCommandes(id) {
+    // Show the spinner before starting the request.
+    this.ngxSpinnerService.show();
+    await this.commandeService.getAllCommandeByFournisseur(id).pipe(
+      map((commande: any) => commande),
+      catchError((error: any) => {
+        console.error("Erreur lors de la récupération des commandes : ", error);
+        this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
+        return []; // Retourne une liste vide en cas d'erreur pour éviter les plantages
+      }),
+      finalize(() => {
+        this.ngxSpinnerService.hide();// Masquez le spinner une fois la requête terminée (succès ou erreur)
+      })
+    ).subscribe((data: any) => {
+      // Filtrer les données pour ne garder que les commandes avec le statut "PENDING"
+      const pendingData = data.filter((commande: any) => commande.statutCommande.name === 'PENDING');
+      this.commandePending = pendingData;
+      this.commandePendingTotal = pendingData.length;
+
+      // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
+      const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
+      this.commandes = deliveredData;
+
+      // Obtenir le mois et l'année en cours.
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+
+      // Filtrer les commandes pour le mois en cours
+      const commandesMensuelles = deliveredData.filter((commande: any) => {
+        const dateCommande = new Date(commande.dateCommande);
+        return dateCommande.getMonth() === currentMonth && dateCommande.getFullYear() === currentYear;
+      });
+
+      // Calculer les totaux pour toutes les commandes
+      const commandeParCode = data.reduce((acc: any, commande: any) => {
+        acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
+        acc.montantTotal += commande.montant;
+        return acc;
+      }, { codes: {}, montantTotal: 0 });
+
+      // Calculer les totaux pour les commandes mensuelles
+      const commandeParCodeMensuel = commandesMensuelles.reduce((acc: any, commande: any) => {
+        acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
+        acc.montantTotal += commande.montant;
+        return acc;
+      }, { codes: {}, montantTotal: 0 });
+
+      this.venteTotal = deliveredData.length;
+      this.commandeTotal = Object.keys(commandeParCode.codes).length;
+      this.montantTotal = commandeParCode.montantTotal;
+
+       // Valeurs mensuelles
+      this.commandeTotalMensuel = Object.keys(commandeParCodeMensuel.codes).length;
+      this.montantTotalMensuel = commandeParCodeMensuel.montantTotal;
+
+      // Obtenir le mois et l'année du mois précédent
+      const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+      const commandesMoisPrecedent = deliveredData.filter((commande: any) => {
+        const dateCommande = new Date(commande.dateCommande);
+        return dateCommande.getMonth() === previousMonth && dateCommande.getFullYear() === previousYear;
+      });
+
+      // Calculer le montant total des ventes du mois précédent
+      const montantTotalMoisPrecedent = commandesMoisPrecedent.reduce((total: number, commande: any) => total + commande.montant, 0);
+
+      // Calcul de la variation en pourcentage
+      if (montantTotalMoisPrecedent > 0) {
+        this.pourcentageEvolution = (((this.montantTotalMensuel - montantTotalMoisPrecedent) / montantTotalMoisPrecedent) * 100).toFixed(2);
+      } else {
+        this.pourcentageEvolution = this.montantTotalMensuel > 0 ? 100 : 0;
+      }
+    });
+  }
+
+  /**
+   * Retrieves the view count for the current month for the user's products.
+   */
+  getProductViewCount(username) {
+    this.productService.getViewsForCurrentMonthOfProduct(username).then(data => {
+      this.visitTotal = data;
+    });
   }
 }

@@ -15,7 +15,7 @@ import { CommandeDialogComponent } from '../commande-dialog/commande-dialog.comp
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { CommandeAddNoteComponent } from '../commande-add-note/commande-add-note.component';
-import { ExcelExportService } from 'src/app/services/excel-export.service';
+import { ExcelOperationService } from 'src/app/services/excel-operation.service';
 
 @Component({
   selector: 'app-commande-details',
@@ -33,7 +33,7 @@ export class CommandeDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private breakpointObserver:BreakpointObserver,
     public dialog: MatDialog,
-    private excelExportService: ExcelExportService
+    private excelExportService: ExcelOperationService
   ) {
     this.settings = this.appSettings.settings;
   }
@@ -43,7 +43,7 @@ export class CommandeDetailsComponent implements OnInit {
   public sub: any;
   public paniers: Order[];
     public settings:Settings;
-  
+
   searchText:string = '';
    domHandlerService = inject(DomHandlerService);
       isAboveSmSize$: Observable<boolean>;
@@ -58,12 +58,12 @@ export class CommandeDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     this.sub = this.activatedRoute.params.subscribe(params => {
-   
+
       this.idUrls = params['id'];
       this.codeCommande = params['code'];
       this.getPanierById(params['id']);
   });
-  
+
      // request a size event in order to get availble screen size | Check Small size
             this.isAboveSmSize$ = this.breakpointObserver.observe([Breakpoints.Small,Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
             .pipe(
@@ -162,7 +162,7 @@ export class CommandeDetailsComponent implements OnInit {
           return panier.fournisseurUsername?.toString().trim().toLowerCase() || '';
           case "statutCommande":
             return panier.statutCommande.name?.toString().trim().toLowerCase() || '';
-    
+
       default:
         return '';
     }
@@ -175,7 +175,7 @@ export class CommandeDetailsComponent implements OnInit {
         //order.prixUnitaire.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
         //order.quantite.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
         order.fournisseurUsername.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        order.statutCommande.name.toLowerCase().includes(this.searchText.toLowerCase()) 
+        order.statutCommande.name.toLowerCase().includes(this.searchText.toLowerCase())
        // order.dateCommande.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
        // order.montant.toString().toLowerCase().includes(this.searchText.toLowerCase())
       );
@@ -196,7 +196,7 @@ export class CommandeDetailsComponent implements OnInit {
       maxWidth: '90vw', // Optionnel : limite la largeur à un pourcentage de la fenêtre
       maxHeight: '90vh' // Optionnel : limite la hauteur à un pourcentage de la fenêtre
     });
-  
+
     dialogRef.afterClosed().subscribe(product => {
       this.getPanierById(this.idUrls);
     });
@@ -210,11 +210,11 @@ export class CommandeDetailsComponent implements OnInit {
           message: "Vous etes sur de supprimer ce produit ?"
         }
       });
-  
+
       dialogRef.afterClosed().subscribe(dialogResult => {
         if (dialogResult) {
          // this.deleteCommande(commande.id)
-        
+
         }
       });
     }
@@ -229,11 +229,11 @@ export class CommandeDetailsComponent implements OnInit {
          // message: "Le commentaire sera ajouté"
         }
       });
-  
+
       dialogRef.afterClosed().subscribe(dialogResult => {
         if (dialogResult) {
          // this.deleteCommande(commande.id)
-        
+
         }
       });
     }
@@ -245,7 +245,7 @@ export class CommandeDetailsComponent implements OnInit {
         console.error('Error during recharge:', error);
       });
     }
-  
+
     setStatusT(idPanier: string, status: string, order: any) {
       this.commandeService.setStatus(idPanier, status).subscribe(
         () => {
@@ -262,9 +262,9 @@ export class CommandeDetailsComponent implements OnInit {
     }
     exportAsExel(){
       console.log("Exportation...");
-      
+
       this.excelExportService.exportToExcel(this.paniers, 'La commande n°'+ this.codeCommande);
-      console.log("Exportation finish...");  
+      console.log("Exportation finish...");
     }
-  
+
 }
