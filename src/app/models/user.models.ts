@@ -10,7 +10,7 @@ export class User {
   password?: string;
   description?: string;
   profiles?: Profile[];
-  avatar?: string;
+  logo?: string;
   points?: number|null;
   enabled?: boolean;
   bg1:any;

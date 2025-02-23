@@ -3,20 +3,19 @@
   <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Ajouter un produit" routerLink="/account-seller/products-seller/add-product">
     <i class="fa-solid fa-plus"></i> {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
   </button>
-  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button color="warn" matTooltip="Commandes en attente" routerLink="/account-seller/orders">
-    <i class="fa-solid fa-cart-arrow-down"></i> Commandes en attente
+  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Lien de votre boutique" (click)="shareLink(el)">
+    <span #el>
+      <i class="fa-solid fa-share" *ngIf="!isCopied"></i>
+      <i class="fa-solid fa-check" *ngIf="isCopied"></i>
+    </span>
+    Partager ma boutique
   </button>
-  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button color="warn" matTooltip="Information" routerLink="/account-seller/information">
+  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Information" routerLink="/account-seller/information">
     <i class="fa-solid fa-gears"></i> Gérer ma boutique
   </button>
   <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Promouvoir" (click)="WhatsAppUs()">
     <i class="fa-solid fa-bullhorn"></i> Promouvoir mes produits
   </button>
-  <div fxLayout="row" class="copy-container">
-    <input matInput type="text" [value]="shopLink" class="copy-input" #linkInput readonly>
-    <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
-    <mat-icon matSuffix *ngIf="isCopied">check</mat-icon>
-  </div>
 </div>
 
 <!-- <ng-template #popupTemplate>
@@ -93,8 +92,7 @@
   </div>
 </div> -->
 
-<!-- Additional Detailed Stats & Analytics (from other branch) -->
-<div fxLayout="row wrap">
+<!-- <div fxLayout="row wrap">
   <div fxFlex="100" fxFlex.xl="50" fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="100" class="p-2">
     <mat-card class="gradient-teal tile p-2" routerLink="/account/orders-manage">
       <mat-icon>shop</mat-icon>
@@ -124,7 +122,21 @@
       <p>Visiteurs pour mes produits</p>
     </mat-card>
   </div>
+</div> -->
+
+<div fxLayout="row wrap" class="card-container">
+  <div *ngFor="let card of cards" fxFlex="48.5" fxFlex.gt-xs="32" fxFlex.gt-sm="24" [routerLink]="card.routerLink">
+    <div class="card" [ngClass]="card.cardClass">
+      <div class="card-header">
+        <span class="card-icon"><i [class]="card.icon"></i></span>
+        <span class="card-value">{{ card.value }}</span>
+      </div>
+      <h3>{{ card.title }}</h3>
+      <p>{{ card.content }}</p>
+    </div>
+  </div>
 </div>
+
 
 <div fxLayout="row wrap" fxFlex="100" *ngIf="montantTotalMensuel != 0">
   <div fxFlex="100" fxFlex.gt-sm="100" class="p-2">

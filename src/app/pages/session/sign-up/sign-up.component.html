@@ -208,7 +208,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="phone-input" fxFlex="63.6">
-        <mat-label>Numéro</mat-label>
+        <mat-label>Téléphone</mat-label>
         <span matPrefix>&nbsp;&nbsp;{{ selectedClientCountry?.phoneCode }}</span>
         <input matInput formControlName="clientPhone" [placeholder]="selectedClientCountry?.placeholder" [mask]="selectedClientCountry?.mask">
         <mat-error *ngIf="clientFormValues.clientPhone.errors?.required">Le numéro est obligatoire</mat-error>
@@ -219,8 +219,8 @@
       <button mat-button class="back-button" routerLink="/authentication">
         <mat-icon>arrow_back</mat-icon>Retour
       </button>
-      <button mat-raised-button class="submit-button" type="submit" [disabled]="clientForm.invalid">Valider
-        <mat-icon>arrow_forward</mat-icon>
+      <button mat-raised-button class="submit-button" type="submit" [disabled]="clientForm.invalid">
+        Valider<mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
   </form>
@@ -250,7 +250,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="phone-input" fxFlex="63.6">
-          <mat-label>Numéro</mat-label>
+          <mat-label>Téléphone</mat-label>
           <span matPrefix>&nbsp;&nbsp;{{ selectedVendeurCountry?.phoneCode }}</span>
           <input matInput formControlName="vendeurPhone" [mask]="selectedVendeurCountry?.mask" [placeholder]="selectedVendeurCountry?.placeholder">
           <mat-error *ngIf="vendeurFormValues?.vendeurPhone.errors?.required">Le numéro est obligatoire</mat-error>
@@ -283,8 +283,8 @@
         <button mat-button class="back-button" routerLink="/authentication">
           <mat-icon>arrow_back</mat-icon>Retour
         </button>
-        <button mat-raised-button class="submit-button" (click)="nextPage()" [disabled]="vendeurForm.invalid">Suivant
-          <mat-icon>arrow_forward</mat-icon>
+        <button mat-raised-button class="submit-button" (click)="nextPage()" [disabled]="vendeurForm.invalid">
+          Suivant<mat-icon>arrow_forward</mat-icon>
         </button>
       </div>
     </div>

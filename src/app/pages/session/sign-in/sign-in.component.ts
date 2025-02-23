@@ -59,7 +59,8 @@ export class SignInComponent implements OnInit {
             this.cm.openFailureSnackBar('Une erreur est survenue, veuillez réessayer');
             return;
           }
-          this.router.navigate(['/account-customer']);
+          (userInfo.profiles[0].name.toLowerCase().includes('boutique'))?
+          this.router.navigate(['/account-seller/dashboard']) : this.router.navigate(['/account-customer']);
         },
         () => {
           this.cm.openFailureSnackBar('Numéro de telephone ou mot de passe incorrect');

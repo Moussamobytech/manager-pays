@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/services/common.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
 
 @Component({
@@ -16,6 +17,8 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
+  sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
+  shopLink: string = 'https://fidelity-market.com/#/sellers/' + this.sellerInfo.username;
 
   constructor(
     public router: Router,
@@ -24,7 +27,7 @@ export class AccountComponent implements OnInit {
     private auth: AuthenticationService,
     public dialog: MatDialog,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
+    private cm:CommonService,
     private imgCompressService: ImageCompressService
   ) {}
 
@@ -36,14 +39,14 @@ export class AccountComponent implements OnInit {
   defaultLogo = 'assets/images/icons/shop_icon.png';
   selectedLogo: File | null = null;
   selectedLogoName: string = null;
-  public links =  [
+  public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-    { name: 'Parrainage', href: 'parrainage', icon: 'people' },
+    // { name: 'Parrainage', href: 'parrainage', icon: 'people' },
     { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
     { name: 'Mes clients', href: 'customers', icon: 'people_outline' },
     { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
-    { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
-    { name: 'Informations', href: 'information', icon: 'info_outline' },
+    // { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
+    { name: 'Paramètres', href: 'settings', icon: 'settings' },
     { name: 'Comment ca marche?', href: 'how_works', icon: 'help_outline' },
     { name: 'Déconnection', href: '/sign-in', icon: 'power_settings_new' },
   ];
@@ -97,10 +100,10 @@ export class AccountComponent implements OnInit {
             });
           }
         } else {
-          this.snackBar.open("Format incorrect, veillez choisir une image!", "x", { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+        this.cm.openFailureSnackBar("Format incorrect, veillez choisir une image!");
         }
       } else {
-        this.snackBar.open("Veuillez choisir un logo puis réessayer!", "x", { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+        this.cm.openFailureSnackBar("Veuillez choisir un logo puis réessayer!");
       }
     } catch (error: any) {
       console.log(error);
@@ -132,6 +135,22 @@ export class AccountComponent implements OnInit {
       } else {
         this.selectedLogoName = logoName;
       }
+    }
+  }
+
+  shareLink(){
+    const shareData = {
+      title: '',
+      text: 'Découvrez cette boutique sur Fidelity-Market 💥! '+this.sellerInfo.nom+' !',
+      url: this.shopLink
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .catch((error) => console.error('Erreur lors de l\'envoie: ', error));
+    } else {
+      this.cm.openWarningSnackBar("Le partage n'est pas pris en charge par votre navigateur.")
     }
   }
 }

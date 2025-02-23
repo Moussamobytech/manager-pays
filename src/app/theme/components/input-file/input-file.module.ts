@@ -9,9 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { InputFileService } from './services/input-file.service';
 import { InputFileConfig } from './interfaces/input-file-config';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 export { InputFileConfig } from './interfaces/input-file-config';
- 
+
 @NgModule({
   declarations: [
     DropZoneDirective,
@@ -20,6 +21,7 @@ export { InputFileConfig } from './interfaces/input-file-config';
   imports: [
     CommonModule,
     FormsModule,
+    SharedModule,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,

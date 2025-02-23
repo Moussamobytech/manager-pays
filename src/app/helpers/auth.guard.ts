@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     let user  = JSON.parse(sessionStorage.getItem('currentUser')!);
 
     if (user == null || user == undefined || JSON.stringify(user) === '{}' || user == "") {
-      this.router.navigate(['authentication/sign-in'])
+      this.router.navigate(['authentication'])
       return false;
     }
 
@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate, CanLoad {
 
       let user  = JSON.parse(sessionStorage.getItem('currentUser')!);
       if (user == null || user == undefined || JSON.stringify(user) === '{}' || user == "") {
-        this.router.navigate(['/sign-in'])
+        this.router.navigate(['authentication'])
         return false;
       }
 

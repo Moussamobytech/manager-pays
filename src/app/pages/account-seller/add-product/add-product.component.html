@@ -1,134 +1,101 @@
-<div class="p-2">
-  <mat-card>
-      <mat-card-header>
-          <mat-card-title>{{(id) ? 'Modifier' : 'Ajouter un nouveau'}} Produit</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="pt-3">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
-              <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
-                  <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 5 images)</span></p>
-                  <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>
+<div class="main-container">
+  <h2>{{ (id) ? 'Modifier' : 'Ajouter un nouveau' }} Produit</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
+      <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
+          <p class="mt-1">
+            <span class="uppercase fw-500">Gallery</span>
+            <span class="text-muted px-1">(max 5 images)</span>
+          </p>
+          <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>
+      </div>
+      <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
+          <div fxLayout="row wrap">
+              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Nom</mat-label>
+                      <input matInput formControlName="nom" required>
+                      <mat-error *ngIf="form.controls.nom.errors?.required">nom est obligatoire</mat-error>
+                      <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4 caractères</mat-error>
+                  </mat-form-field>
               </div>
-              <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
-                  <div fxLayout="row wrap">
-                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Nom</mat-label>
-                              <input matInput formControlName="nom" required>
-                              <mat-error *ngIf="form.controls.nom.errors?.required">nom est obligatoire</mat-error>
-                              <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4 caractères</mat-error>
-                          </mat-form-field>
-                      </div>
-                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Categorie</mat-label>
-                              <mat-select formControlName="categorie" required>
-                                  <mat-option *ngFor="let cat of categories" [value]="cat.id">
-                                      <span>{{cat.nom}}</span>
-                                  </mat-option>
-                              </mat-select>
-                              <mat-error *ngIf="form.controls.categorie.errors?.required">categorie est obligatoire</mat-error>
-                          </mat-form-field>
-                      </div>
-                      <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Prix</mat-label>
-                              <input type="number" matInput formControlName="priceBasic" required>
-                              <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
-                          </mat-form-field>
-                      </div>
-                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Prix promo</mat-label>
-                              <input type="number" matInput formControlName="pricePromotion">
-                              <mat-error *ngIf="form.controls.pricePromotion.errors?.required">Prix promo est obligatoire</mat-error>
-                          </mat-form-field>
-                      </div>  -->
-
-
-                      <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Prix</mat-label>
-                            <input type="number" step="1" onkeypress="return event.charCode >= 48" matInput formControlName="priceBasic" required>
-                            <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
-                            <mat-error *ngIf="form.controls.priceBasic.errors?.nonZero">Prix ne peut pas être zéro</mat-error>
-                          </mat-form-field>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Prix promo</mat-label>
-                            <input type="number" step="1" onkeypress="return event.charCode >= 48" matInput formControlName="pricePromotion">
-                            <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error>
-                          </mat-form-field>
-                        </div> -->
-
-
-                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'PRODUCTS.PRICE' | translate}}</mat-label>
-                            <input matInput formControlName="priceBasic">
-                            <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
-                            <mat-error *ngIf="form.controls.priceBasic.errors?.pattern">Le prix doit etre un nombre </mat-error>
-                            <mat-error *ngIf="!form.controls.priceBasic.errors?.pattern&&form.controls.priceBasic.errors?.minlength">Le prix minimum est 100FCFA</mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>{{'PRODUCTS.PRICE_PROMOTION' | translate}} (Optionnel)</mat-label>
-                              <input matInput formControlName="pricePromotion">
-                              <mat-error *ngIf="form.controls.pricePromotion.errors?.pattern">Le prix de promo doit etre un nombre</mat-error>
-                              <mat-error *ngIf="form.controls.pricePromotion.errors?.minlength">Le prix de promo minimum est 100FCFA</mat-error>
-                          </mat-form-field>
-                      </div>
-                      <!-- <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Color</mat-label>
-                              <mat-select formControlName="color" multiple  (selectionChange)="onColorSelectionChange($event)">
-                                  <mat-select-trigger>{{selectedColors}}</mat-select-trigger>
-                                  <mat-option *ngFor="let color of colors" [value]="color">
-                                      <div fxLayout="row" fxLayoutAlign="space-between center">
-                                          <span>{{color}}</span>
-                                          <mat-icon [style.color]="color">fiber_manual_record</mat-icon>
-                                      </div>
-                                  </mat-option>
-                              </mat-select>
-                          </mat-form-field>
-                      </div>
-                      <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Size</mat-label>
-                              <mat-select formControlName="size" multiple>
-                                  <mat-option *ngFor="let size of sizes" [value]="size">
-                                      <span>{{size}}</span>
-                                  </mat-option>
-                              </mat-select>
-                          </mat-form-field>
-                      </div>
-                      <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Weight</mat-label>
-                              <input matInput formControlName="weight" type="number">
-                          </mat-form-field>
-                      </div>  -->
-
-                      <div fxFlex="100" class="px-1">
-                          <mat-form-field appearance="outline" class="w-100">
-                              <mat-label>Description</mat-label>
-                              <textarea matInput formControlName="description" rows="7"></textarea>
-                          </mat-form-field>
-                      </div>
-
-
-
-                      <div fxFlex="100" class="mt-2 text-center w-100">
-                          <button mat-raised-button color="primary" type="submit">Enregistrer</button>
-                      </div>
-                  </div>
+              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Categorie</mat-label>
+                      <mat-select formControlName="categorie" required>
+                          <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                              <span>{{ cat.nom }}</span>
+                          </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="form.controls.categorie.errors?.required">categorie est obligatoire</mat-error>
+                  </mat-form-field>
               </div>
-          </form>
-      </mat-card-content>
 
+              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{ 'PRODUCTS.PRICE' | translate }}</mat-label>
+                    <input matInput formControlName="priceBasic">
+                    <mat-error *ngIf="form.controls.priceBasic.errors?.required">Prix est obligatoire</mat-error>
+                    <mat-error *ngIf="form.controls.priceBasic.errors?.pattern">Le prix doit etre un nombre</mat-error>
+                    <mat-error *ngIf="!form.controls.priceBasic.errors?.pattern && form.controls.priceBasic.errors?.minlength">
+                      Le prix minimum est 100FCFA
+                    </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>{{ 'PRODUCTS.PRICE_PROMOTION' | translate }} (Optionnel)</mat-label>
+                      <input matInput formControlName="pricePromotion">
+                      <mat-error *ngIf="form.controls.pricePromotion.errors?.pattern">
+                        Le prix de promo doit etre un nombre
+                      </mat-error>
+                      <mat-error *ngIf="form.controls.pricePromotion.errors?.minlength">
+                        Le prix de promo minimum est 100FCFA
+                      </mat-error>
+                  </mat-form-field>
+              </div>
 
+              <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Color</mat-label>
+                      <mat-select formControlName="color" multiple (selectionChange)="onColorSelectionChange($event)">
+                          <mat-select-trigger>{{ selectedColors }}</mat-select-trigger>
+                          <mat-option *ngFor="let color of colors" [value]="color">
+                              <div fxLayout="row" fxLayoutAlign="space-between center">
+                                  <span>{{ color }}</span>
+                                  <mat-icon [style.color]="color">fiber_manual_record</mat-icon>
+                              </div>
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Tailles disponibles</mat-label>
+                      <mat-select formControlName="size" multiple>
+                          <mat-option *ngFor="let size of sizes" [value]="size">
+                              <span>{{ size }}</span>
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              <div fxFlex="100" fxFlex.gt-sm="33.3" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Weight</mat-label>
+                      <input matInput min="0" formControlName="weight" type="number">
+                  </mat-form-field>
+              </div>
 
-  </mat-card>
+              <div fxFlex="100" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Description</mat-label>
+                      <textarea matInput placeholder="Ajouter une description pour attirer les clients" formControlName="description" rows="4"></textarea>
+                  </mat-form-field>
+              </div>
+
+              <div fxFlex="100" class="text-center w-100">
+                  <button mat-raised-button class="submit-btn" type="submit">Enregistrer</button>
+              </div>
+          </div>
+      </div>
+  </form>
 </div>

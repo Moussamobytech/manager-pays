@@ -43,6 +43,7 @@ export class InputFileComponent implements ControlValueAccessor, OnInit {
     private _placeholderLink: string;
     private _sizeLimit: number;
 
+    @Input() containerFlex: string = '50';
     @Input() disabled: boolean;
     @Input() placeholder: string;
 

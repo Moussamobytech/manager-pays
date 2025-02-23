@@ -1,4 +1,93 @@
+
+$primary: #25224a;
+$amber: #feb930;
+
 .input-file{
   display: flex;
   justify-content: center;
 }
+
+.container {
+  padding: 16px;
+
+  @media screen and (max-width: 600px) {
+    margin-bottom: 30px;
+  }
+  .full-width {
+    width: 100%;
+  }
+
+  .country-title{
+    display: flex;
+    width: 100%;
+    // align-items: center;
+
+    mat-icon{
+      font-size: 18px;
+      cursor: pointer;
+      @media screen and (max-width: 600px) {
+        margin-left: auto;
+      }
+    }
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+
+    .informations, .apparence{
+      gap: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      resize: none;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center ;
+
+      &.double-btn{
+        justify-content: space-between;
+      }
+    }
+
+    .other-btn {
+      background-color: $primary;
+      color: white;
+      margin-top: 16px;
+    }
+
+    .submit-btn {
+      background-color: $amber;
+      color: $primary;
+      margin-top: 16px;
+    }
+
+  }
+}
+
+::ng-deep .no-checkmark .mat-pseudo-checkbox {
+  display: none !important;
+}
+::ng-deep .mdc-list-item__primary-text{
+  width: 100%;
+
+  .option-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .option-icon {
+      font-size: 18px;
+      color: $primary;
+
+      &.selected{
+        color: #283593;
+      }
+    }
+  }
+}
+

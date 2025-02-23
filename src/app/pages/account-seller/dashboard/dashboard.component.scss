@@ -8,6 +8,7 @@
       font-size: 10px;
     }
   }
+  margin-bottom: 20px;
 }
 
 .tile {
@@ -51,7 +52,7 @@ mat-card{
   color: white;
 }
 
-.jaune {
+.amber {
   background-color: #feb930;
 }
 
@@ -84,6 +85,83 @@ mat-card{
     transition: color 0.3s ease;
     &:hover {
       color: #c54896;
+    }
+  }
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .card {
+    height: 130px;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; // Pushes elements apart
+      width: 100%;
+
+      .card-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+
+        i {
+          font-size: 1.5em;
+        }
+      }
+
+      .card-value {
+        margin-left: auto; // Ensures it moves to the right
+      }
+    }
+
+    &.amber {
+      color: #25224a;
+      background-color: #feb930;
+      .card-icon{
+        background-color: #25224a;
+
+        i {
+          color: #feb930;
+        }
+      }
+    }
+
+    &.primary {
+      color: white;
+      background-color: #25224a;
+
+      .card-icon{
+        background-color: white;
+
+        i {
+          color: #25224a;
+        }
+      }
+    }
+
+    h3 {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 500px) {
+      p{
+        font-size: 11px;
+      }
+      h3{
+        font-size: 14px;
+      }
     }
   }
 }

@@ -11,22 +11,27 @@ import { AnalyticsService } from 'src/app/services/analitycs.service';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-public newsletter: Newsletter[];
-contactForm: UntypedFormGroup;
+  public newsletter: Newsletter[];
+  contactForm: UntypedFormGroup;
+  accountLink: string = null;
+  currentUser: any;
 
   constructor(public formBuilder: UntypedFormBuilder, public appService : AppService,
     private analitycsService: AnalyticsService) { }
 
   ngOnInit() {
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser') ?? null);
+    this.accountLink = this.currentUser && this.currentUser.profiles[0].name.toLowerCase().includes('boutique') ? '/account-seller' : '/account-customer';
+
     this.initForm()
     this.analitycsService.trackEvent('footer loaded', 'footer loaded into view','view');
-   }
+  }
 
 
   initForm(){
     this.contactForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-     });
+    });
   }
   public subscribe(): void {
     if (this.contactForm.valid) {
@@ -52,7 +57,7 @@ contactForm: UntypedFormGroup;
     }
   }
 
-  isOtherRouteActive(): boolean {
+  isOtherRoutesActive(): boolean {
     return window.location.href.includes('account-customer')|| window.location.href.includes('account-seller');
   }
 

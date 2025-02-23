@@ -1,4 +1,4 @@
-<div fxLayout="row wrap" fxLayoutAlign="center center">
+<!-- <div fxLayout="row wrap" fxLayoutAlign="center center">
   <div fxFlex="100" class="p-2" fxLayout="column">
     <h2 class="text-muted text-center">Détails du compte</h2>
     <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit(infoForm.value)" fxLayout="row wrap">
@@ -42,7 +42,7 @@
             <span class="text-muted px-1">(max 3 images)</span>
           </p>
           <div class="input-file" >
-            <input-file formControlName="banners" [fileLimit]="3" fileAccept="image/*"></input-file>
+            <input-file containerFlex="50"  formControlName="banners" [fileLimit]="3" fileAccept="image/*"></input-file>
           </div>
         </div>
       </div>
@@ -75,6 +75,201 @@
       </mat-form-field>
       <div fxFlex="100" class="text-center mt-2">
         <button mat-raised-button color="warn">Changement</button>
+      </div>
+    </form>
+  </div>
+</div> -->
+
+
+
+<div class="container">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-select [(value)]="selectedTab" (selectionChange)="onTabChange($event)">
+      <mat-select-trigger>
+        <i *ngIf="selectedTab" class="fa-solid fa-{{ getSelectedIcon() }}"></i>
+        {{ getSelectedLabel() }}
+      </mat-select-trigger>
+      <mat-option *ngFor="let tab of tabs" [value]="tab.value">
+        <i class="fa-solid fa-{{ tab.icon }}"></i> {{ tab.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit(infoForm.value)" class="form-container">
+    <div *ngIf="selectedTab === 'informations'" class="informations" fxLayout="row flex-wrap">
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="firstname" required />
+        <mat-error *ngIf="infoForm.controls.firstname.errors?.required">Le prénom est obligatoire</mat-error>
+        <mat-error *ngIf="infoForm.controls.firstname.hasError('minlength')"> Le prénom n'est pas assez long, minimum 3 caractères</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="lastname" required />
+        <mat-error *ngIf="infoForm.controls.lastname.errors?.required">Le nom est obligatoire</mat-error>
+        <mat-error *ngIf="infoForm.controls.lastname.hasError('minlength')">Le nom n'est pas assez long, minimum 3 caractères</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Téléphone</mat-label>
+        <input matInput formControlName="phoneNumber" required />
+        <mat-error *ngIf="infoForm.controls.phoneNumber.errors?.required">Le numéro de contact est obligatoire</mat-error>
+        <mat-error *ngIf="infoForm.controls.phoneNumber.hasError('minlength')">Le numéro n'est pas assez long, minimum 8 caractères</mat-error>
+        <mat-error *ngIf="infoForm.controls.phoneNumber.hasError('maxlength')">Le numéro est trop long, maximum 8 caractères</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="infoForm.controls.email.errors?.pattern">Adresse mail invalide</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Pays d'origine</mat-label>
+        <mat-select formControlName="country">
+          <mat-option *ngFor="let country of availableCountries" [value]="country">
+            {{ country }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Ville</mat-label>
+        <input matInput formControlName="city" />
+      </mat-form-field>
+
+      <div class="button-container" fxFlex>
+        <button mat-raised-button class="submit-btn" type="submit">Enregistrer <mat-icon>arrow_forward</mat-icon></button>
+      </div>
+    </div>
+
+
+    <div *ngIf="selectedTab === 'apparence'" class="apparence" fxLayout="row flex-wrap">
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Nom de la boutique</mat-label>
+        <input matInput formControlName="boutiqueName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
+        <mat-label>Description courte de la boutique (70 mots max)</mat-label>
+        <textarea matInput (keypress)="onDescriptionInput($event)" (input)="updateDescriptionWordCount($event)" formControlName="description" rows="2"></textarea>
+        <mat-hint align="end">{{ wordCount }}/{{ maxWords }}</mat-hint>
+      </mat-form-field>
+
+      <div fxFlex="100">
+        <label>Ajouter un logo pour plus de visibilité:</label>
+        <input-file formControlName="logo" [fileLimit]="1" fileAccept="image/*"></input-file>
+        <!-- <mat-hint>Ajouter un logo pour plus de visibilité</mat-hint> -->
+      </div>
+
+      <div fxFlex="100">
+        <label>Ajouter jusqu'à 3 bannières :</label>
+        <div fxLayoutGap="10px">
+          <input-file containerFlex="32" formControlName="banners" [fileLimit]="3" fileAccept="image/*"></input-file>
+        </div>
+        <!-- <mat-hint>Max 2 Mo par image</mat-hint> -->
+      </div>
+
+      <div class="button-container double-btn" fxFlex="100">
+        <button mat-raised-button class="other-btn" type="button" [routerLink]="'/sellers/'+currentUser.username"><mat-icon>remove_red_eye</mat-icon> Voir l'affichage</button>
+        <button mat-raised-button class="submit-btn" type="submit">Enregistrer <mat-icon>arrow_forward</mat-icon></button>
+      </div>
+    </div>
+
+
+    <div *ngIf="selectedTab === 'gestion'" class="gestion">
+      <div>
+        <label>Sélectionner les pays de livraison :</label>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ajouter pays de livraison</mat-label>
+          <mat-select #countrySelect (selectionChange)="addDeliveryCountry($event)">
+            <mat-select-trigger>{{selectedCountries.join(', ')}}</mat-select-trigger>
+            <mat-option *ngFor="let country of availableCountries" [value]="country" class="no-checkmark">
+              <div class="option-content">
+                <span>{{ country }}</span>
+                <i class="fa-solid fa-check option-icon selected" *ngIf="selectedCountries.includes(country)"></i>
+                <i class="fa-solid fa-plus option-icon" *ngIf="!selectedCountries.includes(country)"></i>
+              </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div formArrayName="deliveryCountries">
+        <div *ngFor="let countryGroup of deliveryCountries.controls; let i = index" [formGroupName]="i">
+          <div class="country-title">
+            <b>Pays:&nbsp;</b> {{ countryGroup.get('name')?.value }}
+              <mat-icon (click)="removeCountry(i, countrySelect)">delete</mat-icon>
+          </div>
+
+          <!-- Delivery Time Inputs -->
+          <div>
+            <label>Délais de livraison en nombre de jours</label><br>
+            <mat-form-field appearance="outline">
+              <mat-label>Exemple: 3</mat-label>
+              <input matInput type="number" min="0" formControlName="nationalDeliveryPrice" placeholder="En jours" />
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline">
+              <mat-label>À l'étranger</mat-label>
+              <input matInput type="number" min="0" formControlName="internationalDeliveryPrice" placeholder="En jours" />
+            </mat-form-field> -->
+          </div>
+
+          <!-- Delivery Price -->
+          <div>
+            <label>Prix de livraison</label><br>
+            <mat-form-field appearance="outline">
+              <mat-label>Exemple: 2000</mat-label>
+              <input matInput type="number" min="500" formControlName="deliveryPrice" />
+              <span matSuffix>FCFA&nbsp;&nbsp;</span>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button mat-raised-button class="submit-btn" type="submit">Enregistrer <mat-icon>arrow_forward</mat-icon></button>
+      </div>
+    </div>
+  </form>
+
+
+
+  <div *ngIf="selectedTab === 'securite'" class="securite">
+    <form [formGroup]="passwordForm" (ngSubmit)="onPasswordFormSubmit(passwordForm.value)" class="form-container">
+      <div fxLayout="row wrap" fxLayoutAlign="center center">
+        <div fxFlex.gt-xs="60">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Mot de passe actuel</mat-label>
+            <input matInput [type]="hide1 ? 'password' : 'text'" formControlName="currentPassword" required />
+            <button mat-icon-button matSuffix (click)="hide1 = !hide1" type="button"><mat-icon>{{ hide1 ? 'visibility_off' : 'visibility' }}</mat-icon></button>
+            <mat-error *ngIf="passwordForm.controls.currentPassword.errors?.required">Mot de passe actuel est obligatoire</mat-error>
+            <mat-error *ngIf="passwordForm.controls.currentPassword.hasError('minlength')">Mot de passe actuel n'est pas assez long, minimum 6 caractères</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nouveau mot de passe</mat-label>
+            <input matInput [type]="hide2 ? 'password' : 'text'" formControlName="newPassword" required />
+            <button mat-icon-button matSuffix (click)="hide2 = !hide2" type="button"><mat-icon>{{ hide2 ? 'visibility_off' : 'visibility' }}</mat-icon></button>
+            <mat-error *ngIf="passwordForm.controls.newPassword.errors?.required">Nouveau mot de passe est obligatoire</mat-error>
+            <mat-error *ngIf="passwordForm.controls.newPassword.hasError('minlength')">Nouveau mot de passe n'est pas assez long, minimum 6 caractères</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirmation du nouveau mot de passe</mat-label>
+            <input matInput [type]="hide2 ? 'password' : 'text'" formControlName="confirmNewPassword" required />
+            <button mat-icon-button matSuffix (click)="hide2 = !hide2" type="button"><mat-icon>{{ hide2 ? 'visibility_off' : 'visibility' }}</mat-icon></button>
+            <mat-error *ngIf="passwordForm.controls.confirmNewPassword.errors?.required">Confirmer le nouveau mot de passe est obligatoire</mat-error>
+            <mat-error *ngIf="passwordForm.controls.confirmNewPassword.hasError('mismatchedPasswords')">Les mots de passe ne correspondent pas</mat-error>
+          </mat-form-field>
+
+          <div class="button-container">
+            <button mat-raised-button class="submit-btn" type="submit">Enregistrer <mat-icon>arrow_forward</mat-icon></button>
+          </div>
+        </div>
       </div>
     </form>
   </div>

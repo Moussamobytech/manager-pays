@@ -19,7 +19,7 @@ import { OrdersManageComponents } from './orders-manage/orders-manage.components
 import { ParrainageComponent } from './parrainage/parrainage.component';
 import { AddParrainageComponent } from './add-parrainage/add-parrainage.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { AnalyticsComponent } from '../account/analytics/analytics.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 const config: InputFileConfig = {
   fileAccept: '*'
@@ -34,17 +34,17 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent, data: { breadcrumb: 'Dashboard' } },
-      { path: 'information', component: InformationComponent, data: { breadcrumb: 'Information' } },
+      { path: 'settings', component: InformationComponent, data: { breadcrumb: 'Paramètres' } },
       { path: 'products-seller', component: ProductsComponent, data: { breadcrumb: 'Produits' } },
-      { path: 'products-seller/add-product', component: AddProductComponent, data: { breadcrumb: 'Ajouter un Produit' } },
-      { path: 'products-seller/edit-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modifier un Produit' } },
+      { path: 'products-seller/add-product', component: AddProductComponent, data: { breadcrumb: 'Ajout de Produit' } },
+      { path: 'products-seller/edit-product/:id', component: AddProductComponent, data: { breadcrumb: 'Modification de Produit' } },
       { path: 'how_works', component: HowWorksComponent, data: { breadcrumb: 'Comment ca marche ?' } },
       { path: 'addresses', component: AddressesComponent, data: { breadcrumb: 'Addresses' } },
       { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule), data: { breadcrumb: 'Clients' } },
-      { path: 'orders', component: OrdersComponent, data: { breadcrumb: 'Mes achats' } },
-      { path: 'orders-manage', component: OrdersManageComponents, data: { breadcrumb: 'Gestion commandes' } },
-      { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Gestion commandes' } },
-      { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Ajouter un parrainage' } },
+      { path: 'orders', component: OrdersComponent, data: { breadcrumb: 'Achats' } },
+      { path: 'orders-manage', component: OrdersManageComponents, data: { breadcrumb: 'Commandes' } },
+      { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Parrainages' } },
+      { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Ajout de parrainage' } },
     ]
   }
 ];

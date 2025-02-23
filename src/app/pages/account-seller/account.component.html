@@ -7,8 +7,9 @@
           <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="boutique logo">
           <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
         </div>
-        <div *ngIf="currentUser.name" class="mb-3">
+        <div *ngIf="currentUser.name" class="shopname-section">
           <p>{{currentUser.name}}</p>
+          <button mat-icon-button class="text-muted" (click)="shareLink()"><mat-icon>share</mat-icon></button>
         </div>
 
         <ng-template #FilePopupTemplate>
@@ -55,7 +56,7 @@
               <mat-icon class="icon-more_vert">more_vert</mat-icon>
               <mat-icon class="icon-menu">menu</mat-icon>
           </button>
-          <h3>{{ 'NAV.HOME' | translate }}</h3>
+          <h3>Mon compte</h3>
       </div>
       <div class="account-wrapper mat-elevation-z1">
           <router-outlet></router-outlet>

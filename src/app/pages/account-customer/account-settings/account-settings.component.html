@@ -26,6 +26,7 @@
 
       <mat-form-field appearance="outline" class="phone-number" fxFlex="63.6">
         <mat-label>Téléphone</mat-label>
+        <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.phoneCode }}</span>
         <input matInput formControlName="username" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
       </mat-form-field>
     </div>

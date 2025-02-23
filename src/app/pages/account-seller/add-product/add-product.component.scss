@@ -1,5 +1,15 @@
+$primary: #25224a;
+$amber: #feb930;
 
+.main-container{
+  padding: 16px;
+  @media screen and (max-width: 600px) {
+    margin-bottom: 40px;
+  }
 
-// .mat-mdc-button>.mat-icon{
-//     color: #d81b60 !important;;
-// }
+  .submit-btn {
+    background-color: $amber;
+    color: $primary;
+    margin-top: 16px;
+  }
+}

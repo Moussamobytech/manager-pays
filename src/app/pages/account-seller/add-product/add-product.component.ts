@@ -39,7 +39,7 @@ export class AddProductComponent implements OnInit {
       'pricePromotion': [null, [Validators.pattern('^[0-9]*$'),Validators.minLength(3)]],
       'priceBasic': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)] ],
       "description": null,
-      "weight": "5",
+      "weight": null,
       "user": this.currentUser.username,
       "categorie": [null, Validators.required ]
     });
