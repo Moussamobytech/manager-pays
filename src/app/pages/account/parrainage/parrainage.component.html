@@ -3,11 +3,65 @@
         <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
             <h2>Parrainage</h2>
             <button mat-raised-button color="warn" matTooltip="Créer un Parrainage" (click)="add()">
-                Créer un Parrainage
+                Créer une campagne
                  <!-- <mat-icon>add</mat-icon> 
               {{"ADMIN_NAV.ADD_PRODUCT"}}-->
             </button>
         </div>
+
+
+        <mat-divider></mat-divider>
+        <div class="mat-mdc-table admin-table">
+            <div class="mat-mdc-header-row">
+                <div class="mat-mdc-header-cell">Nom</div>
+                <div class="mat-mdc-header-cell">Montant Max</div>
+                <div class="mat-mdc-header-cell">Montant Mini</div>
+                <div class="mat-mdc-header-cell">Réduction %</div>
+                <div class="mat-mdc-header-cell">Nbre d'utilisation</div>
+                <div class="mat-mdc-header-cell">Date de début</div>
+                <div class="mat-mdc-header-cell">Date de fin</div>
+                <div class="mat-mdc-header-cell">Actions</div>
+            </div>
+            <div *ngFor="let campagne of campagnes | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+                <div class="mat-mdc-cell">{{campagne.nom}}</div>
+                <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
+                <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
+                <div class="mat-mdc-cell">{{campagne.reduction}}</div>
+                <div class="mat-mdc-cell">{{campagne.nombreUtilisation || 'N/A'}}</div>
+                <div class="mat-mdc-cell">{{campagne.dateDebut | date}}</div>
+                <div class="mat-mdc-cell">{{campagne.dateFin | date}}</div>
+                
+                <!-- <div class="mat-mdc-cell">{{ ( stores | filterById : follower.storeId )?.name }}</div>       -->
+                <div class="mat-mdc-cell">
+                    <div class="p-2 actions">
+                      <!-- <button mat-mini-fab class="bleu" matTooltip="View">
+                        <mat-icon>remove_red_eye</mat-icon>
+                      </button> -->
+                      <button mat-mini-fab color="accent" matTooltip="Modifier" (click)="edit(campagne.id)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-mini-fab color="primary" matTooltip="Modifier" (click)="remove(campagne)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                      <!-- <button *ngIf="product.etat == 'INACTIF' || product.etat == 'PENDING'" mat-mini-fab color="accent" matTooltip="" class="mx-1" (click)="remove(product)">
+                          <mat-icon>refresh</mat-icon>
+                      </button> -->
+                      <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'" [checked]="campagne.active == true" (change)="setStatus(campagne.id, $event)"> </mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+
     </mat-card>
 
+   
+
+</div>
+<div  fxLayout="row wrap">
+    <div fxFlex="100">
+        <mat-card class="text-center">
+            <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+        </mat-card>
+    </div>
 </div>

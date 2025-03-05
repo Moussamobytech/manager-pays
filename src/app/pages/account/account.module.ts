@@ -17,7 +17,7 @@ import { AuthGuard } from 'src/app/helpers/auth.guard';
 import { HowWorksComponent } from './how_works/how_works.component';
 import { OrdersManageComponents } from './orders-manage/orders-manage.components';
 import { ParrainageComponent } from './parrainage/parrainage.component';
-import { AddParrainageComponent } from './add-parrainage/add-parrainage.component';
+import { AddParrainageComponent } from './parrainage/add-parrainage/add-parrainage.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AnalyticsComponent } from './analytics/analytics.component';
 const config: InputFileConfig = {
@@ -41,7 +41,8 @@ export const routes: Routes = [
       { path: 'orders', component: OrdersComponent, data: { breadcrumb: 'Mes achats' } },
       { path: 'orders-manage', component: OrdersManageComponents, data: { breadcrumb: 'Gestion commandes' } },
       { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Gestion commandes' } },
-      { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Ajouter un parrainage' } },
+      { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Ajouter une campagne' } },
+      { path: 'add-parrainage/:id', component: AddParrainageComponent, data: { breadcrumb: 'Modifier la campagne' } },
     ]
   }
 ];

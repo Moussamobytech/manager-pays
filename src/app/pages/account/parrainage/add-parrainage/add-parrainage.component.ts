@@ -1,0 +1,197 @@
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Category } from 'src/app/app.models';
+import { AppService } from 'src/app/app.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { CategoryService } from 'src/app/services/category.service';
+import { CommonMessageService } from 'src/app/services/common-message.service';
+import { ImageCompressService } from 'src/app/services/image-compress.servive';
+import { ProductService } from 'src/app/services/product.service';
+import { User } from 'src/app/models/user.models';
+import { CampagneService } from 'src/app/services/campagne.service';
+
+@Component({
+  selector: 'app-add-parrainage',
+  templateUrl: './add-parrainage.component.html',
+  styleUrl: './add-parrainage.component.scss'
+})
+export class AddParrainageComponent implements OnInit {
+  form: FormGroup;
+  private currentUser: User;
+  public id: any;
+  public products: any = []
+  public username:string;
+  sub: any;
+
+  constructor(
+    public appService: AppService, 
+    public formBuilder: UntypedFormBuilder, 
+    private commonService: CommonMessageService,
+    private auth: AuthenticationService, 
+    private productService: ProductService, 
+    private campagneService: CampagneService,
+    private router: Router,private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.currentUser = this.auth.currentUser()
+    this.username = this.currentUser.username;   
+    this.form = this.formBuilder.group({
+      'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
+      'reduction': [null, Validators.required],
+      'commission': null,
+      'nombreUtilisation':null,
+      'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
+      'montantMaxAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
+      "dateDebut":[null,Validators.required],
+      "dateFin":[null,Validators.required],
+      "description": null,
+      'username':this.username,
+      'seuilRetrait':null
+
+    });
+
+
+
+    this.loadData()
+    this.sub = this.activatedRoute.params.subscribe(params => {
+      if(params['id']){
+        this.id = params['id'];
+        this.getCampagneById();
+      }
+    });
+  }
+
+
+  async loadData() {
+
+    let res = await this.productService.productUser(this.currentUser.username)
+    this.products = res
+  }
+  //Controle pour la saisie de 0
+  nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = parseFloat(control.value);
+    if (value === 0) {
+      return { nonZero: true };
+    }
+    return null;
+  }
+
+  
+
+  public async onSubmit() {
+    if (this.id) {
+      this.edit()
+    } else {
+      this.save()
+    }
+
+  }
+
+ 
+
+  async save() {
+    try {
+      if (this.form.valid) {
+        const data = {
+          nom: this.form.value.nom,
+          description: this.form.value.description,
+          reduction: this.form.value.reduction,
+          commissionParrain: this.form.value.commission,
+          nombreUtilisation: this.form.value.nombreUtilisation,
+          montantMinAchat: this.form.value.montantMinAchat,
+          montantMaxAchat: this.form.value.montantMaxAchat,
+          dateDebut: this.form.value.dateDebut,
+          dateFin: this.form.value.dateFin,
+          username: this.form.value.username,
+          seuilRetrait: this.form.value.seuilRetrait
+        };
+  
+        this.campagneService.add(data).subscribe({
+          next: (datas) => {           
+          
+              this.commonService.successToast(datas.message);
+              this.router.navigate(["/account/parrainage"]);
+           
+          },
+          error: (err) => {
+            if (err && err.statusCode == "BAD_REQUEST") {
+              this.commonService.errorToast(err.body.message);
+            } else {
+              this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+            }
+          }
+        });
+  
+      } else {
+        this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
+      }
+    } catch (error) {
+      console.log(error);
+      this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
+    }
+  }
+  
+
+  async edit() {
+    let size = 0;
+    try {
+      if (this.form.valid) {
+        const data = {
+          nom: this.form.value.nom,
+          description: this.form.value.description,
+          reduction: this.form.value.reduction,
+          commissionParrain: this.form.value.commission,
+          nombreUtilisation: this.form.value.nombreUtilisation,
+          montantMinAchat: this.form.value.montantMinAchat,
+          montantMaxAchat: this.form.value.montantMaxAchat,
+          dateDebut: this.form.value.dateDebut,
+          dateFin: this.form.value.dateFin,
+          username: this.form.value.username,
+          seuilRetrait: this.form.value.seuilRetrait
+        };
+
+      
+        this.campagneService.edit(this.id,data).subscribe({
+          next: (datas) => {           
+              this.commonService.successToast(datas.message);
+              this.router.navigate(["/account/parrainage"]);
+           
+          },
+          error: (err) => {
+            if (err && err.statusCode == "BAD_REQUEST") {
+              this.commonService.errorToast(err.body.message);
+            }
+            else if(err && err.statusCode == "OK"){
+              this.commonService.successToast("Campagne modifiée avec succès !");
+              this.router.navigate(["/account/parrainage"]);
+            }
+             else {
+              this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+            }
+          }
+        });
+
+      } else {
+        this.commonService.warnToast("Merci de vérifier si les champs sont toutes remplis")
+      }
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  public getCampagneById(){
+    this.campagneService.find(this.id).then((data : any) =>{
+      console.log(data)
+      this.form.patchValue(data);
+     
+     // this.form.controls.images.setValue(images);
+    })
+  }
+
+
+}

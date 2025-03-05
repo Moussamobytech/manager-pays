@@ -58,7 +58,7 @@ export class AccountComponent implements OnInit {
 
     this.links = [
       { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-     // { name: 'Parrainage', href: 'parrainage', icon: 'people' },
+      { name: 'Parrainage', href: 'parrainage', icon: 'people' },
       { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
       { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
       //{ name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
