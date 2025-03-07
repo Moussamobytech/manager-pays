@@ -21,18 +21,18 @@
       </div>
       <div *ngFor="let campagne of campagnes | paginate: { itemsPerPage: count, currentPage: page }"
         class="mat-mdc-row">
-        <div class="mat-mdc-cell">{{campagne.nom}}</div>
+        <div class="mat-mdc-cell" (click)="openCampagneAllCode(campagne.id)" >{{campagne.nom}}</div>
         <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
         <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
         <div class="mat-mdc-cell">{{campagne.reduction}}</div>
-        <div class="mat-mdc-cell"> 
-          <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'"
-            [checked]="campagne.active == true" (change)="setStatus(campagne.id, $event)"> 
+        <div class="mat-mdc-cell">
+          <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'" [checked]="campagne.active == true"
+            (change)="setStatus(campagne.id, $event)">
           </mat-slide-toggle>
         </div>
         <div class="mat-mdc-cell">
           <div class="p-2 actions">
-            <button mat-mini-fab class="bleu" matTooltip="Détail" (click)="detailCampagne(campagne.id)">
+            <button mat-mini-fab class="bleu" matTooltip="Détail" (click)="openCampagneDetail(campagne)">
               <mat-icon>remove_red_eye</mat-icon>
             </button>
             <button mat-mini-fab color="accent" matTooltip="Modifier" (click)="edit(campagne.id)">
@@ -43,7 +43,7 @@
             </button>
           </div>
         </div>
-       
+
 
       </div>
 
@@ -51,7 +51,9 @@
 
   </mat-card>
 
-
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR GENERATE CODE-->
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
   <ng-template #generateCodeTemplate>
     <h1 mat-dialog-title>Générer un code</h1>
     <div mat-dialog-content>
@@ -94,7 +96,9 @@
   </ng-template>
 
 
-
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE TO SEE GENERATE CODE-->
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
 
   <ng-template #codeGenerer>
     <h1 mat-dialog-title>Votre code généré</h1>
@@ -108,6 +112,75 @@
     </div>
   </ng-template>
 
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR CAMPAGNE DETAILS-->
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+
+  <ng-template #detailsCampagne>
+    <h1 mat-dialog-title>Campagne: {{ detailsCampagneData.nom }}</h1>
+    <div mat-dialog-content>
+      <mat-card-content class="pt-3">
+        <table class="mat-elevation-z2 w-100">
+          <tr>
+            <th>Nom de la campagne</th>
+            <td>{{ detailsCampagneData.nom }}</td>
+          </tr>
+          <tr>
+            <th>Réduction en %</th>
+            <td>{{ detailsCampagneData.reduction }}</td>
+          </tr>
+          <tr>
+            <th>Montant minimum d'achat</th>
+            <td>{{ detailsCampagneData.montantMinAchat }}</td>
+          </tr>
+          <tr>
+            <th>Montant maximum d'achat</th>
+            <td>{{ detailsCampagneData.montantMaxAchat }}</td>
+          </tr>
+          <tr>
+            <th>Nombre d'utilisation</th>
+            <td>{{ detailsCampagneData.nombreUtilisation }}</td>
+          </tr>
+          <tr>
+            <th>Commission en %</th>
+            <td>{{ detailsCampagneData.commission }}</td>
+          </tr>
+          <tr>
+            <th>Date de début</th>
+            <td>{{ detailsCampagneData.dateDebut }}</td>
+          </tr>
+          <tr>
+            <th>Date de fin</th>
+            <td>{{ detailsCampagneData.dateFin }}</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td>{{ detailsCampagneData.description }}</td>
+          </tr>
+        </table>
+      </mat-card-content>
+    </div>
+  </ng-template>
+
+   <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR ALL CODE OF CAMPAGNE -->
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  
+  <ng-template #allCodeGenerer>
+    <h1 mat-dialog-title>Les codes généré</h1>
+    <div mat-dialog-content>
+      <div *ngFor="let code of allCodesCampagne"
+        style="margin: 2%; border-radius: 5px;background-color: rgb(206, 201, 201);color: black; padding: 2%; display: flex; justify-content: space-between;">
+
+        <p>Date: {{ code.dateCreation | date:'d MMMM y à HH:mm' }}</p>
+
+        <strong style="font-size: 30px;text-transform: uppercase;font-family: 'Times New Roman', Times, serif;">
+          {{code.code}}</strong>
+        <mat-icon mat-button (click)="copyCodeToClipboard2(code.code)" style="cursor: pointer;">file_copy</mat-icon>
+        <mat-icon mat-button (click)="removeCode(code)" style="cursor: pointer; color: red;">delete</mat-icon>
+      </div>
+    </div>
+  </ng-template>
 
 
 </div>

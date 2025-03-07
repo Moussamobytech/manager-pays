@@ -115,6 +115,8 @@ export class CampagneService {
   public getAllCodeByCampagne(id: any):Observable<any> {
     return  this.api.get(`/code-promo/getAllCodeByCampagne/${id}`);
   }
-
+  supprimerCode(id: string): Observable<any> {
+    return this.api.delete(`/code-promo/delete/${id}`);
+  }
 
 }

@@ -25,6 +25,8 @@ export class ParrainageComponent implements OnInit {
 
   @ViewChild('generateCodeTemplate') generateCodeTemplate: TemplateRef<any>;
   @ViewChild('codeGenerer') codeGenerer: TemplateRef<any>;
+  @ViewChild('detailsCampagne') detailsCampagne: TemplateRef<any>;
+  @ViewChild('allCodeGenerer') allCodeGenerer: TemplateRef<any>;
   
   
 
@@ -41,6 +43,8 @@ export class ParrainageComponent implements OnInit {
   public count = 6;
 
   monCode:any=''
+  detailsCampagneData: any;
+  allCodesCampagne: any;
 
   constructor(
     public appService: AppService,
@@ -215,6 +219,46 @@ export class ParrainageComponent implements OnInit {
     });
   }
 
+   openCampagneDetail(campagne: any): void {
+      this.detailsCampagneData = campagne; // Stocker l'objet sélectionné
+      const dialogRef = this.dialog.open(this.detailsCampagne, {
+        width: '800px',
+      });
+  
+      dialogRef.afterClosed().subscribe(() => {
+        this.detailsCampagneData = null; // Réinitialiser après fermeture
+      });
+    }
+
+
+
+
+    openCampagneAllCode(id: any): void {
+
+      this.campagneService.getAllCodeByCampagne(id).subscribe({
+        next: (datas) => {
+          this.allCodesCampagne = datas;
+          console.log(":::::::::::::::: ALL CODE = ",JSON.stringify(this.allCodesCampagne));
+          
+        },
+        error: (err) => {
+          if (err && err.statusCode == "BAD_REQUEST") {
+            this.commonService.errorToast(err.body.message);
+          } else {
+            this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+          }
+        }
+      });
+
+      const dialogRef = this.dialog.open(this.allCodeGenerer, {
+        width: '800px',
+      });
+  
+      dialogRef.afterClosed().subscribe(() => {
+        this.allCodesCampagne = null; // Réinitialiser après fermeture
+      });
+    }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(this.generateCodeTemplate, {
       width: '400px',
@@ -284,5 +328,44 @@ export class ParrainageComponent implements OnInit {
       this.commonService.warnToast('Aucun code à copier.');
     }
   }
+
+  copyCodeToClipboard2(monCode) {
+    if (monCode) {
+      this.clipboard.copy(monCode);
+      this.commonService.successToast('Code copié dans le presse-papiers !');
+    } else {
+      this.commonService.warnToast('Aucun code à copier.');
+    }
+  }
+
+
+  public removeCode(code: any) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: {
+        title: "Confirm Action",
+        message: "Vous etes sur de vouloir supprimer ce code ?"
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.campagneService.supprimerCode(code.id).subscribe(
+          () => {
+            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
+            const index: number = this.allCodesCampagne.findIndex((us: any) => us.id === code.id);
+            if (index !== -1) {
+              this.allCodesCampagne.splice(index, 1);
+            }
+            console.log("Campagne successfully deleted.");
+          },
+          (error) => {
+            console.error("Error deleting produit:", error);
+            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+          }
+        );
+      }
+    });
+  }
+
 
 }
