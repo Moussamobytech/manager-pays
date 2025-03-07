@@ -20,6 +20,7 @@ import { ParrainageComponent } from './parrainage/parrainage.component';
 import { AddParrainageComponent } from './parrainage/add-parrainage/add-parrainage.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { DetailCampagneComponent } from './parrainage/detail-campagne/detail-campagne.component';
 const config: InputFileConfig = {
   fileAccept: '*'
 };
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Gestion commandes' } },
       { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Ajouter une campagne' } },
       { path: 'add-parrainage/:id', component: AddParrainageComponent, data: { breadcrumb: 'Modifier la campagne' } },
+      { path: 'detail-campagne/:id', component: DetailCampagneComponent, data: { breadcrumb: 'Détail de la campagne' } },
     ]
   }
 ];

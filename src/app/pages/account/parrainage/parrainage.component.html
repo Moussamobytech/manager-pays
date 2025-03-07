@@ -1,67 +1,121 @@
 <div class="p-2">
-    <mat-card>
-        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-            <h2>Parrainage</h2>
-            <button mat-raised-button color="warn" matTooltip="Créer un Parrainage" (click)="add()">
-                Créer une campagne
-                 <!-- <mat-icon>add</mat-icon> 
-              {{"ADMIN_NAV.ADD_PRODUCT"}}-->
+  <mat-card>
+    <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
+      <button mat-raised-button class="bleu mr-2" matTooltip="Générer un code" (click)="openDialog()">
+        Générer un code
+      </button>
+      <button mat-raised-button color="warn" matTooltip="Créer un Parrainage" (click)="add()">
+        Créer une campagne
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+    <div class="mat-mdc-table admin-table">
+      <div class="mat-mdc-header-row">
+        <div class="mat-mdc-header-cell">Nom</div>
+        <div class="mat-mdc-header-cell">Montant Max</div>
+        <div class="mat-mdc-header-cell">Montant Mini</div>
+        <div class="mat-mdc-header-cell">Réduction %</div>
+        <div class="mat-mdc-header-cell">Status</div>
+        <div class="mat-mdc-header-cell">Actions</div>
+      </div>
+      <div *ngFor="let campagne of campagnes | paginate: { itemsPerPage: count, currentPage: page }"
+        class="mat-mdc-row">
+        <div class="mat-mdc-cell">{{campagne.nom}}</div>
+        <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
+        <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
+        <div class="mat-mdc-cell">{{campagne.reduction}}</div>
+        <div class="mat-mdc-cell"> 
+          <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'"
+            [checked]="campagne.active == true" (change)="setStatus(campagne.id, $event)"> 
+          </mat-slide-toggle>
+        </div>
+        <div class="mat-mdc-cell">
+          <div class="p-2 actions">
+            <button mat-mini-fab class="bleu" matTooltip="Détail" (click)="detailCampagne(campagne.id)">
+              <mat-icon>remove_red_eye</mat-icon>
             </button>
+            <button mat-mini-fab color="accent" matTooltip="Modifier" (click)="edit(campagne.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" matTooltip="Supprimer" (click)="remove(campagne)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
+       
+
+      </div>
+
+    </div>
+
+  </mat-card>
 
 
-        <mat-divider></mat-divider>
-        <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row">
-                <div class="mat-mdc-header-cell">Nom</div>
-                <div class="mat-mdc-header-cell">Montant Max</div>
-                <div class="mat-mdc-header-cell">Montant Mini</div>
-                <div class="mat-mdc-header-cell">Réduction %</div>
-                <div class="mat-mdc-header-cell">Nbre d'utilisation</div>
-                <div class="mat-mdc-header-cell">Date de début</div>
-                <div class="mat-mdc-header-cell">Date de fin</div>
-                <div class="mat-mdc-header-cell">Actions</div>
-            </div>
-            <div *ngFor="let campagne of campagnes | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
-                <div class="mat-mdc-cell">{{campagne.nom}}</div>
-                <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
-                <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
-                <div class="mat-mdc-cell">{{campagne.reduction}}</div>
-                <div class="mat-mdc-cell">{{campagne.nombreUtilisation || 'N/A'}}</div>
-                <div class="mat-mdc-cell">{{campagne.dateDebut | date}}</div>
-                <div class="mat-mdc-cell">{{campagne.dateFin | date}}</div>
-                
-                <!-- <div class="mat-mdc-cell">{{ ( stores | filterById : follower.storeId )?.name }}</div>       -->
-                <div class="mat-mdc-cell">
-                    <div class="p-2 actions">
-                      <!-- <button mat-mini-fab class="bleu" matTooltip="View">
-                        <mat-icon>remove_red_eye</mat-icon>
-                      </button> -->
-                      <button mat-mini-fab color="accent" matTooltip="Modifier" (click)="edit(campagne.id)">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-mini-fab color="primary" matTooltip="Modifier" (click)="remove(campagne)">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                      <!-- <button *ngIf="product.etat == 'INACTIF' || product.etat == 'PENDING'" mat-mini-fab color="accent" matTooltip="" class="mx-1" (click)="remove(product)">
-                          <mat-icon>refresh</mat-icon>
-                      </button> -->
-                      <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'" [checked]="campagne.active == true" (change)="setStatus(campagne.id, $event)"> </mat-slide-toggle>
-                    </div>
-                </div>
-            </div>
-        
+  <ng-template #generateCodeTemplate>
+    <h1 mat-dialog-title>Générer un code</h1>
+    <div mat-dialog-content>
+      <!-- <p>Entrez les détails pour recharger votre compte.</p> -->
+      <form [formGroup]="form" (ngSubmit)="generate()" autocomplete="off">
+        <div mat-dialog-content>
+          <div fxLayout="row wrap">
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Campagne</mat-label>
+              <mat-select formControlName="campagne" required>
+                <mat-option *ngFor="let campagne of activeCampagne" [value]="campagne.id">
+                  <span>{{campagne.nom}}</span>
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls.campagne.errors?.required">La campagne est obligatoire</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Type de promo</mat-label>
+              <mat-select formControlName="typePromo" required>
+                <mat-option *ngFor="let typepromo of typePromo" [value]="typepromo.id">
+                  <span>{{promo(typepromo.name)}}</span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+          </div>
         </div>
+        <div mat-dialog-actions>
+          <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+            <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
 
-    </mat-card>
+            <button mat-raised-button class="bleu" type="submit">Générer</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
 
-   
+
+
+
+  <ng-template #codeGenerer>
+    <h1 mat-dialog-title>Votre code généré</h1>
+    <div mat-dialog-content>
+      <div
+        style="border-radius: 5px;background-color: rgb(206, 201, 201);color: black; padding: 2%; display: flex; justify-content: space-between;">
+        <strong style="font-size: 30px;text-transform: uppercase;font-family: 'Times New Roman', Times, serif;">{{
+          monCode }}</strong>
+        <mat-icon mat-button (click)="copyCodeToClipboard()" style="cursor: pointer;">file_copy</mat-icon>
+      </div>
+    </div>
+  </ng-template>
+
+
 
 </div>
-<div  fxLayout="row wrap">
-    <div fxFlex="100">
-        <mat-card class="text-center">
-            <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
-        </mat-card>
-    </div>
+<div fxLayout="row wrap">
+  <div fxFlex="100">
+    <mat-card class="text-center">
+      <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5"
+        (pageChange)="onPageChanged($event)"></pagination-controls>
+    </mat-card>
+  </div>
 </div>

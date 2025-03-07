@@ -85,6 +85,11 @@ export class CampagneService {
     return this.api.get('/campagne/user-getAllCampagne/' + username);
   }
 
+  public getAllTypePromo(): Observable<any> {
+    return this.api.get('/campagne/getAllPromo');
+  }
+  
+
   public setStatus(id: string,status:boolean): Observable<any> {
     return this.api.get('/campagne/status/' + id,status);
   }
@@ -100,5 +105,16 @@ export class CampagneService {
   find(id: any) {
     return this.api.get(`/campagne/get-by-id/` + id).toPromise();
   }
+
+
+
+  public generateCode(formData: any):Observable<any> {
+    return  this.api.post(`/code-promo/add`, formData);
+  }
+
+  public getAllCodeByCampagne(id: any):Observable<any> {
+    return  this.api.get(`/code-promo/getAllCodeByCampagne/${id}`);
+  }
+
 
 }
