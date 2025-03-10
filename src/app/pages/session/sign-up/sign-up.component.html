@@ -177,10 +177,10 @@
   </div>
 
   <div class="user-type-selector" fxLayout="row" fxLayoutGap="20px">
-    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'client'}" (click)="profilType('client')">
+    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'client'}" (click)="profilType('client')" type="button">
       <mat-icon>person</mat-icon> Je suis Client
     </button>
-    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'vendeur'}" (click)="profilType('vendeur')">
+    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'vendeur'}" (click)="profilType('vendeur')" type="button">
       <i class="fa-solid fa-shop"></i> Je suis Vendeur
     </button>
   </div>
@@ -216,7 +216,7 @@
     </div>
 
     <div class="button-container">
-      <button mat-button class="back-button" routerLink="/authentication">
+      <button  mat-button class="back-button" type="button" routerLink="/authentication">
         <mat-icon>arrow_back</mat-icon>Retour
       </button>
       <button mat-raised-button class="submit-button" type="submit" [disabled]="clientForm.invalid">
@@ -280,10 +280,10 @@
 
 
       <div class="button-container">
-        <button mat-button class="back-button" routerLink="/authentication">
+        <button mat-button class="back-button" type="button" routerLink="/authentication">
           <mat-icon>arrow_back</mat-icon>Retour
         </button>
-        <button mat-raised-button class="submit-button" (click)="nextPage()" [disabled]="vendeurForm.invalid">
+        <button mat-raised-button class="submit-button" type="button" (click)="nextPage()" [disabled]="vendeurForm.invalid">
           Suivant<mat-icon>arrow_forward</mat-icon>
         </button>
       </div>
@@ -319,7 +319,7 @@
       </div>
 
       <div class="button-container">
-        <button mat-button class="back-button" (click)="previousPage()">
+        <button  mat-button class="back-button" type="button" (click)="previousPage()">
           <mat-icon>arrow_back</mat-icon> Retour
         </button>
         <button mat-raised-button class="submit-button" type="submit" >

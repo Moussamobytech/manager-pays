@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Category } from 'src/app/models/category.models';
 import { MOCK_DATA } from './mock.data';
 
 @Component({

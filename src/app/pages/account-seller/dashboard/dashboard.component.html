@@ -1,19 +1,19 @@
 <!-- Quick Buttons (HEAD) -->
 <div fxLayout="row wrap" class="quick-buttons">
-  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Ajouter un produit" routerLink="/account-seller/products-seller/add-product">
+  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Ajouter un produit" routerLink="/account-seller/products-seller/add-product">
     <i class="fa-solid fa-plus"></i> {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
   </button>
-  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Lien de votre boutique" (click)="shareLink(el)">
+  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Lien de votre boutique" (click)="shareLink(el)">
     <span #el>
       <i class="fa-solid fa-share" *ngIf="!isCopied"></i>
       <i class="fa-solid fa-check" *ngIf="isCopied"></i>
     </span>
     Partager ma boutique
   </button>
-  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Information" routerLink="/account-seller/information">
+  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Information" routerLink="/account-seller/information">
     <i class="fa-solid fa-gears"></i> Gérer ma boutique
   </button>
-  <button fxFlex="48" fxFlex.gt-xs="31" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Promouvoir" (click)="WhatsAppUs()">
+  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Promouvoir" (click)="WhatsAppUs()">
     <i class="fa-solid fa-bullhorn"></i> Promouvoir mes produits
   </button>
 </div>
@@ -125,7 +125,7 @@
 </div> -->
 
 <div fxLayout="row wrap" class="card-container">
-  <div *ngFor="let card of cards" fxFlex="48.5" fxFlex.gt-xs="32" fxFlex.gt-sm="24" [routerLink]="card.routerLink">
+  <div *ngFor="let card of cards" fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" [routerLink]="card.routerLink">
     <div class="card" [ngClass]="card.cardClass">
       <div class="card-header">
         <span class="card-icon"><i [class]="card.icon"></i></span>

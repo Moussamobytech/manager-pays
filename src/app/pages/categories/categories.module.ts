@@ -23,9 +23,6 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     NgxPaginationModule,
-    // ShareButtonsModule,
-    // ShareIconsModule,
-    // PipesModule
   ],
   declarations: [CategoriesComponent,ProductsComponent]
 })

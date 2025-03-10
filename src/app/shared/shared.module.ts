@@ -52,6 +52,7 @@ import { LangComponent } from './lang/lang.component';
 import { ProductsCardComponent } from './product-card/product-card.component';
 import { SearchResultsComponent } from '../pages/search-results/search-results.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { LazyLoadImagesDirective } from './lazy-load-images.directive';
 
 @NgModule({
   imports: [
@@ -146,7 +147,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     CategoryListComponent,
     ConfirmDialogComponent,
     LangComponent,
-    SlickCarouselModule
+    SlickCarouselModule,
+    LazyLoadImagesDirective
   ],
   declarations: [
     RatingComponent,
@@ -159,8 +161,9 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     BannersComponent,
     CategoryListComponent,
     ConfirmDialogComponent,
-    LangComponent
-  ],
+    LangComponent,
+    LazyLoadImagesDirective
+   ],
   providers:[
     // { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
   ]
