@@ -23,6 +23,7 @@ export class AddParrainageComponent implements OnInit {
   public products: any = []
   public username:string;
   sub: any;
+  typePromo: any;
 
   constructor(
     public appService: AppService, 
@@ -36,7 +37,8 @@ export class AddParrainageComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
-    this.username = this.currentUser.username;   
+    this.username = this.currentUser.username; 
+    this.getAllPromo();  
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'reduction': [null, Validators.required],
@@ -48,7 +50,8 @@ export class AddParrainageComponent implements OnInit {
       "dateFin":[null,Validators.required],
       "description": null,
       'username':this.username,
-      'seuilRetrait':null
+      'seuilRetrait':null,
+      'typePromo':[null, Validators.required]
 
     });
 
@@ -92,6 +95,8 @@ export class AddParrainageComponent implements OnInit {
  
 
   async save() {
+    console.log("Le type vaut:::::::: ",this.form.value.typePromo);
+    
     try {
       if (this.form.valid) {
         const data = {
@@ -105,7 +110,8 @@ export class AddParrainageComponent implements OnInit {
           dateDebut: this.form.value.dateDebut,
           dateFin: this.form.value.dateFin,
           username: this.form.value.username,
-          seuilRetrait: this.form.value.seuilRetrait
+          seuilRetrait: this.form.value.seuilRetrait,
+          typePromo:this.form.value.typePromo
         };
   
         this.campagneService.add(data).subscribe({
@@ -149,7 +155,8 @@ export class AddParrainageComponent implements OnInit {
           dateDebut: this.form.value.dateDebut,
           dateFin: this.form.value.dateFin,
           username: this.form.value.username,
-          seuilRetrait: this.form.value.seuilRetrait
+          seuilRetrait: this.form.value.seuilRetrait,
+          typePromo:this.form.value.typePromo
         };
 
       
@@ -193,5 +200,62 @@ export class AddParrainageComponent implements OnInit {
     })
   }
 
+  getAllPromo() {
+    this.campagneService.getAllTypePromo().subscribe({
+      next: (datas) => {
+        this.typePromo = datas;
+      },
+      error: (err) => {
+        if (err && err.statusCode == "BAD_REQUEST") {
+          this.commonService.errorToast(err.body.message);
+        } else {
+          this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+        }
+      }
+    });
+  }
+
+  public promo(key) {
+    let res = ""
+    switch (key) {
+      case "POURCENTAGE":
+        res = "Pourcentage"
+        break;
+
+      case "MONTANT_FIXE":
+        res = "Montant fixe"
+        break;
+
+      case "LIVRAISON_GRATUITE":
+        res = "Livraison gratuite"
+        break;
+      case "ACHAT_1_OFFERT":
+        res = "Lors des premiers achats"
+        break;
+      case "CADEAU":
+        res = "Cadeaux aux achats"
+        break;
+      case "POINTS_BONUS":
+        res = "Des points en bonus"
+        break;
+      case "BON_ACHAT":
+        res = "Le bon achat"
+        break;
+      case "PARRAINAGE":
+        res = "Parrainage"
+        break;
+      case "ESSAI_GRATUIT":
+        res = "Les essais gratuits"
+        break;
+      case "ABONNEMENT_REDUIT":
+        res = "Abonnement"
+        break;
+
+      default:
+        res = "N/A"
+        break;
+    }
+    return res
+  }
 
 }

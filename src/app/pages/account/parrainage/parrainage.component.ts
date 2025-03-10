@@ -44,7 +44,7 @@ export class ParrainageComponent implements OnInit {
 
   monCode:any=''
   detailsCampagneData: any;
-  allCodesCampagne: any;
+  allCodesCampagne: any = [];
 
   constructor(
     public appService: AppService,
@@ -69,7 +69,6 @@ export class ParrainageComponent implements OnInit {
 
     this.form = this.fb.group({
       campagne: ['', Validators.required],
-      typePromo: ['', Validators.required]
 
     });
   }
@@ -173,8 +172,7 @@ export class ParrainageComponent implements OnInit {
       if (this.form.valid) {
         const data = {
           campagneParrainage: this.form.value.campagne,
-          username: this.username,
-          typePromo: this.form.value.typePromo
+          username: this.username
         };
   
         this.campagneService.generateCode(data).subscribe({
@@ -237,9 +235,10 @@ export class ParrainageComponent implements OnInit {
 
       this.campagneService.getAllCodeByCampagne(id).subscribe({
         next: (datas) => {
-          this.allCodesCampagne = datas;
-          console.log(":::::::::::::::: ALL CODE = ",JSON.stringify(this.allCodesCampagne));
+          console.log("::::::::::: TEST ",JSON.stringify(datas));
           
+          this.allCodesCampagne = datas;
+         
         },
         error: (err) => {
           if (err && err.statusCode == "BAD_REQUEST") {

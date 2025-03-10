@@ -72,6 +72,7 @@
               <mat-error *ngIf="form.controls.campagne.errors?.required">La campagne est obligatoire</mat-error>
             </mat-form-field>
 
+            <!-- 
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Type de promo</mat-label>
               <mat-select formControlName="typePromo" required>
@@ -80,6 +81,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+           -->
 
 
           </div>
@@ -109,6 +111,7 @@
           monCode }}</strong>
         <mat-icon mat-button (click)="copyCodeToClipboard()" style="cursor: pointer;">file_copy</mat-icon>
       </div>
+
     </div>
   </ng-template>
 
@@ -167,8 +170,8 @@
   <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
   
   <ng-template #allCodeGenerer>
-    <h1 mat-dialog-title>Les codes généré</h1>
-    <div mat-dialog-content>
+    <h1 mat-dialog-title>Les codes générés</h1>
+    <div mat-dialog-content *ngIf="allCodesCampagne!=null">
       <div *ngFor="let code of allCodesCampagne"
         style="margin: 2%; border-radius: 5px;background-color: rgb(206, 201, 201);color: black; padding: 2%; display: flex; justify-content: space-between;">
 
@@ -180,6 +183,9 @@
         <mat-icon mat-button (click)="removeCode(code)" style="cursor: pointer; color: red;">delete</mat-icon>
       </div>
     </div>
+    <div style="text-align: center;" mat-dialog-content *ngIf="allCodesCampagne == ''">
+      <strong>Vous n'avez pas de codes généré pour cette campagne </strong>
+  </div>
   </ng-template>
 
 

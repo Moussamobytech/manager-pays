@@ -24,6 +24,19 @@
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Type de promo</mat-label>
+                            <mat-select formControlName="typePromo" required>
+                              <mat-option *ngFor="let typepromo of typePromo" [value]="typepromo.id">
+                                <span>{{promo(typepromo.name)}}</span>
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
+                                type de promo</mat-error>
+                          </mat-form-field>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Reduction en %</mat-label>
                                 <input matInput formControlName="reduction" required>
@@ -66,7 +79,7 @@
                                     nombre </mat-error>
                             </mat-form-field>
                         </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <!--  <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label> Commission en %</mat-label>
                                 <input matInput formControlName="commission">
@@ -77,9 +90,9 @@
                                 <mat-error
                                     *ngIf="!form.controls.commission.errors?.pattern&&form.controls.commission.errors?.minlength">Le
                                     prix minimum est 100FCFA</mat-error>
-                                <!-- <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
                             </mat-form-field>
-                        </div>
+                        </div>                               <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
+
 
 
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
