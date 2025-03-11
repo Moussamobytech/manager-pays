@@ -21,7 +21,7 @@
       </div>
       <div *ngFor="let campagne of campagnes | paginate: { itemsPerPage: count, currentPage: page }"
         class="mat-mdc-row">
-        <div class="mat-mdc-cell" (click)="openCampagneAllCode(campagne.id)" >{{campagne.nom}}</div>
+        <div class="mat-mdc-cell" (click)="openCampagneAllCode(campagne.id)">{{campagne.nom}}</div>
         <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
         <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
         <div class="mat-mdc-cell">{{campagne.reduction}}</div>
@@ -120,7 +120,12 @@
   <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
 
   <ng-template #detailsCampagne>
-    <h1 mat-dialog-title>Campagne: {{ detailsCampagneData.nom }}</h1>
+
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+      <h1 mat-dialog-title>{{ detailsCampagneData.nom }}</h1>
+      <button mat-raised-button class="bleu mr-2" matTooltip="Voir le code"
+        (click)="openCampagneAllCode(detailsCampagneData.id)">Voir le code</button>
+    </div>
     <div mat-dialog-content>
       <mat-card-content class="pt-3">
         <table class="mat-elevation-z2 w-100">
@@ -165,10 +170,10 @@
     </div>
   </ng-template>
 
-   <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
   <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR ALL CODE OF CAMPAGNE -->
   <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-  
+
   <ng-template #allCodeGenerer>
     <h1 mat-dialog-title>Les codes générés</h1>
     <div mat-dialog-content *ngIf="allCodesCampagne!=null">
@@ -185,7 +190,7 @@
     </div>
     <div style="text-align: center;" mat-dialog-content *ngIf="allCodesCampagne == ''">
       <strong>Vous n'avez pas de codes généré pour cette campagne </strong>
-  </div>
+    </div>
   </ng-template>
 
 
