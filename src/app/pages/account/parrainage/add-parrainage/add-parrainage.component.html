@@ -1,0 +1,135 @@
+<div class="p-2">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>{{(id) ? 'Modifier' : 'Ajouter une nouvelle'}} campagne </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="pt-3">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
+                <!-- <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
+                    <p class="mt-1"><span class="uppercase fw-500">Gallery</span><span class="text-muted px-1">(max 5 images)</span></p>
+                    <input-file formControlName="images" [fileLimit]="5" fileAccept="image/*"></input-file>
+                </div>
+
+                 -->
+                <div fxFlex="100" fxFlex.gt-sm="100" class="px-2">
+                    <div fxLayout="row wrap">
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Nom de la campagne</mat-label>
+                                <input matInput formControlName="nom" required>
+                                <mat-error *ngIf="form.controls.nom.errors?.required">Le nom est
+                                    obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4
+                                    caractères</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Type de promo</mat-label>
+                            <mat-select formControlName="typePromo" required>
+                              <mat-option *ngFor="let typepromo of typePromo" [value]="typepromo.id">
+                                <span>{{promo(typepromo.name)}}</span>
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
+                                type de promo</mat-error>
+                          </mat-form-field>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Reduction en %</mat-label>
+                                <input matInput formControlName="reduction" required>
+                                <mat-error *ngIf="form.controls.reduction.errors?.required">Donne une
+                                    rduction</mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label> Montant minimum d'achat</mat-label>
+                                <input matInput formControlName="montantMinAchat">
+                                <mat-error *ngIf="form.controls.montantMinAchat.errors?.required">Le montant minimum est
+                                    obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.montantMinAchat.errors?.pattern">Le prix doit etre un
+                                    nombre </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label> Montant maximum d'achat</mat-label>
+                                <input matInput formControlName="montantMaxAchat">
+                                <mat-error *ngIf="form.controls.montantMaxAchat.errors?.required">Le montant maximum est
+                                    obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.montantMaxAchat.errors?.pattern">Le prix doit etre un
+                                    nombre </mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Nombre d'utilisation</mat-label>
+                                <input matInput type="number" min="0" formControlName="nombreUtilisation">
+                                <mat-error *ngIf="form.controls.nombreUtilisation.errors?.required">La commission est
+                                    obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.nombreUtilisation.errors?.pattern">Le prix doit etre un
+                                    nombre </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!--  <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label> Commission en %</mat-label>
+                                <input matInput formControlName="commission">
+                                <mat-error *ngIf="form.controls.commission.errors?.required">La commission est
+                                    obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.commission.errors?.pattern">Le prix doit etre un nombre
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="!form.controls.commission.errors?.pattern&&form.controls.commission.errors?.minlength">Le
+                                    prix minimum est 100FCFA</mat-error>
+                            </mat-form-field>
+                        </div>                               <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
+
+
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Date de début</mat-label>
+                                <input matInput [matDatepicker]="pickerDebut" formControlName="dateDebut" required>
+                                <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerDebut></mat-datepicker>
+                                <mat-error *ngIf="form.controls.dateDebut.errors?.required">Cette date est
+                                    obligatoire</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Date de fin</mat-label>
+                                <input matInput [matDatepicker]="pickerFin" formControlName="dateFin" required>
+                                <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerFin></mat-datepicker>
+                                <mat-error *ngIf="form.controls.dateFin.errors?.required">Cette date est
+                                    obligatoire</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" class="px-1">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput formControlName="description" rows="7"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" class="mt-2 text-center w-100">
+                            <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+
+
+
+    </mat-card>
+</div>
