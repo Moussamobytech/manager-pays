@@ -18,7 +18,9 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
 })
 export class AccountComponent implements OnInit {
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
-  shopLink: string = 'https://fidelity-market.com/#/sellers/' + this.sellerInfo.username;
+  
+  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
+
 
   constructor(
     public router: Router,
@@ -41,7 +43,7 @@ export class AccountComponent implements OnInit {
   selectedLogoName: string = null;
   public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-    // { name: 'Parrainage', href: 'parrainage', icon: 'people' },
+    { name: 'Parrainage', href: 'parrainage', icon: 'people' },
     { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
     { name: 'Mes clients', href: 'customers', icon: 'people_outline' },
     { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },

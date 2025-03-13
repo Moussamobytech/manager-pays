@@ -118,7 +118,7 @@ export class AddParrainageComponent implements OnInit {
           next: (datas) => {           
           
               this.commonService.successToast(datas.message);
-              this.router.navigate(["/account/parrainage"]);
+              this.router.navigate(["/account-seller/parrainage"]);
            
           },
           error: (err) => {
@@ -163,7 +163,7 @@ export class AddParrainageComponent implements OnInit {
         this.campagneService.edit(this.id,data).subscribe({
           next: (datas) => {           
               this.commonService.successToast(datas.message);
-              this.router.navigate(["/account/parrainage"]);
+              this.router.navigate(["/account-seller/parrainage"]);
            
           },
           error: (err) => {
@@ -172,7 +172,7 @@ export class AddParrainageComponent implements OnInit {
             }
             else if(err && err.statusCode == "OK"){
               this.commonService.successToast("Campagne modifiée avec succès !");
-              this.router.navigate(["/account/parrainage"]);
+              this.router.navigate(["/account-seller/parrainage"]);
             }
              else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
@@ -218,37 +218,20 @@ export class AddParrainageComponent implements OnInit {
   public promo(key) {
     let res = ""
     switch (key) {
-      case "POURCENTAGE":
-        res = "Pourcentage"
+      case "PROMOTION":
+        res = "Promotion"
         break;
 
-      case "MONTANT_FIXE":
-        res = "Montant fixe"
+      case "OFFRE_BIENVENUE":
+        res = "Offre bienvenue"
         break;
 
       case "LIVRAISON_GRATUITE":
         res = "Livraison gratuite"
         break;
-      case "ACHAT_1_OFFERT":
-        res = "Lors des premiers achats"
-        break;
-      case "CADEAU":
-        res = "Cadeaux aux achats"
-        break;
-      case "POINTS_BONUS":
-        res = "Des points en bonus"
-        break;
-      case "BON_ACHAT":
-        res = "Le bon achat"
-        break;
+
       case "PARRAINAGE":
         res = "Parrainage"
-        break;
-      case "ESSAI_GRATUIT":
-        res = "Les essais gratuits"
-        break;
-      case "ABONNEMENT_REDUIT":
-        res = "Abonnement"
         break;
 
       default:

@@ -35,22 +35,18 @@ export class DashboardComponent implements OnInit {
   //   contact: 0,
   // };
   isCopied: boolean = false;
-  shopLink: string = null;
+  sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
+  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
   commandes: any;
-  commandePending: any;
+  commandePending: any = 0;
   commandeTotal: any = 0;
   venteTotal: any = 0;
   montantTotal: any = 0;
   commandeTotalMensuel: any = 0;
   pourcentageEvolution: any = 0;
   montantTotalMensuel: any = 0;
-  visitTotal: any;
-  cards = [
-    { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: 10, cardClass: 'amber', routerLink: '/account-seller/orders' },
-    { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: 20, cardClass: 'primary', routerLink: '/account-seller/products-seller' },
-    { icon: 'fas fa-search', title: 'Visiteurs', content: 'Pour mes produits', value: 10000, cardClass: 'primary', routerLink: '#' },
-    { icon: 'fas fa-chart-line', title: 'Ventes du mois', content: '1000000 F', value: '+20%', cardClass: 'amber', routerLink: '#' },
-  ];
+  visitTotal: any = 0;
+
   // cards = [
   //   { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: null, cardClass: 'amber', routerLink: '/account-seller/orders'},
   //   { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: null, cardClass: 'primary', routerLink: '/account-seller/products-seller'},
@@ -70,11 +66,18 @@ export class DashboardComponent implements OnInit {
     private commonService: CommonMessageService
   ) {}
 
+  cards = [
+    { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: this.commandePending, cardClass: 'amber', routerLink: '/account-seller/orders-manage' },
+    { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: 20, cardClass: 'primary', routerLink: '/account-seller/products-seller' },
+    { icon: 'fas fa-search', title: 'Visiteurs', content: 'Pour mes produits', value: this.visitTotal, cardClass: 'primary', routerLink: '#' },
+    { icon: 'fas fa-chart-line', title: 'Ventes du mois', content: '1000000 F', value: '+20%', cardClass: 'amber', routerLink: '#' },
+  ];
+
   ngOnInit() {
     this.currentUser = this.auth.currentUser();
 
     // Initialize shopLink (using the seller URL pattern)
-    this.shopLink = "https://fidelity-market.com/#/sellers/" + this.currentUser.username;
+//    this.shopLink = "http://localhost:4200/#/sellers/" + this.currentUser.username;
 
     // If user is not logged in or profiles are missing, redirect to sign-in.
     if (this.currentUser == null || this.currentUser.profiles == null || this.currentUser.profiles == undefined) {
@@ -139,6 +142,7 @@ export class DashboardComponent implements OnInit {
       // this.statsNumber.total = data.total;
       // this.statsNumber.actif = data.actif;
       this.cards[1].value = data.actif;
+      
       // this.statsNumber.inactif = data.inactif;
       // this.statsNumber.pending = data.pending;
       // this.statsNumber.contact = data.contact;

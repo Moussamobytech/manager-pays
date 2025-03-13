@@ -5,6 +5,7 @@ import { Product } from 'src/app/models/product.models';
 import { User } from '../../models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
@@ -26,13 +27,21 @@ export class CartComponent implements OnInit {
   isSmallScreen: boolean = false;
   scrollAmount: number = 0;
 
+  phoneMinLength: number = 8; // Longueur par défaut pour le Mali
+  phoneMaxLength: number = 8; // Longueur par défaut pour le Mali
+  phonePlaceholder: string = 'xxxxxxxx'; // Placeholder par défaut pour le Mali
+
+
   constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
-    private authService:AuthenticationService,
+    private authService:AuthenticationService,public formBuilder: UntypedFormBuilder,
   ) { }
   public count:number = 1;
   public productList: Product[];
 
   pageName:string="cart";
+
+    billingForm: UntypedFormGroup;
+  
 
   ngOnInit() {
     this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.Handset])
@@ -43,8 +52,35 @@ export class CartComponent implements OnInit {
     setTimeout(() => {
       this.onResize();
     });
+
+
+     // Écoute des changements du champ téléphone
+     this.billingForm.get('phone')?.valueChanges.subscribe((phone: string) => {
+      if (!this.isPopulatingForm && phone && phone.length >= this.phoneMinLength) {
+        this.loadUserByPhone(phone);
+      }
+    });
+
+    this.initializeBillingForm();
   }
 
+
+  initializeBillingForm() {
+    this.billingForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.email]],
+      username:[''],
+      phone: ['', Validators.required],
+      country: ['mali'],
+
+      /*  
+      city: [''],
+      state: '',
+      zip: [''],*/
+    });
+  }
+  
   // ngAfterViewInit(): void {
   //   setTimeout(() => {
   //     this.onResize();
@@ -181,6 +217,69 @@ monPanierContient(){
 
     container.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
   }
+
+  isPopulatingForm: boolean = false;
+
+  populateBillingForm(user: User) {
+    this.isPopulatingForm = true; // Active le drapeau
+    this.billingForm.patchValue({
+      firstName: user.firstname || '',
+      lastName: user.lastname || '',
+      email: user.email || '',
+      phone: user.phoneNumber || '',
+      address: user.adresse || '',
+    });
+    this.isPopulatingForm = false; // Désactive le drapeau
+  }
+
+  loadUserByPhone(phone:string){
+
+    this.authService.getUserByPhone(phone).subscribe(
+      datas => {
+        if(datas != null){
+                this.populateBillingForm(datas);
+                this.user = datas;
+                sessionStorage.setItem('currentUser', JSON.stringify(this.user));
+                
+        }
+         
+          },
+      error => {
+        this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
+          panelClass: 'error',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+        console.error("Erreur lors du chargement de user:", error);
+      }
+    );
+  
+  }
+
+  
+
+    onCountryChange(country: string): void {
+      if (country === 'mali') {
+        // Mali
+        this.phoneMinLength = 8;
+        this.phoneMaxLength = 8;
+        this.phonePlaceholder = 'xxxxxxxx';
+      } else if (country === 'civ') {
+        // Côte d'Ivoire
+        this.phoneMinLength = 10;
+        this.phoneMaxLength = 10;
+        this.phonePlaceholder = 'xxxxxxxxxx';
+      }
+  
+      // Mettre à jour les validateurs de téléphone
+      const phoneControl = this.billingForm.get('phone');
+      phoneControl?.setValidators([
+        Validators.required,
+        Validators.minLength(this.phoneMinLength),
+        Validators.maxLength(this.phoneMaxLength)
+      ]);
+      phoneControl?.updateValueAndValidity();
+    }
 
 
 }

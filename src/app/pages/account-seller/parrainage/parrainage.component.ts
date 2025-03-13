@@ -45,6 +45,9 @@ export class ParrainageComponent implements OnInit {
   monCode:any=''
   detailsCampagneData: any;
   allCodesCampagne: any = [];
+  sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
+  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
+
 
   constructor(
     public appService: AppService,
@@ -107,16 +110,16 @@ export class ParrainageComponent implements OnInit {
   }
 
   add() {
-    this.router.navigate(["/account/add-parrainage"])
+    this.router.navigate(["/account-seller/add-parrainage"])
   }
 
 
 
   public edit(id) {
-    this.router.navigate(["/account/add-parrainage/" + id])
+    this.router.navigate(["/account-seller/add-parrainage/" + id])
   }
   public detailCampagne(id) {
-    this.router.navigate(["/account/detail-campagne/" + id])
+    this.router.navigate(["/account-seller/detail-campagne/" + id])
   }
 
 
@@ -176,9 +179,11 @@ export class ParrainageComponent implements OnInit {
         };
   
         this.campagneService.generateCode(data).subscribe({
-          next: (datas) => {           
-          
+          next: (datas) => {   
+
             this.monCode = datas.message
+            console.log("Mon lien = ",this.shopLink+'/'+this.monCode);
+            
             this.dialog.closeAll()
             if(this.monCode != ''){
               this.openMyCode();
@@ -212,7 +217,7 @@ export class ParrainageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // console.log('The dialog was closed');
-      this.router.navigate(["/account/parrainage"])
+      this.router.navigate(["/account-seller/parrainage"])
 
     });
   }
@@ -271,7 +276,7 @@ export class ParrainageComponent implements OnInit {
       });
   
       // Navigate to the desired route
-      this.router.navigate(['/account/parrainage']);
+      this.router.navigate(['/account-seller/parrainage']);
     });
   }
   
@@ -279,37 +284,20 @@ export class ParrainageComponent implements OnInit {
   public promo(key) {
     let res = ""
     switch (key) {
-      case "POURCENTAGE":
-        res = "Pourcentage"
+      case "PROMOTION":
+        res = "Promotion"
         break;
 
-      case "MONTANT_FIXE":
-        res = "Montant fixe"
+      case "OFFRE_BIENVENUE":
+        res = "Offre bienvenue"
         break;
 
       case "LIVRAISON_GRATUITE":
         res = "Livraison gratuite"
         break;
-      case "ACHAT_1_OFFERT":
-        res = "Lors des premiers achats"
-        break;
-      case "CADEAU":
-        res = "Cadeaux aux achats"
-        break;
-      case "POINTS_BONUS":
-        res = "Des points en bonus"
-        break;
-      case "BON_ACHAT":
-        res = "Le bon achat"
-        break;
+
       case "PARRAINAGE":
         res = "Parrainage"
-        break;
-      case "ESSAI_GRATUIT":
-        res = "Les essais gratuits"
-        break;
-      case "ABONNEMENT_REDUIT":
-        res = "Abonnement"
         break;
 
       default:
@@ -321,7 +309,7 @@ export class ParrainageComponent implements OnInit {
 
   copyCodeToClipboard() {
     if (this.monCode) {
-      this.clipboard.copy(this.monCode);
+      this.clipboard.copy(this.shopLink+'/'+this.monCode);
       this.commonService.successToast('Code copié dans le presse-papiers !');
     } else {
       this.commonService.warnToast('Aucun code à copier.');
@@ -330,7 +318,7 @@ export class ParrainageComponent implements OnInit {
 
   copyCodeToClipboard2(monCode) {
     if (monCode) {
-      this.clipboard.copy(monCode);
+      this.clipboard.copy(this.shopLink+'/'+monCode);
       this.commonService.successToast('Code copié dans le presse-papiers !');
     } else {
       this.commonService.warnToast('Aucun code à copier.');
@@ -368,7 +356,3 @@ export class ParrainageComponent implements OnInit {
 
 
 }
-
-/*add() {
-  this.router.navigate(["/account-seller/add-parrainage"])}
-}*/
