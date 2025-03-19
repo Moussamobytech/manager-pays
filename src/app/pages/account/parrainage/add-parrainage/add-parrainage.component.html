@@ -24,19 +24,101 @@
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Type de promo</mat-label>
-                            <mat-select formControlName="typePromo" required>
-                              <mat-option *ngFor="let typepromo of typePromo" [value]="typepromo.id">
-                                <span>{{promo(typepromo.name)}}</span>
-                              </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
-                                type de promo</mat-error>
-                          </mat-form-field>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Type de promo</mat-label>
+                                <mat-select formControlName="typePromo" required>
+                                    <mat-option *ngFor="let typepromo of typePromo" [value]="typepromo.id" (onSelectionChange)=" typePromoSelect(typepromo)" >
+                                        <span>{{promo(typepromo.name)}}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
+                                    type de promo</mat-error>
+                            </mat-form-field>
                         </div>
 
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <!--#########################" LES CHAMPS CONDITIONNELLES ####################"""-->
+
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isPromo"r>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Produits</mat-label>
+                                <mat-select [formControl]="selectedProducts" multiple panelClass="custom-panel">
+                                    <mat-option *ngFor="let product of products" [value]="product.id">
+                                        {{ product.nom }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isOffre">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Type d'offre</mat-label>
+                                <mat-select formControlName="typePromo" required>
+                                    <mat-option *ngFor="let typeoffre of typeOffre" [value]="typeoffre.value">
+                                        <span>{{typeoffre.nom}}</span>
+                                    </mat-option>
+
+                                </mat-select>
+                                <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
+                                    type d'offre</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isLivraison">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Pays</mat-label>
+                                <mat-select [formControl]="selectedCountries" multiple (selectionChange)="onCountryChange()">
+                                    <mat-option *ngFor="let country of countries" [value]="country.name">
+                                        {{ country.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        
+
+                    
+                        
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre || !isLivraison">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Reduction en %</mat-label>
                                 <input matInput formControlName="reduction" required>
@@ -69,7 +151,7 @@
 
 
 
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Nombre d'utilisation</mat-label>
                                 <input matInput type="number" min="0" formControlName="nombreUtilisation">

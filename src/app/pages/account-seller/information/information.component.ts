@@ -226,8 +226,9 @@ export class InformationComponent implements OnInit {
     let bgs = [cur.bg1, cur.bg2, cur.bg3];
     const curBanners: any[] = bgs.filter(item => item).map(item => ({ preview: this.imgLink+item })); // i filter, remove null values then push the rewsult in curBaner
     const logo = [{preview: this.imgLink+cur.logo}]
-    this.wordCount = cur.description.trim() ? cur.description.trim().split(/\s+/).length : 0;
-    console.log("currentUser :::: ",this.currentUser)
+    const description = cur.description || "";
+    this.wordCount = description.trim() ? description.trim().split(/\s+/).length : 0;
+        console.log("currentUser :::: ",this.currentUser)
 
 
     this.infoForm = this.formBuilder.group({

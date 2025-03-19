@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Category } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
@@ -25,6 +25,103 @@ export class AddParrainageComponent implements OnInit {
   sub: any;
   typePromo: any;
 
+
+ isPromo: boolean = false;
+isParrainage: boolean = false;
+isOffre: boolean = false;
+isLivraison: boolean = false;
+
+typePromoSelect(typepromo: any) {
+  // Réinitialisation des valeurs
+  let res = ""
+    console.log("TYPE = ",typepromo.name);
+  
+
+  this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
+res = typepromo.name
+  switch (res) {
+    case 'OFFRE_BIENVENUE':
+      this.isOffre = true;
+      this.isLivraison = false;
+      this.isPromo = false
+      break;
+    case 'LIVRAISON_GRATUITE':
+      this.isLivraison = true;
+      this.isPromo = false;
+      this.isOffre = false
+      break;
+    case 'PARRAINAGE':
+      this.isParrainage = true;
+      break;
+    case 'PROMOTION':
+      this.isPromo = true;
+      this.isLivraison = false;
+      this.isOffre = false
+      break;
+  }
+}
+
+
+  typeOffre = [
+    {nom:'Reduction en %', value:'REDUCTION'},
+    {nom:'Cadeau produit', value:'CADEAUX'}
+  ]
+   // Liste des pays avec leurs régions
+   countries = [
+    { name: 'Mali', regions: ['Bamako','Kayes', 'Koulikoro', 'Sikasso', 'Ségou', 'Mopti', 'Tombouctou', 'Gao', 'Kidal'] },
+    { name: 'Niger', regions: ['Agadez', 'Diffa', 'Dosso', 'Maradi', 'Tahoua', 'Tillabéri', 'Zinder', 'Niamey'] },
+    { name: "Côte d'Ivoire", regions: ['Abidjan', 'Bouaké', 'Daloa', 'Korhogo', 'San-Pédro', 'Yamoussoukro'] },
+    { name: 'Sénégal', regions: ['Dakar', 'Thiès', 'Saint-Louis', 'Kaolack', 'Ziguinchor', 'Tambacounda'] },
+    { name: 'Burkina Faso', regions: ['Centre', 'Hauts-Bassins', 'Cascades', 'Plateau-Central', 'Sahel', 'Est'] }
+  ];
+  
+   // FormControls pour les selects
+   selectedCountry = new FormControl('');
+   selectedRegion = new FormControl('');
+   selectedCountries = new FormControl([]);
+
+   // Liste des régions dynamiques
+   regions: string[] = [];
+   selectedRegions = new FormControl([]);
+
+    // Met à jour les régions lorsqu'un pays est sélectionné
+    onCountryChange() {
+      const country = this.countries.find(c => c.name === this.selectedCountry.value);
+      this.regions = country ? country.regions : [];
+    //  this.selectedRegions = []; // Réinitialise la sélection
+    }
+   // Ajoute ou enlève une région à la sélection
+ 
+
+     // Vérifie si toutes les régions sont sélectionnées
+  isAllSelected(): boolean {
+    return this.selectedRegions.value?.length === this.regions.length;
+  }
+
+  // Vérifie si au moins une région est cochée mais pas toutes
+  isIndeterminate(): boolean {
+    return this.selectedRegions.value?.length > 0 && !this.isAllSelected();
+  }
+
+  // Gère l'option "Tout sélectionner"
+  toggleAllSelection() {
+    if (this.isAllSelected()) {
+      this.selectedRegions.setValue([]);
+    } else {
+      this.selectedRegions.setValue([...this.regions]);
+    }
+  }
+
+  // Met à jour la sélection quand une région est cochée/décochée
+  updateSelection(region: string) {
+    const selected = this.selectedRegions.value || [];
+    if (selected.includes(region)) {
+      this.selectedRegions.setValue(selected.filter(r => r !== region));
+    } else {
+      this.selectedRegions.setValue([...selected, region]);
+    }
+  }
+
   constructor(
     public appService: AppService, 
     public formBuilder: UntypedFormBuilder, 
@@ -33,7 +130,14 @@ export class AddParrainageComponent implements OnInit {
     private productService: ProductService, 
     private campagneService: CampagneService,
     private router: Router,private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder) {
+      this.form = this.fb.group({
+        products: this.fb.array([], Validators.required)
+      });
+  
+     }
+
+   
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
@@ -66,11 +170,23 @@ export class AddParrainageComponent implements OnInit {
     });
   }
 
+  selectedProducts = new FormControl([]);
+
+  toggleSelection(productId: number, event: any) {
+    const selected = this.selectedProducts.value || [];
+    if (event.checked) {
+      this.selectedProducts.setValue([...selected, productId]);
+    } else {
+      this.selectedProducts.setValue(selected.filter(id => id !== productId));
+    }
+  }
 
   async loadData() {
 
     let res = await this.productService.productUser(this.currentUser.username)
     this.products = res
+    console.log(":::::::::: MES PRODS = ",JSON.stringify(this.products));
+    
   }
   //Controle pour la saisie de 0
   nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
