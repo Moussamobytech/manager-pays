@@ -39,21 +39,12 @@
                         <!--#########################" LES CHAMPS CONDITIONNELLES ####################"""-->
 
 
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isPromo"r>
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Produits</mat-label>
-                                <mat-select [formControl]="selectedProducts" multiple panelClass="custom-panel">
-                                    <mat-option *ngFor="let product of products" [value]="product.id">
-                                        {{ product.nom }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+                      
 
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isOffre">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Type d'offre</mat-label>
-                                <mat-select formControlName="typePromo" required>
+                                <mat-select formControlName="typeOffre" required>
                                     <mat-option *ngFor="let typeoffre of typeOffre" [value]="typeoffre.value">
                                         <span>{{typeoffre.nom}}</span>
                                     </mat-option>
@@ -64,10 +55,13 @@
                             </mat-form-field>
                         </div>
 
+
+
+
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isLivraison">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Pays</mat-label>
-                                <mat-select [formControl]="selectedCountries" multiple (selectionChange)="onCountryChange()">
+                                <mat-label>Zone de livraison</mat-label>
+                                <mat-select [formControl]="selectedCountries" multiple>
                                     <mat-option *ngFor="let country of countries" [value]="country.name">
                                         {{ country.name }}
                                     </mat-option>
@@ -116,12 +110,21 @@
 
 
 
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isPromo || form.controls['typeOffre'].value === 'CADEAUX'">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Produits</mat-label>
+                                <mat-select [formControl]="selectedProducts" multiple panelClass="custom-panel">
+                                    <mat-option *ngFor="let product of products" [value]="product.id">
+                                        {{ product.nom }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
 
-
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre || !isLivraison">
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre && !isLivraison || form.controls['typeOffre'].value === 'REDUCTION'">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Reduction en %</mat-label>
-                                <input matInput formControlName="reduction" required>
+                                <input matInput formControlName="reduction">
                                 <mat-error *ngIf="form.controls.reduction.errors?.required">Donne une
                                     rduction</mat-error>
                             </mat-form-field>

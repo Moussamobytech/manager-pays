@@ -13,18 +13,18 @@
       <div class="mat-mdc-table admin-table">
         <div class="mat-mdc-header-row">
           <div class="mat-mdc-header-cell">Nom</div>
+          <div class="mat-mdc-header-cell">Type promo</div>
           <div class="mat-mdc-header-cell">Montant Max</div>
           <div class="mat-mdc-header-cell">Montant Mini</div>
-          <div class="mat-mdc-header-cell">Réduction %</div>
           <div class="mat-mdc-header-cell">Status</div>
           <div class="mat-mdc-header-cell">Actions</div>
         </div>
         <div *ngFor="let campagne of campagnes | paginate: { itemsPerPage: count, currentPage: page }"
           class="mat-mdc-row">
           <div class="mat-mdc-cell" (click)="openCampagneAllCode(campagne.id)">{{campagne.nom}}</div>
+          <div class="mat-mdc-cell">{{promo(campagne.typePromo)}}</div>
           <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
           <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
-          <div class="mat-mdc-cell">{{campagne.reduction}}</div>
           <div class="mat-mdc-cell">
             <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'" [checked]="campagne.active == true"
               (change)="setStatus(campagne.id, $event)">
@@ -134,8 +134,24 @@
               <td>{{ detailsCampagneData.nom }}</td>
             </tr>
             <tr>
+              <th>Type de promotion</th>
+              <td>{{ promo(detailsCampagneData.typePromo)}}</td>
+            </tr>
+
+            <tr *ngIf="detailsCampagneData.typePromo == 'OFFRE_BIENVENUE'">
+              <th>Type d'offre</th>
+              <td>{{ detailsCampagneData.typeOffre}}</td>
+            </tr>
+            <tr *ngIf="detailsCampagneData.typePromo == 'OFFRE_BIENVENUE' && detailsCampagneData.typeOffre == 'CADEAUX'">
+              <th>Les cadeaux offerts</th>
+              <td>{{ detailsCampagneData.cadeauxProduit}}</td>
+            </tr>
+
+
+
+            <tr>
               <th>Réduction en %</th>
-              <td>{{ detailsCampagneData.reduction }}</td>
+              <td>{{ detailsCampagneData.reduction || 'N/A' }}</td>
             </tr>
             <tr>
               <th>Montant minimum d'achat</th>
@@ -147,12 +163,9 @@
             </tr>
             <tr>
               <th>Nombre d'utilisation</th>
-              <td>{{ detailsCampagneData.nombreUtilisation }}</td>
+              <td>{{ detailsCampagneData.nombreUtilisation || 'N/A' }}</td>
             </tr>
-            <tr>
-              <th>Commission en %</th>
-              <td>{{ detailsCampagneData.commission }}</td>
-            </tr>
+            
             <tr>
               <th>Date de début</th>
               <td>{{ detailsCampagneData.dateDebut }}</td>

@@ -145,7 +145,7 @@ res = typepromo.name
     this.getAllPromo();  
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
-      'reduction': [null, Validators.required],
+      'reduction': [null],
       'commission': null,
       'nombreUtilisation':null,
       'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
@@ -155,7 +155,11 @@ res = typepromo.name
       "description": null,
       'username':this.username,
       'seuilRetrait':null,
-      'typePromo':[null, Validators.required]
+      'typePromo':[null, Validators.required],
+      'produitIds':[],
+      'zoneLivraison':[],
+      'typeOffre':[],
+      'cadeauxProduit':[]
 
     });
 
@@ -172,6 +176,14 @@ res = typepromo.name
 
   selectedProducts = new FormControl([]);
 
+  toggleCountry(pays: any, event: any) {
+    const selected = this.selectedCountries.value || [];
+    if (event.checked) {
+      this.selectedCountries.setValue([...selected, pays]);
+    } else {
+      this.selectedCountries.setValue(selected.filter(id => id !== pays));
+    }
+  }
   toggleSelection(productId: number, event: any) {
     const selected = this.selectedProducts.value || [];
     if (event.checked) {
@@ -185,7 +197,6 @@ res = typepromo.name
 
     let res = await this.productService.productUser(this.currentUser.username)
     this.products = res
-    console.log(":::::::::: MES PRODS = ",JSON.stringify(this.products));
     
   }
   //Controle pour la saisie de 0
@@ -210,9 +221,7 @@ res = typepromo.name
 
  
 
-  async save() {
-    console.log("Le type vaut:::::::: ",this.form.value.typePromo);
-    
+  async save() {    
     try {
       if (this.form.valid) {
         const data = {
@@ -227,7 +236,12 @@ res = typepromo.name
           dateFin: this.form.value.dateFin,
           username: this.form.value.username,
           seuilRetrait: this.form.value.seuilRetrait,
-          typePromo:this.form.value.typePromo
+          typePromo:this.form.value.typePromo,
+          typeOffre:this.form.value.typeOffre,
+          produitIds:this.selectedProducts.value,
+          zoneLivraison:this.selectedCountries.value,
+          cadeauxProduit:this.selectedProducts.value
+
         };
   
         this.campagneService.add(data).subscribe({
@@ -240,7 +254,13 @@ res = typepromo.name
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
               this.commonService.errorToast(err.body.message);
-            } else {
+            }
+            if(err.status == "400"){
+              this.commonService.errorToast(err.message);
+
+            }
+            
+            else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
           }
@@ -272,7 +292,11 @@ res = typepromo.name
           dateFin: this.form.value.dateFin,
           username: this.form.value.username,
           seuilRetrait: this.form.value.seuilRetrait,
-          typePromo:this.form.value.typePromo
+          typePromo:this.form.value.typePromo,
+          typeOffre:this.form.value.typeOffre,
+          produitIds:this.selectedProducts.value,
+          zoneLivraison:this.selectedCountries.value,
+          cadeauxProduit:this.selectedProducts.value
         };
 
       

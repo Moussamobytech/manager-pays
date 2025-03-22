@@ -27,8 +27,8 @@ export class ParrainageComponent implements OnInit {
   @ViewChild('codeGenerer') codeGenerer: TemplateRef<any>;
   @ViewChild('detailsCampagne') detailsCampagne: TemplateRef<any>;
   @ViewChild('allCodeGenerer') allCodeGenerer: TemplateRef<any>;
-  
-  
+
+
 
   public username: string;
   private currentUser: User;
@@ -42,7 +42,7 @@ export class ParrainageComponent implements OnInit {
   public page: any;
   public count = 6;
 
-  monCode:any=''
+  monCode: any = ''
   detailsCampagneData: any;
   allCodesCampagne: any = [];
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
@@ -80,6 +80,10 @@ export class ParrainageComponent implements OnInit {
     this.campagneService.getAllCampagneByUsername(username).subscribe({
       next: (datas) => {
         this.campagnes = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+        console.log("ALL OF CAMPAGNE = ", JSON.stringify(this.campagnes));
+
+
         this.activeCampagne = datas
           .filter(campagne => campagne.active)
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -177,20 +181,20 @@ export class ParrainageComponent implements OnInit {
           campagneParrainage: this.form.value.campagne,
           username: this.username
         };
-  
+
         this.campagneService.generateCode(data).subscribe({
-          next: (datas) => {   
+          next: (datas) => {
 
             this.monCode = datas.message
-            console.log("Mon lien = ",this.shopLink+'/'+this.monCode);
-            
+            console.log("Mon lien = ", this.shopLink + '/' + this.monCode);
+
             this.dialog.closeAll()
-            if(this.monCode != ''){
+            if (this.monCode != '') {
               this.openMyCode();
             }
-              this.commonService.successToast(datas.message);
-              this.router.navigate(["/account/parrainage"]);
-           
+            this.commonService.successToast(datas.message);
+            this.router.navigate(["/account/parrainage"]);
+
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -200,7 +204,7 @@ export class ParrainageComponent implements OnInit {
             }
           }
         });
-  
+
       } else {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
@@ -222,64 +226,64 @@ export class ParrainageComponent implements OnInit {
     });
   }
 
-   openCampagneDetail(campagne: any): void {
-      this.detailsCampagneData = campagne; // Stocker l'objet sélectionné
-      const dialogRef = this.dialog.open(this.detailsCampagne, {
-        width: '800px',
-      });
-  
-      dialogRef.afterClosed().subscribe(() => {
-        this.detailsCampagneData = null; // Réinitialiser après fermeture
-      });
-    }
+  openCampagneDetail(campagne: any): void {
+    this.detailsCampagneData = campagne; // Stocker l'objet sélectionné
+    const dialogRef = this.dialog.open(this.detailsCampagne, {
+      width: '800px',
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.detailsCampagneData = null; // Réinitialiser après fermeture
+    });
+  }
 
 
 
 
-    openCampagneAllCode(id: any): void {
+  openCampagneAllCode(id: any): void {
 
-      this.campagneService.getAllCodeByCampagne(id).subscribe({
-        next: (datas) => {
-          console.log("::::::::::: TEST ",JSON.stringify(datas));
-          
-          this.allCodesCampagne = datas;
-         
-        },
-        error: (err) => {
-          if (err && err.statusCode == "BAD_REQUEST") {
-            this.commonService.errorToast(err.body.message);
-          } else {
-            this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
-          }
+    this.campagneService.getAllCodeByCampagne(id).subscribe({
+      next: (datas) => {
+        console.log("::::::::::: TEST ", JSON.stringify(datas));
+
+        this.allCodesCampagne = datas;
+
+      },
+      error: (err) => {
+        if (err && err.statusCode == "BAD_REQUEST") {
+          this.commonService.errorToast(err.body.message);
+        } else {
+          this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
         }
-      });
+      }
+    });
 
-      const dialogRef = this.dialog.open(this.allCodeGenerer, {
-        width: '800px',
-      });
-  
-      dialogRef.afterClosed().subscribe(() => {
-        this.allCodesCampagne = null; // Réinitialiser après fermeture
-      });
-    }
+    const dialogRef = this.dialog.open(this.allCodeGenerer, {
+      width: '800px',
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.allCodesCampagne = null; // Réinitialiser après fermeture
+    });
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(this.generateCodeTemplate, {
       width: '400px',
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       // Reset form fields after the dialog is closed
       this.form.reset({
         campagne: '',
         typePromo: ''
       });
-  
+
       // Navigate to the desired route
       this.router.navigate(['/account-seller/parrainage']);
     });
   }
-  
+
 
   public promo(key) {
     let res = ""
@@ -309,7 +313,7 @@ export class ParrainageComponent implements OnInit {
 
   copyCodeToClipboard() {
     if (this.monCode) {
-      this.clipboard.copy(this.shopLink+'/'+this.monCode);
+      this.clipboard.copy(this.shopLink + '/' + this.monCode);
       this.commonService.successToast('Code copié dans le presse-papiers !');
     } else {
       this.commonService.warnToast('Aucun code à copier.');
@@ -318,7 +322,7 @@ export class ParrainageComponent implements OnInit {
 
   copyCodeToClipboard2(monCode) {
     if (monCode) {
-      this.clipboard.copy(this.shopLink+'/'+monCode);
+      this.clipboard.copy(this.shopLink + '/' + monCode);
       this.commonService.successToast('Code copié dans le presse-papiers !');
     } else {
       this.commonService.warnToast('Aucun code à copier.');
@@ -353,6 +357,9 @@ export class ParrainageComponent implements OnInit {
       }
     });
   }
+
+
+
 
 
 }
