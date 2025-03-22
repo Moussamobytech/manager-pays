@@ -2,19 +2,321 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { Campagne, Product } from 'src/app/app.models';
 import moment from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { CampagneService } from 'src/app/services/campagne.service';
 import { Product } from 'src/app/models/product.models';
 import { Campagne } from 'src/app/app.models';
+import { User } from 'src/app/models/user.models';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { CommonMessageService } from 'src/app/services/common-message.service';
+import { ProductService } from 'src/app/services/product.service';
 @Component({
   selector: 'app-campagne-dialog',
   templateUrl: './campagne-dialog.component.html',
   styleUrl: './campagne-dialog.component.scss'
 })
 export class CampagneDialogComponent implements OnInit {
+
+  form: FormGroup;
+  private currentUser: User;
+  public id: any;
+  public products: any = []
+  public username:string;
+  sub: any;
+  typePromo: any;
+  selectedProducts = new FormControl([]);
+  selectedCountries = new FormControl([]);
+
+
+isPromo: boolean = false;
+isParrainage: boolean = false;
+isOffre: boolean = false;
+isLivraison: boolean = false;
+
+
+constructor(
+    public appService: AppService, 
+    public formBuilder: UntypedFormBuilder, 
+    private commonService: CommonMessageService,
+    private auth: AuthenticationService, 
+    private productService: ProductService, 
+    private campagneService: CampagneService,
+    private router: Router,private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder) {
+      this.form = this.fb.group({
+        products: this.fb.array([], Validators.required)
+      });
+  
+     }
+
+     typeOffre = [
+      {nom:'Reduction en %', value:'REDUCTION'},
+      {nom:'Cadeau produit', value:'CADEAUX'}
+    ]
+     // Liste des pays avec leurs régions
+     countries = [
+      { name: 'Mali', regions: ['Bamako','Kayes', 'Koulikoro', 'Sikasso', 'Ségou', 'Mopti', 'Tombouctou', 'Gao', 'Kidal'] },
+      { name: 'Niger', regions: ['Agadez', 'Diffa', 'Dosso', 'Maradi', 'Tahoua', 'Tillabéri', 'Zinder', 'Niamey'] },
+      { name: "Côte d'Ivoire", regions: ['Abidjan', 'Bouaké', 'Daloa', 'Korhogo', 'San-Pédro', 'Yamoussoukro'] },
+      { name: 'Sénégal', regions: ['Dakar', 'Thiès', 'Saint-Louis', 'Kaolack', 'Ziguinchor', 'Tambacounda'] },
+      { name: 'Burkina Faso', regions: ['Centre', 'Hauts-Bassins', 'Cascades', 'Plateau-Central', 'Sahel', 'Est'] }
+    ];
+
+   
+
+  ngOnInit(): void {
+    this.currentUser = this.auth.currentUser()
+    this.username = this.currentUser.username; 
+    this.getAllPromo();
+    this.loadData();
+    this.form = this.formBuilder.group({
+      'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
+      'reduction': [null],
+      'commission': null,
+      'nombreUtilisation':null,
+      'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
+      'montantMaxAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
+      "dateDebut":[null,Validators.required],
+      "dateFin":[null,Validators.required],
+      "description": null,
+      'username':this.username,
+      'seuilRetrait':null,
+      'typePromo':[null, Validators.required],
+      'produitIds':[],
+      'zoneLivraison':[],
+      'typeOffre':[],
+      'cadeauxProduit':[]
+
+    });
+
+
+    
+
+    this.loadData()
+    this.sub = this.activatedRoute.params.subscribe(params => {
+      if(params['id']){
+        this.id = params['id'];
+        this.getCampagneById();
+      }
+    });
+  }
+
+
+public async onSubmit() {
+  if (this.id) {
+    this.edit()
+  } else {
+    this.save()
+  }
+
+}
+
+async save() {    
+  try {
+    if (this.form.valid) {
+      const data = {
+        nom: this.form.value.nom,
+        description: this.form.value.description,
+        reduction: this.form.value.reduction,
+        commissionParrain: this.form.value.commission,
+        nombreUtilisation: this.form.value.nombreUtilisation,
+        montantMinAchat: this.form.value.montantMinAchat,
+        montantMaxAchat: this.form.value.montantMaxAchat,
+        dateDebut: this.form.value.dateDebut,
+        dateFin: this.form.value.dateFin,
+        username: this.form.value.username,
+        seuilRetrait: this.form.value.seuilRetrait,
+        typePromo:this.form.value.typePromo,
+        typeOffre:this.form.value.typeOffre,
+        produitIds:this.selectedProducts.value,
+        zoneLivraison:this.selectedCountries.value,
+        cadeauxProduit:this.selectedProducts.value
+
+      };
+
+      this.campagneService.add(data).subscribe({
+        next: (datas) => {           
+        
+            this.commonService.successToast(datas.message);
+            this.router.navigate(["/admin/campagne/campagne-list"]);
+         
+        },
+        error: (err) => {
+          if (err && err.statusCode == "BAD_REQUEST") {
+            this.commonService.errorToast(err.body.message);
+          }
+          if(err.status == "400"){
+            this.commonService.errorToast(err.message);
+
+          }
+          
+          else {
+            this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+          }
+        }
+      });
+
+    } else {
+      this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
+    }
+  } catch (error) {
+    console.log(error);
+    this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
+  }
+}
+async edit() {
+  let size = 0;
+  try {
+    if (this.form.valid) {
+      const data = {
+        nom: this.form.value.nom,
+        description: this.form.value.description,
+        reduction: this.form.value.reduction,
+        commissionParrain: this.form.value.commission,
+        nombreUtilisation: this.form.value.nombreUtilisation,
+        montantMinAchat: this.form.value.montantMinAchat,
+        montantMaxAchat: this.form.value.montantMaxAchat,
+        dateDebut: this.form.value.dateDebut,
+        dateFin: this.form.value.dateFin,
+        username: this.form.value.username,
+        seuilRetrait: this.form.value.seuilRetrait,
+        typePromo:this.form.value.typePromo,
+        typeOffre:this.form.value.typeOffre,
+        produitIds:this.selectedProducts.value,
+        zoneLivraison:this.selectedCountries.value,
+        cadeauxProduit:this.selectedProducts.value
+      };
+
+    
+      this.campagneService.edit(this.id,data).subscribe({
+        next: (datas) => {           
+            this.commonService.successToast(datas.message);
+            this.router.navigate(["/admin/campagne/campagne-list"]);
+         
+        },
+        error: (err) => {
+          if (err && err.statusCode == "BAD_REQUEST") {
+            this.commonService.errorToast(err.body.message);
+          }
+          else if(err && err.statusCode == "OK"){
+            this.commonService.successToast("Campagne modifiée avec succès !");
+            this.router.navigate(["/admin/campagne/campagne-list"]);
+          }
+           else {
+            this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+          }
+        }
+      });
+
+    } else {
+      this.commonService.warnToast("Merci de vérifier si les champs sont toutes remplis")
+    }
+
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+getAllPromo() {
+  this.campagneService.getAllTypePromo().subscribe({
+    next: (datas) => {
+      this.typePromo = datas;
+    },
+    error: (err) => {
+      if (err && err.statusCode == "BAD_REQUEST") {
+        this.commonService.errorToast(err.body.message);
+      } else {
+        this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
+      }
+    }
+  });
+}
+public getCampagneById(){
+  this.campagneService.find(this.id).then((data : any) =>{
+    console.log(data)
+    this.form.patchValue(data);
+   
+   // this.form.controls.images.setValue(images);
+  })
+}
+public promo(key) {
+  let res = ""
+  switch (key) {
+    case "PROMOTION":
+      res = "Promotion"
+      break;
+
+    case "OFFRE_BIENVENUE":
+      res = "Offre bienvenue"
+      break;
+
+    case "LIVRAISON_GRATUITE":
+      res = "Livraison gratuite"
+      break;
+
+    case "PARRAINAGE":
+      res = "Parrainage"
+      break;
+
+    default:
+      res = "N/A"
+      break;
+  }
+  return res
+}
+toggleSelection(productId: number, event: any) {
+  const selected = this.selectedProducts.value || [];
+  if (event.checked) {
+    this.selectedProducts.setValue([...selected, productId]);
+  } else {
+    this.selectedProducts.setValue(selected.filter(id => id !== productId));
+  }
+}
+async loadData() {
+  let res = await this.productService.getAllProducts()
+  this.products = res
+}
+typePromoSelect(typepromo: any) {
+  // Réinitialisation des valeurs
+  this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
+
+  const promoType = typepromo.name;
+
+  const promoStates = {
+    'OFFRE_BIENVENUE': () => this.isOffre = true,
+    'LIVRAISON_GRATUITE': () => this.isLivraison = true,
+    'PARRAINAGE': () => this.isParrainage = true,
+    'PROMOTION': () => this.isPromo = true
+  };
+
+  // Exécuter la fonction correspondante si elle existe
+  promoStates[promoType]?.();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
   public products: Array<Product> = [];
   isAddingCampaign: boolean = true;
   productList: any[]; // Assurez-vous que le type correspond à vos données de productList
@@ -68,9 +370,11 @@ export class CampagneDialogComponent implements OnInit {
     // console.log("Date new ",new Date(this.data.campagne.dateDebut))
     this.form = this.fb.group({
       id: [this.isUpdateMode ? this.data.campagne.id : null],
-      libelle: [this.isUpdateMode ? this.data.campagne.libelle : null, Validators.required],
+      nom: [this.isUpdateMode ? this.data.campagne.nom : null, Validators.required],
       username: [this.isUpdateMode ? this.data.campagne.username : null, Validators.required],
+      createdByUser:[this.isUpdateMode ? this.data.campagne.createdByUser : null, Validators.required],
       type: [this.isUpdateMode ? this.data.campagne.type : null, Validators.required],
+      typePromo:[this.isUpdateMode ? this.data.campagne.typePromo : null, Validators.required],
 
      //  dateDebut: [this.isUpdateMode ? moment(this.data.campagne.dateDebut).format('l') : null, Validators.required],
       // dateDebut: [this.isUpdateMode ? this.data.campagne.dateDebut: null, Validators.required],
@@ -196,5 +500,5 @@ this.getSelectedProductsNames()
     }
   }
 
-
+*/
 }

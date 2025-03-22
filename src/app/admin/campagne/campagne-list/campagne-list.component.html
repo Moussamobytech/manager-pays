@@ -1,8 +1,12 @@
 <div class="p-2">
   <mat-card>
-      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-          <h2>{{"ADMIN_NAV.CAMPAGNE_LIST" | translate}}</h2>
-          <button mat-raised-button color="warn" (click)="openCampagneDialog(null)">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
+    <h2>{{"ADMIN_NAV.CAMPAGNE_LIST" | translate}}</h2>
+
+      <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
+            <button mat-raised-button class="bleu mr-2" matTooltip="Générer un code" (click)="openDialog()">
+              Générer un code
+            </button>
+          <button mat-raised-button color="warn" (click)="addCampagne()">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
       </div>
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table">
@@ -15,20 +19,23 @@
               <div class="mat-mdc-header-cell" style="width: 40%;">Actions</div>
           </div>
           <div *ngFor="let item of campagne | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
-              <div class="mat-mdc-cell" style="width: 10%;">{{item.libelle |translate}}</div>
-              <div class="mat-mdc-cell" style="width: 10%;">{{item.type |translate}}</div>
-              <div class="mat-mdc-cell" style="width: 10%;">{{item.username}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.nom|translate}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.typePromo |translate}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{item.createdByUser}}</div>
               <div class="mat-mdc-cell" style="width: 15%;">{{item.dateDebut | date: 'dd-MM-yyyy' }}</div>
               <div class="mat-mdc-cell" style="width: 15%;">{{item.dateFin | date: 'dd-MM-yyyy' }}</div>
               <div class="mat-mdc-cell" style="width: 40%;">
                   <div class="p-2 actions" style="display: flex; align-items: center;">
-                      <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openCampagneDialog(item)">
+                      <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openCampagneDialog(item.id)">
                           <mat-icon>edit</mat-icon>
                       </button>
-                      <a [routerLink]="['/admin/campagne/campagne-detail', item.id]" mat-mini-fab color="accent" matTooltip="View" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
-                      <mat-slide-toggle [color]="item.etat ? 'primary' : 'warn'" [checked]="item.etat" (change)="setStatusCampagne(item.id, $event)">
-                          {{ item.etat ? 'Activée' : 'Désactivée' }}
-                      </mat-slide-toggle>
+
+                      <button mat-mini-fab class="bleu" matTooltip="Détail" (click)="openCampagneDetail(item)">
+                        <mat-icon>remove_red_eye</mat-icon>
+                      </button>                      
+                      <mat-slide-toggle [color]="item.active == true ? 'primary' : 'warn'" [checked]="item.active == true"
+                      (change)="setStatus(item.id, $event)">
+                    </mat-slide-toggle>
                   </div>
               </div>
           </div>
@@ -42,3 +49,143 @@
       </div>
   </mat-card>
 </div>
+
+
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR GENERATE CODE-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <ng-template #generateCodeTemplate>
+        <h1 mat-dialog-title>Générer un code</h1>
+        <div mat-dialog-content>
+          <!-- <p>Entrez les détails pour recharger votre compte.</p> -->
+          <form [formGroup]="form" (ngSubmit)="generate()" autocomplete="off">
+            <div mat-dialog-content>
+              <div fxLayout="row wrap">
+    
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Campagne</mat-label>
+                  <mat-select formControlName="campagne" required>
+                    <mat-option *ngFor="let campagne of activeCampagne" [value]="campagne.id">
+                      <span>{{campagne.nom}}</span>
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.controls.campagne.errors?.required">La campagne est obligatoire</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div mat-dialog-actions>
+              <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+                <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
+    
+                <button mat-raised-button class="bleu" type="submit">Générer</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </ng-template>
+ <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR CAMPAGNE DETAILS-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  
+    <ng-template #detailsCampagne>
+  
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h1 mat-dialog-title>{{ detailsCampagneData.nom }}</h1>
+          <button mat-raised-button class="bleu mr-2" matTooltip="Voir le code"
+            (click)="openCampagneAllCode(detailsCampagneData.id)">Voir le code</button>
+        </div>
+        <div mat-dialog-content>
+          <mat-card-content class="pt-3">
+            <table class="mat-elevation-z2 w-100">
+              <tr>
+                <th>Nom de la campagne</th>
+                <td>{{ detailsCampagneData.nom }}</td>
+              </tr>
+              <tr>
+                <th>Type de promotion</th>
+                <td>{{ promo(detailsCampagneData.typePromo)}}</td>
+              </tr>
+  
+              <tr *ngIf="detailsCampagneData.typePromo == 'OFFRE_BIENVENUE'">
+                <th>Type d'offre</th>
+                <td>{{ detailsCampagneData.typeOffre}}</td>
+              </tr>
+              <tr *ngIf="detailsCampagneData.typePromo == 'OFFRE_BIENVENUE' && detailsCampagneData.typeOffre == 'CADEAUX'">
+                <th>Les cadeaux offerts</th>
+                <td>{{ detailsCampagneData.cadeauxProduit}}</td>
+              </tr>
+  
+  
+  
+              <tr>
+                <th>Réduction en %</th>
+                <td>{{ detailsCampagneData.reduction || 'N/A' }}</td>
+              </tr>
+              <tr>
+                <th>Montant minimum d'achat</th>
+                <td>{{ detailsCampagneData.montantMinAchat }}</td>
+              </tr>
+              <tr>
+                <th>Montant maximum d'achat</th>
+                <td>{{ detailsCampagneData.montantMaxAchat }}</td>
+              </tr>
+              <tr>
+                <th>Nombre d'utilisation</th>
+                <td>{{ detailsCampagneData.nombreUtilisation || 'N/A' }}</td>
+              </tr>
+              
+              <tr>
+                <th>Date de début</th>
+                <td>{{ detailsCampagneData.dateDebut }}</td>
+              </tr>
+              <tr>
+                <th>Date de fin</th>
+                <td>{{ detailsCampagneData.dateFin }}</td>
+              </tr>
+              <tr>
+                <th>Description</th>
+                <td>{{ detailsCampagneData.description }}</td>
+              </tr>
+            </table>
+          </mat-card-content>
+        </div>
+      </ng-template>
+
+        <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR ALL CODE OF CAMPAGNE -->
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  
+    <ng-template #allCodeGenerer>
+        <h1 mat-dialog-title>Les codes générés</h1>
+        <div mat-dialog-content *ngIf="allCodesCampagne!=null">
+          <div *ngFor="let code of allCodesCampagne"
+            style="margin: 2%; border-radius: 5px;background-color: rgb(206, 201, 201);color: black; padding: 2%; display: flex; justify-content: space-between;">
+    
+            <p>Date: {{ code.dateCreation | date:'d MMMM y à HH:mm' }}</p>
+    
+            <strong style="font-size: 30px;text-transform: uppercase;font-family: 'Times New Roman', Times, serif;">
+              {{code.code}}</strong>
+            <mat-icon mat-button (click)="copyCodeToClipboard2(code.code)" style="cursor: pointer;">file_copy</mat-icon>
+            <mat-icon mat-button (click)="removeCode(code)" style="cursor: pointer; color: red;">delete</mat-icon>
+          </div>
+        </div>
+        <div style="text-align: center;" mat-dialog-content *ngIf="allCodesCampagne == ''">
+          <strong>Vous n'avez pas de codes généré pour cette campagne </strong>
+        </div>
+      </ng-template>
+          <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE TO SEE GENERATE CODE-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+  
+    <ng-template #codeGenerer>
+        <h1 mat-dialog-title>Votre code généré</h1>
+        <div mat-dialog-content>
+          <div
+            style="border-radius: 5px;background-color: rgb(206, 201, 201);color: black; padding: 2%; display: flex; justify-content: space-between;">
+            <strong style="font-size: 30px;text-transform: uppercase;font-family: 'Times New Roman', Times, serif;">{{
+              monCode }}</strong>
+            <mat-icon mat-button (click)="copyCodeToClipboard()" style="cursor: pointer;">file_copy</mat-icon>
+          </div>
+    
+        </div>
+      </ng-template>

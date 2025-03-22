@@ -33,9 +33,7 @@ isLivraison: boolean = false;
 
 typePromoSelect(typepromo: any) {
   // Réinitialisation des valeurs
-  let res = ""
-    console.log("TYPE = ",typepromo.name);
-  
+  let res = ""  
 
   this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
 res = typepromo.name
@@ -195,7 +193,7 @@ res = typepromo.name
 
   async loadData() {
 
-    let res = await this.productService.productUser(this.currentUser.username)
+    let res = await this.productService.getAllProducts()
     this.products = res
     
   }

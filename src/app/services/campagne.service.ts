@@ -85,6 +85,10 @@ export class CampagneService {
     return this.api.get('/campagne/user-getAllCampagne/' + username);
   }
 
+  public getAllCampagne(): Observable<any> {
+    return this.api.get('/campagne/getAllCampagne');
+  }
+
   public getAllTypePromo(): Observable<any> {
     return this.api.get('/campagne/getAllPromo');
   }
