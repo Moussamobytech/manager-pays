@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 // import { Campagne, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
@@ -51,16 +51,18 @@ export class CampagneListComponent implements OnInit {
 
   public form: UntypedFormGroup;
   currentUser: any;
+  sortedCampagne: any[];
 
   constructor(
     private clipboard: Clipboard,
     private auth: AuthenticationService,
     private commonService: CommonMessageService,
-    public appService: AppService, 
+    public appService: AppService,
     public campagneService: CampagneService,
     public fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
     public domHandlerService: DomHandlerService,
-    private router: Router, public dialog: MatDialog, 
+    private router: Router, public dialog: MatDialog,
     public appSettings: AppSettings) {
     this.settings = this.appSettings.settings;
 
@@ -90,20 +92,6 @@ export class CampagneListComponent implements OnInit {
     this.page = event;
     this.domHandlerService.winScroll(0, 0);
   }
-
-  // public getCampagne(){
-
-  //   try {
-  //     let res = this.campagneService.getCampagne();
-  //     this.campagne = res;
-  //     console.log("Campagne :"+ this.campagne);
-  //   } catch (error) {
-  //     console.log('error Campagne Id ', error);
-  //   }
-
-  // }
-
-
   openDialog(): void {
     const dialogRef = this.dialog.open(this.generateCodeTemplate, {
       width: '400px',
@@ -126,17 +114,15 @@ export class CampagneListComponent implements OnInit {
       this.activeCampagne = data
         .filter(campagne => campagne.active)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      console.log("campagne :", this.campagne)
-      //for show more product
-      // for (var index = 0; index < 3; index++) {
-      //   this.products = this.products.concat(this.products);
-      // }
+
+      this.activeCampagne = [...this.activeCampagne]; // Nouvelle référence pour détecter les changements
+      this.cdr.detectChanges(); // Force la détection des changements
     });
   }
+
   public getAllProducts() {
     this.appService.getAllProducts().subscribe(data => {
       this.products = data;
-      console.log("Produit :", this.products)
       //for show more product
       // for (var index = 0; index < 3; index++) {
       //   this.products = this.products.concat(this.products);
@@ -181,10 +167,7 @@ export class CampagneListComponent implements OnInit {
 
     this.campagneService.getAllCodeByCampagne(id).subscribe({
       next: (datas) => {
-        console.log("::::::::::: TEST ", JSON.stringify(datas));
-
         this.allCodesCampagne = datas;
-
       },
       error: (err) => {
         if (err && err.statusCode == "BAD_REQUEST") {
@@ -252,8 +235,6 @@ export class CampagneListComponent implements OnInit {
       this.commonService.warnToast('Aucun code à copier.');
     }
   }
-
-
   public removeCode(code: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
@@ -281,7 +262,6 @@ export class CampagneListComponent implements OnInit {
       }
     });
   }
-
   onNoClick(): void {
     this.dialog.closeAll();
   }
@@ -323,7 +303,6 @@ export class CampagneListComponent implements OnInit {
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
   }
-
   openMyCode(): void {
     const dialogRef = this.dialog.open(this.codeGenerer, {
       width: '400px',
@@ -334,7 +313,6 @@ export class CampagneListComponent implements OnInit {
 
     });
   }
-
   copyCodeToClipboard() {
     if (this.monCode) {
       this.clipboard.copy(this.shopLink + '/' + this.monCode);
@@ -427,6 +405,54 @@ export class CampagneListComponent implements OnInit {
           // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
         }
       );
+    }
+  }
+
+
+
+
+  sortCampagne(keyWord: string) {
+    console.log("Tri par : ", keyWord);
+
+    const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
+    if (this[ascKey] === undefined) {
+      this[ascKey] = true; // Initialise en ordre croissant
+    }
+
+    const isAscending = this[ascKey];
+    const sortOrder = isAscending ? 1 : -1;
+
+    this.sortedCampagne = [...this.campagne].sort((a, b) => {
+      const valueA = this.getSortValue(a, keyWord);
+      const valueB = this.getSortValue(b, keyWord);
+
+      if (typeof valueA === "string" && typeof valueB === "string") {
+        return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
+      }
+
+      if (valueA < valueB) return -sortOrder;
+      if (valueA > valueB) return sortOrder;
+      return 0;
+    });
+    this[ascKey] = !isAscending;
+    this.cdr.detectChanges(); // 🔥 Force l'actualisation du template !
+  }
+
+  // function to get the sortable value based on 'keyWord'
+  getSortValue(campagne: any, keyWord: string): any {
+    switch (keyWord) {
+      case "nom":
+        return campagne.nom ? campagne.nom.trim().toLowerCase() : '';
+      case "username":
+        return campagne.createdByUser ? campagne.createdByUser.trim().toLowerCase() : '';
+      case "typePromo":
+        return campagne.typePromo ? campagne.typePromo.trim().toLowerCase() : '';
+      case "dateDebut":
+        return campagne.dateDebut ? new Date(campagne.dateDebut).getTime() : 0;
+        case "dateFin":
+        return campagne.dateFin ? new Date(campagne.dateFin).getTime() : 0;
+      default:
+        return '';
     }
   }
 

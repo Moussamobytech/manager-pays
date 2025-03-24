@@ -11,14 +11,24 @@
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table">
           <div class="mat-mdc-header-row mat-toolbar mat-primary">
-              <div class="mat-mdc-header-cell" style="width: 10%;">Libelle</div>
-              <div class="mat-mdc-header-cell" style="width: 10%;">Type</div>
-              <div class="mat-mdc-header-cell" style="width: 10%;">Username</div>
-              <div class="mat-mdc-header-cell" style="width: 15%;">Date Debut</div>
-              <div class="mat-mdc-header-cell" style="width: 15%;">Date Fin</div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">Libelle
+                <a (click)="sortCampagne('nom')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">Type
+                <a (click)="sortCampagne('typePromo')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="mat-mdc-header-cell" style="width: 10%;">Username
+                <a (click)="sortCampagne('username')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="mat-mdc-header-cell" style="width: 15%;">Date Debut
+                <a (click)="sortCampagne('dateDebut')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="mat-mdc-header-cell" style="width: 15%;">Date Fin
+                <a (click)="sortCampagne('dateFin')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
               <div class="mat-mdc-header-cell" style="width: 40%;">Actions</div>
           </div>
-          <div *ngFor="let item of campagne | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+          <div *ngFor="let item of (sortedCampagne || campagne) | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
               <div class="mat-mdc-cell" style="width: 10%;">{{item.nom|translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.typePromo |translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.createdByUser}}</div>
