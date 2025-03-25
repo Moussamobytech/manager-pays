@@ -37,6 +37,7 @@ export const routes = [
       { path: 'reviews', loadChildren: () => import('./reviews/reviews.module').then(m => m.ReviewsModule), data: { breadcrumb: 'Reviews' } },
       { path: 'campagne', loadChildren: () => import('./campagne/campagne.module').then(m => m.CampagneModule), data: { breadcrumb: 'Campagne' } },
       { path: 'brand', loadChildren: () => import('./brands/brand.module').then(m => m.BrandModule), data: { breadcrumb: 'Brand' } },
+      { path: 'caracteristiques', loadChildren: () => import('./caracteristiques/caracteristiques.module').then(m => m.CaracteristiquesModule), data: { breadcrumb: 'Caracteristique' } },
       { path: 'influencer', loadChildren: () => import('./influencer/influencer.module').then(m => m.InfluencerModule), data: { breadcrumb: 'Influencer' } },
       { path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule), data: { breadcrumb: 'Contact' } },
       { path: 'newsletter', loadChildren: () => import('./newsletter/newsletter.module').then(m => m.NewsletterModule), data: { breadcrumb: 'Newsletter' } },

@@ -108,6 +108,7 @@ import { HeaderComponent } from './shared/header/header.component';
     CategoryService,
     CampagneService,
     InfluencerService,
+    CaracteristiquesService,
     ApiService,
     AnalyticsService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },
