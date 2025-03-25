@@ -58,18 +58,28 @@
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Zone de livraison</mat-label>
                                 <mat-select [formControl]="selectedCountries" multiple>
-                                    <mat-option *ngFor="let country of countries" [value]="country.name">
-                                        {{ country.name }}
+                                    <mat-option *ngFor="let country of countries" [value]="country">
+                                        {{ country.nom }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isPromo">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Produits en promotions</mat-label>
+                                <mat-select [formControl]="selectedProducts" multiple panelClass="custom-panel">
+                                    <mat-option *ngFor="let product of products" [value]="product">
+                                        {{ product.nom }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1"
-                            *ngIf="isPromo || form.controls['typeOffre'].value === 'CADEAUX'">
+                            *ngIf="form.controls['typeOffre'].value === 'CADEAUX'">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Produits</mat-label>
-                                <mat-select [formControl]="selectedProducts" multiple panelClass="custom-panel">
-                                    <mat-option *ngFor="let product of products" [value]="product.id">
+                                <mat-select [formControl]="selectedProducts2" multiple panelClass="custom-panel">
+                                    <mat-option *ngFor="let product of products" [value]="product">
                                         {{ product.nom }}
                                     </mat-option>
                                 </mat-select>
@@ -97,7 +107,7 @@
                                     nombre </mat-error>
                             </mat-form-field>
                         </div>
-                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isLivraison">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label> Montant maximum d'achat</mat-label>
                                 <input matInput formControlName="montantMaxAchat">
@@ -113,7 +123,7 @@
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Nombre d'utilisation</mat-label>
-                                <input matInput type="number" min="0" formControlName="nombreUtilisation">
+                                <input matInput type="number" min="1" formControlName="nombreUtilisation">
                                 <mat-error *ngIf="form.controls.nombreUtilisation.errors?.required">La commission est
                                     obligatoire</mat-error>
                                 <mat-error *ngIf="form.controls.nombreUtilisation.errors?.pattern">Le prix doit etre un

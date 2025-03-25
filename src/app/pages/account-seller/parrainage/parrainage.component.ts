@@ -81,9 +81,6 @@ export class ParrainageComponent implements OnInit {
       next: (datas) => {
         this.campagnes = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-        console.log("ALL OF CAMPAGNE = ", JSON.stringify(this.campagnes));
-
-
         this.activeCampagne = datas
           .filter(campagne => campagne.active)
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -186,8 +183,6 @@ export class ParrainageComponent implements OnInit {
           next: (datas) => {
 
             this.monCode = datas.message
-            console.log("Mon lien = ", this.shopLink + '/' + this.monCode);
-
             this.dialog.closeAll()
             if (this.monCode != '') {
               this.openMyCode();
@@ -244,8 +239,6 @@ export class ParrainageComponent implements OnInit {
 
     this.campagneService.getAllCodeByCampagne(id).subscribe({
       next: (datas) => {
-        console.log("::::::::::: TEST ", JSON.stringify(datas));
-
         this.allCodesCampagne = datas;
 
       },
@@ -347,7 +340,6 @@ export class ParrainageComponent implements OnInit {
             if (index !== -1) {
               this.allCodesCampagne.splice(index, 1);
             }
-            console.log("Campagne successfully deleted.");
           },
           (error) => {
             console.error("Error deleting produit:", error);

@@ -13,6 +13,7 @@ import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
 import { ProductService } from 'src/app/services/product.service';
+import { CountryService } from 'src/app/services/country.service';
 @Component({
   selector: 'app-campagne-dialog',
   templateUrl: './campagne-dialog.component.html',
@@ -28,6 +29,8 @@ export class CampagneDialogComponent implements OnInit {
   sub: any;
   typePromo: any;
   selectedProducts = new FormControl([]);
+  selectedProducts2 = new FormControl([]);
+
   selectedCountries = new FormControl([]);
 
 
@@ -35,6 +38,7 @@ isPromo: boolean = false;
 isParrainage: boolean = false;
 isOffre: boolean = false;
 isLivraison: boolean = false;
+  countries: any;
 
 
 constructor(
@@ -44,6 +48,7 @@ constructor(
     private auth: AuthenticationService, 
     private productService: ProductService, 
     private campagneService: CampagneService,
+    private countryService:CountryService,
     private router: Router,private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) {
       this.form = this.fb.group({
@@ -57,13 +62,7 @@ constructor(
       {nom:'Cadeau produit', value:'CADEAUX'}
     ]
      // Liste des pays avec leurs régions
-     countries = [
-      { name: 'Mali', regions: ['Bamako','Kayes', 'Koulikoro', 'Sikasso', 'Ségou', 'Mopti', 'Tombouctou', 'Gao', 'Kidal'] },
-      { name: 'Niger', regions: ['Agadez', 'Diffa', 'Dosso', 'Maradi', 'Tahoua', 'Tillabéri', 'Zinder', 'Niamey'] },
-      { name: "Côte d'Ivoire", regions: ['Abidjan', 'Bouaké', 'Daloa', 'Korhogo', 'San-Pédro', 'Yamoussoukro'] },
-      { name: 'Sénégal', regions: ['Dakar', 'Thiès', 'Saint-Louis', 'Kaolack', 'Ziguinchor', 'Tambacounda'] },
-      { name: 'Burkina Faso', regions: ['Centre', 'Hauts-Bassins', 'Cascades', 'Plateau-Central', 'Sahel', 'Est'] }
-    ];
+  
 
    
 
@@ -78,14 +77,14 @@ constructor(
       'commission': null,
       'nombreUtilisation':null,
       'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
-      'montantMaxAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
+      'montantMaxAchat': [null],
       "dateDebut":[null,Validators.required],
       "dateFin":[null,Validators.required],
       "description": null,
       'username':this.username,
       'seuilRetrait':null,
       'typePromo':[null, Validators.required],
-      'produitIds':[],
+      'produitPromos':[],
       'zoneLivraison':[],
       'typeOffre':[],
       'cadeauxProduit':[]
@@ -102,6 +101,13 @@ constructor(
         this.getCampagneById();
       }
     });
+    this.getAllPays();
+  }
+
+  getAllPays() {
+    this.countryService.getAllCountries().subscribe(datas => {
+      this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    })
   }
 
 
@@ -131,11 +137,12 @@ async save() {
         seuilRetrait: this.form.value.seuilRetrait,
         typePromo:this.form.value.typePromo,
         typeOffre:this.form.value.typeOffre,
-        produitIds:this.selectedProducts.value,
+        produitPromos:this.selectedProducts.value,
         zoneLivraison:this.selectedCountries.value,
-        cadeauxProduit:this.selectedProducts.value
+        cadeauxProduit:this.selectedProducts2.value
 
       };
+      
 
       this.campagneService.add(data).subscribe({
         next: (datas) => {           
@@ -168,7 +175,8 @@ async save() {
   }
 }
 async edit() {
-  let size = 0;
+  console.log("EDIT == ",this.form.value.zoneLivraison);
+  
   try {
     if (this.form.valid) {
       const data = {
@@ -186,8 +194,8 @@ async edit() {
         typePromo:this.form.value.typePromo,
         typeOffre:this.form.value.typeOffre,
         produitIds:this.selectedProducts.value,
-        zoneLivraison:this.selectedCountries.value,
-        cadeauxProduit:this.selectedProducts.value
+        zoneLivraison:this.form.value.zoneLivraison,
+        cadeauxProduit:this.selectedProducts2.value
       };
 
     

@@ -23,7 +23,7 @@
           class="mat-mdc-row">
           <div class="mat-mdc-cell" (click)="openCampagneAllCode(campagne.id)">{{campagne.nom}}</div>
           <div class="mat-mdc-cell">{{promo(campagne.typePromo)}}</div>
-          <div class="mat-mdc-cell">{{campagne.montantMaxAchat}}</div>
+          <div class="mat-mdc-cell">{{campagne.montantMaxAchat || 'N/A'}}</div>
           <div class="mat-mdc-cell">{{campagne.montantMinAchat}}</div>
           <div class="mat-mdc-cell">
             <mat-slide-toggle [color]="campagne.active == true ? 'primary' : 'warn'" [checked]="campagne.active == true"
@@ -65,7 +65,7 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Campagne</mat-label>
                 <mat-select formControlName="campagne" required>
-                  <mat-option *ngFor="let campagne of activeCampagne" [value]="campagne.id">
+                  <mat-option *ngFor="let campagne of campagnes" [value]="campagne.id">
                     <span>{{campagne.nom}}</span>
                   </mat-option>
                 </mat-select>

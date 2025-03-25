@@ -10,6 +10,7 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { ProductService } from 'src/app/services/product.service';
 import { User } from 'src/app/models/user.models';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { CountryService } from 'src/app/services/country.service';
 
 @Component({
   selector: 'app-add-parrainage',
@@ -65,13 +66,7 @@ res = typepromo.name
     {nom:'Cadeau produit', value:'CADEAUX'}
   ]
    // Liste des pays avec leurs régions
-   countries = [
-    { name: 'Mali', regions: ['Bamako','Kayes', 'Koulikoro', 'Sikasso', 'Ségou', 'Mopti', 'Tombouctou', 'Gao', 'Kidal'] },
-    { name: 'Niger', regions: ['Agadez', 'Diffa', 'Dosso', 'Maradi', 'Tahoua', 'Tillabéri', 'Zinder', 'Niamey'] },
-    { name: "Côte d'Ivoire", regions: ['Abidjan', 'Bouaké', 'Daloa', 'Korhogo', 'San-Pédro', 'Yamoussoukro'] },
-    { name: 'Sénégal', regions: ['Dakar', 'Thiès', 'Saint-Louis', 'Kaolack', 'Ziguinchor', 'Tambacounda'] },
-    { name: 'Burkina Faso', regions: ['Centre', 'Hauts-Bassins', 'Cascades', 'Plateau-Central', 'Sahel', 'Est'] }
-  ];
+   countries:any
   
    // FormControls pour les selects
    selectedCountry = new FormControl('');
@@ -127,6 +122,8 @@ res = typepromo.name
     private auth: AuthenticationService, 
     private productService: ProductService, 
     private campagneService: CampagneService,
+    private countryService: CountryService,
+    
     private router: Router,private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) {
       this.form = this.fb.group({
@@ -147,14 +144,14 @@ res = typepromo.name
       'commission': null,
       'nombreUtilisation':null,
       'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
-      'montantMaxAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
+      'montantMaxAchat': [null],
       "dateDebut":[null,Validators.required],
       "dateFin":[null,Validators.required],
       "description": null,
       'username':this.username,
       'seuilRetrait':null,
       'typePromo':[null, Validators.required],
-      'produitIds':[],
+      'produitPromos':[],
       'zoneLivraison':[],
       'typeOffre':[],
       'cadeauxProduit':[]
@@ -170,9 +167,19 @@ res = typepromo.name
         this.getCampagneById();
       }
     });
+
+    this.getAllPays();
+  }
+
+
+  getAllPays() {
+    this.countryService.getAllCountries().subscribe(datas => {
+      this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    })
   }
 
   selectedProducts = new FormControl([]);
+  selectedProducts2 = new FormControl([]);
 
   toggleCountry(pays: any, event: any) {
     const selected = this.selectedCountries.value || [];
@@ -193,7 +200,7 @@ res = typepromo.name
 
   async loadData() {
 
-    let res = await this.productService.getAllProducts()
+    let res = await this.productService.productUser(this.currentUser.username)
     this.products = res
     
   }
@@ -236,9 +243,9 @@ res = typepromo.name
           seuilRetrait: this.form.value.seuilRetrait,
           typePromo:this.form.value.typePromo,
           typeOffre:this.form.value.typeOffre,
-          produitIds:this.selectedProducts.value,
+          produitPromos:this.selectedProducts.value,
           zoneLivraison:this.selectedCountries.value,
-          cadeauxProduit:this.selectedProducts.value
+          cadeauxProduit:this.selectedProducts2.value
 
         };
   
@@ -294,7 +301,7 @@ res = typepromo.name
           typeOffre:this.form.value.typeOffre,
           produitIds:this.selectedProducts.value,
           zoneLivraison:this.selectedCountries.value,
-          cadeauxProduit:this.selectedProducts.value
+          cadeauxProduit:this.selectedProducts2.value
         };
 
       
