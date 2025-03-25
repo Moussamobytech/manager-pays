@@ -49,6 +49,7 @@ import { AnalyticsService } from './services/analitycs.service';
 import { InfluencerService } from './services/influencer.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SearchResultsModule } from './pages/search-results/search-results.module';
+import { CaracteristiquesService } from './services/caracteristiques.service';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { SearchResultsModule } from './pages/search-results/search-results.modul
     CategoryService,
     CampagneService,
     InfluencerService,
+    CaracteristiquesService,
     ApiService,
     AnalyticsService,
     { provide: OverlayContainer, useClass: CustomOverlayContainer },

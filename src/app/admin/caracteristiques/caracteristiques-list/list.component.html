@@ -1,0 +1,46 @@
+<div class="p-2">
+  <mat-card>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+          <h2>{{"ADMIN_NAV.CARAC_LIST" | translate}}</h2>
+          <button mat-raised-button color="warn" (click)="openCaracteristiquesDialog(null)">{{"ADMIN_NAV.ADD_CARAC" | translate}}</button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mat-mdc-table admin-table text-center">
+          <div class="mat-mdc-header-row mat-toolbar mat-primary">
+              <div class="mat-mdc-header-cell">Libelle</div>
+            <div class="mat-mdc-header-cell" >Type</div>
+            <div class="mat-mdc-header-cell" >Unite</div>
+              <div class="mat-mdc-header-cell" >Description</div>
+
+              <div class="mat-mdc-header-cell " >Actions</div>
+          </div>
+          <div *ngFor="let item of caracteristiques | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+            
+              <div class="mat-mdc-cell" >{{item.libelle}}</div>
+              <div class="mat-mdc-cell">{{item.type }}</div>
+              <div class="mat-mdc-cell">{{item.unite }}</div>
+              <div class="mat-mdc-cell">{{item.description }}</div>
+
+
+              <div class="mat-mdc-cell" >
+                  <div class="p-2 actions" style="display: flex; align-items: center;">
+                      <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openCaracteristiquesDialog(item)">
+                          <mat-icon>edit</mat-icon>
+                      </button>
+                      <a [routerLink]="['/admin/caracteristiques/caracteristiques-detail', item.id]" mat-mini-fab color="accent" matTooltip="View" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
+                      <!-- <mat-slide-toggle [color]="item.etat ? 'primary' : 'warn'" [checked]="item.etat" (change)="setEtatCaracteristiques(item.id, $event)">
+                          {{ item.etat ? 'Activée' : 'Désactivée' }}
+                      </mat-slide-toggle> -->
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div fxLayout="row wrap">
+          <div fxFlex="100">
+              <mat-card class="text-center">
+                  <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+              </mat-card>
+          </div>
+      </div>
+  </mat-card>
+</div>

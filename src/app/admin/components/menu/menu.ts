@@ -11,6 +11,7 @@ export const menuItems = [
     new Menu (24, 'ADMIN_NAV.ADD_PRODUCT', '/admin/products/add-product', null, 'add_circle_outline', null, false, 20),
     new Menu (40, 'ADMIN_NAV.USERS', '/admin/users', null, 'group_add', null, false, 0),
     new Menu (130, 'ADMIN_NAV.BRAND', '/admin/brand/brand-list', null, 'branding_watermark', null, false, 0),
+    new Menu (130, 'ADMIN_NAV.CARAC', '/admin/caracteristiques/list', null, 'branding_watermark', null, false, 0),
     new Menu (131, 'ADMIN_NAV.INFLUENCER', '/admin/influencer', null, 'card_giftcard', null, false, 0),
     new Menu (142, 'ADMIN_NAV.CAMPAGNE', '/admin/campagne/campagne-list', null, 'campaign', null, false, 0),
     new Menu (150, 'ADMIN_NAV.CONTACT', '/admin/contact/contact', null, 'contact_mail', null, false, 0),

@@ -90,6 +90,21 @@ export class  Brand {
 }
 
 
+export class  Caracteristiques {
+  constructor (
+               public id: string,
+               public libelle: string,
+               public description: string,
+               public etat: boolean,
+               public type : string,
+               public unite : string,
+               public createdAt : string,
+               public updatedAt : string,
+               ) {}
+}
+
+
+
 export class  Influencer {
   constructor (
                public id: string,

@@ -1,0 +1,49 @@
+<h1 mat-dialog-title class="text-center">{{ isUpdateMode ? 'Modifier Caracteristique' : 'Ajouter Caracteristique' }}</h1>
+
+<!-- Affichage du message de succès -->
+
+
+<!-- Formulaire -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div mat-dialog-content>
+    <div fxLayout="row wrap">
+      <!-- Champ caché pour l'ID du brand -->
+      <input type="hidden" formControlName="id">
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Libelle</mat-label>
+        <input matInput formControlName="libelle" required>
+        <mat-error *ngIf="form.get('libelle').hasError('required')">Libelle est obligatoire</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Type</mat-label>
+        <input matInput formControlName="type" required>
+        <mat-error *ngIf="form.get('type').hasError('required')">Type est obligatoire</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Unite</mat-label>
+        <input matInput formControlName="unite">
+        <mat-error *ngIf="form.get('unite').hasError('required')">Unite est obligatoire</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" required>
+        <mat-error *ngIf="form.get('description').hasError('required')">Description est obligatoire</mat-error>
+      </mat-form-field>
+
+
+      <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
+        <p>{{ isUpdateMode ? 'Caracteristique modifié avec succès' : 'Caracteristique ajoutée avec succès' }}</p>
+      </mat-dialog-content>
+
+
+  </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+      <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
+      <button mat-raised-button color="primary" type="submit">{{ isUpdateMode ? 'Modifier' : 'Ajouter' }}</button>
+    </div>
+  </div>
+</form>
