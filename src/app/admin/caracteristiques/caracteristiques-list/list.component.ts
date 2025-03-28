@@ -40,7 +40,7 @@ export class CaracteristiquesListComponent implements OnInit{
 
       this.caracteristiques = data;
       console.log("Data received ", this.caracteristiques );
-  });
+    });
   }
 
   public openCaracteristiquesDialog(data: any) {

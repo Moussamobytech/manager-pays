@@ -107,6 +107,15 @@ export class  Caracteristiques {
                ) {}
 }
 
+export class  CaracteristiquesProduit {
+  constructor (
+               public id: string,
+               public produit: string,
+               public caracteristiques: string,
+               public valeur : string,
+               ) {}
+}
+
 
 
 export class  Influencer {

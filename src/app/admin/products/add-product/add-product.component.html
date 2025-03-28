@@ -74,6 +74,95 @@
                             </mat-form-field>
                         </div>
 
+                        <div fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                            <form [formGroup]="caraForm">
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                      <mat-panel-title> Liste Caractéristiques </mat-panel-title>
+                                      <mat-panel-description>
+                                        Ajouter/supprimer
+                                        <!-- <mat-icon>library_add</mat-icon> -->
+                                      </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <div fxFlex="100" fxFlex.gt-sm="100" class="px-1" (click)="addItem()">
+                                        <button mat-flat-button fxFlex="100">Ajouter</button>
+                                    </div>
+                                    <div formArrayName="dynamicFields" fxFlex="100" fxFlex.gt-sm="100" class="px-1">
+                                        <div *ngFor="let field of dynamicFields.controls; let i = index" [formGroupName]="i">
+                                            <!-- <label>Field {{i + 1}}</label>
+                                            <input formControlName="valeur" /> -->
+                                            <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{'PRODUCTS.CARAC' | translate}}</mat-label>
+                                                    <mat-select id="field{{i}}" formControlName="caracteristiques" required>
+                                                        <mat-option *ngFor="let carac of caracteristiques" [value]="carac.id">
+                                                            <span>{{carac.libelle}}</span>
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{'PRODUCTS.VALUE' | translate}}</mat-label>
+                                                    <input matInput type="text" id="field{{i}}" formControlName="valeur">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="example-button-container">
+                                                <button (click)="removeField(i)" mat-fab aria-label="Example icon button with a delete icon">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        
+
+                                        <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                                            <mat-form-field appearance="outline" class="w-100">
+                                                <mat-label>{{'PRODUCTS.CARAC' | translate}}</mat-label>
+                                                <mat-select formControlName="user" required>
+                                                    <mat-option *ngFor="let carac of caracteristiques" [value]="carac.id">
+                                                        <span>{{carac.libelle}}</span>
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                                            <mat-form-field appearance="outline" class="w-100">
+                                                <mat-label>{{'PRODUCTS.VALUE' | translate}}</mat-label>
+                                                <input matInput type="number" max="5" formControlName="weight">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="example-button-container">
+                                            <button (click)="removeItem()" mat-fab aria-label="Example icon button with a delete icon">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div> -->
+                                    </div>
+                                    
+                                    
+                                    <!-- <div fxFlex="100" fxLayout="row wrap" class="w-100">
+                                        <mat-form-field>
+                                            <mat-label>First name</mat-label>
+                                            <input matInput />
+                                        </mat-form-field>
+                                      
+                                        <mat-form-field>
+                                            <mat-label>Age</mat-label>
+                                            <input matInput type="number" min="1" />
+                                        </mat-form-field>
+                                        <div class="example-button-container">
+                                            <button mat-fab aria-label="Example icon button with a delete icon">
+                                            <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div> -->
+                                    
+                                </mat-expansion-panel>
+                            </form>
+                            
+                        </div>
+
 
 
                         <div fxFlex="100" class="mt-2 text-center w-100">
