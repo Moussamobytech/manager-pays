@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -9,6 +9,8 @@ import { ProductService } from 'src/app/services/product.service';
 import { Category } from 'src/app/models/category.models';
 import { User } from 'src/app/models/user.models';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
+import { CaracteristiquesService } from 'src/app/services/caracteristiques.service';
+import { Caracteristiques, CaracteristiquesProduit } from 'src/app/app.models';
 
 @Component({
   selector: 'app-add-product',
@@ -21,17 +23,22 @@ export class AddProductComponent implements OnInit {
   public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""];
   public selectedColors:string;
   public categories:Category[];
+  public caracteristiques :Caracteristiques []=[];
+  public arrayItems :CaracteristiquesProduit []=[];
   public users:User[];
   private sub: any;
   public id:any;
   private currentUser: User;
+  caraForm: FormGroup;
 
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
-    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router, private imgCompressService: ImageCompressService ) { }
+    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService,
+     private caracteristiqueService :  CaracteristiquesService, private router: Router, private imgCompressService: ImageCompressService ) { }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
     console.log("currentUser :::::::: ",this.currentUser)
+    this.arrayItems = [];
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
@@ -42,8 +49,12 @@ export class AddProductComponent implements OnInit {
       "user": this.currentUser?.username || null,
       "categorie": [null, Validators.required ]
     });
+    this.caraForm = this.formBuilder.group({
+      dynamicFields: this.formBuilder.array([])
+   });
     this.getCategories();
     this.getUsers();
+    this.getCaracteristiques();
     this.sub = this.activatedRoute.params.subscribe(params => {
       if(params['id']){
         this.id = params['id'];
@@ -67,13 +78,60 @@ export class AddProductComponent implements OnInit {
       })
       this.form.controls.images.setValue(images);
     })
+
+    this.caracteristiqueService.findByProduit(this.id).subscribe((data) => {
+      this.arrayItems = data;
+      console.log("caracteristiques produit received ", data );
+    });
+
   }
 
 
+  public getCaracteristiques(){
+    this.caracteristiqueService.getCaracteristiques().subscribe((data) => {
+      this.caracteristiques = data;
+      console.log("caracteristiques received ", this.caracteristiques );
+    });
+  }
 
+  get dynamicFields() {
+    return this.caraForm.get('dynamicFields') as FormArray;
+  }
+
+  addField() {
+    const fieldGroup = this.formBuilder.group({
+      caracteristiques: ['', Validators.required], // Add validation
+      valeur: ['', Validators.required], // Add validation
+      produit: [''], // Add validation
+    });
+    this.dynamicFields.push(fieldGroup); // Add field to the array
+  }
+
+  removeField(index: number) {
+    this.dynamicFields.removeAt(index); // Remove field from the array
+  }
+  addItem() {
+    this.dynamicFields.push(this.formBuilder.group({
+      'caracteristiques': [''],
+      'valeur': [''],
+      "produit": [''],
+    }));
+    console.log("dynamicFields :: ",this.dynamicFields);
+    console.log("dynamicFields :: ",this.dynamicFields.value[0]);
+    
+
+    // this.dynamicFields.push(this.formBuilder.control(false));
+  }
+
+  removeItem() {
+    this.arrayItems.pop();
+    this.dynamicFields.removeAt(this.dynamicFields.length - 1);
+    
+  }
 
   async save(){
 
+    console.log("dynamicFields :: ",this.dynamicFields);
     try {
       if (this.form.valid) {
         var data = new FormData();
@@ -99,9 +157,11 @@ export class AddProductComponent implements OnInit {
         data.append('weight', this.form.value.weight || "5");
         // console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",data)
-        let res = await this.productService.add(data);
+        let res : any = await this.productService.add(data);
         console.log("res save product :::::::: ",res)
+        
         if (res != null) {
+          this.addList(res.data.code)
           this.router.navigate(["/admin/products/product-list"])
         }
       }else{
@@ -110,6 +170,21 @@ export class AddProductComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  public addList(code) {
+    
+    if (this.dynamicFields.value.length > 0) {
+      this.caracteristiqueService.addCaracteristiquesListToProduct(code, this.dynamicFields.value).subscribe(
+        response => {
+            console.log('Caracteristiques ajoutée avec succès:', response);
+        },
+        error => {
+            console.error('Erreur lors de l\'ajout du caracteristique:', error);
+        }
+      );
+    }
+    
   }
 
   compressAndPrepareImages () {

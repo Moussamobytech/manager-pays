@@ -19,7 +19,7 @@ export class CaracteristiquesService {
   }
 
   public findByProduit(id: string) {
-    return this.api.get('/caracteristiques//list-to-caracteristique/'+ id).toPromise();
+    return this.api.get('/caracteristiques/list-to-caracteristique/'+ id).toPromise();
   }
 
   public findByCaracteristiques(id: string) {
@@ -40,6 +40,10 @@ export class CaracteristiquesService {
 
   public addCaracteristiquesToProduct(caracteristiques: any) {
     return this.api.post(`/caracteristiques/add-to-product`, caracteristiques);
+  }
+
+  public addCaracteristiquesListToProduct(id: string, caracteristiques: any) {
+    return this.api.post(`/caracteristiques/add-list-to-product?id=${id}`, caracteristiques);
   }
 
   public updateCaracteristiques(id: string,

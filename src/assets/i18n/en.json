@@ -207,6 +207,8 @@
     "IMAGE": "Image",
     "STATE": "Etat",
     "WEIGHT": "Priorisation",
+    "CARAC": "Caracteristiques",
+    "VALUE": "Valeur",
     "START": "Date de début",
     "END": "Date de fin",
     "USER": "Vendeur",
