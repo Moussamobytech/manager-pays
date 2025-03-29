@@ -280,12 +280,10 @@ export class InformationComponent implements OnInit {
       if (banners.bg2) data.append('bg2', banners.bg2);
       if (banners.bg3) data.append('bg3', banners.bg3);
       data.append('type', this.currentProfile(values.profiles));
-      console.log("data: ",data);
       let res = await this.auth.updateUserInfo(this.currentUser.id, data)
       if(res == "OK"){
         this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
         this.currentUser = await this.auth.info(this.currentUser.username);// update user info
-        console.log(this.currentUser);
       }else{
         this.snackBar.open('Une erreur est intervenue lors de la mises à jour de vos informations !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
       }
@@ -302,7 +300,6 @@ export class InformationComponent implements OnInit {
 
       try {
         let res: any = await this.auth.updatePassword(data);
-        console.log("Response:", res);
         if (res === "OK") {
           this.snackBar.open('Your password changed successfully!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
           // window.location.reload();
@@ -310,7 +307,6 @@ export class InformationComponent implements OnInit {
           this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations!', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
         }
       } catch (error: any) {
-        console.log("Error:", error);
         this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations!', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
       }
     }

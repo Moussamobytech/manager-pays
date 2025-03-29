@@ -384,7 +384,6 @@ export class CampagneListComponent implements OnInit {
   }
   public updateState(id, state) {
     this.campagneService.updateState(id, state).then((data: any) => {
-      console.log(data)
     })
   }
 
@@ -412,7 +411,6 @@ export class CampagneListComponent implements OnInit {
 
 
   sortCampagne(keyWord: string) {
-    console.log("Tri par : ", keyWord);
 
     const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
     if (this[ascKey] === undefined) {

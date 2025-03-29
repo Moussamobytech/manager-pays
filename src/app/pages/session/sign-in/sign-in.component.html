@@ -61,14 +61,15 @@
       <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
         <mat-label>Pays</mat-label>
         <mat-select formControlName="country" (selectionChange)="handleChange($event)">
-          <mat-option *ngFor="let country of countries" [value]="country.code">
-            {{ country.name }}
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{ country.nom }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="phone-number" fxFlex="63.6">
         <mat-label>Téléphone</mat-label>
+        <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.indicatif }}</span>
         <input matInput formControlName="username" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
         <mat-error *ngIf="loginFormControls.username.errors?.required">Identifiant est obligatoire</mat-error>
       </mat-form-field>
