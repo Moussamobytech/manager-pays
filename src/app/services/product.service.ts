@@ -114,6 +114,9 @@ getTotalViewsYear(): Observable<any> {
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }
+  allProducts(): any {
+    return this.api.get(`/produit/products-with-campaigns`).toPromise();
+  }
   // searchProducts(term: string): Promise<Product[]> {
   //   return this.products().then(products =>
   //     products.filter(product =>
@@ -196,7 +199,8 @@ getTotalViewsYear(): Observable<any> {
   }
 
   public getProductByTop() {
-    return this.api.get('/produit/top-rates').toPromise();
+   // return this.api.get('/produit/top-rates').toPromise();
+    return this.api.get('/produit/products-with-campaigns').toPromise();
   }
 
   public getViewsForCurrentMonthOfProduct(username) {

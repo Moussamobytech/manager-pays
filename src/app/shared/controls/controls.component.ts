@@ -10,7 +10,7 @@ import { CommonService } from 'src/app/services/common.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class ControlsComponent implements OnInit {
-  @Input() product: Product;
+  @Input() product: any;
   @Input() type: string;
   @Input() pageName: string;
   @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter<any>();
@@ -123,5 +123,31 @@ export class ControlsComponent implements OnInit {
 
   toggleLike(product:any){
 
+  }
+
+  public promo(key) {
+    let res = ""
+    switch (key) {
+      case "PROMOTION":
+        res = "Promotion"
+        break;
+
+      case "OFFRE_BIENVENUE":
+        res = "Offre bienvenue"
+        break;
+
+      case "LIVRAISON_GRATUITE":
+        res = "Livraison gratuite"
+        break;
+
+      case "PARRAINAGE":
+        res = "Parrainage"
+        break;
+
+      default:
+        res = "N/A"
+        break;
+    }
+    return res
   }
 }

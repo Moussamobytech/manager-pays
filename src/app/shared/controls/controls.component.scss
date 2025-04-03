@@ -4,6 +4,13 @@
 }
 
 .product-contact {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+
   width: 100%;
   .like-btn {
     position: relative;
@@ -46,4 +53,10 @@
     color: #25224a;
   }
 
+
+  .campagne {
+    font-size: 12px;
+    color: #d81b60;
+    font-weight: bold;
+  }
 }

@@ -74,7 +74,7 @@ constructor(
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'reduction': [null],
-      'commission': null,
+      'commission': [null,Validators.required],
       'nombreUtilisation':null,
       'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
       'montantMaxAchat': [null],

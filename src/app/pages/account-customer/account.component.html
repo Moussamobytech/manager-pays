@@ -6,7 +6,7 @@
       <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="logo">
       <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
     </div>
-    <h2>Gaoussou Diarra</h2>
+    <h2>{{user.firstname}} {{user.lastname}}</h2>
   </div>
   <div fxLayout="row wrap" class="card-container">
     <div *ngFor="let card of cards" fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">

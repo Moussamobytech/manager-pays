@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
 
   public async getAllProduit() {
     let res : Array<Product> = await this.produitService.products()
-    // console.log("res product :::::::: ",res)
+     console.log("res product :::::::: ",res)
     this.produit = res;
   }
 
@@ -145,6 +145,8 @@ export class HomeComponent implements OnInit {
 
   public async getNewArrivalsProducts() {
     const products = await this.produitService.getProductByTop();
+    console.log("res product :::::::: ",products)
+
     this.newArrivalsProducts = products.map(product => {
       let nom = (product.nom).toLowerCase();
       return {
@@ -165,7 +167,8 @@ export class HomeComponent implements OnInit {
         pricePromotion: this.parsePrice(product.pricePromotion),
       };
     })
-    .filter(product => (product.pricePromotion !== null)&&(product.pricePromotion < product.priceBasic));
+    .filter(product => (product.campagne !== null)&&(product.campagne.type == "PROMOTION"));
+   // .filter(product => (product.pricePromotion !== null)&&(product.pricePromotion < product.priceBasic));
     console.log("promo: ",this.promoProducts)
   }
 

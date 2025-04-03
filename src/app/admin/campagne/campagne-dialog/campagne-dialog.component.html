@@ -123,26 +123,20 @@
                       <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre">
                           <mat-form-field appearance="outline" class="w-100">
                               <mat-label>Nombre d'utilisation</mat-label>
-                              <input matInput type="number" min="0" formControlName="nombreUtilisation">
-                              <mat-error *ngIf="form.controls.nombreUtilisation.errors?.required">La commission est
-                                  obligatoire</mat-error>
-                              <mat-error *ngIf="form.controls.nombreUtilisation.errors?.pattern">Le prix doit etre un
-                                  nombre </mat-error>
+                              <input matInput type="number" min="1" formControlName="nombreUtilisation">
                           </mat-form-field>
                       </div>
-                      <!--  <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                           <mat-form-field appearance="outline" class="w-100">
                               <mat-label> Commission en %</mat-label>
                               <input matInput formControlName="commission">
-                              <mat-error *ngIf="form.controls.commission.errors?.required">La commission est
-                                  obligatoire</mat-error>
-                              <mat-error *ngIf="form.controls.commission.errors?.pattern">Le prix doit etre un nombre
+                              <mat-error *ngIf="form.controls.commission.errors?.pattern">La commission doit etre un nombre
                               </mat-error>
                               <mat-error
-                                  *ngIf="!form.controls.commission.errors?.pattern&&form.controls.commission.errors?.minlength">Le
-                                  prix minimum est 100FCFA</mat-error>
+                                  *ngIf="!form.controls.commission.errors?.pattern&&form.controls.commission.errors?.minlength">La commission
+                                   minimum est 100 FCFA</mat-error>
                           </mat-form-field>
-                      </div>                               <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
+                      </div>                              
 
 
 

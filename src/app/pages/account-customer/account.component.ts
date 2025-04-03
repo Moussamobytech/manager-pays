@@ -28,7 +28,13 @@ export class AccountComponent implements OnInit {
   constructor(private auth : AuthenticationService, private imgCompressService:ImageCompressService,
     private cm:CommonService,) { }
 
+    user:any
   ngOnInit() {
+
+    this.currentUser = this.auth.currentUser()
+   this.user = this.currentUser;
+    console.log("USER = ",this.user);
+    
   }
 
   onFileSelected(event: Event) {
