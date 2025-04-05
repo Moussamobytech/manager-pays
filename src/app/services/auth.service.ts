@@ -189,7 +189,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
       return this.api.put(`/users/etat/${id}?state=${etat}`, null).pipe();
     }
 
-    getUserByPhone(phone: string): Observable<any> {
+    getUserByPhone(phone: string): Observable<any> {      
       return this.api.get(`/users/get-by-phone/${phone}`);
     }
 

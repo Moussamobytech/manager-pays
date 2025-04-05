@@ -10,7 +10,7 @@ import { CommonService } from 'src/app/services/common.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class ControlsComponent implements OnInit {
-  @Input() product: any;
+  @Input() product: Product;
   @Input() type: string;
   @Input() pageName: string;
   @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter<any>();
@@ -129,7 +129,7 @@ export class ControlsComponent implements OnInit {
     let res = ""
     switch (key) {
       case "PROMOTION":
-        res = "Promotion"
+        res = "En promotion"
         break;
 
       case "OFFRE_BIENVENUE":

@@ -142,7 +142,7 @@
   <h2 class="cart-title">Mon Panier</h2>
 
   <!-- Mobile-only: Back Button -->
-  <button class="back-button" fxShow.xs fxShow.lt.xs>
+  <button class="back-button" routerLink="/" fxShow.xs fxShow.lt.xs>
     <i class="fa-solid fa-chevron-left"></i> Ajouter Nouveau Produit
   </button>
 
@@ -156,11 +156,20 @@
           <p class="product-price">{{ product?.pricePromotion || product?.priceBasic }} F</p>
         </div>
       </div>
+     
+      <div class="summary-item" *ngIf="product?.campagne && product?.campagne.reduction">
+        <p>Réduction - {{ product?.campagne.reduction}}%</p>
+      </div>
+      
       <div class="product-actions">
         <app-controls [product]="product" [pageName]="pageName" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>
         <button class="delete-button" (click)="remove(product)"><i class="fa-solid fa-trash"></i></button>
       </div>
+
+    
+
     </div>
+    
   </div>
 
   <!-- Order Summary & Payment Form -->
@@ -171,10 +180,12 @@
         <p>Montant</p>
         <p>{{ grandTotal }} F</p>
       </div>
-      <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
+  
+      <!-- <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
         <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
         <p>-{{ getProductDiscount(product) }} F</p>
       </div>
+     -->
       <div class="summary-item total">
         <p>Total</p>
         <p>{{ grandTotal - (grandTotal * (product?.priceBasic | discount: product?.pricePromotion) / grandTotal) }} F</p>
@@ -216,33 +227,21 @@
     <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
       <!-- Champ Pays -->
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Country</mat-label>
-        <mat-select formControlName="country" (selectionChange)="onCountryChange($event.value)">
-          <mat-option value="'mali'">🇲🇱 Mali (+223)</mat-option>
-          <mat-option value="'civ'">🇨🇮 Côte d'Ivoire (+225)</mat-option>
+        <mat-label>Pays</mat-label>
+        <mat-select formControlName="country" required (selectionChange)="handleCountryChange($event)">
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{ country.nom }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     
     <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
       <!-- Champ Téléphone -->
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Phone</mat-label>
-        <input 
-          matInput 
-          placeholder="phonePlaceholder" 
-          formControlName="phone" 
-          maxlength="{{phoneMaxLength}}" 
-          minlength="{{phoneMinLength}}" 
-
-          required>
-      <!--  <mat-error *ngIf="billingForm.controls.phone.errors?.required">Phone is required</mat-error>
-        <mat-error *ngIf="billingForm.controls.phone.errors?.minlength"> 
-          Phone number must be at least {{ phoneMinLength }} digits.
-        </mat-error>
-        <mat-error *ngIf="billingForm.controls.phone.errors?.maxlength">
-          Phone number cannot exceed {{ phoneMaxLength }} digits.
-        </mat-error> -->
+      <mat-form-field appearance="outline" class="w-100 phone-number">
+        <mat-label>Téléphone</mat-label>
+        <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.indicatif }}</span>
+        <input matInput formControlName="phone" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
       </mat-form-field>
     </div>
     
@@ -264,7 +263,15 @@
   </div>
 </form>
 
+<div class="buttons">
+  <button mat-button class="back-btn" routerLink="/">
+     Retour
+  </button>
 
+  <button mat-flat-button type="submit" class="vld-btn" (click)="commander()"  [disabled]="!billingForm.valid">
+    Valider <mat-icon>arrow_forward</mat-icon>
+  </button>
+</div>
   </div>
 
   <!-- Similar Products Section -->

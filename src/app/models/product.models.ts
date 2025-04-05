@@ -1,3 +1,4 @@
+import { Campagne } from "./campagne.models";
 import { Category } from "./category.models";
 
 export class Product {
@@ -33,5 +34,6 @@ export class Product {
                 public updatedAt:string,
                 public monthlyVisits: number,
                 public dailyVisits: number,
+                public campagne:Campagne,
                 public yearlyVisits: number ){ }
   }
