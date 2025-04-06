@@ -20,6 +20,7 @@ import { ParrainageComponent } from './parrainage/parrainage.component';
 import { AddParrainageComponent } from './add-parrainage/add-parrainage.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { ImgImproveDialogComponent } from './add-product/img-improve-dialog/img-improve-dialog.component';
 
 const config: InputFileConfig = {
   fileAccept: '*'
@@ -45,6 +46,7 @@ export const routes: Routes = [
       { path: 'orders-manage', component: OrdersManageComponents, data: { breadcrumb: 'Commandes' } },
       { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Parrainages' } },
       { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Ajout de parrainage' } },
+
     ]
   }
 ];
@@ -73,7 +75,8 @@ export const routes: Routes = [
     OrdersManageComponents,
     ParrainageComponent,
     AddParrainageComponent,
-    AnalyticsComponent
+    AnalyticsComponent,
+    ImgImproveDialogComponent
   ]
 })
 export class AccountSellerModule { }

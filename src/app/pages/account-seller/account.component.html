@@ -9,7 +9,10 @@
         </div>
         <div *ngIf="currentUser.name" class="shopname-section">
           <p>{{currentUser.name}}</p>
-          <button mat-icon-button class="text-muted" (click)="shareLink()"><mat-icon>share</mat-icon></button>
+          <button mat-icon-button class="text-muted" (click)="shareLink()">
+            <mat-icon *ngIf="!isCopied">share</mat-icon>
+          <mat-icon *ngIf="isCopied">check</mat-icon>
+          </button>
         </div>
 
         <ng-template #FilePopupTemplate>
@@ -50,7 +53,7 @@
             </mat-list-item>
         </mat-nav-list> -->
     </mat-sidenav>
-    <mat-sidenav-content class="account-content" [ngClass.lt-sm]="'p-left'">
+    <mat-sidenav-content class="account-content"><!--[ngClass.lt-sm]="'p-left'"-->
       <div fxLayout="row" fxLayoutAlign="space-between center" fxHide.gt-sm class="header-row mat-elevation-z1 text-muted">
           <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()" class="toggle-button">
               <mat-icon class="icon-more_vert">more_vert</mat-icon>

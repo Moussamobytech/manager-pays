@@ -4,7 +4,7 @@
       <mat-chip-option color="warn" highlighted selectable="false">-{{product.priceBasic|discount: product.pricePromotion}}% OFF</mat-chip-option>
     </mat-chip-listbox>
     <a [routerLink]="['/products', product.id, product.nom]" (click)="setProductViewCount(product.id)" class="image-link" [ngStyle]="secondView ? { height: '200px' } : {}">
-      <img [src]="product.image1" alt="Product Image" class="card-image">
+      <img [alt]="'Product Image'" class="card-image" (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'">
     </a>
   </div>
 
@@ -25,6 +25,9 @@
           {{ product.priceBasic | number : '1.0-2' }} F
         </span>
       </p>
+    </div>
+    <div class="delivery-state">
+      <p>Livraison gratuite</p>
     </div>
     <!-- <div class="divider"></div> -->
     <div class="icons">

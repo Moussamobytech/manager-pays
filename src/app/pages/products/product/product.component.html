@@ -1,94 +1,96 @@
-<div fxLayout="row wrap" >
-  <div fxFlex="100"  fxFlex.md="45" fxFlex.gt-md="35">
-    <!-- <mat-card class="product-image">
-      <mat-chip-listbox *ngIf="product?.pricePromotion&&product?.pricePromotion!=product?.priceBasic">
-        <mat-chip-option color="warn" highlighted selectable="false">-{{product.priceBasic|discount: product.pricePromotion}}% OFF</mat-chip-option>
-      </mat-chip-listbox>
-      <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
-      <img *ngIf="selectedImage" [src]="selectedImage" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)" class="card-image"/>
-    </mat-card> -->
+<div class="main-container">
+  <div fxLayout="row wrap" >
+    <div fxFlex="100"  fxFlex.md="45" fxFlex.gt-md="35">
+      <div class="image-selector">
+        <div class="main-image">
+          <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
+          <img (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)" alt="Selected Image">
+        </div>
 
-    <div class="image-selector">
-      <div class="main-image">
-        <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
-        <img [src]="selectedImage" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)" alt="Selected Image">
-      </div>
-
-      <div class="image-buttons">
-        <button *ngFor="let image of product?.images" (click)="selectImage(image)"
-                [class.active]="image === selectedImage">
-          <img [src]="image" alt="Product Image">
-        </button>
+        <div class="image-buttons">
+          <button *ngFor="let image of product?.images" (click)="selectImage(image)"
+                  [class.active]="image === selectedImage">
+            <img [src]="image" alt="Product Image">
+          </button>
+        </div>
       </div>
     </div>
 
+    <div fxFlex="100" fxFlex.gt-md="45" fxFlex.md="55" ngClass.gt-sm="px-4 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2">
+      <div #zoomViewer fxShow="false" fxShow.gt-md>
+          <mat-card *ngIf="selectedImage" class="zoom-viewer mat-elevation-z18" [ngStyle]="{'background-image': 'url(' + zoomImage + ')'}"></mat-card>
+      </div>
+      <h2 class="primary-color" >{{product?.nom}}</h2>
+      <div class="py-1 lh">
+        <span class="sm-title">{{'PRODUCTS.CATEGORY'|translate  }}: </span> <span>{{product?.categorieNom }}</span>
+      </div>
+
+      <div class="price-section">
+        <span class="sm-title">Prix:</span> &nbsp;
+        <p *ngIf="!product?.pricePromotion||product?.pricePromotion==product?.priceBasic" class="price-basic">
+          {{ product?.priceBasic | number : '1.0-2' }} FCFA
+        </p>
+        <p *ngIf="product?.pricePromotion&&product?.pricePromotion!=product?.priceBasic" class="price-promotion">
+          {{ product?.pricePromotion | number : '1.0-2' }} FCFA
+          <span class="original-price">
+            {{ product?.priceBasic | number : '1.0-2' }} F
+          </span>
+        </p>
+      </div>
+
+      <div *ngIf="product?.description != null && product?.description != 'null'" class="py-1">
+        <span>Description: </span> {{product?.description}}
+      </div>
+
+      <div class="divider mt-1"></div>
+
+      <!-- there is no actual use of this section yet -->
+      <div *ngIf="product?.color&&product?.size" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-2">
+        <div *ngIf="product?.color" class="color">
+          <span class="fw-500">Select Color:</span>
+          <button mat-raised-button *ngFor="let color of product?.color" [style.background]="color">&nbsp;</button>
+        </div>
+        <div *ngIf="product?.size" class="size" ngClass.xs="mt-1">
+          <span class="fw-500">Select Size:</span>
+          <button mat-raised-button *ngFor="let size of product?.size">{{size}}</button>
+        </div>
+      </div>
+
+      <div class="controls-container">
+        <div class="user-section"><i class="fa-solid fa-shop"></i> Vendue par <span>{{product?.userNom}}</span></div>
+        <div class="referals">
+          <div class="referal-btn">
+            <div><span>P</span></div>
+            <div>
+              <p>Parrainage</p>
+              <span>Parrainer un ami et gagner des commissions</span>
+            </div>
+          </div>
+          <button mat-icon-button class="text-muted" (click)="shareLink()">
+            <mat-icon *ngIf="!isCopied">share</mat-icon>
+            <mat-icon *ngIf="isCopied">check</mat-icon>
+          </button>
+        </div>
+        <div class="py-1"><app-controls [product]="product" [type]="'all'"></app-controls></div>
+      </div>
+
+      <!-- <div class="py-2">
+        <button mat-button><i class="fa-solid fa-share-nodes"></i> {{'SHARE_ZAP'|translate}}</button>
+        <share-buttons theme="modern-dark"
+            [include]="['copy', 'facebook', 'whatsapp']"
+            [url]="path"
+            [description]="'SHARE_ZAP'|translate">
+        </share-buttons>
+      </div> -->
+    </div>
   </div>
 
-  <div fxFlex="100" fxFlex.gt-md="45" fxFlex.md="55" ngClass.gt-sm="px-4 m-0" ngClass.sm="mt-2" ngClass.xs="mt-2">
-    <div #zoomViewer fxShow="false" fxShow.gt-md>
-        <mat-card *ngIf="selectedImage" class="zoom-viewer mat-elevation-z18" [ngStyle]="{'background-image': 'url(' + zoomImage + ')'}"></mat-card>
+    <div class="py-3 mt-3">
+      <h2>{{'RELATED_PRODUCTS'|translate}}</h2>
+      <div class="divider"></div>
+      <app-products-carousel [products]="relatedProducts"></app-products-carousel>
     </div>
-    <h2 class="primary-color" >{{product?.nom}}</h2>
-    <div class="py-1 lh">
-      <span class="sm-title">{{'PRODUCTS.CATEGORY'|translate  }}: </span> <span>{{product?.categorieNom }}</span>
-    </div>
-
-    <div class="price-section">
-      <span class="sm-title">Prix:</span> &nbsp;
-      <p *ngIf="!product?.pricePromotion||product?.pricePromotion==product?.priceBasic" class="price-basic">
-        {{ product?.priceBasic | number : '1.0-2' }} FCFA
-      </p>
-      <p *ngIf="product?.pricePromotion&&product?.pricePromotion!=product?.priceBasic" class="price-promotion">
-        {{ product?.pricePromotion | number : '1.0-2' }} FCFA
-        <span class="original-price">
-          {{ product?.priceBasic | number : '1.0-2' }} F
-        </span>
-      </p>
-    </div>
-
-    <div *ngIf="product?.description != null && product?.description != 'null'" class="py-1">
-      <span>Description: </span> {{product?.description}}
-    </div>
-
-    <div class="divider mt-1"></div>
-
-    <div class="py-2 primary-color">
-      <h2>{{'PRODUCTS.CALL_USER'| translate}}</h2>
-    </div>
-
-    <!-- there is no actual use of this section yet -->
-    <div *ngIf="product?.color&&product?.size" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="details text-muted py-2">
-      <div *ngIf="product?.color" class="color">
-        <span class="fw-500">Select Color:</span>
-        <button mat-raised-button *ngFor="let color of product?.color" [style.background]="color">&nbsp;</button>
-      </div>
-      <div *ngIf="product?.size" class="size" ngClass.xs="mt-1">
-        <span class="fw-500">Select Size:</span>
-        <button mat-raised-button *ngFor="let size of product?.size">{{size}}</button>
-      </div>
-    </div>
-
-    <div class="py-1">
-      <app-controls [product]="product" [type]="'all'"></app-controls>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="py-2">
-      <button mat-button><i class="fa-solid fa-share-nodes"></i> {{'SHARE_ZAP'|translate}}</button>
-      <share-buttons theme="modern-dark"
-          [include]="['copy', 'facebook', 'whatsapp']"
-          [url]="path"
-          [description]="'SHARE_ZAP'|translate">
-      </share-buttons>
-    </div>
-  </div>
 </div>
 
-<div class="py-3 mt-3">
-  <h2>{{'RELATED_PRODUCTS'|translate}}</h2>
-  <div class="divider"></div>
-  <app-products-carousel [products]="relatedProducts"></app-products-carousel>
-</div>
 
 

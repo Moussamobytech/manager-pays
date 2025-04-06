@@ -18,7 +18,8 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
 })
 export class AccountComponent implements OnInit {
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
-  shopLink: string = 'https://fidelity-market.com/#/sellers/' + this.sellerInfo.username;
+  shopLink: string = window.location.origin+'/#/sellers/' + this.sellerInfo.username;
+  isCopied = false;
 
   constructor(
     public router: Router,
@@ -150,7 +151,20 @@ export class AccountComponent implements OnInit {
         .share(shareData)
         .catch((error) => console.error('Erreur lors de l\'envoie: ', error));
     } else {
-      this.cm.openWarningSnackBar("Le partage n'est pas pris en charge par votre navigateur.")
+      this.cm.openWarningSnackBar("Partage non supporté sur ce navigateur, le lien a été copié.");
+      this.copyLink()
     }
+  }
+
+  copyLink(): void {
+    navigator.clipboard.writeText(this.shopLink).then(
+      () => {
+        this.isCopied = true;
+        setTimeout(() => (this.isCopied = false), 3000);
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+      }
+    );
   }
 }

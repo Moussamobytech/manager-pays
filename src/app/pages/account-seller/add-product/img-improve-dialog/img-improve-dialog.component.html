@@ -1,0 +1,43 @@
+<div class="dialog-container">
+  <div class="images-container">
+    <div *ngFor="let img of images; let i = index; trackBy: trackByIndex"class="image-card"
+         [class.selected]="selectedImages.includes(img)" (click)="toggleSelection(img)"
+         [ngStyle]="{'background-image': !img.bgrep_img ? 'url(./assets/images/transparent.jpg)' : {}}">
+      <img [src]="getImagePath(img.bgrep_img || img.bgless_img)" alt="Image card">
+      <mat-icon class="check-icon" *ngIf="selectedImages.includes(img)">check_circle</mat-icon>
+    </div>
+  </div>
+
+  <div class="color-selection">
+    <div class="color-cards" [ngClass]="{ 'color-cards': true, limited: !showAll, 'all-colors': showAll }">
+      <div [class.selected]="checkTransparentColor()" matTooltip="Transparent" (click)="selectColor('transparent')" class="color-card transparent">
+        <mat-icon *ngIf="checkTransparentColor()">check</mat-icon>
+      </div>
+
+      <div *ngFor="let color of (showAll ? colors : (colors | slice:0:6))" class="color-card"
+      [matTooltip]="color.name" [class.selected]="hasColorSelected(color.hex)"
+           [ngStyle]="{'background': color.hex}" (click)="selectColor(color.hex)">
+        <mat-icon *ngIf="hasColorSelected(color.hex)">check</mat-icon>
+      </div>
+
+      <div class="color-card custom-color" matTooltip="Couleur personnalisée" [ngStyle]="{'background': customColor || {}}" (click)="customColorPicker.click()">
+        <mat-icon>palette</mat-icon>
+      </div>
+      <input type="color" #customColorPicker (change)="selectCustomColor($event)" style="display: none;" />
+    </div>
+  </div>
+  <div class="load-more-container">
+    <button *ngIf="!showAll && colors.length > 6" (click)="showAll = !showAll" class="load-more-btn">
+      Charger plus
+    </button>
+    <button *ngIf="showAll && colors.length > 6" (click)="showAll = !showAll" class="load-more-btn">
+      Moins
+    </button>
+  </div>
+
+
+  <div class="actions">
+    <button mat-button (click)="onCancel()">Annuler</button>
+    <button mat-button color="primary" (click)="onApply()">Apliquer</button>
+  </div>
+</div>

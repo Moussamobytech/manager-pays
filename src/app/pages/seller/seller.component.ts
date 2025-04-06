@@ -76,7 +76,7 @@ export class SellerComponent implements OnInit {
         this.cm.goTo("/");
       }else{
         this.getDataFromBackend();
-        this.shopLink = "https://fidelity-market.com/#/sellers/"+this.sellerId;
+        this.shopLink = window.location.origin+"/#/sellers/"+this.sellerId;
       }
     });
     this.onWindowResize();

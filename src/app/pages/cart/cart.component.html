@@ -208,9 +208,11 @@
 
       <div class="product-list" #simillarContainer>
         <div class="similar-product" *ngFor="let similarProduct of productList">
-          <img [src]="similarProduct.image1" alt="Similar Product" />
-          <p class="similar-name text-truncate">{{ similarProduct.nom }}</p>
-          <p class="similar-price">{{ similarProduct.pricePromotion || similarProduct.priceBasic }} F</p>
+          <div [routerLink]="['/products', similarProduct.id, similarProduct.nom]">
+            <img [src]="similarProduct.image1" alt="Similar Product" />
+            <p class="similar-name text-truncate">{{ similarProduct.nom }}</p>
+            <p class="similar-price">{{ similarProduct.pricePromotion || similarProduct.priceBasic }} F</p>
+          </div>
           <button class="buy-button">Acheter</button>
         </div>
       </div>

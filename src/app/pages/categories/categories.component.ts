@@ -13,4 +13,14 @@ export class CategoriesComponent implements OnInit {
   ngOnInit() {
   }
 
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/logo_fidelity.gif';
+  }
+
+  onImageLoad(event: Event, image:string) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = image;
+  }
+
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Product } from 'src/app/models/product.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-account',
@@ -15,7 +17,7 @@ export class AccountComponent implements OnInit {
     { icon: 'fas fa-sack-dollar', title: 'Mes gains', content: '20000F', routerLink: 'earnings', cardClass: 'amber' },
     { icon: 'fas fa-exchange-alt', title: 'Invite tes amis', content: 'Gagne jusqu\'à 5000 F par ami invité !', routerLink: '/referal', cardClass: 'primary' },
     { icon: 'fa-solid fa-phone', title: 'Mettre à jour', content: 'Mon numéro de téléphone', routerLink: 'settings', cardClass: 'primary' },
-    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', routerLink: '/referal', cardClass: 'amber' },
+    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', cardClass: 'amber' },
   ];
   historiqueData = [
   { image: 'assets/images/ads/3.jpg', name: 'Chemise homme', price: '35 000F', status: 'Livrée', date: '05/02/2025', color: 'accent' },
@@ -24,11 +26,14 @@ export class AccountComponent implements OnInit {
   ];
   selectedLogo: File | null = null ;
   public currentUser:any = this.auth.currentUser();
+  selectedTab = 'historique';
+  favorisProducts:Product[] = [];
 
   constructor(private auth : AuthenticationService, private imgCompressService:ImageCompressService,
-    private cm:CommonService,) { }
+    private cm:CommonService, private produitService:ProductService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+      this.favorisProducts = await this.produitService.getProductByNewArrival(50)
   }
 
   onFileSelected(event: Event) {
@@ -58,6 +63,19 @@ export class AccountComponent implements OnInit {
       }catch(error:any){
         console.log(error);
       }
+    }
+  }
+
+  selectTab(tab: string) {
+    this.selectedTab = tab;
+  }
+
+  WhatsAppUs(card: string) {
+    console.log(card);
+    if(card.toLowerCase().includes("revendeur")){
+      let message = "Bonjour, Je souhaiterais postuler pour devenir revendeur sur Fidelity Market.";
+      const link = "https://wa.me/22376007979?text=" + encodeURIComponent(message);
+      window.open(link, "_blank");
     }
   }
 

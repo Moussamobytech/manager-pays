@@ -21,6 +21,8 @@ $primary_color: #25224a;
     .image-link {
       display: block;
       height: 200px;
+      background-color: #605f5f36;
+      border-radius: 10px;
 
       img {
         width: 100%;
@@ -66,6 +68,12 @@ $primary_color: #25224a;
           text-decoration: line-through;
         }
       }
+    }
+
+    .delivery-state {
+      font-size: 15px;
+      color: #d81b60;
+      font-weight: 500;
     }
 
     .icons {
@@ -116,6 +124,9 @@ $primary_color: #25224a;
           font-size: 12px;
         }
       }
+      .delivery-state {
+        font-size: 13px;
+      }
 
       .icons {
         justify-content: space-around;
@@ -151,6 +162,9 @@ $primary_color: #25224a;
         .price-promotion {
           font-size: 11px;
         }
+      }
+      .delivery-state {
+        font-size: 11px;
       }
     }
   }
