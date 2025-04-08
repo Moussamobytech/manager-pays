@@ -30,18 +30,18 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
-    // console.log("currentUser :::::::: ",this.currentUser)
+    // console.log("currentUser :::::::: ",this.currentUser)   #5C6BC0,#66BB6A,#EF5350
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'images': null,
-      // priceBasic: ['', [Validators.required, this.nonZeroValidator]],
-      // pricePromotion: ['', this.nonZeroValidator],
       'pricePromotion': [null, [Validators.pattern('^[0-9]*$'),Validators.minLength(3)]],
       'priceBasic': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)] ],
       "description": null,
-      "weight": null,
+      "weight": [],
       "user": this.currentUser.username,
-      "categorie": [null, Validators.required ]
+      "categorie": [Validators.required ],
+      "colors":[],
+      "tailles":[]
     });
     this.getCategories();
     this.sub = this.activatedRoute.params.subscribe(params => {
@@ -61,15 +61,22 @@ export class AddProductComponent implements OnInit {
   }
   public getCategories(){
     this.category.categories().subscribe(data => {
-      console.log(data)
       this.categories = data;
     });
   }
 
   public getProductById(){
     this.productService.find(this.id).then((data : any) =>{
-      console.log(data)
+      
       this.form.patchValue(data);
+      this.form.controls.categorie.setValue(data.categorie.id);
+      this.form.patchValue({
+        colors: data.colors
+      });
+      this.form.patchValue({
+        tailles: data.tailles
+      });
+      
       const images: any[] = [];
       // if (data.image1 != null) {
       //   let image = {link: data.image1, preview: data.image1 }
@@ -102,7 +109,6 @@ export class AddProductComponent implements OnInit {
   }
 
   public  async onSubmit(){
-    console.log(this.form.value);
     if (this.id) {
       this.edit()
     }else{
@@ -111,7 +117,7 @@ export class AddProductComponent implements OnInit {
 
   }
 
-  async save(){
+  async save(){    
     let size= 0;
     try {
       if (this.form.valid) {
@@ -146,7 +152,9 @@ export class AddProductComponent implements OnInit {
         // data.append('images', this.form.value.images);
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
-        data.append('weight', "5");
+        data.append('weight', this.form.value.weight);
+        data.append('colors', this.form.value.color);
+        data.append('tailles', this.form.value.size);
         // console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",data)
         let res = await this.productService.add(data);
@@ -218,13 +226,17 @@ export class AddProductComponent implements OnInit {
           i++;
         })
         // data.append('images', this.form.value.images);
-        data.append('user', this.form.value.user);
+        data.append('user', this.currentUser.username);
+        data.append('weight',  this.form.value.weight);
+        data.append('colors',  this.form.value.colors);
         data.append('categorie', this.form.value.categorie);
+        data.append('tailles', this.form.value.tailles);
+
         // data.append('weight', "5");
-        console.log("images ::: ",this.form.value.images)
-        console.log("data ::: ",JSON.stringify(data))
+        //console.log("images ::: ",this.form.value.images)
+        //console.log("data ::: ",JSON.stringify(data))
         let res = await this.productService.edit(this.id,data);
-        console.log("res save product :::::::: ",res)
+       // console.log("res save product :::::::: ",res)
         if (res != null) {
           this.router.navigate(["/account-seller/products-seller"])
         }

@@ -45,9 +45,9 @@ export class AccountComponent implements OnInit {
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
     { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
 
-    { name: 'Campagne', href: 'parrainage', icon: 'people' },
+    { name: 'Campagne', href: 'parrainage', icon: 'campaign' },
     { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
-    { name: 'Mes clients', href: 'customers', icon: 'people_outline' },
+    //{ name: 'Mes clients', href: 'customers', icon: 'people_outline' },
     // { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
     { name: 'Paramètres', href: 'settings', icon: 'settings' },
     { name: 'Comment ca marche?', href: 'how_works', icon: 'help_outline' },

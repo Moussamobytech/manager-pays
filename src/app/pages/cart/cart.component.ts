@@ -206,7 +206,7 @@ monPanierContient(){
   );
 
 }
-public updateCart(value) {
+/*public updateCart(value) {
   console.log("::::::::::::::::::: VALUE = ", value);
 
   if (value) {
@@ -233,12 +233,15 @@ public updateCart(value) {
   }
 
   this.getAllArticleInPanier();
-}
+}*/
 
 
 
- /* public updateCart(value){
+onlyCartItemCount:any = 0
+  public updateCart(value){
     let onlyProdTotal:any
+    console.log("My value = ",value);
+    
     if(value){
       this.total[value.productId] = value.total;
       this.cartItemCount[value.productId] = value.soldQuantity;
@@ -263,7 +266,7 @@ public updateCart(value) {
     this.getAllArticleInPanier();
 
   }
-*/
+
   public remove(product) {
    this.appService.remove(product);
    this.getAllArticleInPanier();
@@ -388,10 +391,7 @@ public updateCart(value) {
 
 
 
-    commander(){
-
-      console.log("PRODUCTS ::::: ",this.productList);
-      
+    commander(){     
 
       let user = this.user;      
       if(user != null){    
@@ -415,11 +415,9 @@ public updateCart(value) {
           }
         ); 
       }
-      else if (this.billingForm.valid) {
-        console.log("2 EXISTING USER ==== ",this.idUser);
-    
+      else if (this.billingForm.valid) {    
         const values = this.billingForm.value;
-      
+    
         // Génération du numéro de téléphone complet basé sur le pays
         const countryCode = this.selectedCountry.indicatif;
         const phone = countryCode + values["phone"];

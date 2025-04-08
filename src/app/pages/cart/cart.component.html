@@ -158,8 +158,15 @@
       </div>
      
       <div class="summary-item" *ngIf="product?.campagne && product?.campagne.reduction">
-        <p>Réduction - {{ product?.campagne.reduction}}%</p>
+        <p>
+          Réduction - {{ product?.campagne.reduction }}%
+          (-
+          {{
+            ((product?.priceBasic || 0) * product?.campagne.reduction / 100) | number : '1.0-0'
+          }} F)
+        </p>
       </div>
+      
       
       <div class="product-actions">
         <app-controls [product]="product" [pageName]="pageName" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>

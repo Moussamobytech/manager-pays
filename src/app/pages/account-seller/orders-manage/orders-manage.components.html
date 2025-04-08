@@ -8,12 +8,12 @@
       <div class="mat-mdc-table orders-table">
         <div class="mat-mdc-header-row">
           <div class="mat-mdc-header-cell image">Image</div>
-          <div class="mat-mdc-header-cell">
+        <!--  <div class="mat-mdc-header-cell">
             Code
             <mat-icon class="sortable" (click)="sortBy('codeCommande')">
               {{ sortKey === 'codeCommande' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
             </mat-icon>
-          </div>
+          </div> -->
           <div class="mat-mdc-header-cell">
             Date
             <mat-icon class="sortable" (click)="sortBy('dateCommande')">
@@ -38,6 +38,28 @@
               {{ sortKey === 'montant' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
             </mat-icon>
           </div>
+<!-- :::::::::::::::::::::::::::: ALL NEWS COLUMNS :::::::::::::::::::::::::::::-->
+
+          <div class="mat-mdc-header-cell">
+            Pays
+            <mat-icon class="sortable" (click)="sortBy('montant')">
+              {{ sortKey === 'montant' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Adresse
+            <mat-icon class="sortable" (click)="sortBy('montant')">
+              {{ sortKey === 'montant' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+          <div class="mat-mdc-header-cell">
+            Paiement
+            <mat-icon class="sortable" (click)="sortBy('montant')">
+              {{ sortKey === 'montant' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
+            </mat-icon>
+          </div>
+
+
   
           <div class="mat-mdc-header-cell">
             Status
@@ -45,12 +67,13 @@
               {{ sortKey === 'idStatutCommande' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
             </mat-icon>
           </div>
-          <div class="mat-mdc-header-cell">
+        <!--  <div class="mat-mdc-header-cell">
             Client
             <mat-icon class="sortable" (click)="sortBy('clientUsername')">
               {{ sortKey === 'clientUsername' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
             </mat-icon>
           </div>
+          -->
         
           <div class="mat-mdc-header-cell">Details</div>
         </div>
@@ -61,11 +84,19 @@
           <div class="mat-mdc-cell image" >
             <img [src]="order.produitImage" alt="" width="50">
           </div>
-          <div class="mat-mdc-cell"><span class="order">{{order.codeCommande}}</span></div>
+          <!--<div class="mat-mdc-cell"><span class="order">{{order.codeCommande}}</span></div>-->
           <div class="mat-mdc-cell">{{ order.dateCommande | date: 'dd/MM/yy' }}</div>
           <div class="mat-mdc-cell">{{order.produitNom}}</div>
           <div class="mat-mdc-cell">{{order.quantite}}</div>
           <div class="mat-mdc-cell">{{order.montant}}</div>
+
+          <!--:::::::::  :::::::::::-->
+          <div class="mat-mdc-cell">Cote d'ivoire</div>
+          <div class="mat-mdc-cell">Abidjan, Bouaké</div>
+          <div class="mat-mdc-cell">Orange Money</div>
+
+
+
           <div class="mat-mdc-cell {{order.statutCommande.name}}" [ngClass]="order.statutCommande.name"> 
             <mat-select [value]="order.statutCommande.id">
               @for (st of status; track status) {
@@ -73,7 +104,7 @@
               }
             </mat-select>
         </div>
-          <div class="mat-mdc-cell">{{order.clientPhoneNumber}}</div>
+          <!--<div class="mat-mdc-cell">{{order.clientPhoneNumber}}</div> -->
           <div class="mat-mdc-cell">
             <div class="p-2 actions">
                <button  mat-mini-fab color="warn" matTooltip="View invoice" class="btn-invoice" (click)="openOrderDetails(order)" >
