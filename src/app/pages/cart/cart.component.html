@@ -147,6 +147,7 @@
   </button>
 
   <!-- Product List: row on desktop, column on mobile -->
+
   <div class="cart-items" fxLayout="row wrap">
     <div class="cart-item" *ngFor="let product of productList" fxFlex.xs="100" fxFlex.gt-sm="48">
       <div class="product-info">
@@ -162,9 +163,10 @@
           Réduction - {{ product?.campagne.reduction }}%
           (-
           {{
-            ((product?.priceBasic || 0) * product?.campagne.reduction / 100) | number : '1.0-0'
+            ((product?.priceBasic || 0) * product?.campagne.reduction / 100) * product.cartCount | number : '1.0-0'
           }} F)
         </p>
+      
       </div>
       
       
@@ -187,6 +189,12 @@
         <p>Montant</p>
         <p>{{ grandTotal }} F</p>
       </div>
+      
+      <div class="summary-item">
+        <p>Reduction total</p>
+        <p>{{ getTotalReduction() | number : '1.0-0' }} F</p>
+      </div>
+
   
       <!-- <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
         <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
@@ -195,7 +203,7 @@
      -->
       <div class="summary-item total">
         <p>Total</p>
-        <p>{{ grandTotal - (grandTotal * (product?.priceBasic | discount: product?.pricePromotion) / grandTotal) }} F</p>
+        <p>{{ grandTotal - getTotalReduction() | number : '1.0-0' }} F</p>
       </div>
     </div>
 

@@ -389,8 +389,141 @@ onlyCartItemCount:any = 0
       })
     }
 
+    getTotalReduction(): number {
+      return this.productList.reduce((total, product) => {
+        return total + ((product?.priceBasic || 0) * (product?.campagne?.reduction || 0) / 100 * product.cartCount);
+      }, 0);
+    }
 
+    commander(){     
+      let user = this.user;      
+      if(user != null){    
+        // Appliquer la réduction aux articles avant l'envoi
+        const productsWithReduction = this.productList.map(product => {
+          if (product.campagne && product.campagne.reduction) {
+            const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
+            const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
+            return {
+              ...product,
+              pricePromotion: finalPrice,
+              totalPrice: finalPrice * product.cartCount
+            };
+          }
+          return {
+            ...product,
+            totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
+          };
+        });
 
+        this.appService.addCommande(user.id, productsWithReduction).subscribe(
+          () => {
+            this.snackBar.open('Commande effectuée avec succès', '×', {
+              panelClass: 'success',
+              verticalPosition: 'top',
+              duration: 3000
+            });
+            this.clear()
+            this.router.navigate(["/cart"]);
+          },
+          error => {
+            this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
+              panelClass: 'error',
+              verticalPosition: 'top',
+              duration: 3000
+            });
+            console.error("Erreur lors la commande des articles:", error);
+          }
+        ); 
+      }
+      else if (this.billingForm.valid) {    
+        const values = this.billingForm.value;
+    
+        // Génération du numéro de téléphone complet basé sur le pays
+        const countryCode = this.selectedCountry.indicatif;
+        const phone = countryCode + values["phone"];
+      
+        // Création du payload
+        const formData = new FormData();
+
+        formData.append("username", phone);
+        formData.append("firstname", values["firstName"]);
+        formData.append("lastname", values["lastName"]);
+        formData.append("password", values["phone"] || '');
+        formData.append("phoneNumber", values["phone"]);
+        formData.append("addresse", values["addresse"] || '');
+        formData.append("country", values["country"]);
+        formData.append("state", values["state"] || '');
+        formData.append("boutique", values["company"] || '');
+        formData.append("role", this.profil || 'user');
+        formData.append("typeOfUsername", 'phone');
+        
+        // Appliquer la réduction aux articles avant l'envoi
+        const productsWithReduction = this.productList.map(product => {
+          if (product.campagne && product.campagne.reduction) {
+            const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
+            const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
+            return {
+              ...product,
+              pricePromotion: finalPrice,
+              totalPrice: finalPrice * product.cartCount
+            };
+          }
+          return {
+            ...product,
+            totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
+          };
+        });
+      
+        // Création du compte
+        this.authService.signup(formData).toPromise()
+          .then(async (res: any) => {
+            try {
+              // Connexion de l'utilisateur
+              const username = formData.get('username') as string;
+              const password = formData.get('password') as string;
+              
+              const loginData = await this.authService.login(username, password).toPromise();
+              const userInfo = await this.authService.info(loginData.username);
+      
+              if (!userInfo) {
+                throw new Error('Impossible de récupérer les informations du client, merci de réessayer à nouveau');
+              }
+      
+              // Récupération de l'utilisateur par téléphone et ajout de la commande
+              const phone = formData.get('phoneNumber') as string;
+              const myUser = await this.authService.getUserByPhone(phone).toPromise();
+              await this.appService.addCommande(myUser.id, productsWithReduction).toPromise();
+      
+              this.snackBar.open('Commande effectuée avec succès', '×', {
+                panelClass: 'success',
+                verticalPosition: 'top',
+                duration: 3000
+              });
+      
+              this.clear();
+              this.router.navigate(["/cart"]);
+      
+            } catch (error: any) {
+              console.error('Erreur lors du processus :', error);
+              this.snackBar.open(error.message || 'Une erreur s\'est produite.', '×', {
+                panelClass: 'error',
+                verticalPosition: 'top',
+                duration: 3000
+              });
+            }
+          })
+          .catch((error: any) => {
+            console.error('Erreur lors de la création du compte :', error);
+            this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte!', '×', {
+              panelClass: 'error',
+              verticalPosition: 'top',
+              duration: 3000
+            });
+          });
+      }
+    }
+
+/*
     commander(){     
 
       let user = this.user;      
@@ -489,6 +622,6 @@ onlyCartItemCount:any = 0
           });
       }
       
-    }
+    }*/
       
 }
