@@ -8,6 +8,19 @@ import { Commande } from '../models/commande.models';
 })
 export class CountryService {
 
+  addRegion(data: any): Observable<any> {
+    return this.api.post(`/region/create`, data);
+  }
+  getAllRegions(): Observable<any> {
+   return this.api.get(`/region/getAll`);
+  }
+
+
+  getAllRegionsByCountrie(id: any):Observable<any> {
+    return this.api.get(`/region/getAllByCountrie/${id}`);
+      }
+
+
   constructor(private api: ApiService,) { }
 
   addCountries(datas: any): any {

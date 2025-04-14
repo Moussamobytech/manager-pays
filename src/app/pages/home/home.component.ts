@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getNewArrivalsProducts();
     this.getTopRatedProducts();
+    this.productInPromo();
     // this.listCampagne();
     // this.getAllProduit();
     // this.getBrands();
@@ -123,7 +124,7 @@ export class HomeComponent implements OnInit {
 
   public async getAllProduit() {
     let res : Array<Product> = await this.produitService.products()
-     console.log("res product :::::::: ",res)
+   //  console.log("res product :::::::: ",res)
     this.produit = res;
   }
 
@@ -145,7 +146,7 @@ export class HomeComponent implements OnInit {
 
   public async getNewArrivalsProducts() {
     const products = await this.produitService.getProductByTop();
-    console.log("res product :::::::: ",products)
+  //  console.log("res product :::::::: ",products)
 
     this.newArrivalsProducts = products.map(product => {
       let nom = (product.nom).toLowerCase();
@@ -157,7 +158,7 @@ export class HomeComponent implements OnInit {
       };
     }).sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
 
-    this.promoProducts = products
+   /* this.promoProducts = products
     .map(product => {
       let nom = (product.nom).toLowerCase();
       return {
@@ -167,9 +168,17 @@ export class HomeComponent implements OnInit {
         pricePromotion: this.parsePrice(product.pricePromotion),
       };
     })
-    .filter(product => (product.campagne !== null)&&(product.campagne.type == "PROMOTION"));
+    .filter(product => (product.campagne !== null)&&(product.campagne.type == "PROMOTION")); */
    // .filter(product => (product.pricePromotion !== null)&&(product.pricePromotion < product.priceBasic));
-    console.log("promo: ",this.promoProducts)
+  //  console.log("promo: ",this.promoProducts)
+  }
+
+  productInPromo(){
+    this.produitService.getproductOnPromo().subscribe(datas => {
+      this.promoProducts = datas
+      console.log(":::::: Les Prods en Promos : ",datas);
+      
+    })
   }
 
 

@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppService } from '../../../app.service';
 import { Settings, AppSettings } from '../../../app.settings';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top-menu',
@@ -10,14 +11,18 @@ import { AuthenticationService } from 'src/app/services/auth.service';
 })
 export class TopMenuComponent implements OnInit {
 
+
   public currencies = ['USD', 'EUR'];
-  public currency:any;
-  public user:any;
+  public currency: any;
+  public user: any;
   deferredPrompt: any;
   installButtonVisible: boolean = false;
+  public roles: any = '';
+
+  routes:any = ""
 
   public settings: Settings;
-  constructor(public appSettings:AppSettings, public appService:AppService, public translateService: TranslateService, private auth:AuthenticationService) {
+  constructor(public appSettings: AppSettings, private router:Router, public appService: AppService, public translateService: TranslateService, private auth: AuthenticationService) {
     this.settings = this.appSettings.settings;
   }
 
@@ -37,37 +42,51 @@ export class TopMenuComponent implements OnInit {
     }
   }
 
+
+
   ngOnInit() {
     this.currency = this.currencies[0];
     this.changeLang("fr")
-    this.user  = JSON.parse(sessionStorage.getItem('currentUser')!);
-      // this.username = sessionStorage.getItem('username')!;
-      // console.log("TopMenuComponent user :::: ",this.user);
+    this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
+    this.roles = this.user.profiles[0].name;
+
+    if (this.roles == "ROLE_BOUTIQUE") {
+     this.routes = "account-seller";
+    }
+    else if(this.roles == "ROLE_PARTICULIER"){
+     this.routes = "account-customer";
+    
+  }
+    // this.username = sessionStorage.getItem('username')!;
+   console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
   }
 
-  public changeCurrency(currency){
+
+
+  
+  public changeCurrency(currency) {
     this.currency = currency;
   }
 
-  public changeLang(lang:string){
+  public changeLang(lang: string) {
     this.translateService.use(lang);
 
   }
 
-  public getLangText(lang){
-    if(lang == 'de'){
+  public getLangText(lang) {
+    if (lang == 'de') {
       return 'German';
     }
-    else if(lang == 'fr'){
+    else if (lang == 'fr') {
       return 'Français';
     }
-    else if(lang == 'ru'){
+    else if (lang == 'ru') {
       return 'Russian';
     }
-    else if(lang == 'tr'){
+    else if (lang == 'tr') {
       return 'Turkish';
     }
-    else{
+    else {
       return 'English';
     }
   }

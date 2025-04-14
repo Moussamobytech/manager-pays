@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { map, tap } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
+import { BannersService } from 'src/app/services/banners.service';
 
 @Component({
   selector: 'app-seller',
@@ -54,16 +55,21 @@ export class SellerComponent implements OnInit {
   domWidth: number = window?.innerWidth;
   loadedProductCount:number; // nombre de produit actuellement chargee
   public usePagination = this.domWidth > 430; // basculer entre la pagination et le Voir plus
+  currentUser: import("/home/coulibaly/Documents/Projets/Aplika/FIDELITY-NEW/e-commerce-front/src/app/models/user.models").User;
+  bannersInfo: any;
 
 
   constructor(
     public appSettings: AppSettings,
     private common: CommonMessageService,
     private activatedRoute: ActivatedRoute,
+    private auth: AuthenticationService,
     private appService: AppService,
     private produitService: ProductService,
     public domHandlerService: DomHandlerService,
-    private cm: CommonService,
+    private cm: CommonService,    
+    private bannersService: BannersService,
+    
   ) {
     this.selectedSorting = this.sortings[0];
   }
@@ -96,7 +102,29 @@ export class SellerComponent implements OnInit {
   }
 
   private getSeller() {
-    this.appService.infoSeller(this.sellerId).subscribe(
+
+    this.sellerInfo = this.auth.currentUser()
+    let cur = this.sellerInfo;
+
+    this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
+      this.bannersInfo = datas;
+      this.sellerBanners = [
+        this.bannersInfo.image1,
+        this.bannersInfo.image2,
+        this.bannersInfo.image3
+      ]
+      .filter(img => !!img)
+      .map(img => {
+        // Si c’est déjà une URL externe (commence par http), on la garde telle quelle
+        if (img.startsWith('http')) return { image: img };
+      
+        // Sinon, on la compose avec imgsLink
+        return { image: this.imgsLink + img };
+      });
+        
+    });
+
+  /*  this.appService.infoSeller(this.sellerId).subscribe(
       (infoS)=>{
         this.sellerInfo = infoS;
         this.sellerBanners = [
@@ -114,13 +142,18 @@ export class SellerComponent implements OnInit {
         }
       }
     );
+    */
   }
 
   private getProducts() {
     return this.produitService.getProductBySeller(this.sellerId).pipe(
       map((p)=>p.filter((p)=>p.etat=="ACTIF")),
       tap((products) => {
+
+        
+        
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
+        console.log(":::::::::::::::::: SELLER PRODUCT ::: ",this.sellerProducts);
         this.unchangedSellerProducts = products;
         this.loadedProductCount = this.viewCount;
         // console.log(this.usePagination)

@@ -207,4 +207,10 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/views-month/'+username).toPromise();
   }
 
+
+  public getproductOnPromo():Observable<any>{
+
+    return this.api.get('/campagne/all-product-promo-active');
+  }
+
 }

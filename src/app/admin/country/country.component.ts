@@ -19,11 +19,19 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 })
 export class CountryComponent implements OnInit {
 
+  allRegions: any;
+ 
+
   @ViewChild('addCountry') addCountry: TemplateRef<any>;
+  @ViewChild('addRegions') addRegions: TemplateRef<any>;
+  @ViewChild('paysDetails') paysDetails: TemplateRef<any>;
+
+
+
 
 
   public form: UntypedFormGroup;
-
+  public formRegion: UntypedFormGroup;
 
   public brand: Brand[] = [];
   public page: any;
@@ -33,6 +41,7 @@ export class CountryComponent implements OnInit {
   public id: any;
   sub: any;
   sortedCountries: any[];
+  monPays: any;
 
   constructor(
     private router: Router,
@@ -56,12 +65,24 @@ export class CountryComponent implements OnInit {
       'indicatif': [null, Validators.required],
       'description': [null],
     });
+    this.formRegion = this.formBuilder.group({
+      'nom': [null, Validators.required],
+      'pays': [null, Validators.required],
+      'description': [null],
+    });
+    this.getAllRegions();
+    this.getAllCountries();
 
     this.sub = this.activatedRoute.params.subscribe(params => {
       if (params['id']) {
         this.id = params['id'];
       }
     });
+  }
+  getAllCountries() {
+    this.countryService.getAllCountries().subscribe(datas => {
+      this.allCountries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    })
   }
   public onPageChanged(event) {
     this.page = event;
@@ -128,10 +149,20 @@ export class CountryComponent implements OnInit {
       this.Modifier(this.id);
     }
     else {
-      this.AddPays()
+    this.AddPays();
     }
   }
+  submitRegionForm() {
+    this.addRegion();
+   /*#addCountry if (this.id != null) {
+      this.Modifier(this.id);
+    }
+    else {
+      this.addRegion()
+    }*/
+  }
 
+  
   AddPays() {
 
     try {
@@ -140,9 +171,6 @@ export class CountryComponent implements OnInit {
           nom: this.form.value.nom,
           indicatif: this.form.value.indicatif,
           description: this.form.value.description
-
-
-
         };
 
         this.countryService.addCountries(data).subscribe({
@@ -154,8 +182,6 @@ export class CountryComponent implements OnInit {
               this.router.navigate(["/admin/country"]);
 
             }
-
-
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -163,9 +189,7 @@ export class CountryComponent implements OnInit {
             }
             if (err.status == "400") {
               this.commonService.errorToast(err.message);
-
             }
-
             else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
@@ -181,6 +205,29 @@ export class CountryComponent implements OnInit {
     }
 
   }
+  addRegion() {
+    if (this.formRegion.valid) {
+      const data = {
+        nom: this.formRegion.value.nom,
+        idCountrie: this.formRegion.value.pays,
+        description: this.formRegion.value.description
+      };
+      this.countryService.addRegion(data).subscribe({
+        next: (datas) => {
+          this.commonService.successToast(datas.message);
+          this.dialog.closeAll();
+          this.getAllRegions();
+          this.router.navigate(["/admin/country"]);
+        },
+        error: (err) => {
+          this.commonService.errorToast(err.message);
+        }
+      });
+    }
+    else {
+      this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
+    }
+  }
 
   Modifier(id: any) {
 
@@ -190,8 +237,6 @@ export class CountryComponent implements OnInit {
           nom: this.form.value.nom,
           indicatif: this.form.value.indicatif,
           description: this.form.value.description
-
-
 
         };
 
@@ -205,8 +250,6 @@ export class CountryComponent implements OnInit {
               this.id = null;
 
             }
-
-
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -237,6 +280,12 @@ export class CountryComponent implements OnInit {
   getAllPays() {
     this.countryService.getAllCountries().subscribe(datas => {
       this.allCountries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    })
+  }
+
+  getAllRegions() {
+    this.countryService.getAllRegions().subscribe(datas => {
+      this.allRegions = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     })
   }
 
@@ -301,6 +350,25 @@ export class CountryComponent implements OnInit {
       this.router.navigate(['/admin/country']);
     });
   }
+  openRegionDialog(id: any): void {
+    const dialogRef = this.dialog.open(this.addRegions, {
+      width: '400px',
+    });
+  } 
+
+
+  openPaysDetails(pays: any) {
+        const dialogRef = this.dialog.open(this.paysDetails, {
+      width: '400px',
+    });
+    this.monPays = pays;
+    this.countryService.getAllRegionsByCountrie(pays.id).subscribe( datas =>{
+      console.log("My Regions List ",datas);
+      this.allRegions = datas;
+    //  dialogRef.componentInstance.allRegions = datas;
+    })
+    }
+
   onNoClick(): void {
     this.dialog.closeAll();
   }

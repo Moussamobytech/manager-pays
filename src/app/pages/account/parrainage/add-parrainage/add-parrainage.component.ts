@@ -275,13 +275,17 @@ res = typepromo.name
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
     } catch (error) {
-      console.log(error);
+   //   console.log(error);
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
   }
   
 
   async edit() {
+
+    console.log(";;;;;;;;;;;TYPE ::::::::::::PRO = ",this.form.value.produitIds);
+    
+
     let size = 0;
     try {
       if (this.form.valid) {
@@ -331,15 +335,17 @@ res = typepromo.name
 
 
     } catch (error) {
-      console.log(error)
+     // console.log(error)
     }
   }
 
 
   public getCampagneById(){
     this.campagneService.find(this.id).then((data : any) =>{
-      console.log(data)
+      console.log("ME CAMPAGNE +++",data.produitPromos)
       this.form.patchValue(data);
+      this.form.controls.typePromo.patchValue(data.typePromo.id); 
+     // this.form.controls.produitIds.patchValue(data.produitPromos.id);
      
      // this.form.controls.images.setValue(images);
     })
