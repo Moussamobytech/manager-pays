@@ -1,8 +1,12 @@
 <mat-card *ngIf="product" class="product-item modern-card">
   <div class="item-image">
-    <mat-chip-listbox *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic">
+    <mat-chip-listbox *ngIf="product.campagne&&product.campagne.type == 'PROMOTION'">
+      <mat-chip-option color="warn" highlighted selectable="false">-{{product.campagne.reduction}}% OFF</mat-chip-option>
+    </mat-chip-listbox> 
+      <!--  <mat-chip-listbox *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic">
       <mat-chip-option color="warn" highlighted selectable="false">-{{product.priceBasic|discount: product.pricePromotion}}% OFF</mat-chip-option>
-    </mat-chip-listbox>
+    </mat-chip-listbox> -->
+
     <a [routerLink]="['/products', product.id, product.nom]" (click)="setProductViewCount(product.id)" class="image-link" [ngStyle]="secondView ? { height: '200px' } : {}">
       <img [alt]="'Product Image'" class="card-image" (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'">
     </a>
@@ -13,8 +17,10 @@
       {{ product.categorieNom }}
     </h4> -->
     <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
-      {{ product.nom }}
+      {{ product.nom }} 
+      
     </a>
+    
     <div class="price-section">
       <p *ngIf="!product.pricePromotion||product.pricePromotion==product.priceBasic" class="price-basic">
         {{ product.priceBasic | number : '1.0-2' }} FCFA

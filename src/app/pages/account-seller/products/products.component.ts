@@ -28,7 +28,7 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
 
     this.currentUser = this.auth.currentUser()
-    console.log("currentUser :::::::: ",this.currentUser)
+   // console.log("currentUser :::::::: ",this.currentUser)
 
     this.loadData()
   }
@@ -40,7 +40,7 @@ export class ProductsComponent implements OnInit {
 
   async loadData(){
     let res = await this.productService.productUser(this.currentUser.username)
-    console.log("res product :::::::: ",res)
+    //console.log("res product :::::::: ",res)
     this.products = res
   }
 

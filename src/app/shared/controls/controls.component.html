@@ -15,5 +15,6 @@
         <i class="fa-regular fa-heart like-icon" [class.liked]=""></i>
         <i class="fa-solid fa-heart like-icon filled" [class.liked]=""></i>
       </span>
+      <span *ngIf="product.campagne?.type" class="campagne">{{ promo(product.campagne.type) }}</span> 
     </div>
 </div>

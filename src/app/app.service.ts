@@ -15,7 +15,7 @@ export class Data {
     public categories: Category[],
     public compareList: Product[],
     public wishList: Product[],
-    public cartList: Product[],
+    public cartList: any[],
     public totalPrice: number,
     public totalCartCount: number,
   ) {}

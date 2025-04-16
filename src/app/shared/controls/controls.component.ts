@@ -124,4 +124,30 @@ export class ControlsComponent implements OnInit {
   toggleLike(product:any){
 
   }
+
+  public promo(key) {
+    let res = ""
+    switch (key) {
+      case "PROMOTION":
+        res = "En promotion"
+        break;
+
+      case "OFFRE_BIENVENUE":
+        res = "Offre bienvenue"
+        break;
+
+      case "LIVRAISON_GRATUITE":
+        res = "Livraison gratuite"
+        break;
+
+      case "PARRAINAGE":
+        res = "Parrainage"
+        break;
+
+      default:
+        res = "N/A"
+        break;
+    }
+    return res
+  }
 }

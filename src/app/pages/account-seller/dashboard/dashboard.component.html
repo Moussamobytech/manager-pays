@@ -1,4 +1,8 @@
 <!-- Quick Buttons (HEAD) -->
+
+
+
+
 <div fxLayout="row wrap" class="quick-buttons">
   <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Ajouter un produit" routerLink="/account-seller/products-seller/add-product">
     <i class="fa-solid fa-plus"></i> {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
@@ -10,10 +14,10 @@
     </span>
     Partager ma boutique
   </button>
-  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Information" routerLink="/account-seller/information">
+  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Information" routerLink="/account-seller/settings">
     <i class="fa-solid fa-gears"></i> Gérer ma boutique
   </button>
-  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Promouvoir" (click)="WhatsAppUs()">
+  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Promouvoir" routerLink="/account-seller/parrainage">
     <i class="fa-solid fa-bullhorn"></i> Promouvoir mes produits
   </button>
 </div>
@@ -137,9 +141,10 @@
   </div>
 </div>
 
-
-<div fxLayout="row wrap" fxFlex="100" *ngIf="montantTotalMensuel != 0">
+<mat-card>
   <div fxFlex="100" fxFlex.gt-sm="100" class="p-2">
     <app-analytics></app-analytics>
   </div>
-</div>
+</mat-card>
+
+

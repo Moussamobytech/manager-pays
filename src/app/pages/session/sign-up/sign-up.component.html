@@ -177,16 +177,16 @@
   </div>
 
   <div class="user-type-selector" fxLayout="row" fxLayoutGap="20px">
-    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'client'}" (click)="profilType('client')" type="button">
+    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'particulier'}" (click)="profilType('particulier')" type="button">
       <mat-icon>person</mat-icon> Je suis Client
     </button>
-    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'vendeur'}" (click)="profilType('vendeur')" type="button">
+    <button mat-stroked-button class="user-type-button" fxFlex="49" [ngClass]="{'active': profil === 'boutique'}" (click)="profilType('boutique')" type="button">
       <i class="fa-solid fa-shop"></i> Je suis Vendeur
     </button>
   </div>
 
   <!-- Client Form -->
-  <form [formGroup]="clientForm" (ngSubmit)="onClientFormSubmit(clientForm.value)" *ngIf="profil === 'client'">
+  <form [formGroup]="clientForm" (ngSubmit)="onClientFormSubmit(clientForm.value)" *ngIf="profil === 'particulier'">
     <mat-form-field appearance="outline">
       <mat-label>Prénom</mat-label>
       <input matInput formControlName="clientFirstName" required>
@@ -203,17 +203,39 @@
       <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
         <mat-label>Pays</mat-label>
         <mat-select formControlName="clientCountry" (selectionChange)="handleClientCountryChange($event)">
-          <mat-option *ngFor="let country of countries" [value]="country.code">{{country.name}}</mat-option>
+          <mat-option *ngFor="let country of countries" [value]="country.id">{{country.nom}}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="phone-input" fxFlex="63.6">
         <mat-label>Téléphone</mat-label>
-        <span matPrefix>&nbsp;&nbsp;{{ selectedClientCountry?.phoneCode }}</span>
-        <input matInput formControlName="clientPhone" [placeholder]="selectedClientCountry?.placeholder" [mask]="selectedClientCountry?.mask">
+        <span matPrefix>&nbsp;&nbsp;{{ selectedClientCountry?.indicatif }}</span>
+        <input matInput formControlName="clientPhone" [placeholder]="selectedClientCountry?.placeholder" [mask]="phoneMask">
         <mat-error *ngIf="clientFormValues.clientPhone.errors?.required">Le numéro est obligatoire</mat-error>
       </mat-form-field>
     </div>
+
+	<mat-form-field appearance="outline">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput formControlName="clientPassword" [type]="hidePassword ? 'password' : 'text'" required>
+        <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="clientFormValues?.clientPassword.errors?.required"> Mot de passe est obligatoire </mat-error>
+        <mat-error *ngIf="clientFormValues?.clientPassword.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Mot de passe de confirmation</mat-label>
+        <input matInput formControlName="clientConfirmPassword" [type]="hideConfirm ? 'password' : 'text'" required>
+        <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hideConfirm">
+          <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="clientFormValues?.clientConfirmPassword.errors?.required"> Mot de passe de confirmation obligatoire </mat-error>
+        <mat-error *ngIf="clientFormValues?.clientConfirmPassword.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+        <mat-error *ngIf="clientFormValues?.clientConfirmPassword.errors?.mismatchedPasswords"> Mot de passe de confirmation ne correspondent pas </mat-error>
+      </mat-form-field>
+
 
     <div class="button-container">
       <button  mat-button class="back-button" type="button" routerLink="/authentication">
@@ -226,7 +248,7 @@
   </form>
 
   <!-- Vendeur Form -->
-  <form [formGroup]="vendeurForm" (ngSubmit)="onVendeurFormSubmit(vendeurForm.value)" *ngIf="profil === 'vendeur'">
+  <form [formGroup]="vendeurForm" (ngSubmit)="onVendeurFormSubmit()" *ngIf="profil === 'boutique'">
     <!-- Vendeur - Page 1 -->
     <div *ngIf="!showSecondPage">
       <mat-form-field appearance="outline">
@@ -245,14 +267,14 @@
         <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
           <mat-label>Pays</mat-label>
           <mat-select formControlName="vendeurCountry" (selectionChange)="handleVendeurCountryChange($event)">
-            <mat-option *ngFor="let country of countries" [value]=" country.code"> {{country.name}}</mat-option>
+            <mat-option *ngFor="let country of countries" [value]="country.id"> {{country.nom}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="phone-input" fxFlex="63.6">
           <mat-label>Téléphone</mat-label>
-          <span matPrefix>&nbsp;&nbsp;{{ selectedVendeurCountry?.phoneCode }}</span>
-          <input matInput formControlName="vendeurPhone" [mask]="selectedVendeurCountry?.mask" [placeholder]="selectedVendeurCountry?.placeholder">
+          <span matPrefix>&nbsp;&nbsp;{{ selectedVendeurCountry?.indicatif }}</span>
+          <input matInput formControlName="vendeurPhone" [mask]="phoneMask" [placeholder]="selectedVendeurCountry?.placeholder">
           <mat-error *ngIf="vendeurFormValues?.vendeurPhone.errors?.required">Le numéro est obligatoire</mat-error>
         </mat-form-field>
       </div>

@@ -28,12 +28,17 @@ export class AccountComponent implements OnInit {
   public currentUser:any = this.auth.currentUser();
   selectedTab = 'historique';
   favorisProducts:Product[] = [];
+  user:any
 
   constructor(private auth : AuthenticationService, private imgCompressService:ImageCompressService,
     private cm:CommonService, private produitService:ProductService) { }
 
   async ngOnInit() {
-      this.favorisProducts = await this.produitService.getProductByNewArrival(50)
+    this.favorisProducts = await this.produitService.getProductByNewArrival(50)
+    this.currentUser = this.auth.currentUser()
+    this.user = this.currentUser;
+    console.log("USER = ",this.user);
+
   }
 
   onFileSelected(event: Event) {

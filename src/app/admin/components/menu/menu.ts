@@ -16,6 +16,7 @@ export const menuItems = [
     new Menu (142, 'ADMIN_NAV.CAMPAGNE', '/admin/campagne/campagne-list', null, 'campaign', null, false, 0),
     new Menu (150, 'ADMIN_NAV.CONTACT', '/admin/contact/contact', null, 'contact_mail', null, false, 0),
     new Menu (160, 'ADMIN_NAV.NEWSLETTER', '/admin/newsletter/newsletter', null, 'email', null, false, 0),
+    new Menu (160, 'Pays', '/admin/country', null, 'public', null, false, 0),
     
 
 

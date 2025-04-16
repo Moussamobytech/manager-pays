@@ -3,7 +3,7 @@
     <img [src]="(sellerInfo?.logo)?imgsLink+sellerInfo.logo:'../../../assets/images/icons/shop_icon.png'" alt="Shop Logo" class="logo" />
   </div>
   <div class="shopname-section">
-    <h1 class="shop-name">{{sellerInfo?.nom||'Nom du boutique'}}</h1>
+    <h1 class="shop-name">{{sellerInfo?.name||'Nom du boutique'}}</h1>
     <button mat-icon-button class="text-muted" (click)="shareLink()"><mat-icon>share</mat-icon></button>
   </div>
   <div class="seller-carousel">

@@ -51,7 +51,7 @@ export class AuthenticationService {
         return "OK"
     } catch (error : any) {
         console.error(error);
-        return "KO"
+        return error
     }
   }
 
@@ -155,9 +155,10 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * @param addresse addresse of user
      * @param username username of user
      * @param password password of user
+     * @param countries le pays d'utilisateur
      */
     signup(formData: any): any {
-        return this.api.post(`/users/register`, formData);
+        return this.api.postFile(`/users/register`, formData);
     }
 
 
@@ -188,7 +189,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
       return this.api.put(`/users/etat/${id}?state=${etat}`, null).pipe();
     }
 
-    getUserByPhone(phone: string): Observable<any> {
+    getUserByPhone(phone: string): Observable<any> {      
       return this.api.get(`/users/get-by-phone/${phone}`);
     }
 

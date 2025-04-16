@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild, HostListener, TemplateRef } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { Subscription } from 'rxjs';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -42,10 +40,11 @@ export class AccountComponent implements OnInit {
   selectedLogoName: string = null;
   public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-    // { name: 'Parrainage', href: 'parrainage', icon: 'people' },
-    { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
-    { name: 'Mes clients', href: 'customers', icon: 'people_outline' },
     { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
+
+    { name: 'Campagne', href: 'parrainage', icon: 'campaign' },
+    { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
+    //{ name: 'Mes clients', href: 'customers', icon: 'people_outline' },
     // { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
     { name: 'Paramètres', href: 'settings', icon: 'settings' },
     { name: 'Comment ca marche?', href: 'how_works', icon: 'help_outline' },

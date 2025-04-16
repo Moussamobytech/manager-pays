@@ -67,6 +67,7 @@ export class  Campagne {
   constructor (
                public id: string,
                public libelle: string,
+               public nom: string,
                public username: string,
                public type: string,
                public etat: boolean,
@@ -74,6 +75,9 @@ export class  Campagne {
                public dateFin : Date,
                public produit : Products,
                public image : File,
+               public createdByUser: string,
+               public typePromo:string,
+               public active:boolean
                ) {}
 }
 

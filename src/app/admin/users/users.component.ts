@@ -23,7 +23,7 @@ import { CommonMessageService } from 'src/app/services/common-message.service';
 })
 export class UsersComponent implements OnInit {
     public users: User[];
-    public sortedUsers: User[]=null;
+      public sortedUsers: User[]=null;
     public searchText: string;
     public page:any;
     public settings: Settings;

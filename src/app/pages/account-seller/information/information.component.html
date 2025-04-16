@@ -126,11 +126,11 @@
         <mat-error *ngIf="infoForm.controls.email.errors?.pattern">Adresse mail invalide</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
-        <mat-label>Pays d'origine</mat-label>
-        <mat-select formControlName="country">
-          <mat-option *ngFor="let country of availableCountries" [value]="country">
-            {{ country }}
+      <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
+        <mat-label>Pays</mat-label>
+        <mat-select formControlName="country" required (selectionChange)="handleCountryChange($event)">
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{ country.nom }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -186,9 +186,9 @@
           <mat-label>Ajouter pays de livraison</mat-label>
           <mat-select #countrySelect (selectionChange)="addDeliveryCountry($event)">
             <mat-select-trigger>{{selectedCountries.join(', ')}}</mat-select-trigger>
-            <mat-option *ngFor="let country of availableCountries" [value]="country" class="no-checkmark">
+            <mat-option *ngFor="let country of countries" [value]="country.nom" class="no-checkmark">
               <div class="option-content">
-                <span>{{ country }}</span>
+                <span>{{ country.nom }}</span>
                 <i class="fa-solid fa-check option-icon selected" *ngIf="selectedCountries.includes(country)"></i>
                 <i class="fa-solid fa-plus option-icon" *ngIf="!selectedCountries.includes(country)"></i>
               </div>

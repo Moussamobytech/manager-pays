@@ -15,6 +15,7 @@ import { FullScreenComponent } from './components/fullscreen/fullscreen.componen
 import { MessagesComponent } from './components/messages/messages.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { AdminGuard } from '../helpers/admin.guard';
+import { CountryComponent } from './country/country.component';
 
 export const routes = [
   {
@@ -40,7 +41,8 @@ export const routes = [
       { path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule), data: { breadcrumb: 'Contact' } },
       { path: 'newsletter', loadChildren: () => import('./newsletter/newsletter.module').then(m => m.NewsletterModule), data: { breadcrumb: 'Newsletter' } },
       { path: 'information', loadChildren: () => import('./information/information.module').then(m => m.InformationModule), data: { breadcrumb: 'Information' } },
-      { path: 'commande', loadChildren: () => import('./commande/commande.module').then(m => m.CommandeModule), data: { breadcrumb: 'Commande' } }
+      { path: 'commande', loadChildren: () => import('./commande/commande.module').then(m => m.CommandeModule), data: { breadcrumb: 'Commande' } },
+      { path: 'country', loadChildren: () => import('./country/county.module').then(m => m.CountryModule), data: { breadcrumb: 'Pays' } }
 
     ]
   }
@@ -53,7 +55,7 @@ export const routes = [
     UserMenuComponent,
     FullScreenComponent,
     MessagesComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
   ],
   imports: [
     CommonModule,

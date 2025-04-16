@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class CampagneService {
   user: User | null = null;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService,private common: CommonMessageService) {}
 
   public getCampagne(): Observable<any>  {
     return this.api.get('/campagne/liste/');
@@ -66,4 +66,61 @@ export class CampagneService {
     // Envoyer la requête PUT à l'API avec l'objet FormData
     return this.api.putFile(`/campagne/update/${id}`, formData, Headers);
   }
+
+
+///!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+///!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+///#::::::::::::::::::::::: BY ADAMA :::::::::::::::::::::::::::::::::::
+///!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+///!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+   public add(formData: any):Observable<any> {
+    return  this.api.post(`/campagne/add-campagne`, formData);
+  }
+  public edit(id:string,formData: any):Observable<any> {    
+    return  this.api.put(`/campagne/update-campagne/${id}`,formData);
+  }
+
+  public getAllCampagneByUsername(username: string): Observable<any> {
+    return this.api.get('/campagne/user-getAllCampagne/' + username);
+  }
+
+  public getAllCampagne(): Observable<any> {
+    return this.api.get('/campagne/getAllCampagne');
+  }
+
+  public getAllTypePromo(): Observable<any> {
+    return this.api.get('/campagne/getAllPromo');
+  }
+  
+
+  public setStatus(id: string,status:boolean): Observable<any> {
+    return this.api.get('/campagne/status/' + id,status);
+  }
+
+  updateState(id: any, status) {
+    return this.api
+      .put(`/campagne/status/${id}/${status}`,null)
+      .toPromise();
+  }
+  supprimer(id: string): Observable<any> {
+    return this.api.delete(`/campagne/delete-campagne/${id}`);
+  }
+  find(id: any) {
+    return this.api.get(`/campagne/get-by-id/` + id).toPromise();
+  }
+
+
+
+  public generateCode(formData: any):Observable<any> {
+    return  this.api.post(`/code-promo/add`, formData);
+  }
+
+  public getAllCodeByCampagne(id: any):Observable<any> {
+    return  this.api.get(`/code-promo/getAllCodeByCampagne/${id}`);
+  }
+  supprimerCode(id: string): Observable<any> {
+    return this.api.delete(`/code-promo/delete/${id}`);
+  }
+
 }

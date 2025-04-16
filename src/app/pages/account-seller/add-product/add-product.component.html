@@ -7,6 +7,27 @@
           <span class="text-muted px-1">(max 5 images)</span>
         </p>
       </div>
+      <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
+          <div fxLayout="row wrap">
+              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Nom</mat-label>
+                      <input matInput formControlName="nom" required>
+                      <mat-error *ngIf="form.controls.nom.errors?.required">nom est obligatoire</mat-error>
+                      <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4 caractères</mat-error>
+                  </mat-form-field>
+              </div>
+              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Categorie</mat-label>
+                      <mat-select formControlName="categorie" required>
+                          <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                              <span>{{ cat.nom }}</span>
+                          </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="form.controls.categorie.errors?.required">La categorie est obligatoire</mat-error>
+                  </mat-form-field>
+              </div>
 
       <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
         <input-file formControlName="images" [containerFlex]="inputFileFlex" [fileLimit]="5" fileAccept="image/*"></input-file>

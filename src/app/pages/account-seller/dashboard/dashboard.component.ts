@@ -35,22 +35,18 @@ export class DashboardComponent implements OnInit {
   //   contact: 0,
   // };
   isCopied: boolean = false;
-  shopLink: string = null;
+  sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
+  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
   commandes: any;
-  commandePending: any;
+  commandePending: any = 0;
   commandeTotal: any = 0;
   venteTotal: any = 0;
   montantTotal: any = 0;
   commandeTotalMensuel: any = 0;
   pourcentageEvolution: any = 0;
   montantTotalMensuel: any = 0;
-  visitTotal: any;
-  cards = [
-    { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: 10, cardClass: 'amber', routerLink: '/account-seller/orders' },
-    { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: 20, cardClass: 'primary', routerLink: '/account-seller/products-seller' },
-    { icon: 'fas fa-search', title: 'Visiteurs', content: 'Pour mes produits', value: 10000, cardClass: 'primary', routerLink: '#' },
-    { icon: 'fas fa-chart-line', title: 'Ventes du mois', content: '1000000 F', value: '+20%', cardClass: 'amber', routerLink: '#' },
-  ];
+  visitTotal: any = 0;
+
   // cards = [
   //   { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: null, cardClass: 'amber', routerLink: '/account-seller/orders'},
   //   { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: null, cardClass: 'primary', routerLink: '/account-seller/products-seller'},
@@ -68,13 +64,22 @@ export class DashboardComponent implements OnInit {
     private cm: CommonService,
     private commandeService: CommandeService,
     private commonService: CommonMessageService
-  ) {}
+  ) { }
+
+  cards = [
+    { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: 0, cardClass: 'amber', routerLink: '/account-seller/orders-manage' },
+    { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: 0, cardClass: 'primary', routerLink: '/account-seller/products-seller' },
+    { icon: 'fas fa-search', title: 'Visiteurs', content: 'Pour mes produits', value: 0, cardClass: 'primary', routerLink: '/account-seller/dashboard' },
+    { icon: 'fas fa-chart-line', title: 'Ventes du mois', content: '1000 F', value: '+10%', cardClass: 'amber', routerLink: '/account-seller/dashboard' },
+  ];
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser();
+    //    console.log("VISIT PENDING :::::::::: = ",this.visitTotal);
+
 
     // Initialize shopLink (using the seller URL pattern)
-    this.shopLink = "https://fidelity-market.com/#/sellers/" + this.currentUser.username;
+    //    this.shopLink = "http://localhost:4200/#/sellers/" + this.currentUser.username;
 
     // If user is not logged in or profiles are missing, redirect to sign-in.
     if (this.currentUser == null || this.currentUser.profiles == null || this.currentUser.profiles == undefined) {
@@ -82,7 +87,7 @@ export class DashboardComponent implements OnInit {
     }
 
     // Retrieve product statistics.
-    //////////////////////// this.stats(this.currentUser.username);
+    this.stats(this.currentUser.username);
 
     // Build the recharge form.
     this.form = this.fb.group({
@@ -91,8 +96,8 @@ export class DashboardComponent implements OnInit {
 
     this.getUserById();
 
-    //////////////////////// this.getProductViewCount(this.currentUser.username);
-    //////////////////////// this.getCommandes(this.currentUser.username);
+    this.getProductViewCount(this.currentUser.username);
+    this.getCommandes(this.currentUser.username);
   }
 
   /**
@@ -139,6 +144,7 @@ export class DashboardComponent implements OnInit {
       // this.statsNumber.total = data.total;
       // this.statsNumber.actif = data.actif;
       this.cards[1].value = data.actif;
+
       // this.statsNumber.inactif = data.inactif;
       // this.statsNumber.pending = data.pending;
       // this.statsNumber.contact = data.contact;
@@ -172,6 +178,7 @@ export class DashboardComponent implements OnInit {
     this.auth.info(this.currentUser.username).then((data: any) => {
       this.username = data;
       this.points = data.points;
+
     });
   }
 
@@ -209,10 +216,10 @@ export class DashboardComponent implements OnInit {
     window.open(link, "_blank");
   }
 
-  shareLink(El:HTMLElement){
+  shareLink(El: HTMLElement) {
     const shareData = {
       title: '',
-      text: 'Découvrez cette boutique sur Fidelity-Market 💥: '+this.currentUser.nom+' !',
+      text: 'Découvrez cette boutique sur Fidelity-Market 💥: ' + this.currentUser.nom + ' !',
       url: this.shopLink
     };
 
@@ -297,7 +304,7 @@ export class DashboardComponent implements OnInit {
       this.commandeTotal = Object.keys(commandeParCode.codes).length;
       this.montantTotal = commandeParCode.montantTotal;
 
-       // Valeurs mensuelles
+      // Valeurs mensuelles
       this.commandeTotalMensuel = Object.keys(commandeParCodeMensuel.codes).length;
       this.montantTotalMensuel = commandeParCodeMensuel.montantTotal;
       this.cards[3].content = this.montantTotalMensuel + ' Fcfa';
@@ -319,7 +326,7 @@ export class DashboardComponent implements OnInit {
       } else {
         this.pourcentageEvolution = this.montantTotalMensuel > 0 ? 100 : 0;
       }
-      this.cards[3].value = (this.pourcentageEvolution>0)?'+'+this.pourcentageEvolution+'%':this.pourcentageEvolution+'%';
+      this.cards[3].value = (this.pourcentageEvolution > 0) ? '+' + this.pourcentageEvolution + '%' : this.pourcentageEvolution + '%';
     });
   }
 
@@ -329,7 +336,8 @@ export class DashboardComponent implements OnInit {
   getProductViewCount(username) {
     this.productService.getViewsForCurrentMonthOfProduct(username).then(data => {
       this.visitTotal = data;
+      this.cards[2].value = this.visitTotal;
+
     });
-    this.cards[2].value = this.visitTotal;
   }
 }
