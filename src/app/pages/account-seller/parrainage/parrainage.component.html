@@ -1,16 +1,16 @@
-<div class="p-2">
-    <mat-card>
-      <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
+<!-- <div class="p-2">
+    <mat-card> -->
+      <!-- <div fxLayout="row wrap" fxLayoutAlign="end center" class="w-100 p-3">
         <button mat-raised-button class="bleu mr-2" matTooltip="Générer un code" (click)="openDialog()">
           Générer un code
         </button>
         <button mat-raised-button color="warn" matTooltip="Créer un Parrainage" (click)="add()">
           Créer une campagne
         </button>
-      </div>
-  
-      <mat-divider></mat-divider>
-      <div class="mat-mdc-table admin-table">
+      </div> -->
+
+      <!-- <mat-divider></mat-divider> -->
+      <!-- <div class="mat-mdc-table admin-table">
         <div class="mat-mdc-header-row">
           <div class="mat-mdc-header-cell">Nom</div>
           <div class="mat-mdc-header-cell">Type promo</div>
@@ -43,14 +43,14 @@
               </button>
             </div>
           </div>
-  
-  
+
+
         </div>
-  
-      </div>
-  
-    </mat-card>
-  
+
+      </div> -->
+
+    <!-- </mat-card> -->
+
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR GENERATE CODE-->
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
@@ -61,7 +61,7 @@
         <form [formGroup]="form" (ngSubmit)="generate()" autocomplete="off">
           <div mat-dialog-content>
             <div fxLayout="row wrap">
-  
+
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Campagne</mat-label>
                 <mat-select formControlName="campagne" required>
@@ -71,8 +71,8 @@
                 </mat-select>
                 <mat-error *ngIf="form.controls.campagne.errors?.required">La campagne est obligatoire</mat-error>
               </mat-form-field>
-  
-              <!-- 
+
+              <!--
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Type de promo</mat-label>
                 <mat-select formControlName="typePromo" required>
@@ -82,26 +82,26 @@
                 </mat-select>
               </mat-form-field>
              -->
-  
-  
+
+
             </div>
           </div>
           <div mat-dialog-actions>
             <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
               <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
-  
+
               <button mat-raised-button class="bleu" type="submit">Générer</button>
             </div>
           </div>
         </form>
       </div>
     </ng-template>
-  
-  
+
+
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE TO SEE GENERATE CODE-->
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-  
+
     <ng-template #codeGenerer>
       <h1 mat-dialog-title>Votre code généré</h1>
       <div mat-dialog-content>
@@ -111,16 +111,16 @@
             monCode }}</strong>
           <mat-icon mat-button (click)="copyCodeToClipboard()" style="cursor: pointer;">file_copy</mat-icon>
         </div>
-  
+
       </div>
     </ng-template>
-  
+
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR CAMPAGNE DETAILS-->
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-  
+
     <ng-template #detailsCampagne>
-  
+
       <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
         <h1 mat-dialog-title>{{ detailsCampagneData.nom }}</h1>
         <button mat-raised-button class="bleu mr-2" matTooltip="Voir le code"
@@ -165,7 +165,7 @@
               <th>Nombre d'utilisation</th>
               <td>{{ detailsCampagneData.nombreUtilisation || 'N/A' }}</td>
             </tr>
-            
+
             <tr>
               <th>Date de début</th>
               <td>{{ detailsCampagneData.dateDebut }}</td>
@@ -182,19 +182,19 @@
         </mat-card-content>
       </div>
     </ng-template>
-  
+
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
     <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR ALL CODE OF CAMPAGNE -->
     <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-  
+
     <ng-template #allCodeGenerer>
       <h1 mat-dialog-title>Les codes générés</h1>
       <div mat-dialog-content *ngIf="allCodesCampagne!=null">
         <div *ngFor="let code of allCodesCampagne"
           style="margin: 2%; border-radius: 5px;background-color: rgb(206, 201, 201);color: black; padding: 2%; display: flex; justify-content: space-between;">
-  
+
           <p>Date: {{ code.dateCreation | date:'d MMMM y à HH:mm' }}</p>
-  
+
           <strong style="font-size: 30px;text-transform: uppercase;font-family: 'Times New Roman', Times, serif;">
             {{code.code}}</strong>
           <mat-icon mat-button (click)="copyCodeToClipboard2(code.code)" style="cursor: pointer;">file_copy</mat-icon>
@@ -205,14 +205,120 @@
         <strong>Vous n'avez pas de codes généré pour cette campagne </strong>
       </div>
     </ng-template>
-  
-  
-  </div>
-  <div fxLayout="row wrap">
+
+  <!-- </div> -->
+  <!-- <div fxLayout="row wrap">
     <div fxFlex="100">
       <mat-card class="text-center">
         <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5"
           (pageChange)="onPageChanged($event)"></pagination-controls>
       </mat-card>
     </div>
+  </div> -->
+
+
+
+
+
+
+
+
+  <div class="campaign" fxLayout="column" fxLayoutGap="24px">
+    <!-- Header and Create Button -->
+    <div class="campaign__header" fxLayout="row" fxLayoutAlign="space-between center">
+      <h2>Mes campagnes</h2>
+      <a class="campaign__create-button" [routerLink]="''">
+        <i class="fa-solid fa-plus"></i>
+        Créer une campagne
+      </a>
+    </div>
+
+    <!-- Campaign Types -->
+    <section class="campaign__types">
+      <h3>Types de campagnes</h3>
+      <div class="campaign__types-list" fxLayout="row wrap">
+        <div *ngFor="let type of campaignTypes" class="campaign__type-card" [class.active]="selectedCampaign === type"
+          fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="selectCampaign(type)" >
+          <div class="campaign__type-header">
+            <div class="campaign__icon-circle">
+              <i *ngIf="type.icon.length > 2" [class]="type.icon"></i>
+              <span *ngIf="type.icon.length <= 2">{{ type.icon }}</span>
+            </div>
+            <button class="campaign__plus-button" (click)="onAddCampaign(type.type); $event.stopPropagation()">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div class="campaign__type-info">
+            <div class="campaign__type-title">{{ type.title }}</div>
+            <div class="campaign__type-desc">{{ type.desc }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campaign Details -->
+    <div *ngIf="selectedCampaign" class="campaign__details">
+      <div class="campaign__details-header" (click)="isOpen = !isOpen">
+        <div class="campaign__icon-circle">
+          <i *ngIf="selectedCampaign.icon.length > 2" [class]="selectedCampaign.icon"></i>
+          <span *ngIf="selectedCampaign.icon.length <= 2">{{ selectedCampaign.icon }}</span>
+        </div>
+        <div class="campaign__details-info">
+          <div class="campaign__details-title">{{ selectedCampaign.title }}</div>
+          <div class="campaign__details-desc">{{ selectedCampaign.desc }}</div>
+        </div>
+        <div class="campaign__accordion-icon">
+          <i class="fas fa-chevron-down" [ngClass]="{ 'rotate': isOpen }"></i>
+        </div>
+      </div>
+      <div class="campaign__details-content" [ngClass]="{ 'open': isOpen }">
+        <p><strong>Objectif:</strong> {{ selectedCampaign.objective }}</p>
+        <p><strong>Comment ça marche:</strong></p>
+        <ul>
+          <li *ngFor="let step of selectedCampaign.steps">
+            <span>{{ step }}</span>
+          </li>
+        </ul>
+        <p><strong>Avantages:</strong></p>
+        <ul>
+          <li *ngFor="let advantage of selectedCampaign.advantages">
+            <span>{{ advantage }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Active Campaigns List -->
+    <section class="campaign__active-list">
+      <h3>Mes campagnes actives</h3>
+      <div class="campaign__active-items" fxLayout="row wrap">
+        <div *ngFor="let campaign of campaigns.slice(0, loadIndex)"
+          class="campaign__active-item" fxFlex.xs="100" fxFlex.gt-sm="49" >
+          <div class="campaign__icon-circle" [ngClass]="campaign.type">
+            <i *ngIf="getCampaignIcon(campaign.type).length > 2" [class]="getCampaignIcon(campaign.type)"></i>
+            <span *ngIf="getCampaignIcon(campaign.type).length < 3">{{ getCampaignIcon(campaign.type) }}</span>
+          </div>
+          <div class="campaign__info" fxFlex>
+            <div class="campaign__title">{{ campaign.title }}</div>
+            <div class="campaign__value">Valeur : {{ campaign.value }}</div>
+            <div class="campaign__description">{{ campaign.info }}</div>
+          </div>
+          <label class="campaign__switch">
+            <input type="checkbox" [checked]="campaign.active" (change)="onToggleCampaign(campaign)">
+            <span class="campaign__slider" [ngClass]="campaign.type"></span>
+          </label>
+          <button class="campaign__edit-button" (click)="onEditCampaign(campaign)">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Load More Button -->
+    <div class="campaign__load-more" fxLayoutAlign="center" *ngIf="campaigns.length > loadIndex">
+      <button class="campaign__load-more-button" (click)="onLoadMore()">
+        Voir plus <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
+
