@@ -1,15 +1,12 @@
 <mat-toolbar id="menu-toolbar" class="top-navbar mat-elevation-z2" fxLayoutAlign="center center">
     <!-- <a mat-button routerLink="/" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'NAV.HOME' | translate }}</a> -->
-    <a mat-button [routerLink]="['/products', 'mode']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Mode - Beauté</a>
-    <a mat-button [routerLink]="['/products', 'health']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Santé - Bien être</a>
-    <a mat-button [routerLink]="['/products', 'household']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Electroménagers</a>
-    <a mat-button [routerLink]="['/products', 'multimedia']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Multimédia</a>
-    <a mat-button [routerLink]="['/products', 'home']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Maison - Bureau</a>
-    <!-- <a mat-button [routerLink]="['/products', 'materials']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Matériels & Outils</a> -->
-    <a mat-button [routerLink]="['/products', 'auto']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Auto - Moto</a>
-    <a mat-button [routerLink]="['/products', 'custom']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'NAV.OTHERS' | translate }}</a>
-    <!-- <a mat-button routerLink="/contact" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'NAV.CONTACT' | translate }}</a> -->
-    <!-- <a mat-button [matMenuTriggerFor]="menu" (click)="openMegaMenu()">{{'Fashion' | translate}}<mat-icon class="caret" iconPositionEnd>arrow_drop_down</mat-icon></a> -->
+    <a mat-button [routerLink]="['/categories', 'mode']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Mode - Beauté</a>
+    <a mat-button [routerLink]="['/categories', 'health']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Santé - Bien être</a>
+    <a mat-button [routerLink]="['/categories', 'household']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Electroménagers</a>
+    <a mat-button [routerLink]="['/categories', 'multimedia']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Multimédia</a>
+    <a mat-button [routerLink]="['/categories', 'home']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Maison - Bureau</a>
+    <a mat-button [routerLink]="['/categories', 'auto']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">Auto - Moto</a>
+    <a mat-button [routerLink]="['/categories', 'custom']" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ 'NAV.OTHERS' | translate }}</a>
     <mat-menu #menu="matMenu" [overlapTrigger]="false" class="mega-menu app-dropdown">
         <div fxLayout="row wrap">
             <div fxFlex="20" fxLayout="column" class="p-1">

@@ -488,10 +488,6 @@ export class ParrainageComponent implements OnInit {
   getCampaignIcon(type: string): string {
     return this.campaignTypes.find(t => t.type === type)?.icon;
   }
-
-  selectCampaign(campaign) {
-    this.selectedCampaign = campaign;
-  }
 // ----------------------------------------------------------------------------------------------------------------
 
 }

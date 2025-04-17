@@ -238,7 +238,7 @@
       <h3>Types de campagnes</h3>
       <div class="campaign__types-list" fxLayout="row wrap">
         <div *ngFor="let type of campaignTypes" class="campaign__type-card" [class.active]="selectedCampaign === type"
-          fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="selectCampaign(type)" >
+          fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="selectedCampaign = type" >
           <div class="campaign__type-header">
             <div class="campaign__icon-circle">
               <i *ngIf="type.icon.length > 2" [class]="type.icon"></i>
