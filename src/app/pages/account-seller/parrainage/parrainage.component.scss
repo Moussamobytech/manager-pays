@@ -83,7 +83,6 @@ $fid_green: #548580;
     margin: 0 auto 40px;
     background: #fff;
 
-    // Header and Create Button
     .campaign__header {
       display: flex;
       justify-content: space-between;
@@ -119,7 +118,6 @@ $fid_green: #548580;
       }
     }
 
-    // Campaign Types Section
     .campaign__types {
       margin-top: 24px;
 
@@ -185,7 +183,6 @@ $fid_green: #548580;
       }
     }
 
-    // Campaign Details Section
     .campaign__details {
       border: 1px solid #eee;
       border-radius: 10px;
@@ -199,23 +196,6 @@ $fid_green: #548580;
         padding: 10px;
         border-radius: 10px;
         cursor: pointer;
-
-        // .campaign__icon-circle {
-        //   width: 50px;
-        //   height: 50px;
-        //   border-radius: 50%;
-        //   background-color: $primary;
-        //   color: $amber;
-        //   display: flex;
-        //   align-items: center;
-        //   justify-content: center;
-        //   font-size: 1.2em;
-        //   margin-right: 10px;
-
-        //   i {
-        //     font-size: 1.5em;
-        //   }
-        // }
 
         .campaign__details-info {
           flex-grow: 1;
@@ -271,7 +251,6 @@ $fid_green: #548580;
       }
     }
 
-    // Active Campaigns Section
     .campaign__active-list {
       margin-top: 24px;
 
@@ -374,7 +353,6 @@ $fid_green: #548580;
       }
     }
 
-    // Load More Button
     .campaign__load-more {
       margin-top: 16px;
 
@@ -394,7 +372,6 @@ $fid_green: #548580;
       }
     }
 
-    // Global icon styles (can be reused across sub-components)
     .campaign__icon-circle {
       width: 50px;
       height: 50px;
@@ -420,7 +397,6 @@ $fid_green: #548580;
       }
     }
 
-    // Responsive adjustments
     @media (max-width: 600px) {
       padding: 8px;
       .campaign__type-card,
