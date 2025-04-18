@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { CommandeService } from 'src/app/services/commande.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
 
@@ -24,8 +25,11 @@ export class AccountComponent implements OnInit {
   ];
   selectedLogo: File | null = null ;
   public currentUser:any = this.auth.currentUser();
+  status: any;
+  orders: any;
 
-  constructor(private auth : AuthenticationService, private imgCompressService:ImageCompressService,
+  constructor(private auth : AuthenticationService,
+    private commandeService:CommandeService, private imgCompressService:ImageCompressService,
     private cm:CommonService,) { }
 
     user:any
@@ -33,8 +37,7 @@ export class AccountComponent implements OnInit {
 
     this.currentUser = this.auth.currentUser()
    this.user = this.currentUser;
-    console.log("USER = ",this.user);
-    
+   this.getAllCommande();    
   }
 
   onFileSelected(event: Event) {
@@ -67,4 +70,25 @@ export class AccountComponent implements OnInit {
     }
   }
 
+
+
+  getAllCommande() {
+    this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(datas => {
+      this.orders = datas;
+      console.log(":::::::::::: MES HISTORIQUES DE COMMANDES :::: ",this.orders);
+      
+    }, error => {
+      //this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+      console.error('Error during recharge:', error);
+    });
+
+  }
+
+  getAllStatus(){
+    this.commandeService.getAllStatusCommander().subscribe(datas => {
+      this.status = datas;
+    }, error => {
+      console.error('Error during recharge:', error);
+    });
+  }
 }
