@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/models/product.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
@@ -6,6 +6,8 @@ import { CommandeService } from 'src/app/services/commande.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { ProductService } from 'src/app/services/product.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-account',
@@ -14,11 +16,13 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class AccountComponent implements OnInit {
   defaultLogoUrl = 'assets/images/icons/user_icon.png';
+  showMoreCards: boolean = false;
+  displayedOrdersCount: number = 3; // Nombre initial d'ordres affichés
   cards = [
     { icon: 'fas fa-sack-dollar', title: 'Mes gains', content: '20000F', routerLink: 'earnings', cardClass: 'amber' },
     { icon: 'fas fa-exchange-alt', title: 'Invite tes amis', content: 'Gagne jusqu\'à 5000 F par ami invité !', routerLink: '/referal', cardClass: 'primary' },
     { icon: 'fa-solid fa-phone', title: 'Mettre à jour', content: 'Mon numéro de téléphone', routerLink: 'settings', cardClass: 'primary' },
-    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', cardClass: 'amber' },
+    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', routerLink: 'settings', cardClass: 'amber' },
   ];
   historiqueData = [
   { image: 'assets/images/ads/3.jpg', name: 'Chemise homme', price: '35 000F', status: 'Livrée', date: '05/02/2025', color: 'accent' },
@@ -32,6 +36,13 @@ export class AccountComponent implements OnInit {
   user:any;
   orders: any[] = [];
   status: any[] = [];
+  showMoreOrders: boolean = false;
+  displayedColumns: string[] = ['produit', 'quantite', 'montant', 'date', 'statut'];
+  dataSource = new MatTableDataSource<any>([]);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('input') input: ElementRef;
+  pageSize = 10;
+  pageSizeOptions = [10, 20, 30];
 
   constructor(
     private auth: AuthenticationService, 
@@ -44,9 +55,11 @@ export class AccountComponent implements OnInit {
   async ngOnInit() {
     this.favorisProducts = await this.produitService.getProductByNewArrival(50)
     this.currentUser = this.auth.currentUser()
-   this.user = this.currentUser;
-   this.getAllCommande();    
+    this.user = this.currentUser;
+    this.getAllCommande();    
   }
+
+
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -78,18 +91,25 @@ export class AccountComponent implements OnInit {
     }
   }
 
-
-
   getAllCommande() {
     this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(datas => {
       this.orders = datas;
-      console.log(":::::::::::: MES HISTORIQUES DE COMMANDES :::: ",this.orders);
-      
+      this.dataSource = new MatTableDataSource<any>(this.orders);
+      this.dataSource.paginator = this.paginator;
+      // Configurer le filtre pour rechercher dans plusieurs champs
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        const searchStr = (
+          data.produitNom?.toLowerCase() + ' ' +
+          data.montant?.toString() + ' ' +
+          data.quantite?.toString() + ' ' +
+          data.dateCommande?.toLowerCase()
+        ).trim();
+        return searchStr.indexOf(filter) !== -1;
+      };
+      console.log(":::::::::::: MES HISTORIQUES DE COMMANDES :::: ",JSON.stringify(this.orders));
     }, error => {
-      //this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
       console.error('Error during recharge:', error);
     });
-
   }
 
   getAllStatus(){
@@ -98,5 +118,87 @@ export class AccountComponent implements OnInit {
     }, error => {
       console.error('Error during recharge:', error);
     });
+  }
+
+  selectTab(tab: string) {
+    this.selectedTab = tab;
+  }
+
+  WhatsAppUs(card: string) {
+    console.log(card);
+    if(card.toLowerCase().includes("revendeur")){
+      let message = "Bonjour, Je souhaiterais postuler pour devenir revendeur sur Fidelity Market.";
+      const link = "https://wa.me/22376007979?text=" + encodeURIComponent(message);
+      window.open(link, "_blank");
+    }
+  }
+
+  getStatusColor(status: string): string {
+    switch(status.toUpperCase()) {
+      case 'PENDING':
+        return 'amber'; // #feb930 (jaune/orange)
+      case 'DELIVERED':
+        return 'accent'; // #548580 (vert)
+      case 'CANCEL':
+        return 'warn'; // #d81b60 (rouge)
+      case 'VALIDE':
+        return 'primary'; // #25224a (bleu foncé)
+      default:
+        return 'primary';
+    }
+  }
+
+  getStatusLabel(status: string): string {
+    switch(status.toUpperCase()) {
+      case 'PENDING':
+        return 'En attente';
+      case 'DELIVERED':
+        return 'Livré';
+      case 'CANCEL':
+        return 'Annulé';
+      case 'VALIDE':
+        return 'Validé';
+      default:
+        return status;
+    }
+  }
+
+  loadMoreOrders() {
+    this.displayedOrdersCount += 3; // Ajoute 3 ordres supplémentaires
+  }
+
+  shouldShowSearch(): boolean {
+    return this.orders.length > 10;
+  }
+
+  toggleShowMore() {
+    this.showMoreOrders = !this.showMoreOrders;
+    if (this.showMoreOrders) {
+      this.updateDataSource();
+    }
+  }
+
+  updateDataSource() {
+    this.dataSource = new MatTableDataSource<any>(this.orders);
+    this.dataSource.paginator = this.paginator;
+    // Réappliquer le filterPredicate lors de la mise à jour
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const searchStr = (
+        data.produitNom?.toLowerCase() + ' ' +
+        data.montant?.toString() + ' ' +
+        data.quantite?.toString() + ' ' +
+        data.dateCommande?.toLowerCase()
+      ).trim();
+      return searchStr.indexOf(filter) !== -1;
+    };
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

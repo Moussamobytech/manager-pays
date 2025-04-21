@@ -624,4 +624,10 @@ onlyCartItemCount:any = 0
       
     }*/
       
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.productList = this.productList.filter(product => 
+      product.nom.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }
 }

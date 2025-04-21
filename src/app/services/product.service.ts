@@ -209,8 +209,10 @@ getTotalViewsYear(): Observable<any> {
 
 
   public getproductOnPromo():Observable<any>{
-
     return this.api.get('/campagne/all-product-promo-active');
   }
 
+  public addToFavorites(productId: string): Observable<any> {
+    return this.api.post(`/produit/favorite/${productId}`, null);
+  }
 }

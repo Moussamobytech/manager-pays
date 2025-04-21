@@ -7,9 +7,26 @@
       <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
     </div>
     <h2>{{user.firstname}} {{user.lastname}}</h2>
-  </div>
+  </div>  
+
   <div fxLayout="row wrap" class="card-container">
-    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards" fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(0, 5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24">
+      <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
+        <span class="card-icon"><i [class]="card.icon"></i></span>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.content }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="see-more-container" *ngIf="cards.length > 5">
+    <button mat-raised-button color="primary" class="see-more-btn" (click)="showMoreCards = !showMoreCards">
+      {{ showMoreCards ? 'Voir moins' : 'Voir plus' }}
+    </button>
+  </div>
+
+  <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
+    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24">
       <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
@@ -29,22 +46,42 @@
 
   <div class="tab-content">
     <div *ngIf="selectedTab === 'historique'" class="historique">
+      <div class="search-container" fxLayout="row" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline" class="w-100" style="max-width: 500px;">
+          <mat-label>Rechercher</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer par produit, montant, quantité ou date" #input>
+        </mat-form-field>
+      </div>
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-        <div *ngFor="let data of historiqueData" fxFlex="100" fxFlex.gt-sm="32">
+        <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" >
           <div class="historique-item">
-            <img [src]="data.image" alt="Image Produit">
+            <img [src]="order.produitImage" alt="Image Produit">
             <div>
-              <p>{{ data.name }}</p>
-              <p>{{ data.price }}</p>
-              <button>Acheter</button>
+              <p>{{ order.produitNom }}</p>
+              <p>{{ order.montant | number }} F</p>
+              <p>Quantité: {{ order.quantite }}</p>
             </div>
             <div class="status">
-              <p [ngClass]="data.color">{{ data.status }}</p>
-              <p>{{ data.date }}</p>
+              <p [ngClass]="getStatusColor(order.statutCommande.name)">{{ getStatusLabel(order.statutCommande.name) }}</p>
+              <p>{{ order.dateCommande | date:'dd/MM/yyyy' }}</p>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="see-more-container" *ngIf="!showMoreOrders && orders.length > 3">
+        <button mat-raised-button color="primary" class="see-more-btn" (click)="toggleShowMore()">
+          Voir plus d'historiques
+        </button>
+      </div>
+
+      <mat-paginator 
+        *ngIf="showMoreOrders"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        showFirstLastButtons
+        aria-label="Select page of orders">
+      </mat-paginator>
     </div>
 
     <div *ngIf="selectedTab === 'favoris'" class="favoris">
