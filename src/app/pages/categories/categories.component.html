@@ -4,7 +4,7 @@
     <a routerLink="">Voir les boutiques <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
   </div>
   <div fxFlex="47" fxFlex.gt-xs="30" fxFlex.gt-sm="22" fxFlex.gt-md="17" *ngFor="let category of categories" class="card">
-    <img [src]="category.image" alt="{{ category.nom }}" class="card-image" />
+    <img [src]="'assets/images/logo_fidelity.gif'" (error)="onImageError($event)" (load)="onImageLoad($event,category.image)" alt="{{ category.nom }}" class="card-image" />
     <div class="card-title">{{ category.nom }}</div>
   </div>
 </div>

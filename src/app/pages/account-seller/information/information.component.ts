@@ -1,186 +1,7 @@
-// import { Component, OnInit } from '@angular/core';
-// import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-// import { MatSnackBar } from '@angular/material/snack-bar';
-// import {  matchingPasswords } from '../../../theme/utils/app-validators';
-// import { User } from 'src/app/models/user.models';
-// import { AuthenticationService } from 'src/app/services/auth.service';
-// import { ImageCompressService } from 'src/app/services/image-compress.servive';
-// import { CommonService } from 'src/app/services/common.service';
-
-// @Component({
-//   selector: 'app-information',
-//   templateUrl: './information.component.html',
-//   styleUrls: ['./information.component.scss']
-// })
-// export class InformationComponent implements OnInit {
-//   infoForm: UntypedFormGroup;
-//   passwordForm: UntypedFormGroup;
-//   currentUser : User
-//   hide = true;
-//   hide1 = true;
-//   hide2 = true;
-//   wordCount: number = 0;
-//   maxWords: number = 70;
-//   imgLink: string = "https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file=";
-//   constructor(public formBuilder: UntypedFormBuilder,
-//     private auth : AuthenticationService,
-//     public snackBar: MatSnackBar,
-//     private imgCompressService:ImageCompressService,
-//     private cm:CommonService,
-//   ) { }
-//   ngOnInit() {
-//     this.currentUser = this.auth.currentUser()
-//     let cur = this.currentUser;
-//     let bgs = [cur.bg1, cur.bg2, cur.bg3];
-//     const curBanners: any[] = bgs.filter(item => item).map(item => ({ preview: this.imgLink+item })); // i filter, remove null values then push the rewsult in curBaner
-//     console.log("currentUser :::: ",this.currentUser)
-
-//     this.infoForm = this.formBuilder.group({
-//       'firstname': [(cur.firstname || null), Validators.compose([ Validators.minLength(3)])],
-//       'lastname': [(cur.lastname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
-//       'phoneNumber': [cur.phoneNumber, Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(8)])],
-//       'profiles': [cur.profiles || null],
-//       'boutiqueName': [cur.name || null],
-//       'adresse': [cur.adresse || null],
-//       ////////////////////////////////////////////////
-//       'email': [(cur.email || null), Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
-//       'description': [cur.description || null],
-//       'banners': [curBanners|| null],
-//     });
-//     this.passwordForm = this.formBuilder.group({
-//       'currentPassword': ['', Validators.required],
-//       'newPassword': ['', Validators.required],
-//       'confirmNewPassword': ['', Validators.required],
-//     },{validator: [matchingPasswords('newPassword', 'confirmNewPassword')]});
-//   }
-
-//   public async onInfoFormSubmit(values:any):Promise<void> {
-//     if (this.infoForm.valid) {
-//       let banners: { bg1: File | null; bg2: File | null; bg3: File | null } = { bg1: null, bg2: null, bg3: null };
-//       await this.compressAndPrepareImages().then((compressedFiles) => {
-//         compressedFiles.forEach((file,i) => {banners["bg"+(i+1)] = file});
-//       });
-//       if(this.wordCount == this.maxWords){
-//         this.cm.openFailureSnackBar("La description ne doit pas depasser 70 mots.")
-//       }
-
-//       let data = new FormData();
-//       data.append('firstname', values.firstname);
-//       data.append('lastname', values.lastname);
-//       data.append('phoneNumber', values.phoneNumber);
-//       data.append('email', values.email);
-//       data.append('adresse', values.adresse);
-//       data.append('nom', values.boutiqueName);
-//       data.append('description', values.description);
-//       if (banners.bg1) data.append('bg1', banners.bg1);
-//       if (banners.bg2) data.append('bg2', banners.bg2);
-//       if (banners.bg3) data.append('bg3', banners.bg3);
-//       data.append('type', this.currentProfile(values.profiles));
-//       console.log("data: ",data);
-//       let res = await this.auth.updateUserInfo(this.currentUser.id, data)
-//       if(res == "OK"){
-//         this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
-//         this.currentUser = await this.auth.info(this.currentUser.username);// update user info
-//         console.log(this.currentUser);
-//       }else{
-//         this.snackBar.open('Une erreur est intervenu lors de la mises à jour de vos informations !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-//       }
-//     }
-//   }
-
-//   public async onPasswordFormSubmit(values: Object): Promise<void> {
-//     if (this.passwordForm.valid && this.passwordForm.value.newPassword) {
-//       let data: any = {
-//         username: this.currentUser.username,
-//         password: this.passwordForm.value.currentPassword,
-//         newpassword: this.passwordForm.value.newPassword
-//       };
-
-//       try {
-//         let res: any = await this.auth.updatePassword(data);
-//         console.log("Response:", res);
-//         if (res === "OK") {
-//           this.snackBar.open('Your password changed successfully!', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
-//           // window.location.reload();
-//         } else {
-//           this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations!', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-//         }
-//       } catch (error: any) {
-//         console.log("Error:", error);
-//         this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations!', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-//       }
-//     }
-//   }
-
-//   currentProfile(roles){
-//     let key = roles[0].name
-//     let profil = ""
-//     switch (key) {
-//       case "ROLE_PARTICULIER":
-//         profil = "particulier"
-//         break;
-//       case "ROLE_BOUTIQUE":
-//         profil = "Boutique"
-//         break
-//       case "ROLE_ADMIN":
-//         profil = "Administrateur"
-//         break;
-//       case "ROLE_USER":
-//         profil = "Utilisateur"
-//         break;
-
-//       default:
-//         profil = "N/A"
-//         break;
-//     }
-//     return profil
-//   }
-
-//   compressAndPrepareImages () {
-//     const compressedImagePromises = this.infoForm.value.banners.map(async (item: any) => {
-//       if(item.file){
-//         const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 100);
-//         const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-//         const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
-//         return compressedFile;
-//       }else{
-//         let compressedFile = await this.convertUrlToFile(item.preview);
-//         return compressedFile;
-//       }
-//     });
-//     return Promise.all(compressedImagePromises);
-//   }
-
-//   updateDescriptionWordCount(event: Event) {
-//     const value = (event.target as HTMLTextAreaElement).value;
-//     this.wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
-//   }
-
-//   onDescriptionInput(event: KeyboardEvent) {
-//     const inputElement = event.target as HTMLTextAreaElement;
-//     const value = inputElement.value;
-//     const words = value.trim().split(/\s+/);
-//     const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
-
-//     if (words.length >= this.maxWords && !allowedKeys.includes(event.key)) {
-//       event.preventDefault();
-//     }
-//   }
-
-//   async convertUrlToFile(url: string): Promise<File> {
-//     const response = await fetch(url);
-//     const blob = await response.blob();
-//     const file = new File([blob], "converted.jpeg", { type: blob.type });
-//     return file;
-//   }
-// }
-
-
 import { Component, OnInit } from '@angular/core';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { matchingPasswords } from '../../../theme/utils/app-validators';
-import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { CommonService } from 'src/app/services/common.service';
@@ -237,30 +58,26 @@ export class InformationComponent implements OnInit {
     let cur = this.currentUser;
 
     let bgs = [cur.bg1, cur.bg2, cur.bg3];
-   // Images de l'utilisateur actuel
-  const curBanners: any[] = bgs.filter(item => item).map(item => ({ preview: this.imgLink + item }));
+    // Images de l'utilisateur actuel
+    const curBanners: any[] = bgs.filter(item => item).map(item => ({ preview: this.imgLink + item }));
 
-  // Récupération des bannières serveur
-  this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
-    const serverBanners = [datas.image1, datas.image2, datas.image3]
-      .filter(img => img)
-      .map(img => ({ preview: img }));
-  
-    this.bannieres = serverBanners.length > 0 ? serverBanners : curBanners;
-    const mergedBanners = [0, 1, 2].map(i => {
-      const serverImg = serverBanners[i]?.preview;
-      const localImg = curBanners[i]?.preview;
-      return { preview: serverImg || localImg };
+    // Récupération des bannières serveur
+    this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
+      const serverBanners = [datas.image1, datas.image2, datas.image3]
+        .filter(img => img)
+        .map(img => ({ preview: img }));
+
+      this.bannieres = serverBanners.length > 0 ? serverBanners : curBanners;
+      const mergedBanners = [0, 1, 2].map(i => {
+        const serverImg = serverBanners[i]?.preview;
+        const localImg = curBanners[i]?.preview;
+        return { preview: serverImg || localImg };
+      });
+      this.bannieres = mergedBanners;
+      this.infoForm.patchValue({
+        banners: mergedBanners
+      });
     });
-    this.bannieres = mergedBanners;
-    this.infoForm.patchValue({
-      banners: mergedBanners
-    });
-    
-    
-  });
-  
-  
 
     const logo = [{ preview: this.imgLink + cur.logo }]
     const description = cur.description || "";
@@ -289,7 +106,7 @@ export class InformationComponent implements OnInit {
     }, { validator: [matchingPasswords('newPassword', 'confirmNewPassword')] });
   }
 
-  get deliveryCountries(): FormArray {    
+  get deliveryCountries(): FormArray {
     return this.infoForm.get('deliveryCountries') as FormArray;
   }
 
@@ -302,35 +119,19 @@ export class InformationComponent implements OnInit {
   handleCountryChange(event: any) {
     this.countryService.getById(event.value).subscribe(datas => {
       this.selectedCountry = datas
-
       // Définir le masque en fonction du pays sélectionné
       let phoneLength = this.getPhoneLength(datas.nom); // Récupérer la longueur du numéro
       this.phoneMask = '0'.repeat(phoneLength); // Génère un masque comme "000000000"
-
       // Réinitialiser le champ de téléphone
       this.infoForm.controls['phoneNumber'].setValue('');
-
-
     })
   }
 
   getPhoneLength(countryName: string): number {
     const phoneLengths: { [key: string]: number } = {
-      "Bénin": 8,
-      "Burkina Faso": 8,
-      "Cap-Vert": 7,
-      "Côte d'Ivoire": 10,
-      "Gambie": 7,
-      "Ghana": 9,
-      "Guinée": 9,
-      "Guinée-Bissau": 7,
-      "Libéria": 9,
-      "Mali": 8,
-      "Niger": 8,
-      "Nigeria": 10,
-      "Sénégal": 9,
-      "Sierra Leone": 8,
-      "Togo": 8
+      "Bénin": 8,"Burkina Faso": 8,"Cap-Vert": 7,"Côte d'Ivoire": 10,"Gambie": 7,
+      "Ghana": 9,"Guinée": 9,"Guinée-Bissau": 7,"Libéria": 9,"Mali": 8,
+      "Niger": 8,"Nigeria": 10,"Sénégal": 9,"Sierra Leone": 8,"Togo": 8
     };
 
     return phoneLengths[countryName] || 9; // Par défaut, retourne 9 si le pays n'est pas trouvé
@@ -338,29 +139,17 @@ export class InformationComponent implements OnInit {
 
   public async onInfoFormSubmit(values: any): Promise<void> {
     if (!this.infoForm.valid) return;
-  
+
     if (this.wordCount == this.maxWords) {
       this.cm.openFailureSnackBar("La description ne doit pas dépasser 70 mots.");
       return;
     }
-  
-  
-  
+
     // Déclaration du type
-    const data: {
-      firstname: any;
-      lastname: any;
-      phoneNumber: any;
-      email: any;
-      adresse: any;
-      name: any;
-      description: any;
-      type: string;
-      idCountry: any;
-      bg1?: File;
-      bg2?: File;
-      bg3?: File;
-    } = {
+    const data: { firstname: any; lastname: any; phoneNumber: any;
+      email: any; adresse: any;name: any;description: any;
+      type: string; idCountry: any;bg1?: File;bg2?: File;bg3?: File; }
+      = {
       firstname: values.firstname,
       lastname: values.lastname,
       phoneNumber: values.phoneNumber,
@@ -371,29 +160,29 @@ export class InformationComponent implements OnInit {
       type: this.currentProfile(values.profiles),
       idCountry: values.country,
     };
-  
-   
-    
+
+
+
     const res = await this.auth.updateUserInfo(this.currentUser.id, data);
-  
+
     if (res === "OK") {
       this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', {
         panelClass: 'success',
         verticalPosition: 'top',
         duration: 3000,
       });
-      this.currentUser = await this.auth.info(this.currentUser.username); // refresh user info
+      this.currentUser = await this.auth.info(this.currentUser.username);
         // Préparer les fichiers de bannière (bg1, bg2, bg3)
-    const banners: { bg1: File | null; bg2: File | null; bg3: File | null } = { bg1: null, bg2: null, bg3: null };
-  
-    const compressedFiles = await this.compressAndPrepareImages();
-    compressedFiles.forEach((file, i) => {
-      banners[`bg${i + 1}` as keyof typeof banners] = file;
-    });
-     // Ajouter les bannières si elles existent
-     if (banners.bg1) data.bg1 = banners.bg1;
-     if (banners.bg2) data.bg2 = banners.bg2;
-     if (banners.bg3) data.bg3 = banners.bg3;
+      const banners: { bg1: File | null; bg2: File | null; bg3: File | null } = { bg1: null, bg2: null, bg3: null };
+
+      const compressedFiles = await this.compressAndPrepareImages();
+      compressedFiles.forEach((file, i) => {
+        banners[`bg${i + 1}` as keyof typeof banners] = file;
+      });
+      // Ajouter les bannières si elles existent
+      if (banners.bg1) data.bg1 = banners.bg1;
+      if (banners.bg2) data.bg2 = banners.bg2;
+      if (banners.bg3) data.bg3 = banners.bg3;
       if(data.bg1 || data.bg2 || data.bg3){
         const formData = new FormData();
         formData.append('userId', this.currentUser.id);
@@ -404,75 +193,15 @@ export class InformationComponent implements OnInit {
 
       }
       this.router.navigate(['/account-seller/settings']);
-    } else {
-      this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations !', '×', {
-        panelClass: 'error',
-        verticalPosition: 'top',
-        duration: 3000,
-      });
-    }
-  }
-  
-
-/*
-  public async onInfoFormSubmit(values: any): Promise<void> {
-    if (this.infoForm.valid) {
-      let banners: { bg1: File | null; bg2: File | null; bg3: File | null } = { bg1: null, bg2: null, bg3: null };
-      await this.compressAndPrepareImages().then((compressedFiles) => {
-        compressedFiles.forEach((file, i) => { banners["bg" + (i + 1)] = file });
-      });
-      if (this.wordCount == this.maxWords) {
-        this.cm.openFailureSnackBar("La description ne doit pas depasser 70 mots.")
-      }
-
-      let data: {
-        firstname: any;
-        lastname: any;
-        phoneNumber: any;
-        email: any;
-        adresse: any;
-        name: any;
-        description: any;
-        type: string;
-        idCountry: any;
-        bg1?: File;
-        bg2?: File;
-        bg3?: File;
-      } = {
-        firstname: values.firstname,
-        lastname: values.lastname,
-        phoneNumber: values.phoneNumber,
-        email: values.email,
-        adresse: values.adresse,
-        name: values.boutiqueName,
-        description: values.description,
-        type: this.currentProfile(values.profiles),
-        idCountry: values.country,
-      };
-
-      if (banners.bg1) data.bg1 = banners.bg1;
-      if (banners.bg2) data.bg2 = banners.bg2;
-      if (banners.bg3) data.bg3 = banners.bg3;
-
-
-      console.log(":::::::::::::::: BOUTIQUE 1 = ",data.bg1);
-      console.log(":::::::::::::::: BOUTIQUE 2 = ",data.bg2);
-      console.log(":::::::::::::::: BOUTIQUE 3 = ",data.bg3);
-      
-
-      let res = await this.auth.updateUserInfo(this.currentUser.id, data)
-      if (res == "OK") {
-        this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', { panelClass: 'success', verticalPosition: 'top', duration: 3000 });
-        this.currentUser = await this.auth.info(this.currentUser.username); // update user info
-        this.router.navigate(['/account-seller/settings']);
-
       } else {
-        this.snackBar.open('Une erreur est intervenue lors de la mises à jour de vos informations !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
+        this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations !', '×', {
+          panelClass: 'error',
+          verticalPosition: 'top',
+          duration: 3000,
+        });
       }
     }
-  }
 
-  */
 
   public async onPasswordFormSubmit(values: Object): Promise<void> {
     if (this.passwordForm.valid && this.passwordForm.value.newPassword) {
@@ -512,7 +241,6 @@ export class InformationComponent implements OnInit {
       case "ROLE_USER":
         profil = "Utilisateur"
         break;
-
       default:
         profil = "N/A"
         break;
@@ -524,40 +252,24 @@ export class InformationComponent implements OnInit {
     const compressedImagePromises = this.infoForm.value.banners.map(async (item: any) => {
       if (item.file) {
         // L'image est locale (venant d'un input file)
-        const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 100);
+        const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 1000, 100);
         const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
         return new File([compressedBlob], randomName, { type: compressedBlob.type });
       } else if (item.preview) {
-
         // L'image est une URL (déjà uploadée), on la télécharge depuis le backend
         const file = await this.bannersService.convertUrlToFile(item.preview);
-        const compressedBlob = await this.imgCompressService.compressImage(file, 1200, 800, 100);
+        const compressedBlob = await this.imgCompressService.compressImage(file, 1200, 1000, 100);
         const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
         return new File([compressedBlob], randomName, { type: compressedBlob.type });
       } else {
         return null;
       }
     });
-  
+
     // Filtrer les fichiers null (au cas où)
     const files = await Promise.all(compressedImagePromises);
     return files.filter((f): f is File => f !== null);
   }
-
-  /*compressAndPrepareImages() {
-    const compressedImagePromises = this.infoForm.value.banners.map(async (item: any) => {
-      if (item.file) {
-        const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 100);
-        const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-        const compressedFile = new File([compressedBlob], randomName, { type: compressedBlob.type });
-        return compressedFile;
-      } else {
-        let compressedFile = await this.convertUrlToFile(item.preview);
-        return compressedFile;
-      }
-    });
-    return Promise.all(compressedImagePromises);
-  }*/
 
   updateDescriptionWordCount(event: Event) {
     const value = (event.target as HTMLTextAreaElement).value;

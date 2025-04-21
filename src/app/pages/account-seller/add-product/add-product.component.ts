@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AppService } from 'src/app/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,10 @@ import { ProductService } from 'src/app/services/product.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { ImgImproveDialogComponent } from './img-improve-dialog/img-improve-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ImageProcessingService } from 'src/app/services/img-processing.service';
 
 @Component({
   selector: 'app-add-product',
@@ -21,12 +25,17 @@ export class AddProductComponent implements OnInit {
   public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""];
   public selectedColors:string;
   public categories:Category[];
-  private sub: any;
+  private sub1: any;
+  private sub2: any;
   private currentUser: User;
   public id:any;
+  isImproveBtnDisabled:boolean=true;
+  inputFileFlex:string= '';
+  reponseBgLessImgs: any[] = [];
 
   constructor(public appService:AppService, public formBuilder: UntypedFormBuilder, private activatedRoute: ActivatedRoute, private commonService: CommonMessageService,
-    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router, private imgCompressService: ImageCompressService ) { }
+    private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router,
+    private imgCompressService: ImageCompressService, private dialog: MatDialog, private imgProcessing:ImageProcessingService ) { }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
@@ -37,28 +46,36 @@ export class AddProductComponent implements OnInit {
       'pricePromotion': [null, [Validators.pattern('^[0-9]*$'),Validators.minLength(3)]],
       'priceBasic': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)] ],
       "description": null,
-      "weight": [],
+      "color": null,
+      "weight": null,
+      "size": null,
       "user": this.currentUser.username,
       "categorie": [Validators.required ],
       "colors":[],
       "tailles":[]
     });
     this.getCategories();
-    this.sub = this.activatedRoute.params.subscribe(params => {
+    this.sub1 = this.activatedRoute.params.subscribe(params => {
       if(params['id']){
         this.id = params['id'];
         this.getProductById();
       }
     });
+
+    this.sub2 = this.form.controls.images.valueChanges.subscribe(value => {
+      this.isImproveBtnDisabled = !value || value.length === 0;
+    });
+    this.inputFileFlex = (window.innerWidth <= 960&&window.innerWidth >= 600) ? '25' : '33.33';
   }
+
   //Controle pour la saisie de 0
-  nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const value = parseFloat(control.value);
-    if (value === 0) {
-      return { nonZero: true };
-    }
-    return null;
-  }
+  // nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  //   const value = parseFloat(control.value);
+  //   if (value === 0) {
+  //     return { nonZero: true };
+  //   }
+  //   return null;
+  // }
   public getCategories(){
     this.category.categories().subscribe(data => {
       this.categories = data;
@@ -67,7 +84,7 @@ export class AddProductComponent implements OnInit {
 
   public getProductById(){
     this.productService.find(this.id).then((data : any) =>{
-      
+
       this.form.patchValue(data);
       this.form.controls.categorie.setValue(data.categorie.id);
       this.form.patchValue({
@@ -76,12 +93,8 @@ export class AddProductComponent implements OnInit {
       this.form.patchValue({
         tailles: data.tailles
       });
-      
+
       const images: any[] = [];
-      // if (data.image1 != null) {
-      //   let image = {link: data.image1, preview: data.image1 }
-      //   images.push(image);
-      // }
       data.images.forEach(item=>{
         let image = {
           link: item,
@@ -91,21 +104,6 @@ export class AddProductComponent implements OnInit {
       })
       this.form.controls.images.setValue(images);
     })
-
-    // this.appService.getProductById(this.id).subscribe((data:any)=>{
-
-    //   this.form.patchValue(data);
-    //   this.selectedColors = data.color;
-    //   const images: any[] = [];
-    //   data.images.forEach(item=>{
-    //     let image = {
-    //       link: item.medium,
-    //       preview: item.medium
-    //     }
-    //     images.push(image);
-    //   })
-    //   this.form.controls.images.setValue(images);
-    // });
   }
 
   public  async onSubmit(){
@@ -117,7 +115,7 @@ export class AddProductComponent implements OnInit {
 
   }
 
-  async save(){    
+  async save(){
     let size= 0;
     try {
       if (this.form.valid) {
@@ -171,7 +169,6 @@ export class AddProductComponent implements OnInit {
   }
 
   compressAndPrepareImages () {
-
     const compressedImagePromises = this.form.value.images.map(async (item: { file: File }) => {
       const compressedBlob = await this.imgCompressService.compressImage(item.file, 1200, 800, 70);
       const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
@@ -186,43 +183,25 @@ export class AddProductComponent implements OnInit {
     let size= 0;
     try {
       if (this.form.valid) {
-
         if(size > 8388608){
           this.commonService.errorToast("La taille totale de l'ensemble des images ne doit pas depasser 8 Mo")
           return;
         }
-
-        // this.form.value.images.forEach(item=>{
-        //   this.imgCompressService.compressImage(item.file,1200,800,70).then( async (blobImg) => {
-        //     const randomName = `img-${Math.random().toString(36).substring(2, 15)}.jpeg`;
-        //     let editedImg = new File([blobImg], randomName, { type: blobImg.type });
-        //     data.append('images', editedImg);
-        //   });
-        //   size += item.file.size
-        // })
-
         if(Number(this.form.value.pricePromotion) > Number(this.form.value.priceBasic) ){
           this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
           return;
         }
+
         var data = new FormData();
         data.append('nom', this.form.value.nom);
         data.append('description', this.form.value.description);
         data.append('priceBasic', this.form.value.priceBasic);
         data.append('pricePromotion', this.form.value.pricePromotion);
-        // if(this.form.value.images == null){
-        //   this.commonService.errorToast("Choississez une image au minimum")
-        //   return;
-        // }
         let i = 1;
         this.form.value.images.forEach(item=>{
-          // console.log(item)
-          // console.log(typeof(item))
-          // if (typeof(item) != "string") {
           if (item.file) {
-            data.append('images'+i, item.file);
+            data.append('image'+i, item.file);
           }
-          // data.append('images', item.file);
           i++;
         })
         // data.append('images', this.form.value.images);
@@ -250,14 +229,68 @@ export class AddProductComponent implements OnInit {
     }
   }
 
+  async openImageImproveDialog() {
+    const images = this.form.value.images;
+    const files: File[] = await Promise.all(
+      images.map((image) => {
+        if (image.link) {
+          return this.convertUrlToFile(image.link);
+        } else {
+          return image.file;
+        }
+      })
+    );
+    // let files:File[] =  this.form.value.images.map((image) => this.convertUrlToFile(image.link)) : this.form.value.images.map((image) => image.file);
+
+    console.log("files ::: ",files);
+    this.imgProcessing.removeBackground(files).subscribe(
+      (response) => {
+        console.log('Background removal successful:', response);
+        this.reponseBgLessImgs = response.results.map((result) => result.output);
+
+        const dialogRef = this.dialog.open(ImgImproveDialogComponent, {
+          width: '80%',
+          maxWidth: '600px',
+          data: {
+            images: this.reponseBgLessImgs,
+          }
+        });
+
+        dialogRef.afterClosed().subscribe((imgs) => {
+          if (imgs) {
+                this.form.controls.images.setValue(imgs);
+          } else {
+            console.log('Dialog was closed without applying any change.');
+          }
+        });
+      },
+      (error) => {
+        console.error('Error during background removal:', error);
+      }
+    );
+  }
+
   public onColorSelectionChange(event:any){
     if(event.value){
       this.selectedColors = event.value.join();
     }
   }
 
+  async convertUrlToFile(imageUrl: string): Promise<File> {
+    const lastSlash = imageUrl.lastIndexOf('/');
+    const lastEqual = imageUrl.lastIndexOf('=');
+    const slicePosition = Math.max(lastSlash, lastEqual) + 1;
+    const imageName = imageUrl.slice(slicePosition);
+    const response = await fetch('https://thingproxy.freeboard.io/fetch/'+imageUrl);
+    const blob = await response.blob();
+    const randomName = `img-${Math.random().toString(36).substring(2, 15)}.webp`;
+    const file = new File([blob], imageName||randomName, { type: blob.type });
+    return file;
+  }
+
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.sub1.unsubscribe();
+    this.sub2.unsubscribe();
   }
 
 }

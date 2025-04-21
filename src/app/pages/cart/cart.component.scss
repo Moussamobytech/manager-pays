@@ -1,4 +1,4 @@
-$primary_color: #25224a;
+// $primary_color: #25224a;
 // .cart-table.mat-mdc-table {
 //     display: block;
 //     overflow-x:auto;
@@ -362,6 +362,7 @@ $background-light: #f9f9f9;
         .similar-product {
           flex: 0 0 auto;
           text-align: center;
+          cursor: pointer;
 
           img {
             width: 100%;

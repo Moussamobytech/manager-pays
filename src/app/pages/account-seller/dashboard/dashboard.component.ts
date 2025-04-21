@@ -228,7 +228,7 @@ export class DashboardComponent implements OnInit {
         .share(shareData)
         .catch((error) => console.error('Erreur lors de l\'envoie: ', error));
     } else {
-      this.cm.openWarningSnackBar("Le partage n'est pas pris en charge par votre navigateur. Le lien a été copié")
+      this.cm.openWarningSnackBar("Partage non supporté sur ce navigateur, Lien copié !");
       this.copyLink(El);
     }
   }

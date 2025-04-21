@@ -51,14 +51,18 @@ $amber_color: #feb930;
     }
     margin-bottom: 20px;
     .more-item{
+      text-align: center;
 
       a{
         text-decoration: none;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         font-size: 14px;
         color: $amber_color;
+        padding: 4px;
+        border: 1px solid $amber_color;
+        border-radius: 10px;
         mat-icon{
           border: 1px solid $amber_color;
           border-radius: 50%;

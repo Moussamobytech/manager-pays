@@ -13,6 +13,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
+interface Campaign {
+  type: 'bienvenue' | 'promo' | 'parrainage' | 'livraison';
+  title: string;
+  value: string;
+  info: string;
+  active: boolean;
+  extra?: string;
+}
 
 @Component({
   selector: 'app-parrainage',
@@ -48,6 +56,113 @@ export class ParrainageComponent implements OnInit {
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
   shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
 
+// ----------------------------------------------------------------------------------------------------------------
+  campaignTypes = [
+    {
+      icon: '👋',
+      title: 'Bienvenue',
+      desc: 'Pour nouveaux clients',
+      objective: 'Attirer de nouveaux clients avec une offre spéciale pour leur premier achat.',
+      steps: [
+        'Offrez une réduction fixe, en pourcentage ou en produit aux nouveaux clients.',
+        'Applicable une seule fois par client.',
+        'Idéal pour encourager le premier achat.'
+      ],
+      advantages: [
+        'Augmenter le nombre de clients.',
+        'Créer une première impression positive.',
+        'Facile à mettre en place et à suivre.'
+      ],
+      type: 'bienvenue'
+    },
+    {
+      icon: 'fa-solid fa-tags',
+      title: 'Promo',
+      desc: 'Réductions spéciales',
+      objective: 'Stimuler les ventes avec une réduction temporaire sur certains produits.',
+      steps: [
+        'Définissez une réduction en pourcentage ou montant fixe.',
+        'Choisissez une date de début et de fin.',
+        'Applicable à tous vos produits ou à quelques produits.'
+      ],
+      advantages: [
+        'Booster rapidement vos ventes.',
+        'Ecouler rapidement vos stocks.',
+        'Attirer des nouveaux clients.'
+      ],
+      type: 'promo'
+    },
+    {
+      icon: 'fa-solid fa-people-arrows',
+      title: 'Parrainage',
+      desc: 'Récompensez vos clients',
+      objective: 'Encourager vos clients actuels à recommander votre boutique à leurs amis.',
+      steps: [
+        'Le client partage son code ou lien unique avec ses amis.',
+        "Ses amis obtiennent une réduction sur leur premier achat.",
+        "Le client reçoit une récompense pour chaque achat par ses amis."
+      ],
+      advantages: [
+        "Marketing gratuit par bouche-à-oreille.",
+        "Acquérir des clients de confiance.",
+        "Fidéliser vos clients existants."
+      ],
+      type: 'parrainage'
+    },
+    {
+      icon: '🚚',
+      title: 'Livraison',
+      desc: 'Livraison gratuite',
+      objective: "Encourager des achats plus importants en offrant la livraison gratuite.",
+      steps: [
+        "Fixez un montant minimum d'achat.",
+        "Offrez la livraison gratuite quand ce montant est atteint.",
+        "Choisissez une date de début et de fin."
+      ],
+      advantages: [
+        "Augmenter les achats par vos clients.",
+        "Éliminer un frein à l'achat.",
+        "Améliorer la satisfaction client."
+      ],
+      type: 'livraison'
+    }
+  ];
+
+  // Mock active campaigns
+  campaigns: Campaign[] = [
+    {
+      type: 'bienvenue',
+      title: 'Bienvenue Nouveaux Clients',
+      value: '2000 F',
+      info: 'Utilisable : 1 fois',
+      active: true
+    },
+    {
+      type: 'promo',
+      title: 'Promo Tabaski',
+      value: '-20%',
+      info: 'Expire : 30/05/2025',
+      active: true
+    },
+    {
+      type: 'parrainage',
+      title: 'Programme Parrainge',
+      value: '1000 F',
+      info: 'Par ami parraine',
+      active: false
+    },
+    {
+      type: 'livraison',
+      title: 'Livraison Offerte',
+      value: 'Pour achats > 20 000F',
+      info: 'Expire : 30/05/2025',
+      active: false
+    }
+  ];
+  selectedCampaign = this.campaignTypes[0];
+  isOpen: boolean = true;
+  loadIndex: number = 4;
+// ----------------------------------------------------------------------------------------------------------------
 
   constructor(
     public appService: AppService,
@@ -351,7 +466,28 @@ export class ParrainageComponent implements OnInit {
   }
 
 
+// ----------------------------------------------------------------------------------------------------------------
+  onAddCampaign(type: string) {
+    // put logics
+    console.log('Add campaign of type:', type);
+  }
 
+  onEditCampaign(campaign: Campaign) {
+    // put logics
+    console.log('Edit campaign:', campaign);
+  }
 
+  onToggleCampaign(campaign: Campaign) {
+    campaign.active = !campaign.active;
+  }
+
+  onLoadMore() {
+    this.loadIndex += 4;
+  }
+
+  getCampaignIcon(type: string): string {
+    return this.campaignTypes.find(t => t.type === type)?.icon;
+  }
+// ----------------------------------------------------------------------------------------------------------------
 
 }

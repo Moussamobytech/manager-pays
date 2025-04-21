@@ -8,7 +8,6 @@ export class LazyLoadImagesDirective implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const supports = 'loading' in HTMLImageElement.prototype;
-    console.log("the lazy loas");
     if (supports) {
       this.elementRef.nativeElement.setAttribute('loading', 'lazy');
     } else {

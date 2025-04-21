@@ -20,6 +20,7 @@ import { OrdersManageComponents } from './orders-manage/orders-manage.components
 //import { AddParrainageComponent } from './add-parrainage/add-parrainage.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AnalyticsComponent } from './analytics/analytics.component';
+import { ImgImproveDialogComponent } from './add-product/img-improve-dialog/img-improve-dialog.component';
 import { ParrainageComponent } from './parrainage/parrainage.component';
 import { AddParrainageComponent } from '../account/parrainage/add-parrainage/add-parrainage.component';
 
@@ -76,7 +77,8 @@ export const routes: Routes = [
     OrdersManageComponents,
     ParrainageComponent,
     AddParrainageComponent,
-    AnalyticsComponent
+    AnalyticsComponent,
+    ImgImproveDialogComponent
   ]
 })
 export class AccountSellerModule { }

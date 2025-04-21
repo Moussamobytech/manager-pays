@@ -2,14 +2,43 @@ $primary: #25224a;
 $amber: #feb930;
 
 .main-container{
-  padding: 16px;
+  // padding: 16px;
   @media screen and (max-width: 600px) {
     margin-bottom: 40px;
+  }
+
+  .toggle-container{
+    position: relative;
+    padding-bottom: 30px;
+
+    mat-icon{
+      font-size: medium;
+      cursor: pointer;
+      height: inherit;
+    }
+    .popover {
+      position: absolute;
+      top: 20px;
+      font-size: xx-small;
+      line-height: normal;
+      background: white;
+      padding: 5px;
+      border: 1px solid #ccc;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      z-index: 100;
+    }
+
   }
 
   .submit-btn {
     background-color: $amber;
     color: $primary;
     margin-top: 16px;
+  }
+
+  .improve-btn:not(:disabled) {
+    background-color: $primary;
+    color: white;
   }
 }

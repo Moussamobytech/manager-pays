@@ -29,4 +29,14 @@ export class ProductsCardComponent implements OnInit {
     data
     })
   }
+
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/logo_fidelity.gif';
+  }
+
+  onImageLoad(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = this.product.image1;
+  }
 }

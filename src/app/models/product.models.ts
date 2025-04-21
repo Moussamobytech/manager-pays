@@ -30,6 +30,7 @@ export class Product {
                 public categorieNom: string,
                 public contact: string,
                 public user : string,
+                public userNom : string,
                 public createdAt:string,
                 public updatedAt:string,
                 public monthlyVisits: number,

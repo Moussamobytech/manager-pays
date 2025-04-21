@@ -34,8 +34,8 @@
               <ul>
                 <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
                   <mat-icon>search</mat-icon>
-                  <span *ngIf="suggestion.type === 'product'"><b>Produit:</b>{{ suggestion.item.nom}}</span>
-                  <span *ngIf="suggestion.type === 'category'"><b>Categorie:</b>{{ suggestion.item.nom}}</span>
+                  <span *ngIf="suggestion.type === 'product'"><b>Produit: </b>{{ suggestion.item.nom}}</span>
+                  <span *ngIf="suggestion.type === 'category'"><b>Categorie: </b>{{ suggestion.item.nom}}</span>
                 </li>
               </ul>
             </div>

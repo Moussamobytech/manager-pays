@@ -18,6 +18,7 @@ import { AuthenticationService } from 'src/app/services/auth.service';
 import { map, tap } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 import { BannersService } from 'src/app/services/banners.service';
+import { User } from 'src/app/app.models';
 
 @Component({
   selector: 'app-seller',
@@ -55,7 +56,7 @@ export class SellerComponent implements OnInit {
   domWidth: number = window?.innerWidth;
   loadedProductCount:number; // nombre de produit actuellement chargee
   public usePagination = this.domWidth > 430; // basculer entre la pagination et le Voir plus
-  currentUser: import("/home/coulibaly/Documents/Projets/Aplika/FIDELITY-NEW/e-commerce-front/src/app/models/user.models").User;
+  currentUser: User;
   bannersInfo: any;
 
 
@@ -67,9 +68,9 @@ export class SellerComponent implements OnInit {
     private appService: AppService,
     private produitService: ProductService,
     public domHandlerService: DomHandlerService,
-    private cm: CommonService,    
+    private cm: CommonService,
     private bannersService: BannersService,
-    
+
   ) {
     this.selectedSorting = this.sortings[0];
   }
@@ -82,7 +83,7 @@ export class SellerComponent implements OnInit {
         this.cm.goTo("/");
       }else{
         this.getDataFromBackend();
-        this.shopLink = "https://fidelity-market.com/#/sellers/"+this.sellerId;
+        this.shopLink = window.location.origin+"/#/sellers/"+this.sellerId;
       }
     });
     this.onWindowResize();
@@ -117,11 +118,11 @@ export class SellerComponent implements OnInit {
       .map(img => {
         // Si c’est déjà une URL externe (commence par http), on la garde telle quelle
         if (img.startsWith('http')) return { image: img };
-      
+
         // Sinon, on la compose avec imgsLink
         return { image: this.imgsLink + img };
       });
-        
+
     });
 
   /*  this.appService.infoSeller(this.sellerId).subscribe(
@@ -150,8 +151,8 @@ export class SellerComponent implements OnInit {
       map((p)=>p.filter((p)=>p.etat=="ACTIF")),
       tap((products) => {
 
-        
-        
+
+
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
         console.log(":::::::::::::::::: SELLER PRODUCT ::: ",this.sellerProducts);
         this.unchangedSellerProducts = products;

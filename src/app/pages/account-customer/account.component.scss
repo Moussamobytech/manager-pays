@@ -126,69 +126,101 @@ $accent_color: #548580 ;
     }
   }
 
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+    justify-content: center;
 
-  .historique {
-    margin-top: 30px;
-
-    h3 {
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
       color: $primary_color;
-      margin-bottom: 20px;
+
+      &.active {
+        background-color: $primary_color;
+        color: white;
+      }
+    }
+  }
+
+  .tab-content {
+
+    .historique {
+      margin-top: 30px;
+
+      .historique-item {
+        display: flex;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+
+        img {
+          width: 80px;
+          height: 80px;
+          border-radius: 10px;
+          margin-right: 10px;
+        }
+
+        div {
+          flex-grow: 1;
+
+          p {
+            margin: 3px 0;
+          }
+
+          button {
+            background-color: $amber_color;
+            color: $primary_color;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+
+            &:hover,&:focus {
+              background-color: darken($amber_color, 15%);
+            }
+          }
+        }
+
+        .status {
+          text-align: right;
+
+          p {
+            margin: 3px 0;
+            font-size: 0.8em;
+            color: #777;
+
+            &.accent{
+              color: $accent_color;
+            }
+
+            &.amber{
+              color: $amber_color;
+            }
+
+            &.warn{
+              color: $warn_color;
+            }
+          }
+        }
+      }
     }
 
-    .historique-item {
-      display: flex;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
+    .favoris {
+      // text-align: center;
 
-      img {
-        width: 80px;
-        height: 80px;
-        border-radius: 10px;
-        margin-right: 10px;
-      }
+      h3{
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-      div {
-        flex-grow: 1;
-
-        p {
-          margin: 3px 0;
-        }
-
-        button {
-          background-color: $amber_color;
-          color: $primary_color;
-          border: none;
-          padding: 5px 10px;
-          border-radius: 5px;
-          cursor: pointer;
-
-          &:hover,&:focus {
-            background-color: darken($amber_color, 15%);
-          }
-        }
-      }
-
-      .status {
-        text-align: right;
-
-        p {
-          margin: 3px 0;
-          font-size: 0.8em;
-          color: #777;
-
-          &.accent{
-            color: $accent_color;
-          }
-
-          &.amber{
-            color: $amber_color;
-          }
-
-          &.warn{
-            color: $warn_color;
-          }
+        a{
+          color: $warn_color;
+          text-decoration: none;
         }
       }
     }

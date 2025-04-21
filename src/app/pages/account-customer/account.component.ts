@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Product } from 'src/app/models/product.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommandeService } from 'src/app/services/commande.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-account',
@@ -16,7 +18,7 @@ export class AccountComponent implements OnInit {
     { icon: 'fas fa-sack-dollar', title: 'Mes gains', content: '20000F', routerLink: 'earnings', cardClass: 'amber' },
     { icon: 'fas fa-exchange-alt', title: 'Invite tes amis', content: 'Gagne jusqu\'à 5000 F par ami invité !', routerLink: '/referal', cardClass: 'primary' },
     { icon: 'fa-solid fa-phone', title: 'Mettre à jour', content: 'Mon numéro de téléphone', routerLink: 'settings', cardClass: 'primary' },
-    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', routerLink: '/referal', cardClass: 'amber' },
+    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', cardClass: 'amber' },
   ];
   historiqueData = [
   { image: 'assets/images/ads/3.jpg', name: 'Chemise homme', price: '35 000F', status: 'Livrée', date: '05/02/2025', color: 'accent' },
@@ -25,16 +27,22 @@ export class AccountComponent implements OnInit {
   ];
   selectedLogo: File | null = null ;
   public currentUser:any = this.auth.currentUser();
-  status: any;
-  orders: any;
+  selectedTab = 'historique';
+  favorisProducts:Product[] = [];
+  user:any;
+  orders: any[] = [];
+  status: any[] = [];
 
-  constructor(private auth : AuthenticationService,
-    private commandeService:CommandeService, private imgCompressService:ImageCompressService,
-    private cm:CommonService,) { }
+  constructor(
+    private auth: AuthenticationService, 
+    private imgCompressService: ImageCompressService,
+    private cm: CommonService, 
+    private produitService: ProductService,
+    private commandeService: CommandeService
+  ) { }
 
-    user:any
-  ngOnInit() {
-
+  async ngOnInit() {
+    this.favorisProducts = await this.produitService.getProductByNewArrival(50)
     this.currentUser = this.auth.currentUser()
    this.user = this.currentUser;
    this.getAllCommande();    

@@ -9,7 +9,7 @@
     <h2>{{user.firstname}} {{user.lastname}}</h2>
   </div>
   <div fxLayout="row wrap" class="card-container">
-    <div *ngFor="let card of cards" fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
+    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards" fxFlex="47" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
       <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
@@ -17,21 +17,48 @@
       </div>
     </div>
   </div>
-  <div class="historique">
-    <h3>Historique des commandes</h3>
-    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-      <div *ngFor="let data of historiqueData" fxFlex="100" fxFlex.gt-sm="32">
-        <div class="historique-item">
-          <img [src]="data.image" alt="Image Produit">
-          <div>
-            <p>{{ data.name }}</p>
-            <p>{{ data.price }}</p>
-            <button>Acheter</button>
+
+  <div class="tabs">
+    <button (click)="selectTab('historique')" [class.active]="selectedTab === 'historique'">
+      <i class="fa-solid fa-history"></i> Historique des commandes
+    </button>
+    <button (click)="selectTab('favoris')" [class.active]="selectedTab === 'favoris'">
+      <i class="fa-solid fa-heart"></i> Mes favoris
+    </button>
+  </div>
+
+  <div class="tab-content">
+    <div *ngIf="selectedTab === 'historique'" class="historique">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
+        <div *ngFor="let data of historiqueData" fxFlex="100" fxFlex.gt-sm="32">
+          <div class="historique-item">
+            <img [src]="data.image" alt="Image Produit">
+            <div>
+              <p>{{ data.name }}</p>
+              <p>{{ data.price }}</p>
+              <button>Acheter</button>
+            </div>
+            <div class="status">
+              <p [ngClass]="data.color">{{ data.status }}</p>
+              <p>{{ data.date }}</p>
+            </div>
           </div>
-          <div class="status">
-            <p [ngClass]="data.color">{{ data.status }}</p>
-            <p>{{ data.date }}</p>
-          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedTab === 'favoris'" class="favoris">
+      <h3 *ngIf="favorisProducts.length === 0">
+        <mat-icon>sentiment_neutral</mat-icon>
+        Aucun favoris pour l'instant, mais vous pouvez en&nbsp;
+        <a routerLink="/products">ajouter</a>&nbsp;!
+      </h3>
+
+      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="favorisProducts.length > 0">
+        <div *ngFor="let product of favorisProducts" fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
+          <!-- <div > -->
+            <app-product-card  [product]="product"></app-product-card>
+          <!-- </div> -->
         </div>
       </div>
     </div>

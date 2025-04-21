@@ -134,44 +134,19 @@ export class PagesComponent implements OnInit {
     this.sidenavMenuItems = res;
   }
 
-  // public changeCategory(event) {
-  //   if (event.target) {
-  //     this.category = this.categories.find(category => category.nom === event.target.innerText);
-  //     console.log("Ma cat ", this.category)
-  //     if (this.category) {
-  //       this.router.navigate(['/products', this.category]); // Navigate to products page with category ID
-  //     }
-  //   }
-  //   if (this.domHandlerService.window?.innerWidth < 960) {
-  //     this.stopClickPropagate(event);
-  //   }
-  // }
   public changeCategory(event) {
     if (event) {
       const selectedCategory = this.categories.find(category => (category.cle === event)||category.id === event);
       if (selectedCategory) {
         this.category = selectedCategory;
         // Naviguer vers la page des produits avec l'ID de la catégorie
-        this.router.navigate(['/products', this.category.cle]);
+        this.router.navigate(['/categories', this.category.cle]);
       }
     }
     if (this.domHandlerService.window?.innerWidth < 960) {
       this.stopClickPropagate(event);
     }
   }
-
-  // public changeCategory(event){
-  //   if(event.target){
-  //     this.category = this.categories.filter(category => category.nom == event.target.innerText)[0];
-  //   }
-  //   if(this.domHandlerService.window?.innerWidth < 960){
-  //     this.stopClickPropagate(event);
-  //   }
-  // }
-
-
-
-
 
   public changeTheme(theme: any){
     this.settings.theme = theme;
