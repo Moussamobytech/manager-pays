@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } fro
 import { AppService } from '../../app.service';
 import { Product } from 'src/app/models/product.models';
 import { CommonService } from 'src/app/services/common.service';
+import { ProductService } from 'src/app/services/product.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-controls',
@@ -16,10 +18,15 @@ export class ControlsComponent implements OnInit {
   @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter<any>();
   @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
   public count: number = 1;
+  currentUser: any;
 
-  constructor(public appService: AppService, public cm: CommonService) {}
+  constructor(private auth: AuthenticationService, public appService: AppService, public cm: CommonService, public produitService: ProductService) {}
 
   ngOnInit() {
+
+    this.currentUser = this.auth.currentUser()
+    
+
     if (this.product) {
       if (this.product.cartCount > 0) {
         this.count = this.product.cartCount;
@@ -121,9 +128,23 @@ export class ControlsComponent implements OnInit {
     this.onQuantityChange.emit(value);
   }
 
-  toggleLike(product:any){
-
+  toggleLike(product: any) {
+    this.produitService.addToFavorites(product.id, this.currentUser.id).subscribe({
+      next: (datas) => {
+        console.log("datas!!!!!!!!!!! ", datas);
+        this.cm.openSuccessSnackBar(datas.message || "Produit ajouté aux favoris");
+      },
+      error: (error) => {
+        console.log("error!!!!!!!!!!! ", error);
+        if (error.status === 400) {
+          this.cm.openFailureSnackBar("Produit est déjà dans les favoris");
+        } else {
+          this.cm.openFailureSnackBar("Une erreur est survenue");
+        }
+      }
+    });
   }
+  
 
   public promo(key) {
     let res = ""

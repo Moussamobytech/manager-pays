@@ -53,7 +53,7 @@
         </mat-form-field>
       </div>
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-        <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" >
+        <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" class="historique-item">
           <div class="historique-item">
             <img [src]="order.produitImage" alt="Image Produit">
             <div>
@@ -85,14 +85,14 @@
     </div>
 
     <div *ngIf="selectedTab === 'favoris'" class="favoris">
-      <h3 *ngIf="favorisProducts.length === 0">
+      <h3 *ngIf="tailles === 0">
         <mat-icon>sentiment_neutral</mat-icon>
         Aucun favoris pour l'instant, mais vous pouvez en&nbsp;
         <a routerLink="/products">ajouter</a>&nbsp;!
       </h3>
 
-      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="favorisProducts.length > 0">
-        <div *ngFor="let product of favorisProducts" fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
+      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="produitsLikes.length > 0">
+        <div *ngFor="let product of produitsLikes" fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
           <!-- <div > -->
             <app-product-card  [product]="product"></app-product-card>
           <!-- </div> -->

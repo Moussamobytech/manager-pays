@@ -212,7 +212,24 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/campagne/all-product-promo-active');
   }
 
-  public addToFavorites(productId: string): Observable<any> {
-    return this.api.post(`/produit/favorite/${productId}`, null);
+  public addToFavorites(produitId: string,userId: string): Observable<any> {
+    console.log(':::::::::::: ',produitId,userId);
+    
+    return this.api.post(`/produit/like/${produitId}/${userId}`, null);
   }
+
+  public getFavorites(userId: string): Observable<any> {
+    return this.api.get(`/produit/favorites/${userId}`);
+  }
+
+  public removeFromFavorites(productId: string,userId: string): Observable<any> {
+    return this.api.delete(`/produit/unlike/${productId}/${userId}`);
+  }
+  public getProduitsLikesByUser(userId: string): Observable<any> {
+    console.log('USER ID :::::::::::: ',userId);
+    return this.api.get(`/produit/likes/${userId}`);
+  }
+
+
+  
 }

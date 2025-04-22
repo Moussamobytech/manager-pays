@@ -43,6 +43,7 @@ export class AccountComponent implements OnInit {
   @ViewChild('input') input: ElementRef;
   pageSize = 10;
   pageSizeOptions = [10, 20, 30];
+  tailles: any;
 
   constructor(
     private auth: AuthenticationService, 
@@ -52,14 +53,25 @@ export class AccountComponent implements OnInit {
     private commandeService: CommandeService
   ) { }
 
+  produitsLikes:any;
+
   async ngOnInit() {
-    this.favorisProducts = await this.produitService.getProductByNewArrival(50)
+   // this.favorisProducts = await this.produitService.getProductByNewArrival(50)
+    //console.log('FAVORIS = :::::::::::: ',this.favorisProducts);
     this.currentUser = this.auth.currentUser()
     this.user = this.currentUser;
     this.getAllCommande();    
+    this.getProduitsLikes();
   }
 
 
+  getProduitsLikes(){
+    this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(datas =>{
+      this.tailles = datas.length;
+    //  console.log("datas!!!!!!!!!!! ",datas);
+      this.produitsLikes = datas;
+    });
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -106,7 +118,6 @@ export class AccountComponent implements OnInit {
         ).trim();
         return searchStr.indexOf(filter) !== -1;
       };
-      console.log(":::::::::::: MES HISTORIQUES DE COMMANDES :::: ",JSON.stringify(this.orders));
     }, error => {
       console.error('Error during recharge:', error);
     });
