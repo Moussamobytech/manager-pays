@@ -11,6 +11,7 @@ export class ProductsCardComponent implements OnInit {
 
   @Input() product: any;
   @Input() viewCol: number;
+  @Input() pageName: string;
   secondView: boolean;
   constructor(private produitService:ProductService) { }
 

@@ -91,11 +91,9 @@
         <a routerLink="/products">ajouter</a>&nbsp;!
       </h3>
 
-      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="produitsLikes.length > 0">
-        <div *ngFor="let product of produitsLikes" fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
-          <!-- <div > -->
-            <app-product-card  [product]="product"></app-product-card>
-          <!-- </div> -->
+      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="favorisProducts.length > 0">
+        <div *ngFor="let product of favorisProducts" fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
+          <app-product-card [product]="product" [pageName]="'account-customer'"></app-product-card>
         </div>
       </div>
     </div>

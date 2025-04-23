@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
@@ -227,7 +228,17 @@ getTotalViewsYear(): Observable<any> {
   }
   public getProduitsLikesByUser(userId: string): Observable<any> {
     console.log('USER ID :::::::::::: ',userId);
-    return this.api.get(`/produit/likes/${userId}`);
+    return this.api.get(`/produit/likes/${userId}`).pipe(
+      map((response: any) => {
+        if (Array.isArray(response)) {
+          return response.map(product => ({
+            ...product,
+            isFavorite: true
+          }));
+        }
+        return response;
+      })
+    );
   }
 
 

@@ -68,8 +68,12 @@ export class AccountComponent implements OnInit {
   getProduitsLikes(){
     this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(datas =>{
       this.tailles = datas.length;
-    //  console.log("datas!!!!!!!!!!! ",datas);
-      this.produitsLikes = datas;
+      // Marquer tous les produits comme favoris
+      this.produitsLikes = datas.map(product => ({
+        ...product,
+        isFavorite: true
+      }));
+      this.favorisProducts = this.produitsLikes;
     });
   }
 

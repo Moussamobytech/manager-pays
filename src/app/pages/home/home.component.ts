@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../app.service';
-
 import { ProductService } from 'src/app/services/product.service';
 import { CampagneService } from 'src/app/services/campagne.service';
 import { Product } from 'src/app/models/product.models';
 import { SwiperConfigInterface } from 'src/app/theme/components/swiper/swiper.module';
+import { AuthenticationService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -41,10 +41,17 @@ export class HomeComponent implements OnInit {
     { id: 6, name: "Chaussures" }
   ]
   selectedSubCategory: any = this.subCategories[0];
+  currentUser: any;
 
-  constructor(public appService:AppService, public produitService : ProductService, public campagneService : CampagneService) { }
+  constructor(
+    public appService: AppService, 
+    public produitService: ProductService, 
+    public campagneService: CampagneService,
+    private auth: AuthenticationService
+  ) { }
 
   ngOnInit() {
+    this.currentUser = this.auth.currentUser();
     this.getNewArrivalsProducts();
     this.getTopRatedProducts();
     this.productInPromo();
@@ -146,53 +153,82 @@ export class HomeComponent implements OnInit {
 
   public async getNewArrivalsProducts() {
     const products = await this.produitService.getProductByTop();
-  //  console.log("res product :::::::: ",products)
-
-    this.newArrivalsProducts = products.map(product => {
-      let nom = (product.nom).toLowerCase();
-      return {
-        ...product,
-        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
-        priceBasic: this.parsePrice(product.priceBasic),
-        pricePromotion: this.parsePrice(product.pricePromotion),
-      };
-    }).sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
-
-   /* this.promoProducts = products
-    .map(product => {
-      let nom = (product.nom).toLowerCase();
-      return {
-        ...product,
-        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
-        priceBasic: this.parsePrice(product.priceBasic),
-        pricePromotion: this.parsePrice(product.pricePromotion),
-      };
-    })
-    .filter(product => (product.campagne !== null)&&(product.campagne.type == "PROMOTION")); */
-   // .filter(product => (product.pricePromotion !== null)&&(product.pricePromotion < product.priceBasic));
-  //  console.log("promo: ",this.promoProducts)
+    
+    // Récupérer les produits likés
+    if (this.currentUser) {
+      this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
+        this.newArrivalsProducts = products.map(product => {
+          let nom = (product.nom).toLowerCase();
+          return {
+            ...product,
+            nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+            priceBasic: this.parsePrice(product.priceBasic),
+            pricePromotion: this.parsePrice(product.pricePromotion),
+            isFavorite: likedProducts.some(liked => liked.id === product.id)
+          };
+        }).sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
+      });
+    } else {
+      this.newArrivalsProducts = products.map(product => {
+        let nom = (product.nom).toLowerCase();
+        return {
+          ...product,
+          nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+          priceBasic: this.parsePrice(product.priceBasic),
+          pricePromotion: this.parsePrice(product.pricePromotion),
+          isFavorite: false
+        };
+      }).sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
+    }
   }
 
-  productInPromo(){
+  productInPromo() {
     this.produitService.getproductOnPromo().subscribe(datas => {
-      this.promoProducts = datas
-      console.log(":::::: Les Prods en Promos : ",datas);
-      
-    })
+      if (this.currentUser) {
+        this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
+          this.promoProducts = datas.map(product => ({
+            ...product,
+            isFavorite: likedProducts.some(liked => liked.id === product.id)
+          }));
+        });
+      } else {
+        this.promoProducts = datas.map(product => ({
+          ...product,
+          isFavorite: false
+        }));
+      }
+    });
   }
-
 
   public async getTopRatedProducts() {
     const products = await this.produitService.getProductByBest();
-    this.topRateProducts = products.map((product:Product) => {
-      let nom = (product.nom).toLowerCase();
-      return {
-        ...product,
-        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
-        priceBasic: this.parsePrice(product.priceBasic),
-        pricePromotion: this.parsePrice(product.pricePromotion),
-      };
-    });
+    
+    // Récupérer les produits likés
+    if (this.currentUser) {
+      this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
+        this.topRateProducts = products.map((product: Product) => {
+          let nom = (product.nom).toLowerCase();
+          return {
+            ...product,
+            nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+            priceBasic: this.parsePrice(product.priceBasic),
+            pricePromotion: this.parsePrice(product.pricePromotion),
+            isFavorite: likedProducts.some(liked => liked.id === product.id)
+          };
+        });
+      });
+    } else {
+      this.topRateProducts = products.map((product: Product) => {
+        let nom = (product.nom).toLowerCase();
+        return {
+          ...product,
+          nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+          priceBasic: this.parsePrice(product.priceBasic),
+          pricePromotion: this.parsePrice(product.pricePromotion),
+          isFavorite: false
+        };
+      });
+    }
   }
 
   parsePrice (price: any) {

@@ -12,8 +12,8 @@
         Ajouter <mat-icon>shopping_cart</mat-icon>
       </button>
       <span *ngIf="pageName !='cart'" class="like-btn" (click)="toggleLike(product)">
-        <i class="fa-regular fa-heart like-icon" [class.liked]=""></i>
-        <i class="fa-solid fa-heart like-icon filled" [class.liked]=""></i>
+        <i class="fa-regular fa-heart like-icon" [style.display]="product.isFavorite ? 'none' : 'inline-block'"></i>
+        <i class="fa-solid fa-heart like-icon filled" [style.display]="product.isFavorite ? 'inline-block' : 'none'"></i>
       </span>
       <span *ngIf="product.campagne?.type" class="campagne">{{ promo(product.campagne.type) }}</span> 
     </div>

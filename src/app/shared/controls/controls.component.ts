@@ -4,6 +4,7 @@ import { Product } from 'src/app/models/product.models';
 import { CommonService } from 'src/app/services/common.service';
 import { ProductService } from 'src/app/services/product.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-controls',
@@ -20,13 +21,17 @@ export class ControlsComponent implements OnInit {
   public count: number = 1;
   currentUser: any;
 
-  constructor(private auth: AuthenticationService, public appService: AppService, public cm: CommonService, public produitService: ProductService) {}
+  constructor(
+    private auth: AuthenticationService, 
+    public appService: AppService, 
+    public cm: CommonService, 
+    public produitService: ProductService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
 
     this.currentUser = this.auth.currentUser()
-    
-
     if (this.product) {
       if (this.product.cartCount > 0) {
         this.count = this.product.cartCount;
@@ -131,11 +136,19 @@ export class ControlsComponent implements OnInit {
   toggleLike(product: any) {
     this.produitService.addToFavorites(product.id, this.currentUser.id).subscribe({
       next: (datas) => {
-        console.log("datas!!!!!!!!!!! ", datas);
+        product.isFavorite = !product.isFavorite;
         this.cm.openSuccessSnackBar(datas.message || "Produit ajouté aux favoris");
+        if (this.pageName === 'account-customer' && window.location.hash.includes('favoris')) {
+          this.router.navigate(['/account-customer']);
+          this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe({
+            next: (produits) => {
+              this.onQuantityChange.emit(produits);
+            }
+          });
+        }
       },
       error: (error) => {
-        console.log("error!!!!!!!!!!! ", error);
+       // console.log("error!!!!!!!!!!! ", error);
         if (error.status === 400) {
           this.cm.openFailureSnackBar("Produit est déjà dans les favoris");
         } else {

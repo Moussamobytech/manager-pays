@@ -36,5 +36,6 @@ export class Product {
                 public monthlyVisits: number,
                 public dailyVisits: number,
                 public campagne:Campagne,
-                public yearlyVisits: number ){ }
+                public yearlyVisits: number,
+                public isFavorite: boolean = false ){ }
   }
