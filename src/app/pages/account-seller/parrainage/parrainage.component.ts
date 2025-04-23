@@ -35,28 +35,32 @@ export class ParrainageComponent implements OnInit {
   @ViewChild('codeGenerer') codeGenerer: TemplateRef<any>;
   @ViewChild('detailsCampagne') detailsCampagne: TemplateRef<any>;
   @ViewChild('allCodeGenerer') allCodeGenerer: TemplateRef<any>;
+  @ViewChild('successDialog') successDialog!: TemplateRef<any>;
+  @ViewChild('errorDialog') errorDialog!: TemplateRef<any>;
 
+  private router = inject(Router);
+  private formBuilder = inject(UntypedFormBuilder);
+  private appService = inject(AppService);
+  private authService = inject(AuthenticationService);
+  private campagneService = inject(CampagneService);
+  private commonService = inject(CommonMessageService);
+  private productService = inject(ProductService);
+  private dialog = inject(MatDialog);
+  private domHandlerService = inject(DomHandlerService);
+  private clipboard = inject(Clipboard);
 
-
-  public username: string;
-  private currentUser: User;
-  campagnes: any
-  typePromo: any
-  activeCampagne: any
-  domHandlerService = inject(DomHandlerService);
   public form: UntypedFormGroup;
-
-
+  public username: string;
+  public currentUser: User;
+  public campagne: any;
+//  public promo: any;
+  public typePromo: any;
+  public activeCampagne: any;
   public page: any;
-  public count = 6;
-
-  monCode: any = ''
-  detailsCampagneData: any;
-  allCodesCampagne: any = [];
-  sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
-  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
-
-// ----------------------------------------------------------------------------------------------------------------
+  public searchTerm: string = '';
+  public selectedType: string = '';
+  public selectedStatus: string = '';
+  public filteredCampaigns: any[] = [];
   campaignTypes = [
     {
       icon: '👋',
@@ -128,6 +132,13 @@ export class ParrainageComponent implements OnInit {
     }
   ];
 
+  monCode: any = ''
+  detailsCampagneData: any;
+  allCodesCampagne: any = [];
+  sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
+  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
+
+// ----------------------------------------------------------------------------------------------------------------
   // Mock active campaigns
   campaigns: Campaign[] = [
     {
@@ -165,37 +176,27 @@ export class ParrainageComponent implements OnInit {
 // ----------------------------------------------------------------------------------------------------------------
 
   constructor(
-    public appService: AppService,
-    public formBuilder: UntypedFormBuilder,
-    private commonService: CommonMessageService,
-    private auth: AuthenticationService,
-    private productService: ProductService,
-    private campagneService: CampagneService,
-    private router: Router,
-    private fb: FormBuilder,
-    private clipboard: Clipboard,
-    public dialog: MatDialog,) { }
-
-
+    private campaignService: CampagneService) {
+    this.form = this.formBuilder.group({
+      campagne: ['', Validators.required],
+      promo: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser()
+    this.currentUser = this.authService.currentUser()
     this.username = this.currentUser.username;
 
     this.getAllCampagne(this.username);
     this.getAllPromo();
-
-    this.form = this.fb.group({
-      campagne: ['', Validators.required],
-
-    });
   }
 
   getAllCampagne(username) {
     this.campagneService.getAllCampagneByUsername(username).subscribe({
       next: (datas) => {
         console.log("CAMPAGNES !!!!!!!!!!! ",JSON.stringify(datas));
-        this.campagnes = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        this.campagne = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        this.filteredCampaigns = [...this.campagne];
 
         this.activeCampagne = datas
           .filter(campagne => campagne.active)
@@ -230,16 +231,12 @@ export class ParrainageComponent implements OnInit {
     this.router.navigate(["/account-seller/add-parrainage"])
   }
 
-
-
   public edit(id) {
     this.router.navigate(["/account-seller/add-parrainage/" + id])
   }
   public detailCampagne(id) {
     this.router.navigate(["/account-seller/detail-campagne/" + id])
   }
-
-
 
   public remove(campagne: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -254,9 +251,9 @@ export class ParrainageComponent implements OnInit {
         this.campagneService.supprimer(campagne.id).subscribe(
           () => {
             // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
-            const index: number = this.campagnes.findIndex((us: any) => us.id === campagne.id);
+            const index: number = this.campagne.findIndex((us: any) => us.id === campagne.id);
             if (index !== -1) {
-              this.campagnes.splice(index, 1);
+              this.campagne.splice(index, 1);
             }
             console.log("Campagne successfully deleted.");
           },
@@ -276,13 +273,22 @@ export class ParrainageComponent implements OnInit {
   }
 
   setStatus(id: string, event: MatSlideToggleChange): void {
-    this.updateState(id, event.checked ? 'true' : 'false')
+    const newStatus = event.checked ? 'true' : 'false';
+    this.campagneService.updateState(id, newStatus).then(
+      (response) => {
+        this.commonService.successToast('Statut de la campagne mis à jour avec succès');
+        this.getAllCampagne(this.username); // Recharger les campagnes pour mettre à jour l'affichage
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour du statut:', error);
+        this.commonService.errorToast('Erreur lors de la mise à jour du statut');
+      }
+    );
   }
   public onPageChanged(event) {
     this.page = event;
     this.domHandlerService.winScroll(0, 0);
   }
-
 
   onNoClick(): void {
     this.dialog.closeAll();
@@ -348,9 +354,6 @@ export class ParrainageComponent implements OnInit {
     });
   }
 
-
-
-
   openCampagneAllCode(id: any): void {
 
     this.campagneService.getAllCodeByCampagne(id).subscribe({
@@ -392,7 +395,6 @@ export class ParrainageComponent implements OnInit {
       this.router.navigate(['/account-seller/parrainage']);
     });
   }
-
 
   public promo(key) {
     let res = ""
@@ -438,7 +440,6 @@ export class ParrainageComponent implements OnInit {
     }
   }
 
-
   public removeCode(code: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
@@ -466,8 +467,6 @@ export class ParrainageComponent implements OnInit {
     });
   }
 
-
-// ----------------------------------------------------------------------------------------------------------------
   onAddCampaign(type: string) {
     // put logics
     console.log('Add campaign of type:', type);
@@ -489,6 +488,19 @@ export class ParrainageComponent implements OnInit {
   getCampaignIcon(type: string): string {
     return this.campaignTypes.find(t => t.type === type)?.icon;
   }
-// ----------------------------------------------------------------------------------------------------------------
 
+  filterCampaigns() {
+    this.filteredCampaigns = this.campagne.filter(campaign => {
+      const matchesSearch = !this.searchTerm || 
+        campaign.nom.toLowerCase().includes(this.searchTerm.toLowerCase());
+      
+      const matchesType = !this.selectedType || 
+        campaign.typePromo.name === this.selectedType;
+      
+      const matchesStatus = !this.selectedStatus || 
+        campaign.active.toString() === this.selectedStatus;
+      
+      return matchesSearch && matchesType && matchesStatus;
+    });
+  }
 }

@@ -65,7 +65,7 @@
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Campagne</mat-label>
                 <mat-select formControlName="campagne" required>
-                  <mat-option *ngFor="let campagne of campagnes" [value]="campagne.id">
+                  <mat-option *ngFor="let campagne of campagne" [value]="campagne.id">
                     <span>{{campagne.nom}}</span>
                   </mat-option>
                 </mat-select>
@@ -233,12 +233,12 @@
       </a>
     </div>
 
-    <!-- Campaign Types -->
-    <section class="campaign__types">
+     <!-- Campaign Types -->
+     <section class="campaign__types">
       <h3>Types de campagnes</h3>
       <div class="campaign__types-list" fxLayout="row wrap">
         <div *ngFor="let type of campaignTypes" class="campaign__type-card" [class.active]="selectedCampaign === type"
-          fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="selectedCampaign = type" >
+          fxFlex="48" fxFlex.gt-sm="24" (click)="selectedCampaign = type" >
           <div class="campaign__type-header">
             <div class="campaign__icon-circle">
               <i *ngIf="type.icon.length > 2" [class]="type.icon"></i>
@@ -287,27 +287,86 @@
         </ul>
       </div>
     </div>
+    
 
     <!-- Active Campaigns List -->
     <section class="campaign__active-list">
+      <div class="campaign__filters" fxLayout="row wrap" fxLayoutGap="16px">
+        <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-sm="300px">
+          <mat-label>Rechercher une campagne</mat-label>
+          <input matInput [(ngModel)]="searchTerm" (keyup)="filterCampaigns()" placeholder="Nom de la campagne...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-sm="200px">
+          <mat-label>Type de campagne</mat-label>
+          <mat-select [(ngModel)]="selectedType" (selectionChange)="filterCampaigns()">
+            <mat-option value="">Tous les types</mat-option>
+            <mat-option *ngFor="let type of typePromo" [value]="type.name">
+              {{promo(type.name)}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-sm="200px">
+          <mat-label>Statut</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="filterCampaigns()">
+            <mat-option value="">Tous les statuts</mat-option>
+            <mat-option value="true">Actif</mat-option>
+            <mat-option value="false">Inactif</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <h3>Mes campagnes actives</h3>
       <div class="campaign__active-items" fxLayout="row wrap">
-        <div *ngFor="let campaign of campaigns.slice(0, loadIndex)"
-          class="campaign__active-item" fxFlex.xs="100" fxFlex.gt-sm="49" >
-          <div class="campaign__icon-circle" [ngClass]="campaign.type">
-            <i *ngIf="getCampaignIcon(campaign.type).length > 2" [class]="getCampaignIcon(campaign.type)"></i>
-            <span *ngIf="getCampaignIcon(campaign.type).length < 3">{{ getCampaignIcon(campaign.type) }}</span>
+        <div *ngFor="let campagne of filteredCampaigns.slice(0, loadIndex)"
+          class="campaign__active-item" fxFlex="100" fxFlex.gt-sm="48" >
+          <div class="campaign__icon-circle" [ngClass]="campagne.typePromo.name.toLowerCase()">
+            <i *ngIf="campagne.typePromo.name === 'PROMOTION'" class="fa-solid fa-tags"></i>
+            <i *ngIf="campagne.typePromo.name === 'OFFRE_BIENVENUE'" class="fa-solid fa-gift"></i>
+            <i *ngIf="campagne.typePromo.name === 'PARRAINAGE'" class="fa-solid fa-people-arrows"></i>
+            <i *ngIf="campagne.typePromo.name === 'LIVRAISON_GRATUITE'" class="fa-solid fa-truck"></i>
           </div>
           <div class="campaign__info" fxFlex>
-            <div class="campaign__title">{{ campaign.title }}</div>
-            <div class="campaign__value">Valeur : {{ campaign.value }}</div>
-            <div class="campaign__description">{{ campaign.info }}</div>
+            <div class="campaign__title">{{ campagne.nom }}</div>
+            <div class="campaign__value">
+              <ng-container *ngIf="campagne.reduction">
+                <span class="campaign__value-item">
+                  <i class="fa-solid fa-percent"></i>
+                  Réduction : {{ campagne.reduction }}%
+                </span>
+              </ng-container>
+              <ng-container *ngIf="campagne.montantMinAchat">
+                <span class="campaign__value-item">
+                  <i class="fa-solid fa-coins"></i>
+                  Min : {{ campagne.montantMinAchat }} F
+                </span>
+              </ng-container>
+            </div>
+            <div class="campaign__description">
+              <div class="campaign__description-text">{{ campagne.description }}</div>
+              <div class="campaign__dates">
+                <span class="campaign__date-item">
+                  <i class="fa-solid fa-calendar"></i>
+                  Du {{ campagne.dateDebut | date:'dd/MM/yyyy' }} au {{ campagne.dateFin | date:'dd/MM/yyyy' }}
+                </span>
+                <span class="campaign__type" [ngClass]="campagne.typePromo.name.toLowerCase()">
+                  <i class="fa-solid fa-tag"></i>
+                  {{ promo(campagne.typePromo.name) }}
+                </span>
+              </div>
+            </div>
           </div>
           <label class="campaign__switch">
-            <input type="checkbox" [checked]="campaign.active" (change)="onToggleCampaign(campaign)">
-            <span class="campaign__slider" [ngClass]="campaign.type"></span>
+            <mat-slide-toggle
+              [checked]="campagne.active"
+              (change)="setStatus(campagne.id, $event)"
+              [color]="campagne.active ? 'primary' : 'warn'"
+              [ngClass]="campagne.typePromo.name.toLowerCase()">
+            </mat-slide-toggle>
           </label>
-          <button class="campaign__edit-button" (click)="onEditCampaign(campaign)">
+          <button class="campaign__edit-button" (click)="edit(campagne.id)">
             <i class="fa-solid fa-pen"></i>
           </button>
         </div>

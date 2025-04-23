@@ -155,10 +155,17 @@ res = typepromo.name
       'zoneLivraison':[],
       'typeOffre':[],
       'cadeauxProduit':[]
-
     });
 
-
+    // S'abonner aux changements de typePromo
+    this.form.get('typePromo').valueChanges.subscribe(value => {
+      if (value) {
+        const selectedType = this.typePromo.find(type => type.id === value);
+        if (selectedType) {
+          this.typePromoSelect(selectedType);
+        }
+      }
+    });
 
     this.loadData()
     this.sub = this.activatedRoute.params.subscribe(params => {

@@ -134,6 +134,10 @@ export class ControlsComponent implements OnInit {
   }
 
   toggleLike(product: any) {
+    if(!this.currentUser) {
+      this.cm.openFailureSnackBar("Veuillez vous connecter pour ajouter des produits aux favoris");
+      return;
+    }
     this.produitService.addToFavorites(product.id, this.currentUser.id).subscribe({
       next: (datas) => {
         product.isFavorite = !product.isFavorite;
