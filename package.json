@@ -41,6 +41,7 @@
     "file-saver": "^2.0.5",
     "flex-layout": "^1.0.1",
     "font-awesome": "^4.7.0",
+    "fuse.js": "^7.1.0",
     "jquery": "^3.7.1",
     "moment": "^2.10.2",
     "ngx-cookie": "^6.0.1",

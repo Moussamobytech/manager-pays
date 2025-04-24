@@ -37,7 +37,7 @@ export class PagesComponent implements OnInit {
   searchTerm = new FormControl('');
   suggestions: any[] = [];
   public showSuggestions: boolean = false;
-  public clickOutsideSubject = new Subject<Event>();
+  private skipNextSearch = false;
 
   totalPanier:any = 0;
   constructor(public appSettings:AppSettings,
@@ -55,14 +55,12 @@ export class PagesComponent implements OnInit {
 
 
   async ngOnInit() {
-    // console.log("this.menuItems res :::::: ",res)
     let res = await this.appService.getCategoriesSidenav().toPromise()
     this.sidenavMenuItems = res;
     this.getAllProduits();
     this.getCategories();
     setTimeout(() => {
       this.settings.theme = 'fidelity';
-      // this.settings.theme = 'green';
     });
 
     this.initializeSearch();
@@ -79,10 +77,15 @@ export class PagesComponent implements OnInit {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(term => {
-            this.showSuggestions = term.length >= 1;
-            return this.showSuggestions
-                ? this.appService.searchProductsAndCategories(this.categories, this.AllProduits, term)
-                : of([]);
+          if (this.skipNextSearch) {
+            this.skipNextSearch = false;
+            return of([]); // skip the search
+          }
+
+          this.showSuggestions = term.length >= 1;
+          return this.showSuggestions
+              ? this.appService.searchProductsAndCategories(this.categories, this.AllProduits, term)
+              : of([]);
         }),
         catchError(error => {
             console.error('Search error:', error);
@@ -96,22 +99,21 @@ export class PagesComponent implements OnInit {
 
   onGlobalClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.suggestions') && !target.closest('.search-input')) {
+    if (!target.closest('.search-input')) {
       this.showSuggestions = false;
     }
   }
   selectSuggestion(suggestion: any,type): void {
+    this.skipNextSearch = true;
     this.searchTerm.setValue(suggestion.nom);
+
     if(type == 'product'){
       this.router.navigate(['/search-results'], { queryParams: { q: suggestion.nom } });
     }else{
-      this.router.navigate(['/products/'+suggestion.cle]);
+      this.router.navigate(['/categories/'+suggestion.cle]);
     }
-    this.showSuggestions = false; // Masquer les suggestions après la sélection
-  }
 
-  onClickOutside(): void {
-    this.showSuggestions = false; // Masquer les suggestions lorsque l'utilisateur clique à l'extérieur
+    this.showSuggestions = false; // Masquer les suggestions après la sélection
   }
 
   public getCategories(){
@@ -128,7 +130,6 @@ export class PagesComponent implements OnInit {
   }
 
   public async getCategoriesSidenav(){
-
     let res = await this.appService.getCategoriesSidenav().toPromise()
     console.log("this.menuItems res :::::: ",res)
     this.sidenavMenuItems = res;
@@ -160,10 +161,21 @@ export class PagesComponent implements OnInit {
 
   public onSearch(event: Event): void {
     event.preventDefault();
-    if (this.searchTerm) {
-      // console.log(":::::::::searchTerm ",this.searchTerm.value)
-      this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
+
+    if (this.searchTerm.value) {
+      const suggestion = this.suggestions[0]?.item;
+      const type = this.suggestions[0]?.type;
+
+      if (this.suggestions.length === 0) {
+        this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
+      } else if (type === 'product') {
+        this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
+      } else {
+        this.router.navigate(['/categories/' + suggestion.cle]);
+      }
     }
+
+    this.showSuggestions = false;
   }
 
 

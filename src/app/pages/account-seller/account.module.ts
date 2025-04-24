@@ -22,7 +22,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { ImgImproveDialogComponent } from './add-product/img-improve-dialog/img-improve-dialog.component';
 import { ParrainageComponent } from './parrainage/parrainage.component';
-import { AddParrainageComponent } from '../account/parrainage/add-parrainage/add-parrainage.component';
+import { AddParrainageComponent } from './parrainage/add-parrainage/add-parrainage.component';
+import { PricingComponent } from './tarifs-pricing/pricing/pricing.component';
 
 const config: InputFileConfig = {
   fileAccept: '*'
@@ -49,6 +50,7 @@ export const routes: Routes = [
       { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Parrainages' } },
       { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Créer une campagne' } },
       { path: 'add-parrainage/:id', component: AddParrainageComponent, data: { breadcrumb: 'Modifier la campagne' } },
+      { path: 'pricing', component: PricingComponent, data: { breadcrumb: 'Nos plans' } },
     ]
   }
 ];
@@ -78,7 +80,8 @@ export const routes: Routes = [
     ParrainageComponent,
     AddParrainageComponent,
     AnalyticsComponent,
-    ImgImproveDialogComponent
+    ImgImproveDialogComponent,
+    PricingComponent,
   ]
 })
 export class AccountSellerModule { }

@@ -1,0 +1,64 @@
+<!-- pricing-component.component.html -->
+<div class="pricing-container">
+  <div class="pricing-header">
+    <h1>Vendre, Revendre, Prospérer</h1>
+    <h2>Gagner à chaque étape!</h2>
+    <p class="subtitle">Des tarifs simples qui évoluent avec votre succès. Payez uniquement quand vous vendez.</p>
+
+    <div class="special-offer">
+      <h3>OFFRE SPÉCIALE</h3>
+      <p>Commission de 10 pendant vos 3 premiers mois, quel que soit votre volume</p>
+    </div>
+
+    <div class="places-counter">
+      <span>Il reste {{remainingPlaces}} places</span>
+    </div>
+  </div>
+
+  <div fxLayout="row wrap" class="plan-cards" fxLayoutAlign="center center">
+    <div class="plan-card" *ngFor="let plan of plans"
+         [ngClass]="plan.title.toLowerCase()"
+         fxFlex.xs="100"
+         fxFlex.sm="45"
+         fxFlex.gt-sm="30">
+      <div class="card-header">
+        <h3>{{plan.title}}</h3>
+        <p class="commission">Commission de {{plan.commission}}</p>
+      </div>
+      <p class="plan-subtitle">{{plan.subtitle}}</p>
+      <ul class="features-list">
+        <li *ngFor="let feature of plan.features">
+          <mat-icon class="check-icon">check_circle</mat-icon>
+          <span>{{feature}}</span>
+        </li>
+      </ul>
+      <button [ngClass]="'btn-' + plan.title.toLowerCase()">{{plan.buttonText}}</button>
+    </div>
+  </div>
+
+  <div class="advantages-section">
+    <h3>Avantages spécifiques</h3>
+
+    <div fxLayout="row wrap" fxLayoutAlign="center center">
+      <div class="advantage-card" fxFlex.xs="100" fxFlex.sm="45" fxFlex.md="45" fxFlex.lg="45">
+        <h4>Pour vendeurs classiques</h4>
+        <ul class="advantages-list">
+          <li *ngFor="let advantage of sellerAdvantages">
+            <mat-icon class="check-icon">check_circle</mat-icon>
+            <span>{{advantage}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="advantage-card" fxFlex.xs="100" fxFlex.sm="45" fxFlex.md="45" fxFlex.lg="45">
+        <h4>Pour revendeurs</h4>
+        <ul class="advantages-list">
+          <li *ngFor="let advantage of resellerAdvantages">
+            <mat-icon class="check-icon">check_circle</mat-icon>
+            <span>{{advantage}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

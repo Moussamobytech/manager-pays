@@ -10,6 +10,19 @@
   </div>
 </div>
 <ng-template #noResults>
-  <p>Aucun produit trouvé.</p>
+  <div class="not-found-container">
+    <div class="icon-wrapper">
+      <i class="fas fa-binoculars"></i>
+    </div>
+    <h2>Aucun résultat pour votre recherche.</h2>
+    <ul>
+      <li><span>Vérifiez l’orthographe de votre recherche</span></li>
+      <li><span>Essayez d’autres mots-clés ou synonymes</span></li>
+      <li><span>Utilisez une recherche plus générale puis filtrez les résultats</span></li>
+    </ul>
+    <a class="home-btn" href="/">
+      <i class="fas fa-home"></i> Retour à l’accueil
+    </a>
+  </div>
 </ng-template>
 

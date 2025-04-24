@@ -1,5 +1,67 @@
 <div class="container">
-  <mat-form-field appearance="outline" class="full-width">
+
+
+
+
+
+
+
+
+
+
+  <!-- Mobile Title Section with Back Button -->
+  <div class="settings-header">
+    <button class="back-button" mat-icon-button>
+      <i class="fa-solid fa-gear"></i>
+      <i *ngIf="" class="fa-solid fa-arrow-left"></i>
+    </button>
+    <h2>Paramètres</h2>
+  </div>
+
+  <!-- Desktop Dropdown (Hidden on Mobile) -->
+  <!-- <div class="desktop-selector" fxHide.xs fxShow> -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-select [(value)]="selectedTab" (selectionChange)="onTabChange($event)">
+        <mat-select-trigger>
+          <i *ngIf="selectedTab" class="fa-solid fa-{{ getSelectedIcon() }}"></i>
+          {{ getSelectedLabel() }}
+        </mat-select-trigger>
+        <mat-option *ngFor="let tab of tabs" [value]="tab.value">
+          <i class="fa-solid fa-{{ tab.icon }}"></i> {{ tab.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  <!-- </div> -->
+
+  <!-- Mobile Settings Options List (Hidden on Desktop) -->
+  <!-- <div class="settings-list" fxShow fxHide.gt-xs>
+    <div [class]="'settings-item ' + (selectedTab === tab.value ? 'active' : '')"
+      *ngFor="let tab of tabs" (click)="handleTabClick(tab.value)">
+      <div class="icon-container">
+        <i class="fa-solid fa-{{ tab.icon }}"></i>
+      </div>
+      <div class="item-content">
+        <div class="item-label">{{ tab.label }}</div>
+        <div class="item-sublabel">{{ tab.sublabel }}</div>
+      </div>
+      <div class="arrow-icon">
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- <mat-form-field appearance="outline" class="full-width">
     <mat-select [(value)]="selectedTab" (selectionChange)="onTabChange($event)">
       <mat-select-trigger>
         <i *ngIf="selectedTab" class="fa-solid fa-{{ getSelectedIcon() }}"></i>
@@ -9,11 +71,11 @@
         <i class="fa-solid fa-{{ tab.icon }}"></i> {{ tab.label }}
       </mat-option>
     </mat-select>
-  </mat-form-field>
+  </mat-form-field> -->
 
 
   <form [formGroup]="infoForm" (ngSubmit)="onInfoFormSubmit(infoForm.value)" class="form-container">
-    <div *ngIf="selectedTab === 'informations'" class="informations" fxLayout="row flex-wrap">
+    <div *ngIf="selectedTab === 'general'" class="informations" fxLayout="row flex-wrap">
       <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
         <mat-label>Prénom</mat-label>
         <input matInput formControlName="firstname" required />
@@ -62,7 +124,7 @@
     </div>
 
 
-    <div *ngIf="selectedTab === 'apparence'" class="apparence" fxLayout="row flex-wrap">
+    <div *ngIf="selectedTab === 'appearance'" class="apparence" fxLayout="row flex-wrap">
       <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
         <mat-label>Nom de la boutique</mat-label>
         <input matInput formControlName="boutiqueName" />
@@ -71,7 +133,7 @@
       <mat-form-field appearance="outline" class="full-width" fxFlex.xs="100" fxFlex.gt-xs="48.6" fxFlex.gt-md="49">
         <mat-label>Description courte de la boutique (70 mots max)</mat-label>
         <textarea matInput (keypress)="onDescriptionInput($event)" (input)="updateDescriptionWordCount($event)" formControlName="description" rows="2"></textarea>
-        <mat-hint align="end">{{ wordCount }}/{{ maxWords }}</mat-hint>
+        <mat-hint> <span>{{ wordCount }}/{{ maxWords }}</span> <i></i></mat-hint>
       </mat-form-field>
 
       <div fxFlex="100">
@@ -95,7 +157,7 @@
     </div>
 
 
-    <div *ngIf="selectedTab === 'gestion'" class="gestion">
+    <div *ngIf="selectedTab === 'shipping'" class="gestion">
       <div>
         <label>Sélectionner les pays de livraison :</label>
         <mat-form-field appearance="outline" class="full-width">
@@ -127,11 +189,6 @@
               <mat-label>Exemple: 3</mat-label>
               <input matInput type="number" min="0" formControlName="nationalDeliveryPrice" placeholder="En jours" />
             </mat-form-field>
-
-            <!-- <mat-form-field appearance="outline">
-              <mat-label>À l'étranger</mat-label>
-              <input matInput type="number" min="0" formControlName="internationalDeliveryPrice" placeholder="En jours" />
-            </mat-form-field> -->
           </div>
 
           <!-- Delivery Price -->
@@ -154,7 +211,7 @@
 
 
 
-  <div *ngIf="selectedTab === 'securite'" class="securite">
+  <div *ngIf="selectedTab === 'security'" class="securite">
     <form [formGroup]="passwordForm" (ngSubmit)="onPasswordFormSubmit(passwordForm.value)" class="form-container">
       <div fxLayout="row wrap" fxLayoutAlign="center center">
         <div fxFlex.gt-xs="60">

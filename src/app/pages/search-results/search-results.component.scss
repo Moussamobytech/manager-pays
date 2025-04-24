@@ -1,0 +1,87 @@
+$primary: #25224a;
+$amber: #feb930;
+$fid_green: #548580;
+
+.not-found-container {
+  max-width: 400px;
+  margin: 5vh auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 60, 80, 0.08);
+  text-align: center;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    max-width: 95vw;
+    padding: 1.2rem 0.5rem;
+  }
+}
+
+.icon-wrapper {
+  background: linear-gradient(135deg, $primary 40%, lighten($primary, 10%) 100%);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  i {
+    color: #fff;
+    font-size: 2.5rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  }
+}
+
+h2 {
+  font-size: 1.3rem;
+  color: $primary;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+ul {
+  text-align: left;
+  margin: 0 0 1.5rem 0;
+  padding: 0 0 0 1.2rem;
+  font-size: 1rem;
+
+  li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    color: $amber;
+    list-style: square;
+
+    span{
+      color: $fid_green;
+    }
+  }
+}
+
+.home-btn {
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .3s, transform .1s;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 2px 8px rgba(255, 168, 0, 0.08);
+  background: linear-gradient(90deg, darken($amber, 15%) 60%, $amber 100%);
+
+  &:hover {
+    background: linear-gradient(90deg, darken($amber, 10%) 60%, lighten($amber, 5%) 100%);
+    transform: translateY(-2px) scale(1.01);
+  }
+}
