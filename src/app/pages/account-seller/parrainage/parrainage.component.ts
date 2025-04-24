@@ -179,7 +179,7 @@ export class ParrainageComponent implements OnInit {
     private campaignService: CampagneService) {
     this.form = this.formBuilder.group({
       campagne: ['', Validators.required],
-      promo: ['', Validators.required]
+     // promo: ['', Validators.required]
     });
   }
 
@@ -194,7 +194,6 @@ export class ParrainageComponent implements OnInit {
   getAllCampagne(username) {
     this.campagneService.getAllCampagneByUsername(username).subscribe({
       next: (datas) => {
-        console.log("CAMPAGNES !!!!!!!!!!! ",JSON.stringify(datas));
         this.campagne = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         this.filteredCampaigns = [...this.campagne];
 
@@ -255,7 +254,6 @@ export class ParrainageComponent implements OnInit {
             if (index !== -1) {
               this.campagne.splice(index, 1);
             }
-            console.log("Campagne successfully deleted.");
           },
           (error) => {
             console.error("Error deleting produit:", error);
@@ -388,7 +386,7 @@ export class ParrainageComponent implements OnInit {
       // Reset form fields after the dialog is closed
       this.form.reset({
         campagne: '',
-        typePromo: ''
+      //  typePromo: ''
       });
 
       // Navigate to the desired route

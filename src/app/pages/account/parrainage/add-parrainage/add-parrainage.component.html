@@ -130,19 +130,15 @@
                                     nombre </mat-error>
                             </mat-form-field>
                         </div>
-                        <!--  <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isParrainage">
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-label> Commission en %</mat-label>
-                                <input matInput formControlName="commission">
-                                <mat-error *ngIf="form.controls.commission.errors?.required">La commission est
-                                    obligatoire</mat-error>
-                                <mat-error *ngIf="form.controls.commission.errors?.pattern">Le prix doit etre un nombre
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="!form.controls.commission.errors?.pattern&&form.controls.commission.errors?.minlength">Le
-                                    prix minimum est 100FCFA</mat-error>
+                                <mat-label>Commission en %</mat-label>
+                                <input matInput formControlName="commission" required>
+                                <mat-error *ngIf="form.controls.commission.errors?.required">La commission est obligatoire</mat-error>
+                                <mat-error *ngIf="form.controls.commission.errors?.pattern">Le prix doit être un nombre</mat-error>
+                                <mat-error *ngIf="form.controls.commission.errors?.min">La commission minimum est de 1%</mat-error>
                             </mat-form-field>
-                        </div>                               <mat-error *ngIf="form.controls.pricePromotion.errors?.nonZero">Prix promo ne peut pas être zéro</mat-error> -->
+                        </div>
 
 
 

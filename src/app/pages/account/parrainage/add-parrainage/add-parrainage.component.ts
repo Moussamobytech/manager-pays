@@ -33,31 +33,39 @@ isOffre: boolean = false;
 isLivraison: boolean = false;
 
 typePromoSelect(typepromo: any) {
-  // Réinitialisation des valeurs
   let res = ""  
 
   this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
-res = typepromo.name
+  res = typepromo.name
   switch (res) {
     case 'OFFRE_BIENVENUE':
       this.isOffre = true;
       this.isLivraison = false;
-      this.isPromo = false
+      this.isPromo = false;
+      this.form.get('commission').clearValidators();
       break;
     case 'LIVRAISON_GRATUITE':
       this.isLivraison = true;
       this.isPromo = false;
-      this.isOffre = false
+      this.isOffre = false;
+      this.form.get('commission').clearValidators();
       break;
     case 'PARRAINAGE':
       this.isParrainage = true;
+      this.form.get('commission').setValidators([
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.min(1)
+      ]);
       break;
     case 'PROMOTION':
       this.isPromo = true;
       this.isLivraison = false;
-      this.isOffre = false
+      this.isOffre = false;
+      this.form.get('commission').clearValidators();
       break;
   }
+  this.form.get('commission').updateValueAndValidity();
 }
 
 

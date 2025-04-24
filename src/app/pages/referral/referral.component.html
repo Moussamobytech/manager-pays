@@ -4,9 +4,9 @@
   <div class="referal-header">
     <div class="gift-icon">🎁</div>
     <div class="referal-details">
-      <h2>GAGNE JUSQU’À 5000 F PAR AMI INVITÉ !</h2>
-      <p>Invite tes amis et gagne de l’argent à chaque transaction qu’ils réalisent ! 🚀</p>
-      <div class="referal-link" fxLayout.lt-sm="column">
+      <h2>GAGNE JUSQU'À UNE SOMME CONSIDÉRABLE PAR AMI INVITÉ !</h2>
+      <p>Invite tes amis et gagne de l'argent à chaque transaction qu'ils réalisent ! 🚀</p>
+    <!--   <div class="referal-link" fxLayout.lt-sm="column">
         <div fxFlex.xs="50" fxLayout="row" class="copy-container">
           <input matInput type="text" value="fidelity.promo" class="copy-input" #linkInput readonly>
           <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
@@ -17,9 +17,56 @@
           <mat-icon class="ph-icon" >share</mat-icon>
         </div>
       </div>
+     -->
     </div>
   </div>
 
+  <!-- Section des campagnes de parrainage actives -->
+  <div class="active-campaigns" *ngIf="parrainageCampaigns.length > 0">
+    <h3>Campagnes de parrainage en cours</h3>
+    <div class="campaigns-grid" fxLayout="row wrap" fxLayoutGap="20px">
+      <mat-card *ngFor="let campaign of parrainageCampaigns" class="campaign-card" fxFlex="100" fxFlex.gt-sm="45">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="title-container">
+              <span class="campaign-name">{{ campaign.nom }}</span>
+              <div class="commission-info">
+                <span class="commission-amount">Commission: {{ (campaign.commissionParrain * campaign.montantMinAchat / 100) | number:'1.0-0' }} F</span>
+                <span class="commission-percent">({{ campaign.commissionParrain }}%)</span>
+              </div>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ campaign.description }}</p>
+          <div class="campaign-dates">
+            <span>Du {{ campaign.dateDebut | date:'dd/MM/yyyy' }} au {{ campaign.dateFin | date:'dd/MM/yyyy' }}</span>
+            <span>{{ calculateRemainingDays(campaign) }}</span>
+          </div>
+          <div class="campaign-code" *ngIf="campaign.codePromoList && campaign.codePromoList.length > 0">
+            <p>Votre code de parrainage:</p>
+            <div class="code-container">
+              <span class="code">{{ campaign.codePromoList[0].code }}</span>
+              <div class="code-actions">
+                <button mat-icon-button (click)="copyCode(campaign.codePromoList[0].code)" matTooltip="Copier le code">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                <button mat-icon-button (click)="shareOnWhatsApp(campaign)" matTooltip="Partager sur WhatsApp">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </button>
+                <button mat-icon-button (click)="shareOnSocial(campaign)" matTooltip="Partager sur les réseaux sociaux">
+                  <mat-icon>share</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="share-message">
+              Partagez ce code avec vos amis pour gagner {{ (campaign.commissionParrain * campaign.montantMinAchat / 100) | number:'1.0-0' }} F par parrainage !
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 
   <div class="referal-benefits" fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start center">
     <div class="benefit" fxFlex="45" fxFlex.gt-xs="30" fxFlex.gt-sm="22" *ngFor="let benefit of benefits" >

@@ -53,6 +53,7 @@ import { ProductsCardComponent } from './product-card/product-card.component';
 import { SearchResultsComponent } from '../pages/search-results/search-results.component';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { LazyLoadImagesDirective } from './lazy-load-images.directive';
+import { DateDiffPipe } from './pipes/date-diff.pipe';
 
 @NgModule({
   imports: [
@@ -148,7 +149,8 @@ import { LazyLoadImagesDirective } from './lazy-load-images.directive';
     ConfirmDialogComponent,
     LangComponent,
     SlickCarouselModule,
-    LazyLoadImagesDirective
+    LazyLoadImagesDirective,
+    DateDiffPipe
   ],
   declarations: [
     RatingComponent,
@@ -162,8 +164,9 @@ import { LazyLoadImagesDirective } from './lazy-load-images.directive';
     CategoryListComponent,
     ConfirmDialogComponent,
     LangComponent,
-    LazyLoadImagesDirective
-   ],
+    LazyLoadImagesDirective,
+    DateDiffPipe
+  ],
   providers:[
     // { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }
   ]

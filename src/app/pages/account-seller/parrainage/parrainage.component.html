@@ -202,7 +202,11 @@
         </div>
       </div>
       <div style="text-align: center;" mat-dialog-content *ngIf="allCodesCampagne == ''">
-        <strong>Vous n'avez pas de codes généré pour cette campagne </strong>
+        <strong>Vous n'avez pas de codes généré pour cette campagne 
+          <button mat-raised-button class="bleu mr-2" matTooltip="Générer un code" (click)="openDialog()">
+            Générer un code
+          </button>
+         </strong>
       </div>
     </ng-template>
 
@@ -366,9 +370,17 @@
               [ngClass]="campagne.typePromo.name.toLowerCase()">
             </mat-slide-toggle>
           </label>
-          <button class="campaign__edit-button" (click)="edit(campagne.id)">
-            <i class="fa-solid fa-pen"></i>
-          </button>
+          <div class="campaign__actions">
+            <button class="campaign__action-button" matTooltip="Détails" (click)="openCampagneDetail(campagne)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <button class="campaign__action-button" matTooltip="Modifier" (click)="edit(campagne.id)">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button class="campaign__action-button delete" matTooltip="Supprimer" (click)="remove(campagne)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
     </section>

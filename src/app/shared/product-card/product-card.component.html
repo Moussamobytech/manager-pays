@@ -32,7 +32,7 @@
         </span>
       </p>
     </div>
-    <div class="delivery-state">
+    <div class="delivery-state" *ngIf="product.campagne && product.campagne.type === 'LIVRAISON_GRATUITE'">
       <p>Livraison gratuite</p>
     </div>
     <!-- <div class="divider"></div> -->

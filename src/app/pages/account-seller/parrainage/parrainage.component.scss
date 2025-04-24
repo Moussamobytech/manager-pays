@@ -407,6 +407,40 @@ $fid_green: #548580;
               color: $amber;
             }
           }
+
+          .campaign__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-left: 8px;
+
+            .campaign__action-button {
+              background: none;
+              border: none;
+              color: $primary;
+              font-size: 1.1rem;
+              cursor: pointer;
+              transition: all 0.3s;
+              padding: 4px;
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 32px;
+              height: 32px;
+
+              &:hover {
+                color: $amber;
+                background: rgba($amber, 0.1);
+                transform: scale(1.1);
+              }
+
+              &.delete:hover {
+                color: #f44336;
+                background: rgba(#f44336, 0.1);
+              }
+            }
+          }
         }
       }
     }
