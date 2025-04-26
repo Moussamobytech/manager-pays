@@ -206,10 +206,13 @@ export class AppService {
       if (isDirectSynonym) adjustedScore -= 0.08;  // Boost synonym matches
       if (isSynonymPrefix) adjustedScore -= 0.12;  // Boost synonym prefix matches
 
-      return { item: r.item, adjustedScore };
+      return { item: r.item, adjustedScore, realScore: r.score };
     })
     .sort((a, b) => a.adjustedScore - b.adjustedScore);
 
+  // Filter out low-scoring results
+  const maybeMissing = boosted.find(r => r.realScore !== undefined && r.adjustedScore < 0.01);
+  console.log('maybeMissing', maybeMissing);
   // 5. Remove same-named products/categories
   const unique: { type: string; item: Category | Product }[] = [];
   const seen = new Set<string>();

@@ -166,9 +166,7 @@ export class PagesComponent implements OnInit {
       const suggestion = this.suggestions[0]?.item;
       const type = this.suggestions[0]?.type;
 
-      if (this.suggestions.length === 0) {
-        this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
-      } else if (type === 'product') {
+      if (this.suggestions.length === 0 || type === 'product') {
         this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
       } else {
         this.router.navigate(['/categories/' + suggestion.cle]);

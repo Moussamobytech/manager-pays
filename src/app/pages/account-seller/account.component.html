@@ -41,7 +41,7 @@
       </mat-card>
 
       <ng-container *ngFor="let link of links">
-        <a mat-button [routerLink]="link.href" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact: false}">
+        <a mat-button [routerLink]="link.href" (click)="(link.name == 'Déconnection')? auth.logout() : null" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact: false}">
           <mat-icon>{{link.icon}}</mat-icon>
           {{ link.name }}
         </a>

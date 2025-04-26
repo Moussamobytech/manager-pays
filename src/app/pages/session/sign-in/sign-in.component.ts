@@ -42,10 +42,13 @@ export class SignInComponent implements OnInit {
     this.countryService.getAllCountries().subscribe(datas => {
       this.countries = datas
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-      .map(country => ({...country, mask: this.getPhoneMask(country.nom)}));
-      console.log(this.countries);
+      .map(country => ({
+        ...country,
+        mask: this.getPhoneMask(country.nom),
+        indicatif: `+${country.indicatif}`,
+      }));
       this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
-      this.loginForm.controls['country'].setValue(this.selectedCountry.id);
+      this.loginForm.controls['country'].setValue(this.selectedCountry?.id);
     })
   }
 
