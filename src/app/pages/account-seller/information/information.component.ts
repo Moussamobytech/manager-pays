@@ -27,15 +27,62 @@ export class InformationComponent implements OnInit {
   maxWords: number = 70;
   imgLink: string = "https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file=";
 
-  selectedTab = 'informations';
+  selectedTab = 'general';
   phoneMask: string = '00 00 00 00'; // Default mask for Mali
 
+  // tabs = [
+  //   { label: 'Informations générales', value: 'informations', icon: 'gears' },
+  //   { label: 'Apparence de la boutique', value: 'apparence', icon: 'qrcode' },
+  //   { label: 'Gestion de la livraison', value: 'gestion', icon: 'truck' },
+  //   { label: 'Sécurité du compte', value: 'securite', icon: 'lock' }
+  // ];
+
   tabs = [
-    { label: 'Informations générales', value: 'informations', icon: 'gears' },
-    { label: 'Apparence de la boutique', value: 'apparence', icon: 'qrcode' },
-    { label: 'Gestion de la livraison', value: 'gestion', icon: 'truck' },
-    { label: 'Sécurité du compte', value: 'securite', icon: 'lock' }
+    { 
+      value: 'general', 
+      label: 'Informations générales', 
+      sublabel: 'Nom, adresse, contacts',
+      icon: 'user' 
+    },
+    { 
+      value: 'security', 
+      label: 'Sécurité du compte', 
+      sublabel: 'Mot de passe',
+      icon: 'shield' 
+    },
+    { 
+      value: 'appearance', 
+      label: 'Apparence de ma boutique', 
+      sublabel: 'Logo, couleurs, bannière',
+      icon: 'palette' 
+    },
+    { 
+      value: 'shipping', 
+      label: 'Gestion de la livraison', 
+      sublabel: 'Zones, tarifs, délais',
+      icon: 'truck' 
+    },
+    { 
+      value: 'payments', 
+      label: 'Paiments', 
+      sublabel: 'Méthodes, commissions',
+      icon: 'credit-card' 
+    },
+    { 
+      value: 'notifications', 
+      label: 'Notifications', 
+      sublabel: 'Email, SMS, WhatsApp',
+      icon: 'bell' 
+    },
+    { 
+      value: 'help', 
+      label: 'Besoin d\'aide', 
+      sublabel: 'Contacter l\'équipe Fidelity',
+      icon: 'circle-info' 
+    }
   ];
+
+  
 
   // availableCountries = ['Mali', 'Senegal', 'Ivory Coast'];
   public selectedCountries: string[] = [];
@@ -353,6 +400,13 @@ export class InformationComponent implements OnInit {
 
   onTabChange(event: MatSelectChange) {
     this.selectedTab = event.value;
+    if( this.selectedTab === 'payments' ){
+      this.cm.goTo("/account-seller/pricing")
+    }
+  }
+
+  handleTabClick(value:any){
+    this.selectedTab = value;
   }
 
   getSelectedIcon(): string {

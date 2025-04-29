@@ -10,7 +10,6 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { ProductService } from 'src/app/services/product.service';
 import { User } from 'src/app/models/user.models';
 import { CampagneService } from 'src/app/services/campagne.service';
-import { CountryService } from 'src/app/services/country.service';
 
 @Component({
   selector: 'app-add-parrainage',
@@ -130,17 +129,8 @@ typePromoSelect(typepromo: any) {
     private auth: AuthenticationService, 
     private productService: ProductService, 
     private campagneService: CampagneService,
-    private countryService: CountryService,
-    
     private router: Router,private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) {
-      this.form = this.fb.group({
-        products: this.fb.array([], Validators.required)
-      });
-  
-     }
-
-   
+    private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
@@ -148,11 +138,11 @@ typePromoSelect(typepromo: any) {
     this.getAllPromo();  
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
-      'reduction': [null],
+      'reduction': [null, Validators.required],
       'commission': null,
       'nombreUtilisation':null,
       'montantMinAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
-      'montantMaxAchat': [null],
+      'montantMaxAchat': [null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(3)]],
       "dateDebut":[null,Validators.required],
       "dateFin":[null,Validators.required],
       "description": null,
@@ -182,42 +172,13 @@ typePromoSelect(typepromo: any) {
         this.getCampagneById();
       }
     });
-
-    this.getAllPays();
   }
 
-
-  getAllPays() {
-    this.countryService.getAllCountries().subscribe(datas => {
-      this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    })
-  }
-
-  selectedProducts = new FormControl([]);
-  selectedProducts2 = new FormControl([]);
-
-  toggleCountry(pays: any, event: any) {
-    const selected = this.selectedCountries.value || [];
-    if (event.checked) {
-      this.selectedCountries.setValue([...selected, pays]);
-    } else {
-      this.selectedCountries.setValue(selected.filter(id => id !== pays));
-    }
-  }
-  toggleSelection(productId: number, event: any) {
-    const selected = this.selectedProducts.value || [];
-    if (event.checked) {
-      this.selectedProducts.setValue([...selected, productId]);
-    } else {
-      this.selectedProducts.setValue(selected.filter(id => id !== productId));
-    }
-  }
 
   async loadData() {
 
     let res = await this.productService.productUser(this.currentUser.username)
     this.products = res
-    
   }
   //Controle pour la saisie de 0
   nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -241,7 +202,9 @@ typePromoSelect(typepromo: any) {
 
  
 
-  async save() {    
+  async save() {
+    console.log("Le type vaut:::::::: ",this.form.value.typePromo);
+    
     try {
       if (this.form.valid) {
         const data = {
@@ -256,31 +219,20 @@ typePromoSelect(typepromo: any) {
           dateFin: this.form.value.dateFin,
           username: this.form.value.username,
           seuilRetrait: this.form.value.seuilRetrait,
-          typePromo:this.form.value.typePromo,
-          typeOffre:this.form.value.typeOffre,
-          produitPromos:this.selectedProducts.value,
-          zoneLivraison:this.selectedCountries.value,
-          cadeauxProduit:this.selectedProducts2.value
-
+          typePromo:this.form.value.typePromo
         };
   
         this.campagneService.add(data).subscribe({
           next: (datas) => {           
           
               this.commonService.successToast(datas.message);
-              this.router.navigate(["/account-seller/parrainage"]);
+              this.router.navigate(["/account/parrainage"]);
            
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
               this.commonService.errorToast(err.body.message);
-            }
-            if(err.status == "400"){
-              this.commonService.errorToast(err.message);
-
-            }
-            
-            else {
+            } else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
           }
@@ -290,17 +242,13 @@ typePromoSelect(typepromo: any) {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
     } catch (error) {
-   //   console.log(error);
+      console.log(error);
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
   }
   
 
   async edit() {
-
-    console.log(";;;;;;;;;;;TYPE ::::::::::::PRO = ",this.form.value.produitIds);
-    
-
     let size = 0;
     try {
       if (this.form.valid) {
@@ -316,18 +264,14 @@ typePromoSelect(typepromo: any) {
           dateFin: this.form.value.dateFin,
           username: this.form.value.username,
           seuilRetrait: this.form.value.seuilRetrait,
-          typePromo:this.form.value.typePromo,
-          typeOffre:this.form.value.typeOffre,
-          produitIds:this.selectedProducts.value,
-          zoneLivraison:this.selectedCountries.value,
-          cadeauxProduit:this.selectedProducts2.value
+          typePromo:this.form.value.typePromo
         };
 
       
         this.campagneService.edit(this.id,data).subscribe({
           next: (datas) => {           
               this.commonService.successToast(datas.message);
-              this.router.navigate(["/account-seller/parrainage"]);
+              this.router.navigate(["/account/parrainage"]);
            
           },
           error: (err) => {
@@ -336,7 +280,7 @@ typePromoSelect(typepromo: any) {
             }
             else if(err && err.statusCode == "OK"){
               this.commonService.successToast("Campagne modifiée avec succès !");
-              this.router.navigate(["/account-seller/parrainage"]);
+              this.router.navigate(["/account/parrainage"]);
             }
              else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
@@ -350,17 +294,15 @@ typePromoSelect(typepromo: any) {
 
 
     } catch (error) {
-     // console.log(error)
+      console.log(error)
     }
   }
 
 
   public getCampagneById(){
     this.campagneService.find(this.id).then((data : any) =>{
-      console.log("ME CAMPAGNE +++",data.produitPromos)
+      console.log(data)
       this.form.patchValue(data);
-      this.form.controls.typePromo.patchValue(data.typePromo.id); 
-     // this.form.controls.produitIds.patchValue(data.produitPromos.id);
      
      // this.form.controls.images.setValue(images);
     })
@@ -384,20 +326,37 @@ typePromoSelect(typepromo: any) {
   public promo(key) {
     let res = ""
     switch (key) {
-      case "PROMOTION":
-        res = "Promotion"
+      case "POURCENTAGE":
+        res = "Pourcentage"
         break;
 
-      case "OFFRE_BIENVENUE":
-        res = "Offre bienvenue"
+      case "MONTANT_FIXE":
+        res = "Montant fixe"
         break;
 
       case "LIVRAISON_GRATUITE":
         res = "Livraison gratuite"
         break;
-
+      case "ACHAT_1_OFFERT":
+        res = "Lors des premiers achats"
+        break;
+      case "CADEAU":
+        res = "Cadeaux aux achats"
+        break;
+      case "POINTS_BONUS":
+        res = "Des points en bonus"
+        break;
+      case "BON_ACHAT":
+        res = "Le bon achat"
+        break;
       case "PARRAINAGE":
         res = "Parrainage"
+        break;
+      case "ESSAI_GRATUIT":
+        res = "Les essais gratuits"
+        break;
+      case "ABONNEMENT_REDUIT":
+        res = "Abonnement"
         break;
 
       default:

@@ -9,6 +9,8 @@ import { Category } from './models/category.models';
 import { Product } from './models/product.models';
 import { Contact, Newsletter } from './app.models';
 import { CartService } from './services/carte.service';
+import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
+import { SearchSynonymsService } from './services/search-synonyms.service';
 
 export class Data {
   constructor(
@@ -41,7 +43,7 @@ export class AppService {
     public snackBar: MatSnackBar,
     public apiService: ApiService,
     private cartService:CartService,
-
+    private synonymService: SearchSynonymsService,
   ) {}
 
   infoSeller(username: string):Observable<any> {
@@ -119,49 +121,166 @@ export class AppService {
   }
 
   private cache = new Map<string, any>();
+  private normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
-  public searchProductsAndCategories(categories: Category[]=[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
-    // accents insensitivity
-    const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-    const lowerTerm = normalizeString(term).trim();
-    if (this.cache.has(lowerTerm)) {
-        return of(this.cache.get(lowerTerm)!);
-    }
+  private fuseOptions: IFuseOptions<{ type: string, item: Category | Product }> = {
+    // ignore diacritics (accents)
+    ignoreDiacritics: true,
+    // should be case sensitive
+    isCaseSensitive: false,
+    // We’ll be searching the `item.nom` field
+    keys: [
+      { name: 'item.nom', weight: 2 },
+      { name: 'item.description', weight: 1 }
+    ],
+    // 0.0 = exact only; raise for more permissive matching (0.3 is a good start)
+    threshold: 0.2,
+    // allow matches anywhere in the string
+    ignoreLocation: true,
+    // sort by match score
+    shouldSort: true,
+    // include score in the result
+    includeScore: true,
+    // matches at least 2 chars
+    minMatchCharLength: 2,
+  };
 
-    const filterItems = <T extends { nom: string }>(items: T[], type: string): { type: string, item: T }[] => {
-      // first i check if element starts with the term
-      const startsWithTerm = items
-        .filter(item => normalizeString(item.nom).startsWith(lowerTerm))
-        .map(item => ({ type, item }));
-      //Then element that contains the searchTerm but excluding the one starting with the term
-      const includesTerm = items
-        .filter(item =>
-          !normalizeString(item.nom).startsWith(lowerTerm) && normalizeString(item.nom).includes(lowerTerm))
-        .map(item => ({ type, item }));
-      return [...startsWithTerm, ...includesTerm];
-    };
-    // filtered products and categories
-    const matchingProducts = filterItems(products, 'product');
-    const matchingCategories = filterItems(categories, 'category');
-    let combinedResults: { type: string, item: Category | Product }[] = [...matchingProducts, ...matchingCategories];
-
-    // remoing deduplicated results
-    const uniqueResults: { type: string, item: Category | Product }[] = [];
-    const seenNames = new Set<string>();
-
-    combinedResults.forEach(result => {
-        const name = result.item.nom.toLowerCase();
-        if (!seenNames.has(name)) {
-            seenNames.add(name);
-            uniqueResults.push(result);
-        }
-    });
-
-    // cache the combined results for future researches
-    this.cache.set(lowerTerm, uniqueResults);
-    return of(uniqueResults);
-
+  /**
+   * Search for products and categories matching the search term
+   * Includes synonym expansion and intelligent scoring
+   */
+  public searchProductsAndCategories(categories: Category[] = [], products: Product[] = [], term: string):
+  Observable<{ type: string; item: Category | Product }[]> {
+  const q = term.trim();
+  if (!q) {
+    return of([]);
   }
+
+  // Cache lookup
+  if (this.cache.has(q)) {
+    return of(this.cache.get(q)!);
+  }
+
+  // Use expandTerm to get all relevant terms - this includes the original term
+  const expandedTerms = [q, ...this.synonymService.expandTerm(q)];
+
+  // 1. Tag and combine all items
+  const allItems: { type: string; item: Category | Product }[] = [
+    ...products.map(p => ({ type: 'product', item: p })),
+    ...categories.map(c => ({ type: 'category', item: c }))
+  ];
+
+  // 2. Build Fuse index
+  const fuse = new Fuse(allItems, this.fuseOptions);
+
+  // 3. Run searches for all expanded terms and combine results
+  let allResults: FuseResult<{ type: string; item: Category | Product }>[] = [];
+
+  expandedTerms.forEach(expandedTerm => {
+    const termResults = fuse.search(expandedTerm);
+    allResults = [...allResults, ...termResults];
+  });
+
+  // Remove duplicates from combined results by item ID
+  const seenIds = new Set<string>();
+  allResults = allResults.filter(result => {
+    const id = result.item.item.id || '';
+    if (seenIds.has(id)) {
+      return false;
+    }
+    seenIds.add(id);
+    return true;
+  });
+
+  // 4. Boost prefix matches & sort by adjusted score
+  const normalizedQ = this.normalize(q);
+  const boosted = allResults
+    .map(r => {
+      const nm = this.normalize(r.item.item.nom);
+
+      // Calculate match type bonuses
+      const isExactMatch = nm === normalizedQ;
+      const isPrefix = nm.startsWith(normalizedQ);
+      const isDirectSynonym = expandedTerms.slice(1).some(synonym =>
+        this.normalize(r.item.item.nom).includes(this.normalize(synonym))
+      );
+      const isSynonymPrefix = expandedTerms.slice(1).some(synonym =>
+        this.normalize(r.item.item.nom).startsWith(this.normalize(synonym))
+      );
+
+      // Apply score adjustments - lower scores are better in Fuse.js
+      let adjustedScore = (r.score ?? 1);
+      if (isExactMatch) adjustedScore -= 0.2;      // Strongest boost for exact matches
+      else if (isPrefix) adjustedScore -= 0.1;     // Boost prefix matches
+
+      if (isDirectSynonym) adjustedScore -= 0.08;  // Boost synonym matches
+      if (isSynonymPrefix) adjustedScore -= 0.12;  // Boost synonym prefix matches
+
+      return { item: r.item, adjustedScore, realScore: r.score };
+    })
+    .sort((a, b) => a.adjustedScore - b.adjustedScore);
+
+  // Filter out low-scoring results
+  const maybeMissing = boosted.find(r => r.realScore !== undefined && r.adjustedScore < 0.01);
+  console.log('maybeMissing', maybeMissing);
+  // 5. Remove same-named products/categories
+  const unique: { type: string; item: Category | Product }[] = [];
+  const seen = new Set<string>();
+  for (const { item } of boosted) {
+    const key = this.normalize(item.item.nom);
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(item);
+    }
+  }
+
+  // 6. Cache & return
+  this.cache.set(q, unique);
+  return of(unique);
+}
+
+
+  // public searchProductsAndCategories(categories: Category[]=[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
+  //   // accents insensitivity
+  //   const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  //   const lowerTerm = normalizeString(term).trim();
+  //   if (this.cache.has(lowerTerm)) {
+  //       return of(this.cache.get(lowerTerm)!);
+  //   }
+
+  //   const filterItems = <T extends { nom: string }>(items: T[], type: string): { type: string, item: T }[] => {
+  //     // first i check if element starts with the term
+  //     const startsWithTerm = items
+  //       .filter(item => normalizeString(item.nom).startsWith(lowerTerm))
+  //       .map(item => ({ type, item }));
+  //     //Then element that contains the searchTerm but excluding the one starting with the term
+  //     const includesTerm = items
+  //       .filter(item =>
+  //         !normalizeString(item.nom).startsWith(lowerTerm) && normalizeString(item.nom).includes(lowerTerm))
+  //       .map(item => ({ type, item }));
+  //     return [...startsWithTerm, ...includesTerm];
+  //   };
+  //   // filtered products and categories
+  //   const matchingProducts = filterItems(products, 'product');
+  //   const matchingCategories = filterItems(categories, 'category');
+  //   let combinedResults: { type: string, item: Category | Product }[] = [...matchingProducts, ...matchingCategories];
+
+  //   // remoing deduplicated results
+  //   const uniqueResults: { type: string, item: Category | Product }[] = [];
+  //   const seenNames = new Set<string>();
+
+  //   combinedResults.forEach(result => {
+  //       const name = result.item.nom.toLowerCase();
+  //       if (!seenNames.has(name)) {
+  //           seenNames.add(name);
+  //           uniqueResults.push(result);
+  //       }
+  //   });
+
+  //   // cache the combined results for future researches
+  //   this.cache.set(lowerTerm, uniqueResults);
+  //   return of(uniqueResults);
+  // }
 
   public getProductById(id): Observable<any> {
     return this.apiService.get('/produit/find/' + id);

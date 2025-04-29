@@ -23,7 +23,7 @@ export class AccountComponent implements OnInit {
     public router: Router,
     public domHandlerService: DomHandlerService,
     public translateService: TranslateService,
-    private auth: AuthenticationService,
+    public auth: AuthenticationService,
     public dialog: MatDialog,
     private fb: FormBuilder,
     private cm:CommonService,
@@ -48,7 +48,7 @@ export class AccountComponent implements OnInit {
     // { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
     { name: 'Paramètres', href: 'settings', icon: 'settings' },
     { name: 'Comment ca marche?', href: 'how_works', icon: 'help_outline' },
-    { name: 'Déconnection', href: '/sign-in', icon: 'power_settings_new' },
+    { name: 'Déconnection', href: '/authentication', icon: 'power_settings_new' },
   ];
 
   async ngOnInit() {

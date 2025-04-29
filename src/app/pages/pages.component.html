@@ -24,13 +24,15 @@
                 <app-category-list [categories]="categories" (change)="changeCategory($event)"></app-category-list>
               </span>
             </mat-menu>
-            <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit"name="query" fxFlex />
-            <button mat-mini-fab type="submit" class="search-btn mat-elevation-z0 text-muted">
-              <mat-icon>search</mat-icon>
-            </button>
+            <div class="search-bar" fxFlex>
+              <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" autocomplete="off" fxFlex />
+              <button mat-mini-fab type="submit" class="search-btn mat-elevation-z0 text-muted">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
           </form>
           <div class="suggestion-container" *ngIf="showSuggestions && suggestions.length > 0">
-            <div class="suggestions-list" appClickOutside="onClickOutside()" #suggestionsContainer>
+            <div class="suggestions-list" #suggestionsContainer>
               <ul>
                 <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
                   <mat-icon>search</mat-icon>
@@ -129,12 +131,14 @@
       <div fxLayoutAlign="space-between center" class="search-container">
         <div fxFlex="85" class="search-content">
           <form (submit)="onSearch($event)" class="search-form" fxLayout="row">
-            <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" fxFlex />
-            <button mat-mini-fab type="submit" class="search-btn mat-elevation-z0 text-muted">
-              <mat-icon>search</mat-icon>
-            </button>
+            <div class="search-bar" fxFlex>
+              <input type="text" [formControl]="searchTerm" placeholder="Rechercher un produit" name="query" autocomplete="off" fxFlex />
+              <button mat-mini-fab type="submit" class="search-btn mat-elevation-z0 text-muted">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
           </form>
-          <div *ngIf="showSuggestions && suggestions.length > 0" class="suggestions-list"appClickOutside="onClickOutside()" #suggestionsContainer>
+          <div *ngIf="showSuggestions && suggestions.length > 0" class="suggestions-list" #suggestionsContainer>
             <ul>
               <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
                 <mat-icon>search</mat-icon>

@@ -8,7 +8,7 @@
         </p>
       </div>
           <div fxLayout="row wrap">
-              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+              <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                   <mat-form-field appearance="outline" class="w-100">
                       <mat-label>Nom</mat-label>
                       <input matInput formControlName="nom" required>
@@ -26,7 +26,7 @@
                       </mat-select>
                       <mat-error *ngIf="form.controls.categorie.errors?.required">La categorie est obligatoire</mat-error>
                   </mat-form-field>
-              </div>
+              </div> -->
 
       <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
         <input-file formControlName="images" [containerFlex]="inputFileFlex" [fileLimit]="5" fileAccept="image/*"></input-file>

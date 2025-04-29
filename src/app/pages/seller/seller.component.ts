@@ -80,109 +80,87 @@ export class SellerComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.currentUser = this.auth.currentUser();
     this.sortProducts();
+    this.onWindowResize();
+  
     this.activatedRoute.params.subscribe((params) => {
+      const code = params['code'];
       this.senderUsername = params['currentUser'];
-      let code = params['code'];
-      
-      if(code && code.length == 10){
-        // Stocker le code dans le sessionStorage
+  
+      if (code?.length === 10) {
         sessionStorage.setItem('referralCode', code);
         sessionStorage.setItem('senderUsername', this.senderUsername);
         this.getSellerFromCode(code);
       } else {
-        // Vérifier si un code existe déjà dans le sessionStorage
-        const storedCode = sessionStorage.getItem('referralCode');
-        const storedUsername = sessionStorage.getItem('senderUsername');
-        if(storedCode && storedCode.length == 10) {
-          this.senderUsername = storedUsername;
-          this.getSellerFromCode(storedCode);
-        }
+        this.initCurrentUserFlow();
       }
     });
-    this.onWindowResize();
   }
-
-
-
-  getSellerFromCode(code:string){
-      this.campagneService.getCampagneByCode(code).subscribe(datas =>{
-        this.sellerId = datas.user.username;
-        if(this.sellerId.length <= 8){
-          this.cm.goTo("/");
-        }else{
-          this.getDataFromBackend();
-          this.shopLink = window.location.origin+"/#/sellers/"+this.sellerId+"/"+code;
-          //console.log("::::::::::::::: SHOP LINK = ",this.shopLink);
-        }
-        })
-  }
-
-  public async getDataFromBackend() {
-    try {
-      this.getSeller();
-      this.getProducts().subscribe(()=>{
-        this.getCategories();
-      });
-    } catch (error) {
-      this.common.errorToast(
-        "Une erreur s'est produite lors du chargement. Merci de réessayer."
-      );
+  
+  private initCurrentUserFlow() {
+    this.currentUser = this.auth.currentUser();
+    this.sellerId = this.currentUser.username;
+  
+    if (this.currentUser.profiles[0].name === 'ROLE_BOUTIQUE') {
+      this.getDataFromBackend();
     }
   }
-
-  private getSeller() {
-
-   /* this.sellerInfo = this.auth.currentUser()
-    let cur = this.sellerInfo;*/
-
-    this.auth.getUserInfo(this.sellerId).subscribe(datas =>{
-   //     console.log(":::::::::::::: INFO ",datas);
-      this.sellerInfo = datas
-      
-    })
-
-    
-    this.bannersService.getBannersByUsername(this.sellerId).subscribe(datas => {
-      
-      this.bannersInfo = datas;
-      this.sellerBanners = [
-        this.bannersInfo.image1,
-        this.bannersInfo.image2,
-        this.bannersInfo.image3
-      ]
-      .filter(img => !!img)
-      .map(img => {
-        // Si c'est déjà une URL externe (commence par http), on la garde telle quelle
-        if (img.startsWith('http')) return { image: img };
-
-        // Sinon, on la compose avec imgsLink
-        return { image: this.imgsLink + img };
-      });
-
-    });
-
-  /*  this.appService.infoSeller(this.sellerId).subscribe(
-      (infoS)=>{
-        this.sellerInfo = infoS;
-        this.sellerBanners = [
-          (this.sellerInfo.bg1)?{ image: this.imgsLink+this.sellerInfo.bg1}:null,
-          (this.sellerInfo.bg2)?{ image: this.imgsLink+this.sellerInfo.bg2}:null,
-          (this.sellerInfo.bg3)?{ image: this.imgsLink+this.sellerInfo.bg3}:null,
-        ].filter((item)=>item!=null);
-        if(!this.sellerInfo?.nom){
-          this.cm.goTo("/sellers/denied/not-allowed");
-        }
-      },
-      (error)=>{
-        if(error.status==400){
+  
+  private getSellerFromCode(code: string) {
+    this.campagneService.getCampagneByCode(code).subscribe({
+      next: (data) => {
+        this.sellerId = data.user.username;
+  
+        if (this.sellerId.length <= 8) {
           this.cm.goTo('/');
+          return;
         }
+  
+        this.shopLink = `${window.location.origin}/#/sellers/${this.sellerId}/${code}`;
+        this.getDataFromBackend();
+      },
+      error: () => {
+        this.common.errorToast("Code de parrainage invalide.");
       }
-    );
-    */
+    });
   }
+  
+  private async getDataFromBackend() {
+    try {
+      this.getSeller();
+      this.getProducts().subscribe(() => this.getCategories());
+    } catch {
+      this.common.errorToast("Une erreur s'est produite lors du chargement. Merci de réessayer.");
+    }
+  }
+  
+  private getSeller() {
+    this.auth.getUserInfo(this.sellerId).subscribe({
+      next: (data) => {
+        this.sellerInfo = data;
+      }
+    });
+  
+    this.bannersService.getBannersByUsername(this.sellerId).subscribe({
+      next: (data) => {
+        this.bannersInfo = data;
+        this.sellerBanners = this.mapBanners([
+          data.image1,
+          data.image2,
+          data.image3
+        ]);
+      }
+    });
+  }
+  
+  private mapBanners(images: (string | null)[]): { image: string }[] {
+    return images
+      .filter((img): img is string => !!img)
+      .map(img => ({
+        image: img.startsWith('http') ? img : this.imgsLink + img
+      }));
+  }
+  
 
   private getProducts() {
     return this.produitService.getProductBySeller(this.sellerId).pipe(
