@@ -104,6 +104,12 @@ resetPassword(username: string, newpassword: string): Observable<any> {
       }
     }
 
+     getUserInfo(username: string): Observable<any>{
+   
+       return this.api.get(`/users/info-user-by-username?username=`+username);
+     
+    }
+
     getAllUsers():Observable<User[]> {
       try{
         let users:Observable<User[]> = this.api.get("users/list");
@@ -158,6 +164,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * @param countries le pays d'utilisateur
      */
     signup(formData: any): any {
+        console.log("::::::::::::::: FORM DATA = ",formData.get("countries"));
         return this.api.postFile(`/users/register`, formData);
     }
 
@@ -191,6 +198,10 @@ resetPassword(username: string, newpassword: string): Observable<any> {
 
     getUserByPhone(phone: string): Observable<any> {      
       return this.api.get(`/users/get-by-phone/${phone}`);
+    }
+
+    gainList(parrainId: string): Observable<any> {
+      return this.api.get(`/users/gain-list/${parrainId}`);
     }
 
 

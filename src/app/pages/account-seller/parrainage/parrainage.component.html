@@ -349,7 +349,7 @@
               </ng-container>
             </div>
             <div class="campaign__description">
-              <div class="campaign__description-text">{{ campagne.description }}</div>
+              <div class="campaign__description-text" *ngIf="campagne.commissionParrain">Commission {{ campagne.commissionParrain }}%</div>
               <div class="campaign__dates">
                 <span class="campaign__date-item">
                   <i class="fa-solid fa-calendar"></i>

@@ -34,9 +34,12 @@ export class ReferralComponent implements OnInit {
       description: 'C\'est simple : partage et tout le monde gagne !'
     }
   ];
-  parrainageCampaigns: any[] = [];
+  parrainageCampaigns: any;
   isCopied = false;
   referalLink: string = "https://fidelity-market.com/#/products/promo";
+
+ // sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
+ // shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
 
   constructor(
     private campagneService: CampagneService,
@@ -44,10 +47,10 @@ export class ReferralComponent implements OnInit {
     private clipboard: Clipboard,
     private authService: AuthenticationService
   ) {
-    this.currentUser = this.authService.currentUser();
   }
 
   ngOnInit() {
+    this.currentUser = this.authService.currentUser();
     this.loadParrainageCampaigns();
   }
 
@@ -60,16 +63,16 @@ export class ReferralComponent implements OnInit {
           campaign.active &&
           new Date(campaign.dateFin) > new Date()
         );
-        console.log("parrainageCampaigns = ",JSON.stringify(this.parrainageCampaigns));
-      },
+       },
       error: (err) => {
         this.commonService.errorToast("Erreur lors du chargement des campagnes");
       }
     });
   }
 
-  copyCode(code: string) {
-    this.clipboard.copy(code);
+  copyCode(code: string,user:string) {
+   const link = window.location.origin + '/#/sellers/' + user+'/'+code;
+    this.clipboard.copy(link);
     this.isCopied = true;
     this.commonService.successToast("Code copié dans le presse-papiers");
     setTimeout(() => {
@@ -99,8 +102,11 @@ export class ReferralComponent implements OnInit {
   }
 
   shareOnSocial(campaign: any) {
+    
     const code = campaign.codePromoList[0].code;
-    const message = `Rejoins-moi sur Fidelity Market ! Utilise mon code de parrainage ${code} pour obtenir une réduction de ${campaign.reduction}% sur ton premier achat.`;
+    const link = window.location.origin + '/#/sellers/' +this.currentUser.username+'/'+code;
+
+    const message = `Rejoins-moi sur Fidelity Market ! Utilise mon code de parrainage ${code} pour obtenir une réduction de ${link}% sur ton premier achat.`;
     
     if (navigator.share) {
       navigator.share({
@@ -109,7 +115,7 @@ export class ReferralComponent implements OnInit {
         url: window.location.origin
       }).catch(console.error);
     } else {
-      this.copyCode(message);
+      this.copyCode(code,this.currentUser.username);
       this.commonService.successToast("Message copié ! Partagez-le sur vos réseaux sociaux.");
     }
   }

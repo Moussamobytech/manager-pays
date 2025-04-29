@@ -16,7 +16,7 @@ import { SellerNotAllowedComponent } from './seller-not-allowed/seller-not-allow
 export const routes: Routes = [
   { path: '', redirectTo: '/',pathMatch: 'full' },
   { path: ':name', component: SellerComponent, pathMatch: 'full' },
-  { path: ':name/:code', component: SellerComponent, pathMatch: 'full' },
+  { path: ':currentUser/:code', component: SellerComponent, pathMatch: 'full' },
   { path: 'denied/not-allowed', component: SellerNotAllowedComponent, pathMatch: 'full', data: { breadcrumb: 'Inactive' } },
 ];
 

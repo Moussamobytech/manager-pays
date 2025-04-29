@@ -42,7 +42,8 @@ export const routes = [
       { path: 'newsletter', loadChildren: () => import('./newsletter/newsletter.module').then(m => m.NewsletterModule), data: { breadcrumb: 'Newsletter' } },
       { path: 'information', loadChildren: () => import('./information/information.module').then(m => m.InformationModule), data: { breadcrumb: 'Information' } },
       { path: 'commande', loadChildren: () => import('./commande/commande.module').then(m => m.CommandeModule), data: { breadcrumb: 'Commande' } },
-      { path: 'country', loadChildren: () => import('./country/county.module').then(m => m.CountryModule), data: { breadcrumb: 'Pays' } }
+      { path: 'country', loadChildren: () => import('./country/county.module').then(m => m.CountryModule), data: { breadcrumb: 'Pays' } },
+      { path: 'search-terme', loadChildren: () => import('./search-terme/search-terme.module').then(m => m.SearchTermeModule), data: { breadcrumb: 'Termes de recherche' } }
 
     ]
   }

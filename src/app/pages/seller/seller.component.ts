@@ -19,6 +19,7 @@ import { map, tap } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
 import { BannersService } from 'src/app/services/banners.service';
 import { User } from 'src/app/app.models';
+import { CampagneService } from 'src/app/services/campagne.service';
 
 @Component({
   selector: 'app-seller',
@@ -56,8 +57,10 @@ export class SellerComponent implements OnInit {
   domWidth: number = window?.innerWidth;
   loadedProductCount:number; // nombre de produit actuellement chargee
   public usePagination = this.domWidth > 430; // basculer entre la pagination et le Voir plus
-  currentUser: User;
+  currentUser: any;
   bannersInfo: any;
+
+  senderUsername:string;
 
 
   constructor(
@@ -70,23 +73,50 @@ export class SellerComponent implements OnInit {
     public domHandlerService: DomHandlerService,
     private cm: CommonService,
     private bannersService: BannersService,
+    private campagneService: CampagneService
 
   ) {
     this.selectedSorting = this.sortings[0];
   }
 
   async ngOnInit() {
+    this.currentUser = this.auth.currentUser();
     this.sortProducts();
     this.activatedRoute.params.subscribe((params) => {
-      this.sellerId = params['name'];
-      if(this.sellerId.length <= 8){
-        this.cm.goTo("/");
-      }else{
-        this.getDataFromBackend();
-        this.shopLink = window.location.origin+"/#/sellers/"+this.sellerId;
+      this.senderUsername = params['currentUser'];
+      let code = params['code'];
+      
+      if(code && code.length == 10){
+        // Stocker le code dans le sessionStorage
+        sessionStorage.setItem('referralCode', code);
+        sessionStorage.setItem('senderUsername', this.senderUsername);
+        this.getSellerFromCode(code);
+      } else {
+        // Vérifier si un code existe déjà dans le sessionStorage
+        const storedCode = sessionStorage.getItem('referralCode');
+        const storedUsername = sessionStorage.getItem('senderUsername');
+        if(storedCode && storedCode.length == 10) {
+          this.senderUsername = storedUsername;
+          this.getSellerFromCode(storedCode);
+        }
       }
     });
     this.onWindowResize();
+  }
+
+
+
+  getSellerFromCode(code:string){
+      this.campagneService.getCampagneByCode(code).subscribe(datas =>{
+        this.sellerId = datas.user.username;
+        if(this.sellerId.length <= 8){
+          this.cm.goTo("/");
+        }else{
+          this.getDataFromBackend();
+          this.shopLink = window.location.origin+"/#/sellers/"+this.sellerId+"/"+code;
+          //console.log("::::::::::::::: SHOP LINK = ",this.shopLink);
+        }
+        })
   }
 
   public async getDataFromBackend() {
@@ -104,10 +134,18 @@ export class SellerComponent implements OnInit {
 
   private getSeller() {
 
-    this.sellerInfo = this.auth.currentUser()
-    let cur = this.sellerInfo;
+   /* this.sellerInfo = this.auth.currentUser()
+    let cur = this.sellerInfo;*/
 
-    this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
+    this.auth.getUserInfo(this.sellerId).subscribe(datas =>{
+   //     console.log(":::::::::::::: INFO ",datas);
+      this.sellerInfo = datas
+      
+    })
+
+    
+    this.bannersService.getBannersByUsername(this.sellerId).subscribe(datas => {
+      
       this.bannersInfo = datas;
       this.sellerBanners = [
         this.bannersInfo.image1,
@@ -116,7 +154,7 @@ export class SellerComponent implements OnInit {
       ]
       .filter(img => !!img)
       .map(img => {
-        // Si c’est déjà une URL externe (commence par http), on la garde telle quelle
+        // Si c'est déjà une URL externe (commence par http), on la garde telle quelle
         if (img.startsWith('http')) return { image: img };
 
         // Sinon, on la compose avec imgsLink
@@ -154,7 +192,6 @@ export class SellerComponent implements OnInit {
 
 
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
-        console.log(":::::::::::::::::: SELLER PRODUCT ::: ",this.sellerProducts);
         this.unchangedSellerProducts = products;
         this.loadedProductCount = this.viewCount;
         // console.log(this.usePagination)

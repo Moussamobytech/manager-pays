@@ -1,0 +1,61 @@
+<div class="p-2">
+    <mat-card>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+            <h2>Liste des produits cherchés</h2>
+            </div>
+        <mat-divider></mat-divider>
+        <div class="mat-mdc-table admin-table text-center">
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
+              <div class="mat-mdc-header-cell" >Terme Recherché
+                <a (click)="sortCountry('termeRecherche')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+                <div class="mat-mdc-header-cell">Nombre de tentatives
+                  <a (click)="sortCountry('nombreTentatives')"><mat-icon>swap_vert</mat-icon></a>
+
+                </div>
+            
+                <div class="mat-mdc-header-cell" >Date
+                  <a (click)="sortCountry('createdAt')"><mat-icon>swap_vert</mat-icon></a>
+                </div>
+  
+                <div class="mat-mdc-header-cell " >Actions</div>
+            </div>
+            <div *ngFor="let mot of (mesMots || sortedCountries) | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+              <div class="mat-mdc-cell" >{{mot.termeRecherche}}</div>
+                <div class="mat-mdc-cell" >{{mot.nombreTentatives}}</div>
+                <div class="mat-mdc-cell">{{ mot.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+  
+  
+                <div class="mat-mdc-cell" >
+                    <div class="p-2 actions" style="display: flex; align-items: center;">
+                      <button mat-mini-fab color="accent" matTooltip="Detail" (click)="openPaysDetails(mot)">
+                        <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                        <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openDialog(mot.id)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="primary" matTooltip="Delete" (click)="remove(mot)">
+                          <mat-icon>delete</mat-icon>
+                      </button>                        <mat-slide-toggle [color]="mot.etat ? 'primary' : 'warn'" [checked]="mot.etat" (change)="setStatus(mot.id, $event)">
+                            {{ mot.etat ? 'Activée' : 'Désactivée' }}
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row wrap">
+            <div fxFlex="100">
+                <mat-card class="text-center">
+                </mat-card>
+            </div>
+        </div>
+    </mat-card>
+  </div>
+  
+ 
+
+
+
+  
+
+  

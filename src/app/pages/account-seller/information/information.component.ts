@@ -7,8 +7,9 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { CommonService } from 'src/app/services/common.service';
 import { MatSelectChange } from '@angular/material/select';
 import { CountryService } from 'src/app/services/country.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BannersService } from 'src/app/services/banners.service';
+import { CampagneService } from 'src/app/services/campagne.service';
 
 @Component({
   selector: 'app-information',
@@ -38,9 +39,14 @@ export class InformationComponent implements OnInit {
 
   // availableCountries = ['Mali', 'Senegal', 'Ivory Coast'];
   public selectedCountries: string[] = [];
-  countries: any;
+  countries: any[] = [];
+  countryRegions: { [key: string]: string[] } = {};
   selectedCountry: any;
   bannieres: any[];
+  mesRegions: any[] = [];
+
+  sellerId: string;
+  shopLink: string;
 
   constructor(public formBuilder: UntypedFormBuilder,
     private auth: AuthenticationService,
@@ -49,13 +55,38 @@ export class InformationComponent implements OnInit {
     private imgCompressService: ImageCompressService,
     private cm: CommonService,
     private router: Router,
-    private countryService: CountryService
+    private countryService: CountryService,
+    private activatedRoute: ActivatedRoute,
+    private campagneService: CampagneService
   ) { }
-  ngOnInit() {
-    this.getAllPays();
-
-    this.currentUser = this.auth.currentUser()
+  async ngOnInit() {
+    this.loadCountries();
+    this.currentUser = this.auth.currentUser();
     let cur = this.currentUser;
+
+    this.activatedRoute.params.subscribe((params) => {
+      this.sellerId = params['sellerId'];
+      let code = params['code'];
+      
+      if(this.sellerId.length < 3) {
+        this.router.navigate(['/']);
+        return;
+      }
+
+      this.shopLink = this.sellerId;
+      
+      if(code && code.length == 10){
+        // Stocker le code dans le sessionStorage
+        sessionStorage.setItem('referralCode', code);
+        this.getSellerFromCode(code);
+      } else {
+        // Vérifier si un code existe déjà dans le sessionStorage
+        const storedCode = sessionStorage.getItem('referralCode');
+        if(storedCode && storedCode.length == 10) {
+          this.getSellerFromCode(storedCode);
+        }
+      }
+    });
 
     let bgs = [cur.bg1, cur.bg2, cur.bg3];
     // Images de l'utilisateur actuel
@@ -110,10 +141,36 @@ export class InformationComponent implements OnInit {
     return this.infoForm.get('deliveryCountries') as FormArray;
   }
 
-  getAllPays() {
-    this.countryService.getAllCountries().subscribe(datas => {
-      this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    })
+  loadCountries() {
+    this.countryService.getAllCountries().subscribe({
+      next: (data) => {
+        this.countries = data;
+        // Stocker les régions pour chaque pays
+        this.countries.forEach(country => {
+          this.countryRegions[country.nom] = country.regions || [];
+        });
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des pays:', err);
+      }
+    });
+  }
+
+  getRegionsForCountry(name: string) {
+    this.countryService.getAllRegionsByCountrieName(name).subscribe({
+      next: (datas) => {
+        this.mesRegions = datas;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des régions:', err);
+      }
+    });
+  }
+
+  onRegionsChange(event: any, index: number) {
+    const selectedRegions = event.value;
+    const countryGroup = this.deliveryCountries.at(index);
+    countryGroup.patchValue({ regions: selectedRegions });
   }
 
   handleCountryChange(event: any) {
@@ -306,12 +363,17 @@ export class InformationComponent implements OnInit {
     return this.tabs.find(tab => tab.value === this.selectedTab)?.label || 'Sélectionner';
   }
 
-  addDeliveryCountry(event: MatSelectChange) {
+  addDeliveryCountry(event: any) {
     const country = event.value;
-    if (country && !this.selectedCountries.includes(country)) {
+    if (!this.selectedCountries.includes(country)) {
       this.selectedCountries.push(country);
-      this.deliveryCountries.push(this.createCountryGroup(country));
-
+      this.deliveryCountries.push(this.formBuilder.group({
+        name: [country],
+        nationalDeliveryPrice: ['', [Validators.required, Validators.min(0)]],
+        deliveryPrice: ['', [Validators.required, Validators.min(500)]],
+        regions: [[]]
+      }));
+      this.getRegionsForCountry(country);
     }
   }
 
@@ -323,12 +385,14 @@ export class InformationComponent implements OnInit {
     }
   }
 
-  createCountryGroup(country: string): any {
-    return this.formBuilder.group({
-      name: [country, Validators.required],
-      nationalDeliveryPrice: ['', [Validators.min(0)]],
-      // internationalDeliveryPrice: ['', [ Validators.min(0)]],
-      deliveryPrice: ['', [Validators.min(500)]]
+  getSellerFromCode(code: string) {
+    this.campagneService.getCampagneByCode(code).subscribe(datas => {
+      this.sellerId = datas.user.username;
+      if (this.sellerId.length <= 8) {
+        this.cm.goTo("/");
+      } else {
+        this.shopLink = window.location.origin + "/#/sellers/" + this.sellerId + "/" + code;
+      }
     });
   }
 

@@ -195,6 +195,8 @@ export class ParrainageComponent implements OnInit {
     this.campagneService.getAllCampagneByUsername(username).subscribe({
       next: (datas) => {
         this.campagne = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        console.log(":::::::::::: ",JSON.stringify(this.campagne));
+        
         this.filteredCampaigns = [...this.campagne];
 
         this.activeCampagne = datas

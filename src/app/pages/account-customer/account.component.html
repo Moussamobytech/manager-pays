@@ -53,7 +53,7 @@
         </mat-form-field>
       </div>
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
-        <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" class="historique-item">
+        <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" class="historique-items">
           <div class="historique-item">
             <img [src]="order.produitImage" alt="Image Produit">
             <div>

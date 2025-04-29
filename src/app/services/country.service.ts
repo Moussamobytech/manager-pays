@@ -20,6 +20,9 @@ export class CountryService {
     return this.api.get(`/region/getAllByCountrie/${id}`);
       }
 
+  getAllRegionsByCountrieName(name: any):Observable<any> {
+    return this.api.get(`/region/getAllByCountrieName/${name}`);
+      }
 
   constructor(private api: ApiService,) { }
 

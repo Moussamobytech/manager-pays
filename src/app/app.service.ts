@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, map, of, throwError, timeout } from 'rxjs';
+import { Observable, Subscribable, catchError, map, of, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import { Campagne, Category, Contact, Newsletter, Product } from './app.models';
 import { environment } from 'src/environments/environment';
@@ -96,6 +96,7 @@ export class AppService {
   public getAllProducts(): Observable<any> {
     return this.apiService.get('/produit/list');
   }
+ 
   public searchProducts(term: string): Observable<Product[]> {
     let products = this.getAllProducts().pipe(
       map(products =>
@@ -105,6 +106,16 @@ export class AppService {
       )
     );
     return products;
+  }
+
+  public searchNotFoundTerme(terme:string):Observable<any>{
+    return this.apiService.post(`/produit/search/${terme}`,null);
+  }
+  
+  public getAllSearchNotFoundTerme():Observable<any>{
+    console.log(":: IN SEARCH ::::");
+    
+    return this.apiService.get(`/produit/get-all-search-terme`);
   }
 
   private cache = new Map<string, any>();
@@ -419,9 +430,9 @@ export class AppService {
 
 
 
-  public addCommande(id: string, product:Product[]): Observable<any> {
+  public addCommande(id: string, senderUsername: string, referralCode: string, product:Product[]): Observable<any> {
 
-    return this.apiService.post(`/commande/addTest?id=${id}`, product);
+    return this.apiService.post(`/commande/addTest?id=${id}&senderUsername=${senderUsername}&referralCode=${referralCode}`, product);
   }
 
 

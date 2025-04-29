@@ -48,7 +48,7 @@
             <div class="code-container">
               <span class="code">{{ campaign.codePromoList[0].code }}</span>
               <div class="code-actions">
-                <button mat-icon-button (click)="copyCode(campaign.codePromoList[0].code)" matTooltip="Copier le code">
+                <button mat-icon-button (click)="copyCode(campaign.codePromoList[0].code,currentUser.username)" matTooltip="Copier le code">
                   <mat-icon>content_copy</mat-icon>
                 </button>
                 <button mat-icon-button (click)="shareOnWhatsApp(campaign)" matTooltip="Partager sur WhatsApp">

@@ -41,6 +41,8 @@ export class CartComponent implements OnInit {
   phoneMask: string = '00 00 00 00'; // Default mask for Mali
   isPopulatingForm: boolean = false;
   onlyProdTotal: any;
+  referralCode: string;
+  senderUsername: string;
 
 
 
@@ -58,6 +60,15 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.getAllPays()
     this.initializeBillingForm();
+
+    // Récupérer le code de parrainage depuis le sessionStorage
+    const referralCode = sessionStorage.getItem('referralCode');
+    const senderUsername = sessionStorage.getItem('senderUsername');
+    if (referralCode && referralCode.length === 10 && senderUsername) {
+    //  console.log("::::::::::::::: REFERRAL CODE = ",referralCode);
+      this.referralCode = referralCode;
+      this.senderUsername = senderUsername;
+    }
 
     this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.Handset])
     .subscribe(result => {
@@ -93,6 +104,7 @@ export class CartComponent implements OnInit {
 
   handleCountryChange(event: any) {
     this.countryService.getById(event.value).subscribe(datas => {
+//console.log("::::::::::::::: DATAS = ",datas);
       this.selectedCountry = datas
       // Définir le masque en fonction du pays sélectionné
       let phoneLength = this.getPhoneLength(datas.nom); // Récupérer la longueur du numéro
@@ -184,7 +196,7 @@ export class CartComponent implements OnInit {
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 monPanierContient(){
-  this.appService.addCommande(this.idUser, this.productList).subscribe(
+  this.appService.addCommande(this.idUser, this.senderUsername, this.referralCode, this.productList).subscribe(
     () => {
       this.snackBar.open('Commande effectuée avec succès', '×', {
         panelClass: 'success',
@@ -240,7 +252,7 @@ monPanierContient(){
 onlyCartItemCount:any = 0
   public updateCart(value){
     let onlyProdTotal:any
-    console.log("My value = ",value);
+    //console.log("My value = ",value);
     
     if(value){
       this.total[value.productId] = value.total;
@@ -399,23 +411,26 @@ onlyCartItemCount:any = 0
       let user = this.user;      
       if(user != null){    
         // Appliquer la réduction aux articles avant l'envoi
+     //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));
         const productsWithReduction = this.productList.map(product => {
           if (product.campagne && product.campagne.reduction) {
             const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
             const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
             return {
               ...product,
+              user: product.user.id, // Ne garder que l'ID de l'utilisateur
               pricePromotion: finalPrice,
               totalPrice: finalPrice * product.cartCount
             };
           }
           return {
             ...product,
+            user: product.user.id, // Ne garder que l'ID de l'utilisateur
             totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
           };
         });
 
-        this.appService.addCommande(user.id, productsWithReduction).subscribe(
+        this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
           () => {
             this.snackBar.open('Commande effectuée avec succès', '×', {
               panelClass: 'success',
@@ -441,7 +456,7 @@ onlyCartItemCount:any = 0
         // Génération du numéro de téléphone complet basé sur le pays
         const countryCode = this.selectedCountry.indicatif;
         const phone = countryCode + values["phone"];
-      
+
         // Création du payload
         const formData = new FormData();
 
@@ -451,11 +466,17 @@ onlyCartItemCount:any = 0
         formData.append("password", values["phone"] || '');
         formData.append("phoneNumber", values["phone"]);
         formData.append("addresse", values["addresse"] || '');
-        formData.append("country", values["country"]);
+        formData.append("countries", values["country"]);
         formData.append("state", values["state"] || '');
         formData.append("boutique", values["company"] || '');
         formData.append("role", this.profil || 'user');
         formData.append("typeOfUsername", 'phone');
+        //formData.append('password', );
+
+        if(this.referralCode){
+          formData.append("parrainLogin", this.senderUsername );
+          formData.append("isInvited", "true");
+        }
         
         // Appliquer la réduction aux articles avant l'envoi
         const productsWithReduction = this.productList.map(product => {
@@ -464,12 +485,14 @@ onlyCartItemCount:any = 0
             const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
             return {
               ...product,
+              user: product.user.id, // Ne garder que l'ID de l'utilisateur
               pricePromotion: finalPrice,
               totalPrice: finalPrice * product.cartCount
             };
           }
           return {
             ...product,
+            user: product.user.id, // Ne garder que l'ID de l'utilisateur
             totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
           };
         });
@@ -488,11 +511,12 @@ onlyCartItemCount:any = 0
               if (!userInfo) {
                 throw new Error('Impossible de récupérer les informations du client, merci de réessayer à nouveau');
               }
+              
       
               // Récupération de l'utilisateur par téléphone et ajout de la commande
               const phone = formData.get('phoneNumber') as string;
               const myUser = await this.authService.getUserByPhone(phone).toPromise();
-              await this.appService.addCommande(myUser.id, productsWithReduction).toPromise();
+              await this.appService.addCommande(myUser.id,this.senderUsername,this.referralCode, productsWithReduction).toPromise();
       
               this.snackBar.open('Commande effectuée avec succès', '×', {
                 panelClass: 'success',

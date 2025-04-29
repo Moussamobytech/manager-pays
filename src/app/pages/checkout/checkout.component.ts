@@ -214,7 +214,7 @@ loadUserByPhone(phone:string){
   );
 
 }
-
+/*
 commander(){
 
   let user = this.authService.currentUser();      
@@ -311,6 +311,7 @@ commander(){
   }
   
 }
+*/
   
 
 

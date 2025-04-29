@@ -44,6 +44,8 @@ export class AccountComponent implements OnInit {
   pageSize = 10;
   pageSizeOptions = [10, 20, 30];
   tailles: any;
+  referralHistory: any;
+  balance:any = 0;
 
   constructor(
     private auth: AuthenticationService, 
@@ -62,6 +64,7 @@ export class AccountComponent implements OnInit {
     this.user = this.currentUser;
     this.getAllCommande();    
     this.getProduitsLikes();
+    this.loadReferralHistory();
   }
 
 
@@ -75,6 +78,17 @@ export class AccountComponent implements OnInit {
       }));
       this.favorisProducts = this.produitsLikes;
     });
+  }
+
+  loadReferralHistory() {
+    this.auth.gainList(this.currentUser.id).subscribe(
+      (data) => {
+        this.referralHistory = data;
+        for (let i = 0; i < this.referralHistory.length; i++) {
+          this.balance += this.referralHistory[i].montant;
+          this.cards[0].content = this.balance + 'F';
+        }}
+    );
   }
 
   onFileSelected(event: Event) {
@@ -140,7 +154,7 @@ export class AccountComponent implements OnInit {
   }
 
   WhatsAppUs(card: string) {
-    console.log(card);
+    //console.log(card);
     if(card.toLowerCase().includes("revendeur")){
       let message = "Bonjour, Je souhaiterais postuler pour devenir revendeur sur Fidelity Market.";
       const link = "https://wa.me/22376007979?text=" + encodeURIComponent(message);

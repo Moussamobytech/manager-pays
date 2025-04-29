@@ -117,7 +117,20 @@
         <div *ngFor="let countryGroup of deliveryCountries.controls; let i = index" [formGroupName]="i">
           <div class="country-title">
             <b>Pays:&nbsp;</b> {{ countryGroup.get('name')?.value }}
-              <mat-icon (click)="removeCountry(i, countrySelect)">delete</mat-icon>
+            <mat-icon (click)="removeCountry(i, countrySelect)">delete</mat-icon>
+          </div>
+
+          <!-- Régions du pays -->
+          <div class="regions-section">
+            <label>Sélectionner les régions :</label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Sélectionner les régions</mat-label>
+              <mat-select multiple [formControlName]="'regions'" (selectionChange)="onRegionsChange($event, i)">
+                <mat-option *ngFor="let region of mesRegions" [value]="region.id">
+                  {{ region.nom }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
 
           <!-- Delivery Time Inputs -->

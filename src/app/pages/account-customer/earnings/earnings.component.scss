@@ -3,14 +3,14 @@ $amber_color: #feb930;
 
 .balance-referral-container {
   padding: 20px;
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
 
   .balance-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .balance {
@@ -44,24 +44,36 @@ $amber_color: #feb930;
   }
 
   .referral-history {
+    margin-top: 30px;
+    width: 100%;
+
     h3 {
       color: $primary_color;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
     }
 
     .referral-table {
       width: 100%;
       border-collapse: collapse;
+      border: 1px solid #ddd;
 
       th,
       td {
-        padding: 8px;
+        padding: 12px;
         text-align: left;
+        border-right: 1px solid #ddd;
         border-bottom: 1px solid #ddd;
       }
 
       th {
         background-color: #f5f5f5;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+
+      tr:hover {
+        background-color: #f9f9f9;
       }
     }
   }
@@ -79,6 +91,74 @@ $amber_color: #feb930;
     .submit-button {
       background-color: $amber_color;
       color: $primary_color;
+    }
+  }
+
+  .withdrawal-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+      h3 {
+        color: $primary_color;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      p {
+        margin-bottom: 20px;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      .popup-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+
+        button {
+          padding: 10px 20px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s;
+
+          &.cancel-button {
+            background-color: #f5f5f5;
+            color: #666;
+            border: 1px solid #ddd;
+
+            &:hover {
+              background-color: #e0e0e0;
+            }
+          }
+
+          &.confirm-button {
+            background-color: $amber_color;
+            color: $primary_color;
+            border: none;
+
+            &:hover {
+              background-color: darken($amber_color, 10%);
+            }
+          }
+        }
+      }
     }
   }
 }

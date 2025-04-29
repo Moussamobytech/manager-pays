@@ -2,11 +2,30 @@
   <div class="balance-header">
     <div class="balance">
       Solde disponible
-      <div class="amount">{{ balance }}</div>
+      <div class="amount">{{ balance | number:'1.0-0' }} FCFA</div>
     </div>
-    <button class="withdraw-button">
+    <button class="withdraw-button" (click)="checkWithdrawal()">
       <i class="fas fa-arrow-alt-circle-down"></i> Retirer
     </button>
+  </div>
+
+  <!-- Popup de confirmation -->
+  <div class="withdrawal-popup" *ngIf="showWithdrawalPopup">
+    <div class="popup-content">
+      <h3>Retrait de fonds</h3>
+      <p *ngIf="balance < 10000">
+        Désolé, vous devez avoir un solde minimum de 10.000 FCFA pour effectuer un retrait.
+        Votre solde actuel est de {{ balance }} FCFA.
+      </p>
+      <p *ngIf="balance >= 10000">
+        Votre solde est suffisant pour effectuer un retrait.
+        Souhaitez-vous procéder au retrait de {{ balance }} FCFA ?
+      </p>
+      <div class="popup-buttons">
+        <button class="cancel-button" (click)="closePopup()">Annuler</button>
+        <button class="confirm-button" *ngIf="balance >= 10000" (click)="proceedWithdrawal()">Confirmer</button>
+      </div>
+    </div>
   </div>
 
   <div class="referral-history">
@@ -14,20 +33,24 @@
     <table class="referral-table">
       <thead>
         <tr>
-          <th>Prénom</th>
           <th>Nom</th>
-          <th>Type</th>
-          <th>Gain</th>
+          <th>Prénom</th>
+          <th>Téléphone</th>
+          <th>Pays</th>
           <th>Date</th>
+          <th>Montant</th>
+          <th>Description</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let referral of referralHistory">
-          <td>{{ referral.firstName }}</td>
-          <td>{{ referral.lastName }}</td>
-          <td>{{ referral.type }}</td>
-          <td>{{ referral.gain }}</td>
-          <td>{{ referral.date }}</td>
+        <tr *ngFor="let item of referralHistory">
+          <td>{{item.parraine.lastname}}</td>
+          <td>{{item.parraine.firstname}}</td>
+          <td>{{item.parraine.phoneNumber}}</td>
+          <td>{{item.parraine.countries.nom}}</td>
+          <td>{{item.createdAt | date:'dd/MM/yyyy à HH:mm'}}</td>
+          <td>{{item.montant}} FCFA</td>
+          <td>{{item.description}}</td>
         </tr>
       </tbody>
     </table>
@@ -36,7 +59,7 @@
     <button mat-button class="back-button" routerLink="/account-customer">
       <mat-icon>arrow_back</mat-icon>Retour
     </button>
-    <button mat-raised-button class="submit-button">Valider
+    <button mat-raised-button class="submit-button" routerLink="/referal">Inviter mes amis
       <i class="fa-solid fa-share"></i>
     </button>
   </div>

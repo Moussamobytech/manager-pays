@@ -18,6 +18,8 @@ export class CampagneService {
     return this.api.get('/campagne/liste/');
   }
 
+
+
   public getCampagneEligible() {
     return this.api.get('/campagne/liste-eligible').toPromise();
   }
@@ -121,6 +123,10 @@ export class CampagneService {
   }
   supprimerCode(id: string): Observable<any> {
     return this.api.delete(`/code-promo/delete/${id}`);
+  }
+
+  public getCampagneByCode(code:string): Observable<any>  {
+    return this.api.get(`/code-promo/get-by-code/${code}`);
   }
 
 }
