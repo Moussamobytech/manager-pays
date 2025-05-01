@@ -1,0 +1,17 @@
+<div class="testimonials-container">
+  <h2>Témoignages</h2>
+
+  <div class="testimonials-scroll" #scrollContainer >
+    <div *ngFor="let testimonial of testimonials" class="testimonial-profile">
+      <!-- Medal/Icon -->
+      <div class="medal" [ngClass]="testimonial.medal">
+        <i class="fa-solid fa-medal"></i>
+      </div>
+
+      <div class="testimonial-details">
+        <h3>{{ testimonial.name }}</h3>
+        <p>{{ testimonial.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

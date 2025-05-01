@@ -1,12 +1,14 @@
 <div class="seller-slider">
   <div class="swiper-container h-100" [swiper]="config">
     <div class="swiper-wrapper h-100">
+      
       <div *ngFor="let slide of sellerBanners" class="swiper-slide">
         <div [attr.data-background]="slide.image" class="slide-item swiper-lazy">
           <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
           <div class="mask"></div>
         </div>
-      </div>
+      </div>  
+
       <button mat-raised-button (click)="routetoProduct('shop_now')" color="warn" class="content-btn">
         <mat-icon>shopping_basket</mat-icon>
         Achetez <span class="extra-text">maintenant</span>
@@ -18,3 +20,5 @@
     <button fxShow fxHide.xs mat-mini-fab *ngIf="sellerBanners.length>1" class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button>
   </div>
 </div>
+
+

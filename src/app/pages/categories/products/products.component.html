@@ -1,0 +1,144 @@
+<div class="main-container">
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav [opened]="sidenavOpen" [mode]="sidenavOpen ? 'side' : 'over'" class="filter-sidenav">
+      <ng-scrollbar pointerEventsMethod="scrollbar" visibility="hover">
+        <mat-accordion displayMode="flat" multi="true">
+          <!-- <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h4>{{'PRODUCTS.CATEGORY' | translate}}</h4>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="categories-wrapper">
+              <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false">
+                <app-category-list [categories]="allCategories" (change)="onChangeCategory($event)">
+                </app-category-list>
+              </ng-scrollbar>
+            </div>
+          </mat-expansion-panel> -->
+          <mat-expansion-panel class="price_section" expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title> <h4>Filtre de prix</h4> </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)">
+              <span> De: <b>{{ priceFrom }} F</b> </span>
+              <span> À: <b>{{ priceTo }} F</b> </span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)" class="filter-price">
+              <mat-slider color="primary" [step]="950" [max]="250000" [min]="100" thumb-label="true">
+                <input matSliderThumb [(ngModel)]="priceFrom" (change)="filterProductsByPrice()"/>
+              </mat-slider>
+              <mat-slider color="warn" [step]="950" [max]="250000" [min]="100" thumb-label="true">
+                <input matSliderThumb [(ngModel)]="priceTo" (change)="filterProductsByPrice ()"/>
+              </mat-slider>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px" class="filter-price">
+              <mat-form-field appearance="outline" class="price-input">
+                <mat-label>Prix Min</mat-label>
+                <input matInput (keypress)="validateNumberInput($event)" (paste)="validatePasteInput($event)"
+                [step]="950" type="number" [(ngModel)]="priceFrom" (change)="filterProductsByPrice()" [min]="100"/>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="price-input">
+                <mat-label>Prix Max</mat-label>
+                <input matInput (keypress)="validateNumberInput($event)" (paste)="validatePasteInput($event)"
+                [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+          <!-- <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h4>{{'PRODUCTS.BRAND' | translate}}</h4>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-brands">
+              <button mat-raised-button *ngFor="let brand of brands" (click)="brand.selected = !brand.selected"[class.selected]="brand.selected">
+                <img [src]="brand.logo" />
+              </button>
+            </div>
+          </mat-expansion-panel> -->
+        </mat-accordion>
+      </ng-scrollbar>
+    </mat-sidenav>
+    <mat-sidenav-content class="all-products" ngClass.gt-sm="p-left">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="filter-row">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()" class="toggle-button">
+            <mat-icon class="icon-menu">menu</mat-icon>
+          </button>
+          <div>
+            <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
+              {{ selectedSorting | translate }}
+              <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
+            </a>
+            <mat-menu #sortMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
+              <span>
+                <button mat-menu-item *ngFor="let sort of sortings" (click)="changeSorting(sort)">
+                  <span>{{ sort | translate }}</span>
+                </button>
+              </span>
+            </mat-menu>
+          </div>
+          <button matTooltip="Afficher par carreaux" mat-icon-button (click)="changeViewType(33.3)" *ngIf="domWidth>360">
+            <mat-icon>view_module</mat-icon>
+          </button>
+          <button matTooltip="Afficher par petit carreaux" mat-icon-button (click)="changeViewType(25)" *ngIf="domWidth>360">
+            <mat-icon>view_comfy</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="shop-search">
+          <input matInput [placeholder]="(sidenavOpen)?'Cherchez un produit, categorie...':'Produit, Categorie...'" autocomplete="off" class="search-input" [(ngModel)]="searchTerm"
+          (input)="onSearchChange()" />
+          <button class="search-btn" mat-icon-button matSuffix (click)="onSearchClick($event)">
+            <mat-icon class="search-icon">search</mat-icon>
+          </button>
+        </div>
+        <div class="suggestion-container" *ngIf="showSuggestions && suggestions.length > 0">
+          <div class="suggestions-list" #suggestionsContainer>
+            <ul>
+              <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
+                <mat-icon>search</mat-icon>
+                <b>{{ suggestion.type === 'product' ? 'Produit' : 'Categorie' }} :</b> {{ suggestion.item.nom }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="onLarge-screen" *ngIf="usePagination">
+        <div fxLayout="row wrap" class="products-wrapper">
+          <div *ngFor="let product of products | paginate: { itemsPerPage: viewCount+4, currentPage: page }"
+          [fxFlex]="(viewCol == 25 && domWidth > 360) ? 50 : 100" [fxFlex.gt-xs]="viewCol"class="col">
+            <app-product-card [product]="product" [viewCol]="viewCol==25?50:100" ></app-product-card>
+          </div>
+        </div>
+        <div fxLayout="row wrap">
+          <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+              <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5"(pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+
+      <div class="onSmall-screen" *ngIf="!usePagination">
+        <div fxLayout="row wrap" class="products-wrapper">
+          <div *ngFor="let product of products" [fxFlex]="(viewCol == 25 && domWidth > 360) ? 50 : 100"
+          [fxFlex.gt-xs]="viewCol" class="col">
+            <app-product-card [product]="product" [viewCol]="viewCol==25?50:100" ></app-product-card>
+          </div>
+        </div>
+        <div class="load-more-wrapper" *ngIf="products?.length < unchangedProducts?.length">
+          <a (click)="loadMore()">Voir plus</a>
+        </div>
+      </div>
+
+      <div *ngIf="products?.length === 0" fxLayout="row wrap" class="products-wrapper">
+        <div fxFlex="100" class="text-center"><p>{{ 'PRODUCTS.NO_DATA' | translate }}</p></div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

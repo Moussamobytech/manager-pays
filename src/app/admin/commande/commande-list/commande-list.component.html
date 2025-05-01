@@ -1,0 +1,118 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
+    <div fxLayout="row">
+        <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
+            <mat-button-toggle value="search" [title]="'BTN.SEARCH'|translate">
+                <mat-icon>search</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <form class="user-search"    [class.show]="controls.value == 'search'">
+        <mat-form-field class="user-search-input">
+            <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" (keyup)="search()" name="search">
+        </mat-form-field>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy" value="table">
+
+            <mat-button-toggle *ngIf="isAboveSmSize$|async" value="table">
+                <mat-icon>view_headline</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>
+
+<div class="users-list">
+
+
+
+  <div class="table-list" *ngIf="isAboveSmSize$ | async">
+    <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
+      <div fxFlex="100" class="p-2">
+        <div class="table-scroll-wrapper">
+          <div class="admin-table">
+            <!-- Header Row -->
+            <div class="header-row">
+              <div class="header-cell filter-cell fixed-width">
+                {{ "Code commande" | translate }}
+                <a (click)="sortCommandes('codeCommande')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                {{ "Quantité" | translate }}
+                <a (click)="sortCommandes('quantite')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Montant
+                <a (click)="sortCommandes('montant')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Client
+                <a (click)="sortCommandes('clientUsername')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Status
+                <a (click)="sortCommandes('statutCommande')"><mat-icon>swap_vert</mat-icon></a>
+            </div>
+              <div class="header-cell filter-cell fixed-width">
+                {{ "Date commande" | translate }}
+                <a (click)="sortCommandes('dateCommande')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width text-center">
+                {{ "USER.ACTION" | translate }}
+              </div>
+            
+            </div>
+
+            <!-- Data Rows -->
+            <div *ngFor="let commande of (sortedCommandes || commandes) | CommandeSearchPipe: searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="data-row">
+              <div class="data-cell fixed-width"> {{ commande.codeCommande | capitalCase }} </div>
+              <div class="data-cell fixed-width"> {{ commande.quantite }} </div>
+              <div class="data-cell fixed-width" > {{ commande.montant }} </div>
+              <div class="data-cell fixed-width" > {{ commande.clientPhone }} </div>
+
+                  <!--   <div class="data-cell fixed-width"> {{Status(order.statutCommande.name)}}</div>-->
+                  <div class="  {{commande.statutCommande.name}}" [ngClass]="commande.statutCommande.name"> 
+                    <mat-select [value]="commande.statutCommande.id">
+                      @for (st of status; track status) {
+                        <mat-option [value]="st.id" (onSelectionChange)="setStatusT(commande.id,st.id,commande)">{{Status(st.name)}}</mat-option>
+                      }
+                    </mat-select>
+                </div>
+
+              <div class="data-cell fixed-width"> {{ commande.dateCommande | date: "dd-MM-yyyy à HH:mm" }} </div>
+              <div class="data-cell fixed-width center">
+                <div class="actions">
+                  <button 
+                  [routerLink]="['/admin/commande/commande-details', commande.id, commande.codeCommande]" 
+                  mat-mini-fab 
+                  color="accent" 
+                  [matTooltip]="'BTN.VIEW' | translate">
+                  <mat-icon>remove_red_eye</mat-icon>
+                </button>
+                
+                  <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate" (click)="remove(commande)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                 <!-- <mat-slide-toggle [color]="commande.enabled ? 'primary' : 'warn'" [checked]="commande.enabled" >
+                  </mat-slide-toggle> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div *ngIf="commandes" fxLayout="row wrap">
+    <div fxFlex="100" class="p-2">
+        <mat-card class="text-center">
+            <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+        </mat-card>
+    </div>
+</div>
+
+<div *ngIf="!commandes" fxLayout="column" fxLayoutAlign="center center" class="user-spinner">
+    <mat-spinner color="primary"></mat-spinner>
+</div>
+

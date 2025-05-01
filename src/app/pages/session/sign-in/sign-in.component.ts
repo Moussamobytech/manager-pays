@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-// import { emailValidator, matchingPasswords } from '../../theme/utils/app-validators';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { validateEmail } from 'src/app/helpers';
+import { CommonService } from 'src/app/services/common.service';
+import { CountryService } from 'src/app/services/country.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,113 +13,97 @@ import { validateEmail } from 'src/app/helpers';
 })
 export class SignInComponent implements OnInit {
   loginForm: UntypedFormGroup;
-  registerForm: UntypedFormGroup;
-  formSubmitted: boolean = false;
-  toSubmit: boolean = false;
-  loading: boolean = false;
+  selectedCountry: any;
+  hidePassword = true;
+  countries:any
 
-  countries : any[] = [{id : "mali", nom: "Mali"}, {id:"civ", nom:"Côte d'ivoire"}];
-  mask = '00 00 00 00'
-  maskPlaceholder = 'XX XX XX XX'
-
-  constructor(private authenticationService: AuthenticationService, public formBuilder: UntypedFormBuilder,
-    public router:Router, public snackBar: MatSnackBar) { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    public formBuilder: UntypedFormBuilder,
+    public router: Router,
+    private cm:CommonService,private countryService: CountryService,
+  ) {}
 
   ngOnInit() {
     this.authenticationService.logout();
+  //  this.selectedCountry = this.countries.find(c => c.code === 'ML');
+
     this.loginForm = this.formBuilder.group({
-      'country': ['mali'],
-      'phone': ['', Validators.compose([Validators.required])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      'username': ['', Validators.required]
+      country: [''],
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
+    this.getAllPays();
 
   }
 
-  handleChange($event){
-    console.log("handleChange :::::::: ", $event);
-    this.formValues.phone.setValue("")
-    if ($event.value == 'mali') {
-      this.mask ='00 00 00 00'
-      this.maskPlaceholder = 'XX XX XX XX'
-    }
-
-    if ($event.value == 'civ') {
-      this.maskPlaceholder = 'XX XX XX XXXX'
-    }
-
+  getAllPays() {
+    this.countryService.getAllCountries().subscribe(datas => {
+      this.countries = datas
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .map(country => ({
+        ...country,
+        mask: this.getPhoneMask(country.nom),
+        indicatif: `+${country.indicatif}`,
+      }));
+      this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
+      this.loginForm.controls['country'].setValue(this.selectedCountry?.id);
+    })
   }
 
-  public onLoginFormSubmit(values:Object):void {
-    console.log("values ::::::: ",values)
-    console.log("values ::::::: ",values["phone"])
-    console.log("values ::::::: ",values["password"])
-    if (values["phone"] != '' && values["password"] != '') {
-      // this.loading = true;
-      let phone = ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone']
-      let pwd = this.formValues.password?.value
-      // this.formValues.phone.setValue( ("mali" == values["country"]) ? "223"+ values['phone'] : "225"+ values['phone'] )
-      this.authenticationService.login(phone, pwd)
-        .subscribe(
-          async (data: any) => {
-            // console.log("data ::::::: ",data)
-            let userInfo = await this.authenticationService.info(data.username);
-            // this.loading = false;
-            // console.log("userInfo ::::::: ",userInfo)
-            if (userInfo == null) {
-              this.snackBar.open('Impossible de récuperer les informations du client, merci de réessayer à nouveau', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-              return;
-            }
-            this.router.navigate(["/account/dashboard"]);
-          },
-          (error: any) => {
-            // console.log(error);
-            // console.log(error.message);
-            // console.log(error.status);
-            // console.log(error == "Erreur d'accès au serveur");
-            // console.log(error === "Erreur d'accès au serveur");
-            if (error == "Erreur d'accès au serveur") {
-              this.snackBar.open('Accès incorrect merci de vérifier les infos fournis !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-            }else{
-              this.snackBar.open('Une erreur interne s\'est produite, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-            }
+  get loginFormControls() { return this.loginForm.controls; }
 
-            // this.loading = false;
-          });
-    }
+  handleChange(event: any) {
+    this.selectedCountry = this.countries.find(c => c.id === event.value);
+    console.log(this.selectedCountry);
+    this.loginForm.controls['username'].setValue('');
   }
 
-  /**
-   * convenience getter for easy access of form fields
-  */
-  get formValues() { return this.loginForm.controls; }
 
-  onSubmit(): void {
-    this.formSubmitted = true;
+
+  getPhoneMask(countryName: string): number {
+    const phoneLengths = {
+      "Bénin": "00 00 00 00",
+      "Burkina Faso": "00 00 00 00",
+      "Cap-Vert": "000 0000",
+      "Cote d'ivoire": "00 00 00 0000",
+      "Gambie": "000 0000",
+      "Ghana": "00 00 00 000",
+      "Guinée": "00 00 00 000",
+      "Guinée-Bissau": "000 0000",
+      "Libéria": "00 00 00 000",
+      "Mali": "00 00 00 00",
+      "Niger": "00 00 00 00",
+      "Nigeria": "00 00 00 0000",
+      "Sénégal": "00 00 00 000",
+      "Sierra Leone": "00 00 00 00",
+      "Togo": "00 00 00 00"
+    };
+
+    return phoneLengths[countryName] || 9; // Par défaut, retourne 9 si le pays n'est pas trouvé
+  }
+
+
+
+  public onLoginFormSubmit(values: any): void {
     if (this.loginForm.valid) {
-      this.loading = true;
-      this.authenticationService.login(this.formValues.phone?.value, this.formValues.password?.value)
-        .subscribe(
-          (data: any) => {
-            // console.log("data ::::::: ",data)
-            this.router.navigate(["account/dashboard"]);
-          },
-          (error: any) => {
-            this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-            console.log(error);
-            this.loading = false;
-          });
+      let phone = this.selectedCountry.indicatif + values['username'];
+      let pwd = values['password'];
+      this.authenticationService.login(phone, pwd).subscribe(
+        async (data: any) => {
+          let userInfo = await this.authenticationService.info(data.username);
+          if (!userInfo) {
+            this.cm.openFailureSnackBar('Une erreur est survenue, veuillez réessayer');
+            return;
+          }
+          (userInfo.profiles[0].name.toLowerCase().includes('boutique'))?
+          this.router.navigate(['/account-seller/dashboard']) : this.router.navigate(['/account-customer']);
+        },
+        () => {
+          this.cm.openFailureSnackBar('Numéro de telephone ou mot de passe incorrect');
+        }
+      );
     }
   }
-
-  reset($event : Event){
-    console.log("resetting process ::::::::");
-
-    this.formValues.phone.setValue("")
-    this.formValues.password.setValue("")
-    this.toSubmit = false;
-  }
-
-
 }

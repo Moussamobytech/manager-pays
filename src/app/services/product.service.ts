@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
@@ -114,6 +115,9 @@ getTotalViewsYear(): Observable<any> {
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }
+  allProducts(): any {
+    return this.api.get(`/produit/products-with-campaigns`).toPromise();
+  }
   // searchProducts(term: string): Promise<Product[]> {
   //   return this.products().then(products =>
   //     products.filter(product =>
@@ -173,6 +177,12 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get('/produit/find/' + id).toPromise();
   }
 
+  public viewProductById(id) {
+    return this.api.post(`/produit/view-product/${id}`,null).toPromise();
+  }
+
+
+
   public getProductByNewArrival(limit) {
     return this.api.get('/produit/new-arrivals?limit='+limit).toPromise();
   }
@@ -190,7 +200,47 @@ getTotalViewsYear(): Observable<any> {
   }
 
   public getProductByTop() {
-    return this.api.get('/produit/top-rates').toPromise();
+   // return this.api.get('/produit/top-rates').toPromise();
+    return this.api.get('/produit/products-with-campaigns').toPromise();
   }
 
+  public getViewsForCurrentMonthOfProduct(username) {
+    return this.api.get('/produit/views-month/'+username).toPromise();
+  }
+
+
+  public getproductOnPromo():Observable<any>{
+    return this.api.get('/campagne/all-product-promo-active');
+  }
+
+  public addToFavorites(produitId: string,userId: string): Observable<any> {
+    console.log(':::::::::::: ',produitId,userId);
+    
+    return this.api.post(`/produit/like/${produitId}/${userId}`, null);
+  }
+
+  public getFavorites(userId: string): Observable<any> {
+    return this.api.get(`/produit/favorites/${userId}`);
+  }
+
+  public removeFromFavorites(productId: string,userId: string): Observable<any> {
+    return this.api.delete(`/produit/unlike/${productId}/${userId}`);
+  }
+  public getProduitsLikesByUser(userId: string): Observable<any> {
+    console.log('USER ID :::::::::::: ',userId);
+    return this.api.get(`/produit/likes/${userId}`).pipe(
+      map((response: any) => {
+        if (Array.isArray(response)) {
+          return response.map(product => ({
+            ...product,
+            isFavorite: true
+          }));
+        }
+        return response;
+      })
+    );
+  }
+
+
+  
 }

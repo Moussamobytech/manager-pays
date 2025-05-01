@@ -1,41 +1,43 @@
-<mat-card *ngIf="product != null && product != undefined" class="product-item" >
-  <mat-chip-listbox *ngIf="product.discount">
-        <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
-    </mat-chip-listbox>
-    <a [routerLink]="['/products', product.id, product.nom]">
-        <!-- <img [attr.data-src]="product.image1" class="swiper-lazy"/> -->
-        <img [src]="product.image1" class="image-link"/>
+<mat-card *ngIf="product" class="product-item modern-card">
+  <div class="item-image">
+    <mat-chip-listbox *ngIf="product.campagne&&product.campagne.type == 'PROMOTION'">
+      <mat-chip-option color="warn" highlighted selectable="false">-{{product.campagne.reduction}}% OFF</mat-chip-option>
+    </mat-chip-listbox> 
+      <!--  <mat-chip-listbox *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic">
+      <mat-chip-option color="warn" highlighted selectable="false">-{{product.priceBasic|discount: product.pricePromotion}}% OFF</mat-chip-option>
+    </mat-chip-listbox> -->
 
-        <!-- <div class="swiper-lazy-preloader"></div> -->
+    <a [routerLink]="['/products', product.id, product.nom]" (click)="setProductViewCount(product.id)" class="image-link" [ngStyle]="secondView ? { height: '200px' } : {}">
+      <img [alt]="'Product Image'" class="card-image" (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'">
     </a>
-    <h4 *ngIf="cat == 'ok'" class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
-    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate center" style="text-align: center;">
-        {{product.nom}}
-    </a>
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
-        <!-- <div *ngIf="!onePrice" fxLayout="column" fxLayoutAlign="center start">
-            <p class="old-price text-muted" [ngClass]="{'old-price': product.pricePromotion}">
-                <span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span>
-            </p>
-            <p class="new-price" *ngIf="product.pricePromotion"> Promo : {{product.pricePromotion | number : '1.2-2'}} FCFA</p>
-        </div> -->
-        <div *ngIf="onePrice" fxLayout="column" fxLayoutAlign="center start"  style="inline-size: 100%;">
-            <p class="text-muted" *ngIf="product.pricePromotion == null || product.pricePromotion == '' ||  product.pricePromotion == 'null'">
-                <span>{{product.priceBasic | number}} FCFA</span>
-                <!-- <span>{{product.priceBasic | number : '1.2-2'}} FCFA</span> -->
-            </p>
-            <p class="text-muted" *ngIf="product.pricePromotion != null && product.pricePromotion != '' && product.pricePromotion != 'null' ">
-                <span>{{product.pricePromotion | number}} FCFA</span>
-            </p>
-        </div>
+  </div>
 
-        <!-- <p class=" text-muted" style="inline-size: 100%;">
-            <span *ngIf="product.pricePromotion == null || product.pricePromotion == '' ||  product.pricePromotion == 'null'">{{product.priceBasic | number : '1.2-2'}} FCFA</span>
-        </p>
-        <p class="new-pricePromotion"  style="inline-size: 100%;"  *ngIf="product.pricePromotion != null && product.pricePromotion != '' && product.pricePromotion != 'null' ">{{product.pricePromotion | number : '1.2-2'}} FCFA</p> -->
+  <div class="item-content">
+    <!-- <h4 class="category text-truncate">
+      {{ product.categorieNom }}
+    </h4> -->
+    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate">
+      {{ product.nom }} 
+      
+    </a>
+    
+    <div class="price-section">
+      <p *ngIf="!product.pricePromotion||product.pricePromotion==product.priceBasic" class="price-basic">
+        {{ product.priceBasic | number : '1.0-2' }} FCFA
+      </p>
+      <p *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic" class="price-promotion text-truncate">
+        {{ product.pricePromotion | number : '1.0-2' }} FCFA
+        <span class="original-price">
+          {{ product.priceBasic | number : '1.0-2' }} F
+        </span>
+      </p>
     </div>
-    <div class="divider mt-2"></div>
+    <div class="delivery-state" *ngIf="product.campagne && product.campagne.type === 'LIVRAISON_GRATUITE'">
+      <p>Livraison gratuite</p>
+    </div>
+    <!-- <div class="divider"></div> -->
     <div class="icons">
-        <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)" ></app-controls>
+      <app-controls [product]="product" [pageName]="pageName"></app-controls>
     </div>
+  </div>
 </mat-card>

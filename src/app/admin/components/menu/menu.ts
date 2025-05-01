@@ -3,6 +3,7 @@ import { Menu } from './menu.model';
 export const menuItems = [
     new Menu (10, 'ADMIN_NAV.DASHBOARD', '/admin', null, 'dashboard', null, false, 0),
     new Menu (20, 'ADMIN_NAV.PRODUCTS', null, null, 'grid_on', null, true, 0),
+    new Menu (160, 'Commandes', '/admin/commande', null, 'shop', null, false, 0),
     new Menu (21, 'ADMIN_NAV.CATEGORIES', '/admin/products/categories', null, 'category', null, false, 20),
     // new Menu (25, 'ADMIN_NAV.CATEGORIE_DETAIL', '/admin/products/categorie-detail', null, 'remove_red_eye', null, false, 20),
     new Menu (22, 'ADMIN_NAV.PRODUCT_LIST', '/admin/products/product-list', null, 'list', null, false, 20),
@@ -16,6 +17,9 @@ export const menuItems = [
     new Menu (142, 'ADMIN_NAV.CAMPAGNE', '/admin/campagne/campagne-list', null, 'campaign', null, false, 0),
     new Menu (150, 'ADMIN_NAV.CONTACT', '/admin/contact/contact', null, 'contact_mail', null, false, 0),
     new Menu (160, 'ADMIN_NAV.NEWSLETTER', '/admin/newsletter/newsletter', null, 'email', null, false, 0),
+    new Menu (160, 'Pays', '/admin/country', null, 'public', null, false, 0),
+    new Menu (161, 'Les termes de recherce', '/admin/search-terme', null, 'public', null, false, 0),
+    
 
 
     // new Menu (30, 'ADMIN_NAV.SALES', null, null, 'monetization_on', null, true, 0),

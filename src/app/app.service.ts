@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, map, of, throwError, timeout } from 'rxjs';
+import { Observable, Subscribable, catchError, map, of, throwError, timeout } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import { Campagne, Category, Contact, Newsletter, Product } from './app.models';
 import { environment } from 'src/environments/environment';
@@ -8,15 +8,18 @@ import { ApiService } from './services/api.service';
 import { Category } from './models/category.models';
 import { Product } from './models/product.models';
 import { Contact, Newsletter } from './app.models';
+import { CartService } from './services/carte.service';
+import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
+import { SearchSynonymsService } from './services/search-synonyms.service';
 
 export class Data {
   constructor(
     public categories: Category[],
     public compareList: Product[],
     public wishList: Product[],
-    public cartList: Product[],
+    public cartList: any[],
     public totalPrice: number,
-    public totalCartCount: number
+    public totalCartCount: number,
   ) {}
 }
 
@@ -33,11 +36,14 @@ export class AppService {
 
   // public url = "http://localhost:8590/ecommerce/api/v1" ;
   public url = environment.url;
+  productList: Product[];
 
   constructor(
     public http: HttpClient,
     public snackBar: MatSnackBar,
-    public apiService: ApiService
+    public apiService: ApiService,
+    private cartService:CartService,
+    private synonymService: SearchSynonymsService,
   ) {}
 
   infoSeller(username: string):Observable<any> {
@@ -92,6 +98,7 @@ export class AppService {
   public getAllProducts(): Observable<any> {
     return this.apiService.get('/produit/list');
   }
+ 
   public searchProducts(term: string): Observable<Product[]> {
     let products = this.getAllProducts().pipe(
       map(products =>
@@ -103,50 +110,177 @@ export class AppService {
     return products;
   }
 
-  private cache = new Map<string, any>();
-
-  public searchProducts1(categories: Category[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
-    // accents insensitivity
-    const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-    const lowerTerm = normalizeString(term).trim();
-    if (this.cache.has(lowerTerm)) {
-        return of(this.cache.get(lowerTerm)!);
-    }
-
-    const filterItems = <T extends { nom: string }>(items: T[], type: string): { type: string, item: T }[] => {
-      // first i check if element starts with the term
-      const startsWithTerm = items
-        .filter(item => normalizeString(item.nom).startsWith(lowerTerm))
-        .map(item => ({ type, item }));
-      //Then element that contains the searchTerm but excluding the one starting with the term
-      const includesTerm = items
-        .filter(item =>
-          !normalizeString(item.nom).startsWith(lowerTerm) && normalizeString(item.nom).includes(lowerTerm))
-        .map(item => ({ type, item }));
-      return [...startsWithTerm, ...includesTerm];
-    };
-    // filtered products and categories
-    const matchingProducts = filterItems(products, 'product');
-    const matchingCategories = filterItems(categories, 'category');
-    let combinedResults: { type: string, item: Category | Product }[] = [...matchingProducts, ...matchingCategories];
-
-    // remoing deduplicated results
-    const uniqueResults: { type: string, item: Category | Product }[] = [];
-    const seenNames = new Set<string>();
-
-    combinedResults.forEach(result => {
-        const name = result.item.nom.toLowerCase();
-        if (!seenNames.has(name)) {
-            seenNames.add(name);
-            uniqueResults.push(result);
-        }
-    });
-
-    // cache the combined results for future researches
-    this.cache.set(lowerTerm, uniqueResults);
-    return of(uniqueResults);
-
+  public searchNotFoundTerme(terme:string):Observable<any>{
+    return this.apiService.post(`/produit/search/${terme}`,null);
   }
+  
+  public getAllSearchNotFoundTerme():Observable<any>{
+    console.log(":: IN SEARCH ::::");
+    
+    return this.apiService.get(`/produit/get-all-search-terme`);
+  }
+
+  private cache = new Map<string, any>();
+  private normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+  private fuseOptions: IFuseOptions<{ type: string, item: Category | Product }> = {
+    // ignore diacritics (accents)
+    ignoreDiacritics: true,
+    // should be case sensitive
+    isCaseSensitive: false,
+    // We’ll be searching the `item.nom` field
+    keys: [
+      { name: 'item.nom', weight: 2 },
+      { name: 'item.description', weight: 1 }
+    ],
+    // 0.0 = exact only; raise for more permissive matching (0.3 is a good start)
+    threshold: 0.2,
+    // allow matches anywhere in the string
+    ignoreLocation: true,
+    // sort by match score
+    shouldSort: true,
+    // include score in the result
+    includeScore: true,
+    // matches at least 2 chars
+    minMatchCharLength: 2,
+  };
+
+  /**
+   * Search for products and categories matching the search term
+   * Includes synonym expansion and intelligent scoring
+   */
+  public searchProductsAndCategories(categories: Category[] = [], products: Product[] = [], term: string):
+  Observable<{ type: string; item: Category | Product }[]> {
+  const q = term.trim();
+  if (!q) {
+    return of([]);
+  }
+
+  // Cache lookup
+  if (this.cache.has(q)) {
+    return of(this.cache.get(q)!);
+  }
+
+  // Use expandTerm to get all relevant terms - this includes the original term
+  const expandedTerms = [q, ...this.synonymService.expandTerm(q)];
+
+  // 1. Tag and combine all items
+  const allItems: { type: string; item: Category | Product }[] = [
+    ...products.map(p => ({ type: 'product', item: p })),
+    ...categories.map(c => ({ type: 'category', item: c }))
+  ];
+
+  // 2. Build Fuse index
+  const fuse = new Fuse(allItems, this.fuseOptions);
+
+  // 3. Run searches for all expanded terms and combine results
+  let allResults: FuseResult<{ type: string; item: Category | Product }>[] = [];
+
+  expandedTerms.forEach(expandedTerm => {
+    const termResults = fuse.search(expandedTerm);
+    allResults = [...allResults, ...termResults];
+  });
+
+  // Remove duplicates from combined results by item ID
+  const seenIds = new Set<string>();
+  allResults = allResults.filter(result => {
+    const id = result.item.item.id || '';
+    if (seenIds.has(id)) {
+      return false;
+    }
+    seenIds.add(id);
+    return true;
+  });
+
+  // 4. Boost prefix matches & sort by adjusted score
+  const normalizedQ = this.normalize(q);
+  const boosted = allResults
+    .map(r => {
+      const nm = this.normalize(r.item.item.nom);
+
+      // Calculate match type bonuses
+      const isExactMatch = nm === normalizedQ;
+      const isPrefix = nm.startsWith(normalizedQ);
+      const isDirectSynonym = expandedTerms.slice(1).some(synonym =>
+        this.normalize(r.item.item.nom).includes(this.normalize(synonym))
+      );
+      const isSynonymPrefix = expandedTerms.slice(1).some(synonym =>
+        this.normalize(r.item.item.nom).startsWith(this.normalize(synonym))
+      );
+
+      // Apply score adjustments - lower scores are better in Fuse.js
+      let adjustedScore = (r.score ?? 1);
+      if (isExactMatch) adjustedScore -= 0.2;      // Strongest boost for exact matches
+      else if (isPrefix) adjustedScore -= 0.1;     // Boost prefix matches
+
+      if (isDirectSynonym) adjustedScore -= 0.08;  // Boost synonym matches
+      if (isSynonymPrefix) adjustedScore -= 0.12;  // Boost synonym prefix matches
+
+      return { item: r.item, adjustedScore, realScore: r.score };
+    })
+    .sort((a, b) => a.adjustedScore - b.adjustedScore);
+
+  // Filter out low-scoring results
+  const maybeMissing = boosted.find(r => r.realScore !== undefined && r.adjustedScore < 0.01);
+  console.log('maybeMissing', maybeMissing);
+  // 5. Remove same-named products/categories
+  const unique: { type: string; item: Category | Product }[] = [];
+  const seen = new Set<string>();
+  for (const { item } of boosted) {
+    const key = this.normalize(item.item.nom);
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(item);
+    }
+  }
+
+  // 6. Cache & return
+  this.cache.set(q, unique);
+  return of(unique);
+}
+
+
+  // public searchProductsAndCategories(categories: Category[]=[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {
+  //   // accents insensitivity
+  //   const normalizeString = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  //   const lowerTerm = normalizeString(term).trim();
+  //   if (this.cache.has(lowerTerm)) {
+  //       return of(this.cache.get(lowerTerm)!);
+  //   }
+
+  //   const filterItems = <T extends { nom: string }>(items: T[], type: string): { type: string, item: T }[] => {
+  //     // first i check if element starts with the term
+  //     const startsWithTerm = items
+  //       .filter(item => normalizeString(item.nom).startsWith(lowerTerm))
+  //       .map(item => ({ type, item }));
+  //     //Then element that contains the searchTerm but excluding the one starting with the term
+  //     const includesTerm = items
+  //       .filter(item =>
+  //         !normalizeString(item.nom).startsWith(lowerTerm) && normalizeString(item.nom).includes(lowerTerm))
+  //       .map(item => ({ type, item }));
+  //     return [...startsWithTerm, ...includesTerm];
+  //   };
+  //   // filtered products and categories
+  //   const matchingProducts = filterItems(products, 'product');
+  //   const matchingCategories = filterItems(categories, 'category');
+  //   let combinedResults: { type: string, item: Category | Product }[] = [...matchingProducts, ...matchingCategories];
+
+  //   // remoing deduplicated results
+  //   const uniqueResults: { type: string, item: Category | Product }[] = [];
+  //   const seenNames = new Set<string>();
+
+  //   combinedResults.forEach(result => {
+  //       const name = result.item.nom.toLowerCase();
+  //       if (!seenNames.has(name)) {
+  //           seenNames.add(name);
+  //           uniqueResults.push(result);
+  //       }
+  //   });
+
+  //   // cache the combined results for future researches
+  //   this.cache.set(lowerTerm, uniqueResults);
+  //   return of(uniqueResults);
+  // }
 
   public getProductById(id): Observable<any> {
     return this.apiService.get('/produit/find/' + id);
@@ -326,32 +460,103 @@ export class AppService {
     });
   }
 
-  public addToCart(product: Product) {
-    let message, status;
+  public addToCart(product: Product): void {
+    // Parse the stringified JSON array
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
 
-    this.Data.totalPrice = null;
-    this.Data.totalCartCount = null;
+    let existingProduct = this.productList.find((item) => item.id === product.id);
 
-    if (this.Data.cartList.filter((item) => item.id == product.id)[0]) {
-      let item = this.Data.cartList.filter((item) => item.id == product.id)[0];
-      item.cartCount = product.cartCount;
+    if (existingProduct) {
+      existingProduct.cartCount += product.cartCount;
+      // console.log("Already in cart, new count:", existingProduct.cartCount);
     } else {
-      this.Data.cartList.push(product);
+      this.productList.push({ ...product });
     }
-    this.Data.cartList.forEach((product) => {
-      this.Data.totalPrice =
-        this.Data.totalPrice + product.cartCount * product.newPrice;
-      this.Data.totalCartCount = this.Data.totalCartCount + product.cartCount;
-    });
 
-    message = 'The product ' + product.nom + ' has been added to cart.';
-    status = 'success';
+    this.updateCartData();
+
+    const message = `Le produit ${product.nom} a été ajouté au panier.`;
+    const status = 'success';
     this.snackBar.open(message, '×', {
       panelClass: [status],
       verticalPosition: 'top',
       duration: 3000,
     });
   }
+
+  public increment(product: Product): void {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+
+    let existingProduct = this.productList.find((item) => item.id === product.id);
+
+    if (existingProduct) {
+      existingProduct.cartCount += 1;
+    } else {
+      this.productList.push({ ...product, cartCount: 1 });
+    }
+
+    this.updateCartData();
+  }
+
+  public decrement(product: Product): void {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+
+    let existingProduct = this.productList.find((item) => item.id === product.id);
+
+    if (existingProduct && existingProduct.cartCount > 1) {
+      existingProduct.cartCount -= 1;
+    } else if (existingProduct) {
+      // Remove product from cart if count reaches 0
+      this.productList = this.productList.filter((item) => item.id !== product.id);
+    }
+
+    this.updateCartData();
+  }
+
+  public remove(product: Product): void {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+
+    const index: number = this.productList.findIndex((item) => item.id === product.id);
+    if (index !== -1) {
+      this.productList.splice(index, 1);
+    }
+
+    this.updateCartData();
+  }
+
+  private updateCartData(): void {
+    this.Data.totalPrice = 0;
+    this.Data.totalCartCount = 0;
+
+    this.productList.forEach((product) => {
+      const productPrice = product.priceBasic != null ? parseFloat(product.priceBasic) : parseFloat(product.pricePromotion);
+      this.Data.totalPrice += product.cartCount * productPrice;
+      this.Data.totalCartCount += product.cartCount;
+    });
+
+    sessionStorage.setItem('totalCartCount', JSON.stringify(this.Data.totalCartCount));
+    sessionStorage.setItem('panier', JSON.stringify(this.productList));
+
+    // Update the cart count using CartService
+    this.cartService.updateCartCount(this.Data.totalCartCount);
+  }
+
+
+
+
+
+  public addCommande(id: string, senderUsername: string, referralCode: string, product:Product[]): Observable<any> {
+
+    return this.apiService.post(`/commande/addTest?id=${id}&senderUsername=${senderUsername}&referralCode=${referralCode}`, product);
+  }
+
+
+
+
 
   public resetProductCartCount(product: Product) {
     product.cartCount = 0;
@@ -660,17 +865,17 @@ export class AppService {
     return [
       {
         value: 'free',
-        name: 'Free Delivery',
+        name: 'A la livraison',
         desc: '$0.00 / Delivery in 7 to 14 business Days',
       },
       {
         value: 'standard',
-        name: 'Standard Delivery',
+        name: 'Orange Money',
         desc: '$7.99 / Delivery in 5 to 7 business Days',
       },
       {
         value: 'express',
-        name: 'Express Delivery',
+        name: 'Carte VISA',
         desc: '$29.99 / Delivery in 1 business Days',
       },
     ];

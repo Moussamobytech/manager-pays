@@ -1,6 +1,6 @@
 .zoom-dialog{
     .mat-mdc-dialog-container{
-        overflow: visible !important;
+        // overflow: hidden !important;
         .controls{
             position: relative;
             button{
@@ -8,21 +8,22 @@
                 top: -44px;
             }
             .zoom-in{
-                right: 44px; 
+                right: 44px;
             }
             .zoom-out{
-                right: 0; 
+                right: 0;
             }
             .close{
-                right: -44px;                
+                right: -44px;
             }
         }
         .viewer{
             width: 100%;
             text-align: center;
+
             img{
-                max-width: 60%;
+                max-width: 100%;
             }
-        }    
+        }
     }
 }

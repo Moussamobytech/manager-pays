@@ -51,6 +51,9 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { LangComponent } from './lang/lang.component';
 import { ProductsCardComponent } from './product-card/product-card.component';
 import { SearchResultsComponent } from '../pages/search-results/search-results.component';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { LazyLoadImagesDirective } from './lazy-load-images.directive';
+import { DateDiffPipe } from './pipes/date-diff.pipe';
 
 @NgModule({
   imports: [
@@ -92,7 +95,8 @@ import { SearchResultsComponent } from '../pages/search-results/search-results.c
     MatTooltipModule,
     MatStepperModule,
     NgScrollbarModule,
-    PipesModule
+    PipesModule,
+    SlickCarouselModule
   ],
   exports: [
     RouterModule,
@@ -143,7 +147,10 @@ import { SearchResultsComponent } from '../pages/search-results/search-results.c
     BannersComponent,
     CategoryListComponent,
     ConfirmDialogComponent,
-    LangComponent
+    LangComponent,
+    SlickCarouselModule,
+    LazyLoadImagesDirective,
+    DateDiffPipe
   ],
   declarations: [
     RatingComponent,
@@ -156,7 +163,9 @@ import { SearchResultsComponent } from '../pages/search-results/search-results.c
     BannersComponent,
     CategoryListComponent,
     ConfirmDialogComponent,
-    LangComponent
+    LangComponent,
+    LazyLoadImagesDirective,
+    DateDiffPipe
   ],
   providers:[
     // { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG }

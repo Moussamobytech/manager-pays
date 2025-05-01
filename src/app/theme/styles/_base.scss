@@ -79,7 +79,7 @@ a{
     text-align: right;
 }
 .divider{
-    border-top: 1px solid rgba(204, 204, 204, 0.6);
+    border-top: 2px solid rgba(204, 204, 204, 0.6);
 }
 .d-none{
   display: none;
@@ -482,48 +482,48 @@ button.swipe-arrow{
 /******* Product *******/
 .product-item {
     position: relative;
-    padding: 16px;
+    // padding: 16px;
     .mat-mdc-chip-listbox {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: -1px;
+        right: 2px;
         &.list-view{
             left: 10px;
         }
     }
-    .image-link{
-        display: block;
-    }
-    img{
-        max-width: 100%;
-        margin-bottom: 12px;
-    }
-    .category{
-        margin-bottom: 4px;
-    }
+    // .image-link{
+    //     display: block;
+    // }
+    // img{
+    //     max-width: 100%;
+    //     margin-bottom: 12px;
+    // }
+    // .category{
+    //     margin-bottom: 4px;
+    // }
     .title{
         display: block;
-        color: inherit;
+        // color: inherit;
         text-decoration: none;
-        font-weight: 500;
-        font-size: 14px;
-        inline-size: 150px;
+        // font-weight: 500;
+        // font-size: 14px;
+        // inline-size: 150px;
         // white-space: pre-wrap;
     }
-    .prices{
-        margin: 12px 0;
-        .old-price{
-            text-decoration: line-through;
-            height: 15px;
-        }
-        .new-price{
-            font-size: 16px;
-            font-weight: 500;
-        }
-    }
-    .icons{
-        margin-top: 18px;
-    }
+    // .prices{
+    //     margin: 12px 0;
+    //     .old-price{
+    //       text-decoration: line-through;
+    //       height: 15px;
+    //     }
+    //     .new-price{
+    //       font-size: 16px;
+    //       font-weight: 500;
+    //     }
+    // }
+    // .icons{
+    //     margin-top: 18px;
+    // }
 }
 .old-price{
     text-decoration: line-through;
@@ -659,4 +659,143 @@ ng-scrollbar {
     --scrollbar-border-radius: 4px !important;
     --scrollbar-hover-size: 8px !important;
     --scrollbar-padding: 2px !important;
+}
+
+////////////////////////// Search //////////////////////////////
+.search-container {
+  width: 70%;
+  position: relative;
+
+  .shop-search {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0px 15px 0px;
+    width: 100%;
+
+    .search-input {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid #000;
+      outline: none;
+      border-radius: 10px;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: 1.5px solid #283593;
+      }
+    }
+
+    .search-btn {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      line-height: .5em;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  }
+
+  .suggestion-container {
+    position: absolute;
+    top: 35px;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 9;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 5px 0;
+    box-sizing: border-box;
+
+    .suggestions-list ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        mat-icon {
+          transition: .2s;
+          padding-right: 10px;
+          color: #d81b60;
+        }
+
+        span {
+          font-size: 14px;
+          color: #333;
+        }
+
+        &:hover {
+          background-color: #f5f5f5;
+        }
+
+        &:hover mat-icon {
+          color: #283593;
+        }
+      }
+    }
+  }
+}
+
+//////////////////////// Copy Link ///////////////////////////////////
+.copy-container {
+  position: relative;
+  margin-top: 5px;
+
+  .copy-input {
+    width: 100%;
+    padding: 8px 35px 8px 8px;
+    font-size: 13px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    color: #333;
+
+    &:focus {
+      outline: 1.5px solid #25224a;
+    }
+  }
+
+  mat-icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    color: #25224a;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #d81b60;
+    }
+  }
+}
+
+////////////////////////// Load more feature ////////////////////////////
+.load-more-wrapper {
+  display: flex;
+  justify-content: center;
+
+  a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:focus,
+    &:hover {
+      color: #25224a;
+      text-decoration: underline;
+    }
+  }
 }

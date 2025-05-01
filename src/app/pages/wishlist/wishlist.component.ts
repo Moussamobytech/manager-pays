@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Data, AppService } from '../../app.service';
 import { Product } from 'src/app/models/product.models';
-// import { Product } from 'src/app/app.models';
-// import { Product } from '../../app.models';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -11,53 +8,40 @@ import { Product } from 'src/app/models/product.models';
   styleUrls: ['./wishlist.component.scss']
 })
 export class WishlistComponent implements OnInit {
-  public quantity:number = 1;
-  constructor(public appService:AppService, public snackBar: MatSnackBar) { }
+  promoProducts: Product[];
+    loadedProductCount:number;
+    unchangedProducts: any;
+    public viewCount: number = (window.innerWidth<=400)?8:10; // nombre de produits à charger après chaque clic sur <charger plus
 
-  ngOnInit() {
-    this.appService.Data.cartList.forEach(cartProduct=>{
-      this.appService.Data.wishList.forEach(product=>{
-        if(cartProduct.id == product.id){
-          product.cartCount = cartProduct.cartCount;
-        }
-      });
-    });
-  }
+    constructor(private produitService:ProductService) { }
 
-  public remove(product:Product) {
-    const index: number = this.appService.Data.wishList.indexOf(product);
-    if (index !== -1) {
-        this.appService.Data.wishList.splice(index, 1);
+    ngOnInit() {
+      this.getPromoProducts();
     }
-  }
 
-  public clear(){
-    this.appService.Data.wishList.length = 0;
-  }
-
-  public getQuantity(val){
-    this.quantity = val.soldQuantity;
-  }
-
-  public addToCart(product: Product): void {
-    const currentProduct = this.appService.Data.cartList.find(item => item.id === product.id);
-    if (currentProduct) {
-      const availableCount = product.availibilityCount;
-      const addedCount = currentProduct.cartCount + this.quantity;
-
-      if (addedCount <= availableCount) {
-        product.cartCount = addedCount;
-      }
-      else{
-        const errorMessage = `You cannot add more items than available. In stock ${availableCount} items and you already added ${currentProduct.cartCount} item(s) to your cart`;
-        this.snackBar.open(errorMessage, '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
-        return;
-      }
+    async getPromoProducts() {
+      const products = await this.produitService.getProductByTop();
+      this.unchangedProducts = products
+      .map(product => {
+        return {
+          ...product,
+          priceBasic: this.parsePrice(product.priceBasic),
+          pricePromotion: this.parsePrice(product.pricePromotion),
+        };
+      })
+      .filter(product => (product.pricePromotion !== null)&&(product.pricePromotion < product.priceBasic));
+      this.promoProducts = this.unchangedProducts.slice(0, this.viewCount);
     }
-    else{
-      product.cartCount = this.quantity;
+
+    parsePrice (price: any) {
+      const parsedPrice = parseFloat(price);
+      return isNaN(parsedPrice) ? null : parsedPrice;
     }
-    this.appService.addToCart(product);
-  }
+
+    loadMore(): void {
+      const nextIndex = this.promoProducts.length + this.viewCount;
+      this.loadedProductCount = nextIndex;
+      this.promoProducts = this.unchangedProducts.slice(0, nextIndex);
+    }
 
 }

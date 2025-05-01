@@ -1,0 +1,107 @@
+<div class="sign-in-container">
+  <div class="main-title">
+    <h2>Paramètres</h2>
+  </div>
+
+  <form [formGroup]="settingForm" (ngSubmit)="onSettingFormSubmit(settingForm.value)">
+    <mat-form-field appearance="outline">
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="firstname" >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="lastname" >
+    </mat-form-field>
+
+    <div class="phone-group" fxLayout="row">
+      <mat-form-field appearance="outline" class="country-select" fxFlex="33.6">
+        <mat-label>Pays</mat-label>
+        <mat-select formControlName="country" required (selectionChange)="handleCountryChange($event)">
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{ country.nom }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="phone-number" fxFlex="63.6">
+        <mat-label>Téléphone</mat-label>
+        <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.indicatif }}</span>
+        <input matInput formControlName="phoneNumber" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
+      </mat-form-field>
+    </div>
+
+    
+
+    <div class="buttons">
+      <button mat-button class="back-btn" routerLink="/account-customer">
+        <mat-icon>arrow_back</mat-icon> Retour
+      </button>
+
+      <button mat-flat-button type="submit" class="vld-btn" [disabled]="!settingForm.valid">
+        Valider <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+  </form>
+
+<div class="py-5">
+  <button  mat-raised-button color="warn" class="primary" (click)="openDialog()">
+    <mat-icon>pass</mat-icon> Modifier le mot de passe
+  </button>
+</div>
+
+</div>
+
+
+ <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <!--:::::::::::::::::::::::::::::::::::::::::::::::::::: TEMPLATE FOR GENERATE CODE-->
+    <!--::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+    <ng-template #updatePasse>
+      <h1 mat-dialog-title>Modifier le mot de passe</h1>
+      <div mat-dialog-content>
+        <!-- <p>Entrez les détails pour recharger votre compte.</p> -->
+        <form [formGroup]="passwordForm" (ngSubmit)="updatePasses()" autocomplete="off">
+          <div mat-dialog-content>
+            <div fxLayout="row wrap" class="center">
+  
+
+              <mat-form-field appearance="outline">
+                <mat-label>Ancien mot de passe</mat-label>
+                <input matInput formControlName="oldPasse" [type]="hideOldPasse ? 'password' : 'text'" required>
+                <button type="button" mat-icon-button matSuffix (click)="hideOldPasse = !hideOldPasse" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hideOldPasse">
+                  <mat-icon>{{ hideOldPasse ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="paaseFormControls?.password.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Mot de passe</mat-label>
+                <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" required>
+                <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hidePassword">
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="paaseFormControls?.password.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+              </mat-form-field>
+          
+              <mat-form-field appearance="outline">
+                <mat-label>Mot de passe de confirmation</mat-label>
+                <input matInput formControlName="confirmPassword" [type]="hideConfirm ? 'password' : 'text'" required>
+                <button type="button" mat-icon-button matSuffix (click)="hideConfirm = !hideConfirm" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="hideConfirm">
+                  <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="paaseFormControls?.confirmPassword.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
+                <mat-error *ngIf="paaseFormControls?.confirmPassword.errors?.mismatchedPasswords">Les deux mot passes doivent correspondre.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div mat-dialog-actions>
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+              <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
+  
+              <button mat-raised-button class="bleu" type="submit">Modifier</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </ng-template>

@@ -1,3 +1,115 @@
-.products-tabs{
-    margin-top: 30px;   
+$primary_color: #25224a;
+$amber_color: #feb930;
+// products container
+.products-container {
+  h2{
+    color: $primary_color;
+    margin-left: 16px;
+  }
+  .subcategory-carousel{
+    height: 50px;
+    .subcategory-item{
+      span{
+        padding: 5px;
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        color: white;
+        background-color: $primary_color;
+        border-radius: 5px;
+        font-size: smaller;
+        cursor: pointer;
+        @media only screen and (max-width:400px){
+          font-size: 9px;
+        }
+      }
+      &.selected{
+        position: relative;
+        span{
+          outline: 2px solid #d81b60;
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #d81b60; /* Amber color */
+          }
+        }
+      }
+    }
+  }
+  .products-carousel{
+    // background: rgba(0,0,0,0.03);
+    position: relative;
+    padding: 8px 0;
+    .with-sub{
+      margin-top: 30px;
+    }
+    margin-bottom: 20px;
+    .more-item{
+      text-align: center;
+
+      a{
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: $amber_color;
+        padding: 4px;
+        border: 1px solid $amber_color;
+        border-radius: 10px;
+        mat-icon{
+          border: 1px solid $amber_color;
+          border-radius: 50%;
+          margin-left: 5px;
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  }
+
+  .swiper-container{
+    padding: 8px 2px;
+    margin: 0 14px;
+  }
+  .swiper-slide {
+    // flex-shrink: 0;
+    width: 25%;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+  }
+  .subcategory-prev{
+    left: 3px;
+  }
+  .subcategory-next{
+    right: 1.5px;
+  }
+
+  .swipe-arrow{
+    @media screen and (max-width: 500px){
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      top: 85%;
+    }
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    top: 80%;
+    background-color: #feb930;
+    color: black;
+    border-radius: 50%;
+  }
+
+  .swiper-button-disabled{
+    display: none;
+  }
 }

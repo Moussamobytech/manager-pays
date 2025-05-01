@@ -17,6 +17,9 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { map, tap } from 'rxjs';
 import { CommonService } from 'src/app/services/common.service';
+import { BannersService } from 'src/app/services/banners.service';
+import { User } from 'src/app/app.models';
+import { CampagneService } from 'src/app/services/campagne.service';
 
 @Component({
   selector: 'app-seller',
@@ -38,8 +41,8 @@ export class SellerComponent implements OnInit {
   public priceFrom = 100;//prix min de filtre
   public priceTo = 250000;
   public sellerId: string;
-  public usedCategories: Category[] = [];//categories des produits du vendeur
-  public checkedCategories: string[] = [];//categories selectionnées par l'utilisateur
+  public usedCategories: Category[] = []; // categories des produits du vendeur
+  public checkedCategories: string[] = []; // categories selectionnées par l'utilisateur
   public isAllBoxSelected = false;  // true si toutes les catégories sont selectionnées/ false sinon
   public page: number;
   public searchTerm: string;// terme de recherche
@@ -54,77 +57,123 @@ export class SellerComponent implements OnInit {
   domWidth: number = window?.innerWidth;
   loadedProductCount:number; // nombre de produit actuellement chargee
   public usePagination = this.domWidth > 430; // basculer entre la pagination et le Voir plus
+  currentUser: any;
+  bannersInfo: any;
+
+  senderUsername:string;
 
 
   constructor(
     public appSettings: AppSettings,
     private common: CommonMessageService,
     private activatedRoute: ActivatedRoute,
+    private auth: AuthenticationService,
     private appService: AppService,
     private produitService: ProductService,
     public domHandlerService: DomHandlerService,
     private cm: CommonService,
+    private bannersService: BannersService,
+    private campagneService: CampagneService
+
   ) {
     this.selectedSorting = this.sortings[0];
   }
 
   async ngOnInit() {
     this.sortProducts();
+    this.onWindowResize();
+  
     this.activatedRoute.params.subscribe((params) => {
-      this.sellerId = params['name'];
-      if(this.sellerId.length <= 8){
-        this.cm.goTo("/");
-      }else{
-        this.getDataFromBackend();
-        this.shopLink = "https://fidelity-market.com/#/sellers/"+this.sellerId;
+      const code = params['code'];
+      this.senderUsername = params['currentUser'];
+  
+      if (code?.length === 10) {
+        sessionStorage.setItem('referralCode', code);
+        sessionStorage.setItem('senderUsername', this.senderUsername);
+        this.getSellerFromCode(code);
+      } else {
+        this.initCurrentUserFlow();
       }
     });
-    this.onWindowResize();
   }
-
-  public async getDataFromBackend() {
-    try {
-      this.getSeller();
-      this.getProducts().subscribe(()=>{
-        this.getCategories();
-      });
-    } catch (error) {
-      this.common.errorToast(
-        "Une erreur s'est produite lors du chargement. Merci de réessayer."
-      );
+  
+  private initCurrentUserFlow() {
+    this.currentUser = this.auth.currentUser();
+    this.sellerId = this.currentUser.username;
+  
+    if (this.currentUser.profiles[0].name === 'ROLE_BOUTIQUE') {
+      this.getDataFromBackend();
     }
   }
-
-  private getSeller() {
-    this.appService.infoSeller(this.sellerId).subscribe(
-      (infoS)=>{
-        this.sellerInfo = infoS;
-        this.sellerBanners = [
-          (this.sellerInfo.bg1)?{ image: this.imgsLink+this.sellerInfo.bg1}:null,
-          (this.sellerInfo.bg2)?{ image: this.imgsLink+this.sellerInfo.bg2}:null,
-          (this.sellerInfo.bg3)?{ image: this.imgsLink+this.sellerInfo.bg3}:null,
-        ].filter((item)=>item!=null);
-        if(!this.sellerInfo?.nom){
-          this.cm.goTo("/sellers/denied/not-allowed");
-        }
-      },
-      (error)=>{
-        if(error.status==400){
+  
+  private getSellerFromCode(code: string) {
+    this.campagneService.getCampagneByCode(code).subscribe({
+      next: (data) => {
+        this.sellerId = data.user.username;
+  
+        if (this.sellerId.length <= 8) {
           this.cm.goTo('/');
+          return;
         }
+  
+        this.shopLink = `${window.location.origin}/#/sellers/${this.sellerId}/${code}`;
+        this.getDataFromBackend();
+      },
+      error: () => {
+        this.common.errorToast("Code de parrainage invalide.");
       }
-    );
+    });
   }
+  
+  private async getDataFromBackend() {
+    try {
+      this.getSeller();
+      this.getProducts().subscribe(() => this.getCategories());
+    } catch {
+      this.common.errorToast("Une erreur s'est produite lors du chargement. Merci de réessayer.");
+    }
+  }
+  
+  private getSeller() {
+    this.auth.getUserInfo(this.sellerId).subscribe({
+      next: (data) => {
+        this.sellerInfo = data;
+      }
+    });
+  
+    this.bannersService.getBannersByUsername(this.sellerId).subscribe({
+      next: (data) => {
+        this.bannersInfo = data;
+        this.sellerBanners = this.mapBanners([
+          data.image1,
+          data.image2,
+          data.image3
+        ]);
+      }
+    });
+  }
+  
+  private mapBanners(images: (string | null)[]): { image: string }[] {
+    return images
+      .filter((img): img is string => !!img)
+      .map(img => ({
+        image: img.startsWith('http') ? img : this.imgsLink + img
+      }));
+  }
+  
 
   private getProducts() {
     return this.produitService.getProductBySeller(this.sellerId).pipe(
       map((p)=>p.filter((p)=>p.etat=="ACTIF")),
       tap((products) => {
+
+
+
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
         this.unchangedSellerProducts = products;
         this.loadedProductCount = this.viewCount;
-        console.log(this.usePagination)
-        console.log(this.sellerProducts.length)
+        // console.log(this.usePagination)
+        // console.log(this.sellerProducts.length)
       })
     );
   }
@@ -146,9 +195,9 @@ export class SellerComponent implements OnInit {
   @HostListener('window:resize')
   public onWindowResize(): void {
     this.sidenavOpen = window.innerWidth >= 960;
-    this.usePagination = this.domWidth > 430;
-    this.viewCol = window.innerWidth < 350 ? 33.3 : 25;
     this.domWidth = window.innerWidth;
+    this.usePagination = this.domWidth > 430;
+    this.viewCol = window.innerWidth < 361 ? 33.3 : 25;
   }
 
   public changeCount(count: number) {
@@ -205,6 +254,7 @@ export class SellerComponent implements OnInit {
   }
 
   public filterProductsByPrice() {
+    console.log(this.priceFrom,this.priceTo);
     this.sellerProducts = this.unchangedSellerProducts.filter((product) => {
       const price = Number(product.pricePromotion) || Number(product.priceBasic);
       return (price >= Math.min(this.priceFrom, this.priceTo) && price <= Math.max(this.priceFrom, this.priceTo));
@@ -248,7 +298,7 @@ export class SellerComponent implements OnInit {
     this.searchTimeout = setTimeout(() => {
       this.showSuggestions = this.searchTerm.length >= 1;
       if (this.showSuggestions) {
-        this.appService.searchProducts1(this.usedCategories, this.unchangedSellerProducts, this.searchTerm).subscribe(
+        this.appService.searchProductsAndCategories(this.usedCategories, this.unchangedSellerProducts, this.searchTerm).subscribe(
           results => {
             this.suggestions = results;
           },
@@ -300,6 +350,7 @@ export class SellerComponent implements OnInit {
 
   copyLink(inputElement: HTMLInputElement): void {
     inputElement.style.transition = '.3s';
+    inputElement.select();
     navigator.clipboard.writeText(this.shopLink).then(
       () => {
         this.isCopied = true;
@@ -331,5 +382,22 @@ export class SellerComponent implements OnInit {
     const nextIndex = this.sellerProducts.length + this.viewCount;
     this.loadedProductCount = nextIndex;
     this.sellerProducts = this.unchangedSellerProducts.slice(0, nextIndex);
+  }
+
+  validateNumberPrice(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete', 'Enter'];
+    const isNumber = /^[0-9]$/.test(event.key);
+
+    if (!isNumber && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+
+  }
+
+  validatePastePrice(event: ClipboardEvent) {
+    const clipboardData = event.clipboardData?.getData('text');
+    if (clipboardData && !/^\d+$/.test(clipboardData)) {
+      event.preventDefault();
+    }
   }
 }

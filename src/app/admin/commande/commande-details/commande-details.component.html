@@ -1,0 +1,141 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
+    <div fxLayout="row">
+        <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
+            <mat-button-toggle value="search" [title]="'BTN.SEARCH'|translate">
+                <mat-icon>search</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+
+    </div>
+    <form class="user-search" [class.show]="controls.value == 'search'">
+        <mat-form-field class="user-search-input">
+            <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" (keyup)="search()" name="search">
+        </mat-form-field>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <Strong>Code commande: {{codeCommande}}</Strong>
+        <button style="margin-left: 10px;" mat-raised-button matTooltip="Eporter vers xlsx" color="warn" (click)="exportAsExel()">
+            <mat-icon>book</mat-icon>
+        </button>
+
+        <mat-button-toggle-group class="toogle" #viewType="matButtonToggleGroup" appearance="legacy" value="table">
+
+            <mat-button-toggle *ngIf="isAboveSmSize$|async" value="table">
+                <mat-icon>view_headline</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>
+
+<div class="users-list">
+    <div class="table-list" *ngIf="isAboveSmSize$ | async">
+        <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
+            <div fxFlex="100" class="p-2">
+                <div class="table-scroll-wrapper">
+                    <div class="admin-table">
+                        <!-- Header Row -->
+                        <div class="header-row">
+                            <div class="header-cell filter-cell fixed-width">
+                                {{ "Image" | translate }}
+                               <!-- <a (click)="sortPaniers('produitImage')"><mat-icon>swap_vert</mat-icon></a>-->
+                            </div>
+
+                            <div class="header-cell filter-cell fixed-width">
+                                {{ "Produit" | translate }}
+                                <a (click)="sortPaniers('produitNom')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+                            <div class="header-cell filter-cell fixed-width">
+                                {{ "Prix unitaire" | translate }}
+                                <a (click)="sortPaniers('prixUnitaire')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+                            <div class="header-cell filter-cell fixed-width">
+                                {{ "Quantité" | translate }}
+                                <a (click)="sortPaniers('quantite')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+                            <div class="header-cell filter-cell fixed-width">
+                                Montant
+                                <a (click)="sortPaniers('montant')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+                            <div class="header-cell filter-cell fixed-width">
+                                Status
+                                <a (click)="sortPaniers('statutCommande')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+                           <div class="header-cell filter-cell fixed-width">
+                                {{ "Fournisseur" | translate }}
+                                <a (click)="sortPaniers('fournisseurUsername')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+                             <div class="header-cell filter-cell fixed-width">
+                                {{ "Date commande" | translate }}
+                                <a (click)="sortPaniers('dateCommande')"><mat-icon>swap_vert</mat-icon></a>
+                            </div>
+
+                            
+
+                            <div class="header-cell filter-cell fixed-width text-center">
+                                {{ "USER.ACTION" | translate }}
+                            </div>
+
+                        </div>
+
+                        <!-- Data Rows -->
+                        <div *ngFor="let order of (sortedPanier || paniers) | OrderSearchPipe: searchText | paginate: { itemsPerPage: 8, currentPage: page }"
+                            class="data-row">
+                            <div class="data-cell fixed-width image">
+                                <img [src]="order.produitImage"  alt="" width="60" height="60">
+                            </div>
+                            <div class="data-cell fixed-width"> {{ order.produitNom }} </div>
+                            <div class="data-cell fixed-width"> {{ order.prixUnitaire}} </div>
+                            <div class="data-cell fixed-width"> {{ order.quantite }} </div>
+                            <div class="data-cell fixed-width"> {{ order.montant }}</div>
+                         <!--   <div class="data-cell fixed-width"> {{Status(order.statutCommande.name)}}</div>-->
+                         <div class="  {{order.statutCommande.name}}" [ngClass]="order.statutCommande.name"> 
+                            <mat-select [value]="order.statutCommande.id">
+                              @for (st of status; track status) {
+                                <mat-option [value]="st.id" (onSelectionChange)="setStatusT(order.id,st.id,order)">{{Status(st.name)}}</mat-option>
+                              }
+                            </mat-select>
+                        </div>
+                            <div class="data-cell fixed-width"> {{ order.fournisseurUsername }}</div>
+                            <div class="data-cell fixed-width"> {{ order.dateCommande | date: "dd-MM-yyyy à HH:mm" }}
+                            </div>
+                            <div class="data-cell fixed-width">
+                                <div class="actions">
+                                    <button (click)="openProductDetails(order)" mat-mini-fab
+                                        color="accent" [matTooltip]="'BTN.VIEW' | translate">
+                                        <mat-icon>remove_red_eye</mat-icon>
+                                        <!--  -->
+                                    </button>
+                                    <button  (click)="remove(order)" mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                    <button  (click)="addNote(order)" mat-mini-fab color="warn" matTooltip="Note">
+                                        <mat-icon>book</mat-icon>
+                                    </button>
+                                    <!--(change)="setStatus(order.id, $event)"
+                                    <mat-slide-toggle [color]="order.enabled ? 'primary' : 'warn'"
+                                        [checked]="order.enabled">
+                                    </mat-slide-toggle>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="paniers" fxLayout="row wrap">
+        <div fxFlex="100" class="p-2">
+            <mat-card class="text-center">
+                <!-- (pageChange)="onPageChanged($event)" -->
+                <pagination-controls class="product-pagination" [autoHide]="true"
+                    [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate"
+                    [maxSize]="5"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+
+    <div *ngIf="!paniers" fxLayout="column" fxLayoutAlign="center center" class="user-spinner">
+        <mat-spinner color="primary"></mat-spinner>
+    </div>

@@ -11,6 +11,8 @@ import { RoundNamePipe } from './roundName.pipe';
 import { UserTypePipe } from './userType.pipe';
 import { SafePipe } from './safe.pipe';
 import { ExportButtonShowPipe } from './export-button-show.pipe';
+import { CommandeSearchPipe } from './commandeSearche.pipe';
+import { OrderSearchPipe } from './orderSearch.pipe';
 import { CustomerSearchPipe } from './customer-search.pipe';
 import { DiscountConverterPipe } from './discountConverter.pipe';
 
@@ -30,7 +32,9 @@ import { DiscountConverterPipe } from './discountConverter.pipe';
       SafePipe,
       ExportButtonShowPipe,
       CustomerSearchPipe,
-      DiscountConverterPipe
+      DiscountConverterPipe,
+      CommandeSearchPipe,
+      OrderSearchPipe
    ],
     exports: [
       FilterByIdPipe,
@@ -44,7 +48,9 @@ import { DiscountConverterPipe } from './discountConverter.pipe';
       SafePipe,
       ExportButtonShowPipe,
       CustomerSearchPipe,
-      DiscountConverterPipe
+      DiscountConverterPipe,
+      CommandeSearchPipe,
+      OrderSearchPipe
     ]
 })
 export class PipesModule { }

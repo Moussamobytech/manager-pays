@@ -1,52 +1,45 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { LoginComponent } from './login/login.component';
-
-import { SessionRoutes } from './session.routing';
-import { UserAuthSessionComponent } from './user-auth-session/user-auth-session.component';
-import { RegisterComponent } from './register/register.component';
-import { CommonService } from 'src/app/services/common.service';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SharedModule } from 'src/app/shared/shared.module';
-// import { SignInComponent } from './sign-in/sign-in.component';
-import { SignInModule } from './sign-in/sign-in.module';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+// import { UserAuthSessionComponent } from './user-auth-session/user-auth-session.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+// import { SignInFirstStepComponent } from './first-step/first-step.component';
+import { SessionGuard } from 'src/app/helpers/session.guard';
+import { AuthenticationComponent } from './authentication/authentication.component';
+
+const SessionRoutes: Routes = [
+  {
+    path: '',
+    canActivate: [SessionGuard],
+    children: [
+      { path: '', component: AuthenticationComponent, pathMatch: 'full' },
+      { path: 'sign-up', component: SignUpComponent, data: { breadcrumb: 'S\'inscrire' } },
+      { path: 'sign-in', component: SignInComponent, data: { breadcrumb: 'Se connecter' }  },
+    ]
+  },
+];
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatIconModule,
-    MatSnackBarModule,
     RouterModule.forChild(SessionRoutes),
-    MatCardModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    MatButtonModule,
-    MatProgressBarModule,
-    MatToolbarModule,
     NgxPaginationModule,
     SharedModule,
-    SignInModule
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   declarations: [
-    LoginComponent,
-    RegisterComponent,
-    UserAuthSessionComponent
+    SignUpComponent,
+    SignInComponent,
+    AuthenticationComponent,
   ],
-  providers:[
-  ]
+  providers: [provideNgxMask()]
 })
-
 export class SessionModule {}

@@ -1,0 +1,21 @@
+<div class="main-slider">
+  <ngx-slick-carousel
+    class="carousel"
+    [config]="slideConfig"
+    *ngIf="slides?.length">
+
+    <div ngxSlickItem *ngFor="let slide of slides" class="carousel-item">
+      <!-- Text Content -->
+      <div class="slide-item">
+        <div class="content">
+          <h1>{{ slide.title }}</h1>
+          <h3>{{ slide.subtitle }}</h3>
+        </div>
+      </div>
+
+      <!-- Image Content -->
+      <div class="image-container" [style.backgroundImage]="'url(' + slide.image + ')'"></div>
+    </div>
+
+  </ngx-slick-carousel>
+</div>

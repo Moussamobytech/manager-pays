@@ -1,0 +1,530 @@
+$primary: #25224a;
+$amber: #feb930;
+$warn: #d81b60;
+$fid_green: #548580;
+
+  .bleu{
+      background-color: #25224a;
+      color: white;
+    }
+    .tile{
+      text-align: right;
+      .mat-icon{
+          position: absolute;
+          left: 4px;
+          top: 8px;
+          line-height: 54px;
+          font-size: 54px;
+          width: 54px;
+          height: 54px;
+          opacity: 0.3;
+      }
+      h2{
+          font-weight: 500;
+      }
+      p{
+          text-transform: uppercase;
+      }
+    }
+
+    /* Réduire la taille du texte pour les écrans de moins de 600 pixels de large */
+    @media screen and (max-width: 700px) {
+      body {
+        font-size: 10px; /* Ajustez la taille du texte selon vos besoins */
+      }
+    }
+    .rose{
+      background-color: #d81b60;
+      color: white;
+    }
+    .bleu{
+      background-color: #25224a;
+      color: white;
+    }
+    .jaune{
+      background-color: #feb930;
+    }
+    .vert{
+      background-color: #548580;
+    }
+
+
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: #f5f5f5;
+      text-align: left;
+      font-weight: bold;
+      width: 40%;
+    }
+
+    td {
+      text-align: left;
+    }
+
+    tr:hover {
+      background: #f0f0f0;
+    }
+
+
+
+  // --------------------------------------------------------------------------------------------------
+  .campaign {
+    padding: 16px;
+    margin: 0 auto 40px;
+    background: #fff;
+
+    .campaign__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        font-size: 1.6rem;
+        font-weight: bold;
+        margin: 0;
+        @media screen and (max-width: 600px) {
+          font-size: 1.3rem;
+        }
+      }
+    }
+
+    .campaign__create-button {
+      background: $amber;
+      color: $primary;
+      border-radius: 10px;
+      padding: 8px 20px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.3s;
+
+      &:hover {
+        background: darken($amber, 10%);
+      }
+
+      @media screen and (max-width: 600px) {
+        font-size: 0.7rem;
+        padding: 8px 10px;
+      }
+    }
+
+    .campaign__types {
+      margin-top: 24px;
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+
+      .campaign__types-list {
+        cursor: pointer;
+        gap: 10px;
+
+        .campaign__type-card {
+          border: 2px solid #eee;
+          border-radius: 16px;
+          padding: 12px;
+          margin-bottom: 8px;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          min-width: 150px;
+
+          &.active {
+            border-color: #ffa500;
+          }
+
+          .campaign__type-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            .campaign__plus-button {
+              background: none;
+              border: none;
+              color: #bbb;
+              font-size: 1.3rem;
+              margin-left: auto;
+              cursor: pointer;
+              transition: color 0.3s;
+              &:hover {
+                color: $amber;
+              }
+            }
+          }
+
+          .campaign__type-info {
+            margin-top: 20px;
+            margin-bottom: 10px;
+
+            .campaign__type-title {
+              font-weight: 600;
+              font-size: 1.1rem;
+            }
+
+            .campaign__type-desc {
+              font-size: 0.95rem;
+              color: #666;
+            }
+          }
+        }
+      }
+    }
+
+    .campaign__details {
+      border: 1px solid #eee;
+      border-radius: 10px;
+      margin-top: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      .campaign__details-header {
+        display: flex;
+        align-items: center;
+        background-color: rgba(254, 185, 48, 0.5);
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+
+        .campaign__details-info {
+          flex-grow: 1;
+
+          .campaign__details-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: $primary;
+          }
+          .campaign__details-desc {
+            font-size: 0.9em;
+            color: $primary;
+          }
+        }
+
+        .campaign__accordion-icon {
+          i {
+            transition: transform 0.3s ease;
+            &.rotate {
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+
+      .campaign__details-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        &.open {
+          max-height: 500px;
+          padding: 20px;
+        }
+        p {
+          margin-bottom: 10px;
+          color: $primary;
+          strong {
+            font-weight: bold;
+          }
+        }
+        ul {
+          list-style-type: square;
+          padding-left: 20px;
+          margin-bottom: 15px;
+          li {
+            color: $amber;
+            margin-bottom: 5px;
+            span {
+              color: $primary;
+            }
+          }
+        }
+      }
+    }
+
+    .campaign__active-list {
+      margin-top: 24px;
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+      }
+
+      .campaign__active-items {
+        gap: 12px;
+
+        .campaign__active-item {
+          border: 2px solid #eee;
+          border-radius: 16px;
+          padding: 12px;
+          display: flex;
+          align-items: center;
+          position: relative;
+
+          .campaign__info {
+            margin-left: 12px;
+            flex: 1;
+
+            .campaign__title {
+              font-weight: 600;
+              font-size: 1.05rem;
+            }
+            .campaign__value {
+              font-size: 0.98rem;
+              color: $primary;
+              display: flex;
+              gap: 16px;
+              margin: 8px 0;
+
+              .campaign__value-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: rgba($amber, 0.1);
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-weight: 500;
+
+                i {
+                  color: $amber;
+                }
+              }
+            }
+            .campaign__description {
+              font-size: 0.92rem;
+              color: $primary;
+
+              .campaign__description-text {
+                margin-bottom: 12px;
+                line-height: 1.4;
+              }
+
+              .campaign__dates {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                align-items: center;
+
+                .campaign__date-item {
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  color: #666;
+                  font-size: 0.9rem;
+
+                  i {
+                    color: $primary;
+                  }
+                }
+
+                .campaign__type {
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                  padding: 4px 12px;
+                  border-radius: 20px;
+                  font-weight: 500;
+                  font-size: 0.9rem;
+                  text-decoration: none;
+                  
+                  i {
+                    font-size: 0.8rem;
+                  }
+                  
+                  &.promotion {
+                    background: rgba(#2196F3, 0.1);
+                    color: #2196F3;
+                  }
+                  
+                  &.offre-bienvenue {
+                    background: rgba(#4CAF50, 0.1);
+                    color: #4CAF50;
+                  }
+                  
+                  &.parrainage {
+                    background: rgba(#FF9800, 0.1);
+                    color: #FF9800;
+                  }
+                  
+                  &.livraison-gratuite {
+                    background: rgba(#9C27B0, 0.1);
+                    color: #9C27B0;
+                  }
+                }
+              }
+            }
+          }
+
+          .campaign__switch {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+            margin: 0 10px;
+
+            ::ng-deep {
+              .mat-slide-toggle {
+                &.mat-checked {
+                  .mat-slide-toggle-thumb {
+                    background-color: #4CAF50;
+                  }
+                  .mat-slide-toggle-bar {
+                    background-color: rgba(76, 175, 80, 0.54);
+                  }
+                }
+
+                &:not(.mat-checked) {
+                  .mat-slide-toggle-thumb {
+                    background-color: #f44336;
+                  }
+                  .mat-slide-toggle-bar {
+                    background-color: rgba(244, 67, 54, 0.54);
+                  }
+                }
+              }
+            }
+          }
+
+          .campaign__edit-button {
+            background: none;
+            border: none;
+            color: $primary;
+            font-size: 1.1rem;
+            margin-left: 6px;
+            cursor: pointer;
+            transition: color 0.3s;
+            &:hover {
+              color: $amber;
+            }
+          }
+
+          .campaign__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-left: 8px;
+
+            .campaign__action-button {
+              background: none;
+              border: none;
+              color: $primary;
+              font-size: 1.1rem;
+              cursor: pointer;
+              transition: all 0.3s;
+              padding: 4px;
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 32px;
+              height: 32px;
+
+              &:hover {
+                color: $amber;
+                background: rgba($amber, 0.1);
+                transform: scale(1.1);
+              }
+
+              &.delete:hover {
+                color: #f44336;
+                background: rgba(#f44336, 0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .campaign__load-more {
+      margin-top: 16px;
+
+      &-button {
+        background: #eee;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 24px;
+        font-weight: 600;
+        color: $primary;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s;
+        &:hover {
+          background: $amber;
+        }
+      }
+    }
+
+    .campaign__icon-circle {
+      width: 50px;
+      height: 50px;
+      background: $primary;
+      color: $amber;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 1.3rem;
+      &.promo {
+        background: $amber;
+        color: $primary;
+      }
+      &.parrainage {
+        background: $warn;
+        color: beige;
+      }
+      &.livraison {
+        background: $fid_green;
+        color: $amber;
+      }
+    }
+
+    @media (max-width: 600px) {
+      padding: 8px;
+      .campaign__type-card,
+      .campaign__active-item {
+        flex-direction: row;
+        min-width: unset;
+        padding: 10px 6px;
+      }
+      .campaign__info {
+        margin-left: 8px;
+      }
+    }
+  }
+
+.campaign__type {
+  display: inline-block;
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: underline;
+  
+  &.promotion {
+    color: #2196F3;
+  }
+  
+  &.offre-bienvenue {
+    color: #4CAF50;
+  }
+  
+  &.parrainage {
+    color: #FF9800;
+  }
+  
+  &.livraison-gratuite {
+    color: #9C27B0;
+  }
+}
+

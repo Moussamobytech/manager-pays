@@ -1,267 +1,150 @@
-<mat-sidenav-container>
+<div class="products-container">
+  <mat-sidenav-container>
     <mat-sidenav #sidenav [opened]="sidenavOpen" [mode]="sidenavOpen ? 'side' : 'over'" class="filter-sidenav">
-        <ng-scrollbar pointerEventsMethod="scrollbar" visibility="hover">
+      <!-- <ng-scrollbar pointerEventsMethod="scrollbar" visibility="hover"> -->
+      <mat-accordion displayMode="flat" multi="true">
+        <mat-expansion-panel class="sidenav-content categories" expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title> <h4>Categories</h4> </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="categories-wrapper">
+            <!-- <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false"> -->
+              <div class="category-checkbox">
+                <mat-checkbox color="warn"
+                  [checked]="isAllBoxSelected"
+                  (change)="toggleAllCategories($event.checked)">
+                  Tous
+                </mat-checkbox>
+              </div>
 
-            <mat-accordion displayMode="flat" multi="true">
-                <mat-expansion-panel expanded>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                          <h4>{{'PRODUCTS.CATEGORY' | translate}}</h4>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div class="categories-wrapper" >
-
-
-
-                    <!-- <div class="categories-wrapper categories-dropdown" > -->
-
-                        <ng-scrollbar pointerEventsMethod="scrollbar" [autoHeightDisabled]="false" >
-                            <app-category-list [categories]="allCategories"  (change)="onChangeCategory($event)"></app-category-list>
-                        </ng-scrollbar>
-                    </div>
-                </mat-expansion-panel>
-
-                <mat-expansion-panel expanded>
-                  <mat-expansion-panel-header>
-                      <mat-panel-title>
-                          <h4>{{'PRODUCTS.PRICE' | translate}}</h4>
-                      </mat-panel-title>
-                  </mat-expansion-panel-header>
-
-              <div fxLayout="row" fxLayoutAlign="space-between center" class="text-muted">
-                <span>{{"FROM" | translate}}: <b>{{ priceFrom }} FCFA</b></span>
-                <span>{{"TO" | translate}}: <b>{{ priceTo }} FCFA</b></span>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="space-between center" class="filter-price">
-
-              <mat-slider color="primary" max="2000000" min="1" thumb-label="true"><input matSliderThumb [(ngModel)]="priceFrom" (change)="onChangePriceFrom()"/></mat-slider>
-              <mat-slider color="warn" max="2000000" min="1" thumb-label="true"><input matSliderThumb [(ngModel)]="priceTo" (change)="onChangePriceTo()"/></mat-slider>
-
-            </div>
-
-              </mat-expansion-panel>
-<!--
-              <mat-expansion-panel expanded>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <h4>Color</h4>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
-                    <button mat-raised-button *ngFor="let color of colors" [style.background]="color.name" (click)="color.selected = !color.selected">
-                        <span *ngIf="!color.selected">&nbsp;</span>
-                        <mat-icon *ngIf="color.selected" class="m-0">check</mat-icon>
-                    </button>
-                </div>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel expanded>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <h4>Size</h4>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-buttons">
-                    <button mat-raised-button *ngFor="let size of sizes" (click)="size.selected = !size.selected" [class.selected]="size.selected">
-                        {{size.name}}
-                    </button>
-                </div>
-            </mat-expansion-panel>
-
-            <mat-expansion-panel expanded>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <h4>Condition</h4>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div fxLayout="column">
-                    <mat-checkbox color="primary">New</mat-checkbox>
-                    <mat-checkbox color="primary">Used</mat-checkbox>
-                    <mat-checkbox color="primary">Not Specified</mat-checkbox>
-                </div>
-            </mat-expansion-panel> -->
-                <mat-expansion-panel expanded>
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            <h4>{{'PRODUCTS.BRAND' | translate}}</h4>
-                        </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="filter-brands">
-                        <button mat-raised-button *ngFor="let brand of brands" (click)="brand.selected = !brand.selected" [class.selected]="brand.selected">
-                            <img [src]="brand.logo"/>
-                        </button>
-                    </div>
-                </mat-expansion-panel>
-
-
-
-            </mat-accordion>
-        </ng-scrollbar>
+              <div *ngFor="let category of usedCategories" class="category-checkbox">
+                <mat-checkbox color="primary"
+                  [checked]="checkedCategories.includes(category.id)||isAllBoxSelected"
+                  (change)="onCategoryChange($event.checked, category.id)">
+                  {{ category.nom }}
+                </mat-checkbox>
+              </div>
+            <!-- </ng-scrollbar> -->
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="sidenav-content" expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title> <h4>Filtre de prix</h4> </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)">
+            <span> De: <b>{{ priceFrom }} F</b> </span>
+            <span> À: <b>{{ priceTo }} F</b> </span>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)" class="filter-price">
+            <mat-slider color="primary" [step]="950" [max]="250000" [min]="100" thumb-label="true">
+              <input matSliderThumb [(ngModel)]="priceFrom" (change)="filterProductsByPrice()"/>
+            </mat-slider>
+            <mat-slider color="warn" [step]="950" [max]="250000" [min]="100" thumb-label="true">
+              <input matSliderThumb [(ngModel)]="priceTo" (change)="filterProductsByPrice()"/>
+            </mat-slider>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px" class="filter-price">
+            <mat-form-field appearance="outline" class="price-input">
+              <mat-label>Prix Min</mat-label>
+              <input matInput (keypress)="validateNumberPrice($event)" (paste)="validatePastePrice($event)"
+              [step]="950" type="number" [(ngModel)]="priceFrom" (change)="filterProductsByPrice()" [min]="100"/>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="price-input">
+              <mat-label>Prix Max</mat-label>
+              <input matInput (keypress)="validateNumberPrice($event)" (paste)="validatePastePrice($event)"
+              [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <!-- </ng-scrollbar> -->
     </mat-sidenav>
-
     <mat-sidenav-content class="all-products" ngClass.gt-sm="p-left">
-        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="filter-row mat-elevation-z1 text-muted">
-
-
-            <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()" class="toggle-button">
-              <!-- <mat-icon class="icon-more_vert">more_vert</mat-icon> -->
-              <mat-icon class="icon-menu">menu</mat-icon>
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="filter-row">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()" class="toggle-button">
+            <mat-icon class="icon-menu">menu</mat-icon>
           </button>
-            <!-- <div>
-                <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
-                    {{sort}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-                </a>
-                <mat-menu #sortMenu="matMenu" xPosition="before" class="app-dropdown" overlapTrigger="true">
-                    <span (mouseleave)="sortMenuTrigger.closeMenu()">
-                        <button mat-menu-item *ngFor="let sort of sortings" (click)="changeSorting(sort)">
-                            <span>{{sort}}</span>
-                        </button>
-                    </span>
-                </mat-menu>
-            </div> -->
-
-            <!-- <div>
-              <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
-                {{ sort | translate }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-              </a>
-              <mat-menu #sortMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
-                  <span (mouseleave)="sortMenuTrigger.closeMenu()">
-                      <button mat-menu-item *ngFor="let sorts of sortings" (click)="changeSorting(sorts)">
-                          <span>{{ sorts | translate }}</span>
-                      </button>
-                  </span>
-              </mat-menu>
-          </div> -->
           <div>
             <a mat-button [matMenuTriggerFor]="sortMenu" #sortMenuTrigger="matMenuTrigger">
-              {{ selectedSorting | translate }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
+              {{ selectedSorting | translate }}
+              <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
             </a>
             <mat-menu #sortMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
-              <span (mouseleave)="sortMenuTrigger.closeMenu()">
-                <button mat-menu-item *ngFor="let sorts of sortings" (click)="changeSorting(sorts)">
-                  <span>{{ sorts | translate }}</span>
+              <span>
+                <button mat-menu-item *ngFor="let sort of sortings" (click)="changeSorting(sort)">
+                  <span>{{ sort | translate }}</span>
                 </button>
               </span>
             </mat-menu>
           </div>
-
-            <div fxLayoutAlign="start center">
-                <!-- <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
-                    {{"SHOW" | translate}} {{count}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-                </a>
-                <mat-menu #countsMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
-                    <span (mouseleave)="countsMenuTrigger.closeMenu()">
-                        <button mat-menu-item *ngFor="let count of counts" (click)="changeCount(count)">
-                            <span>{{count}}</span>
-                        </button>
-                    </span>
-                </mat-menu>
-                 -->
-
-                 <a mat-button [matMenuTriggerFor]="countsMenu" #countsMenuTrigger="matMenuTrigger">
-                  {{ 'SHOW' | translate }} {{ count }}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-                </a>
-                <mat-menu #countsMenu="matMenu" xPosition="before" class="primary" overlapTrigger="true">
-                  <span (mouseleave)="countsMenuTrigger.closeMenu()">
-                    <button mat-menu-item *ngFor="let count of counts" (click)="changeCount(count)">
-                      <span>{{ count }}</span>
-                    </button>
-                  </span>
-                </mat-menu>
-                <button title="Afficher par liste" mat-icon-button (click)="changeViewType('list', 100)">
-                    <mat-icon>view_list</mat-icon>
-                </button>
-                <button title="Afficher par carreaux" mat-icon-button (click)="changeViewType('grid', 33.3)">
-                    <mat-icon>view_module</mat-icon>
-                </button>
-                <button title="Afficher par petit carreaux" *ngIf="screenWidth > 500" mat-icon-button (click)="changeViewType('grid', 25)">
-                    <mat-icon>view_comfy</mat-icon>
-                </button>
-            </div>
+          <button matTooltip="Afficher par carreaux" mat-icon-button (click)="changeViewType(33.3)" *ngIf="domWidth>360">
+            <mat-icon>view_module</mat-icon>
+          </button>
+          <button matTooltip="Afficher par petit carreaux" mat-icon-button (click)="changeViewType(25)" *ngIf="domWidth>360">
+            <mat-icon>view_comfy</mat-icon>
+          </button>
         </div>
+      </div>
 
-
-
-        <div *ngIf="viewType == 'grid'" fxLayout="row wrap" class="products-wrapper">
-
-            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }"  fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="col">
-                <mat-card class="product-item text-center">
-                    <mat-chip-listbox *ngIf="product.discount">
-                        <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
-                    </mat-chip-listbox>
-                    <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
-                        <img [src]="product.image1" alt="" class="card-image">
-                    </a>
-                    <h4 class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
-                    <a [routerLink]="['/products', product.id, product.nom]" class="title text-truncate center">
-                        {{product.nom}}
-                    </a>
-                    <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
-                        <div fxLayout="column" fxLayoutAlign="center start"  style="width: 100%;">
-                            <p class=" text-muted" style="inline-size: 100%;"><span *ngIf="product.pricePromotion == null || product.pricePromotion == '' ||  product.pricePromotion == 'null'">{{product.priceBasic | number : '1.2-2'}} FCFA</span></p>
-                            <p class="new-pricePromotion"  style="inline-size: 100%;"  *ngIf="product.pricePromotion != null && product.pricePromotion != '' && product.pricePromotion != 'null' ">{{product.pricePromotion | number : '1.2-2'}} FCFA</p>
-                        </div>
-                        <!-- <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating> -->
-                    </div>
-                    <div class="divider mt-2"></div>
-                    <div class="icons">
-                        <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)"></app-controls>
-                    </div>
-                </mat-card>
-            </div>
+      <div class="search-container">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="shop-search">
+          <input matInput [placeholder]="(sidenavOpen)?'Cherchez un produit, categorie...':'Produit, Categorie...'" autocomplete="off" class="search-input" [(ngModel)]="searchTerm"
+          (input)="onSearchChange()" />
+          <button class="search-btn" mat-icon-button matSuffix (click)="onSearchClick($event)">
+            <mat-icon class="search-icon">search</mat-icon>
+          </button>
         </div>
-
-        <div *ngIf="viewType == 'list'" fxLayout="row wrap" class="products-wrapper">
-
-            <div  *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }"  fxFlex="100" class="col">
-                <mat-card class="product-item">
-                    <div fxLayout="row wrap">
-                        <div fxFlex="100" fxFlex.gt-xs="40" class="p-2">
-                            <mat-chip-listbox *ngIf="product.discount" class="list-view">
-                                <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
-                            </mat-chip-listbox>
-                            <a [routerLink]="['/products', product.id, product.nom]" class="image-link">
-                                <img [src]="product.image1" alt="" >
-                            </a>
-                        </div>
-                        <div fxFlex="100" fxFlex.gt-xs="60" class="p-2">
-                            <h4 class="category text-muted">{{ ( appService.Data.categories | filterById : product.categorie )?.nom }}</h4>
-                            <a [routerLink]="['/products', product.id, product.nom]" class="title">
-                                {{product.nom}}
-                            </a>
-                            <p class="py-1 text-muted lh">{{product.description| translate}}</p>
-                            <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
-                                <div fxLayout="column" fxLayoutAlign="center start">
-                                  <p class="old-price text-muted" [ngClass]="{'old-price': product.pricePromotion}">
-                                    <span *ngIf="product.priceBasic">{{product.priceBasic | number : '1.2-2'}} FCFA</span>
-                                </p>
-                                <p class="new-price">${{product.pricePromotion | number : '1.2-2'}}</p>
-                                </div>
-                                <!-- <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating> -->
-                            </div>
-                            <div class="divider"></div>
-                            <div class="icons">
-                                <app-controls [product]="product" (onOpenProductDialog)="openProductDialog(product)"></app-controls>
-                            </div>
-                        </div>
-                    </div>
-                </mat-card>
-            </div>
+        <div class="suggestion-container" *ngIf="showSuggestions && suggestions.length > 0">
+          <div class="suggestions-list" #suggestionsContainer>
+            <ul>
+              <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.item,suggestion.type)">
+                <mat-icon>search</mat-icon>
+                <b>{{ suggestion.type === 'product' ? 'Produit' : 'Categorie' }} :</b> {{ suggestion.item.nom }}
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
 
-        <div *ngIf="products.length > 0" fxLayout="row wrap">
-            <div fxFlex="100">
-                <mat-card class="p-0 text-center">
-                    <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
-                </mat-card>
-            </div>
+
+      <div class="onLarge-screen" *ngIf="usePagination">
+        <div fxLayout="row wrap" class="products-wrapper">
+          <div *ngFor="let product of promoProducts | paginate: { itemsPerPage: viewCount, currentPage: page }"
+          [fxFlex]="(viewCol==25&&domWidth>360)?50:100" [fxFlex.gt-xs]="viewCol" class="col">
+            <app-product-card [product]="product" [viewCol]="viewCol==25?50:100"></app-product-card>
+          </div>
         </div>
-
-        <div *ngIf="products.length === 0" fxLayout="row wrap" class="products-wrapper">
-            <div fxFlex="100" class="text-center">
-                <p>{{ 'PRODUCTS.NO_DATA' | translate }}</p>
-            </div>
+        <div fxLayout="row wrap">
+          <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+              <pagination-controls class="product-pagination" previousLabel=" " nextLabel=" "
+              [autoHide]="true" [maxSize]="3"(pageChange)="onPageChanged($event)">
+              </pagination-controls>
+            </mat-card>
+          </div>
         </div>
+      </div>
 
+      <div class="onSmall-screen" *ngIf="!usePagination">
+        <div fxLayout="row wrap" class="products-wrapper">
+          <div *ngFor="let product of promoProducts"
+               [fxFlex]="(viewCol==25&&domWidth>360)?50:100"
+               [fxFlex.gt-xs]="viewCol"
+               class="col">
+            <app-product-card [product]="product" [viewCol]="viewCol==25?50:100"></app-product-card>
+          </div>
+        </div>
+        <div class="load-more-wrapper" *ngIf="promoProducts.length < unchangedProducts.length">
+          <a (click)="loadMore()">Voir plus</a>
+        </div>
+      </div>
+
+      <div *ngIf="promoProducts.length === 0" fxLayout="row wrap" class="products-wrapper">
+        <div fxFlex="100" class="text-center">
+          <p>Aucun produit trouvé, veuillez réessayer ultérieurement</p>
+        </div>
+      </div>
     </mat-sidenav-content>
-</mat-sidenav-container>
+  </mat-sidenav-container>
+</div>

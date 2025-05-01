@@ -40,11 +40,11 @@
     </a>
     <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="primary account">
         <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
-            <a mat-menu-item routerLink="/sign-in">
+            <a mat-menu-item routerLink="authentication/sign-in">
                 <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>
                 <span>{{ 'SIGN_IN' | translate }}</span>
             </a>
-            <a mat-menu-item routerLink="/sign-up">
+            <a mat-menu-item routerLink="authentication/sign-up">
               <mat-icon class="mat-icon-sm">person_add</mat-icon>
               <span>{{ 'SIGN_UP' | translate }}</span>
           </a>
@@ -57,7 +57,7 @@
                 </small></p>
             </div>
             <div class="divider"></div>
-            <a mat-menu-item routerLink="/account">
+            <a mat-menu-item routerLink="/{{routes}}">
                 <mat-icon class="mat-icon-sm">settings</mat-icon>
                 <span>{{'NAV.SETTING'| translate}}</span>
             </a>
@@ -78,7 +78,7 @@
                 <span>Help</span>
             </a>
             <div class="divider"></div>
-            <a mat-menu-item routerLink="/sign-in" (click)="logout()">
+            <a mat-menu-item routerLink="/authentication/sign-in" (click)="logout()">
                 <mat-icon class="mat-icon-sm">power_settings_new</mat-icon>
                 <span>{{ 'LOGOUT' | translate }}</span>
             </a>

@@ -51,7 +51,7 @@ export class AuthenticationService {
         return "OK"
     } catch (error : any) {
         console.error(error);
-        return "KO"
+        return error
     }
   }
 
@@ -102,6 +102,12 @@ resetPassword(username: string, newpassword: string): Observable<any> {
         console.error(error)
         return null;
       }
+    }
+
+     getUserInfo(username: string): Observable<any>{
+   
+       return this.api.get(`/users/info-user-by-username?username=`+username);
+     
     }
 
     getAllUsers():Observable<User[]> {
@@ -155,10 +161,11 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * @param addresse addresse of user
      * @param username username of user
      * @param password password of user
+     * @param countries le pays d'utilisateur
      */
     signup(formData: any): any {
-      // console.log(formData)
-        return this.api.post(`/users/register`, formData);
+        console.log("::::::::::::::: FORM DATA = ",formData.get("countries"));
+        return this.api.postFile(`/users/register`, formData);
     }
 
 
@@ -187,6 +194,14 @@ resetPassword(username: string, newpassword: string): Observable<any> {
 
     public setStatus(id: string, etat: string): Observable<any> {
       return this.api.put(`/users/etat/${id}?state=${etat}`, null).pipe();
+    }
+
+    getUserByPhone(phone: string): Observable<any> {      
+      return this.api.get(`/users/get-by-phone/${phone}`);
+    }
+
+    gainList(parrainId: string): Observable<any> {
+      return this.api.get(`/users/gain-list/${parrainId}`);
     }
 
 

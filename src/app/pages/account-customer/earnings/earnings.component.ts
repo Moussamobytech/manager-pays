@@ -1,0 +1,53 @@
+import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-earnings',
+  templateUrl: './earnings.component.html',
+  styleUrls: ['./earnings.component.scss']
+})
+export class EarningsComponent implements OnInit {
+
+  balance: number = 0;
+  referralHistory: any[] = [];
+  showWithdrawalPopup: boolean = false;
+
+  currentUser: import("/home/coulibaly/Documents/Projets/Aplika/FIDELITY-NEW/e-commerce-front/src/app/models/user.models").User;
+  idUser: string;
+
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) { }
+
+  ngOnInit() {
+    this.currentUser = this.authService.currentUser();
+    this.idUser = this.currentUser.id;
+   // this.loadBalance();
+    this.loadReferralHistory();
+  }
+
+  loadReferralHistory() {
+    this.authService.gainList(this.idUser).subscribe(
+      (data) => {
+        this.referralHistory = data;
+        for (let i = 0; i < this.referralHistory.length; i++) {
+          this.balance += this.referralHistory[i].montant;
+        }}
+    );
+  }
+
+  checkWithdrawal() {
+    this.showWithdrawalPopup = true;
+  }
+
+  closePopup() {
+    this.showWithdrawalPopup = false;
+  }
+
+  proceedWithdrawal() {
+    // TODO: Implémenter la logique de retrait
+    this.closePopup();
+  }
+}

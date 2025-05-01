@@ -1,20 +1,21 @@
 <div class="main-slider">
-  <div class="swiper-container h-100" [swiper]="config">
-    <div class="swiper-wrapper h-100">
-      <div *ngFor="let slide of slides" class="swiper-slide">
-        <div [attr.data-background]="slide.image" class="slide-item swiper-lazy">
-            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-            <div class="mask"></div>
-            <div fxLayout="column" fxLayoutAlign="center center" class="content">
-              <h1>{{slide.title}}</h1>
-              <h3>{{slide.subtitle}}</h3>
-              <button *ngIf="slide.href" mat-raised-button [routerLink]="slide.href" color="jaune" class="jaune">{{slide.show ? slide.show : ('SHOW' | translate)}}</button>
-            </div>
+  <ngx-slick-carousel
+    class="carousel"
+    [config]="slideConfig"
+    *ngIf="slides?.length">
+
+    <div ngxSlickItem *ngFor="let slide of slides" class="carousel-item">
+      <!-- Text Content -->
+      <div class="slide-item">
+        <div class="content">
+          <h1>{{ slide.title }}</h1>
+          <h3>{{ slide.subtitle }}</h3>
         </div>
       </div>
+
+      <!-- Image Content -->
+      <div class="image-container" [style.backgroundImage]="'url(' + slide.image + ')'"></div>
     </div>
-    <div class="swiper-pagination white"></div>
-    <button fxShow fxHide.xs mat-mini-fab color="jaune" class="swiper-button-prev swipe-arrow jaune"><mat-icon>keyboard_arrow_left</mat-icon></button>
-    <button fxShow fxHide.xs mat-mini-fab color="jaune" class="swiper-button-next swipe-arrow jaune"><mat-icon>keyboard_arrow_right</mat-icon></button>
-  </div>
+
+  </ngx-slick-carousel>
 </div>

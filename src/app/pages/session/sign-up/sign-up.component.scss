@@ -1,0 +1,127 @@
+// .back-btn{
+//   flex: 1;
+//   padding: 10px;
+//   border-radius: 5px;
+//   font-size: 14px;
+//   cursor: pointer;
+//   font-weight: bold;
+//   color: white;
+//   background-color: #25224a;
+//   width: initial;
+// }
+// .auth{
+//     // white-space: nowrap;
+//     text-align: center;
+//     padding: 7px 14px;
+//     font-weight: 500;
+// }
+// .country_field{
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+// .country_field img{
+//   margin-right: 5px;
+//   width: 30px;
+// }
+
+$primary_color: #25224a;
+$amber_color: #feb930;
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+  padding: 20px;
+  margin: auto;
+  margin-bottom: 60px;
+
+  .logo-container {
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+
+    .logo {
+      width: 120px;
+      display: inline-block;
+    }
+
+    h3 {
+      margin: 10px;
+      color: $primary_color;
+    }
+
+    .divider{
+      margin-bottom: 20px;
+    }
+  }
+
+  .user-type-selector {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+
+    .user-type-button {
+      // margin: 0 10px;
+      &.active {
+        background-color: $amber_color;
+      }
+      @media screen and (max-width: 500px) {
+        font-size: 13px;
+      }
+      @media screen and (max-width: 400px) {
+        font-size: 10px;
+      }
+    }
+  }
+
+  form {
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+      // margin-bottom: 15px;
+    }
+
+    .phone-container {
+      // display: flex;
+      // width: 100%;
+      display: flex;
+      gap: 10px;
+
+
+      // .country-select {
+      //   width: 40%;
+      //   margin-right: 10px;
+      // }
+
+      // .phone-input {
+      //   width: 60%;
+      // }
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      color: $primary_color;
+
+      .back-button {
+        background-color: #ddd;
+      }
+
+      .submit-button:not(:disabled) {
+        background-color: $amber_color;
+        color: $primary_color;
+      }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-form-field-infix{
+  display: flex;
+}

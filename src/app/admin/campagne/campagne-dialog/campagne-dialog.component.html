@@ -1,125 +1,180 @@
- <h1 mat-dialog-title class="text-center">{{ isUpdateMode ? 'Modifier la campagne' : 'Ajouter une campagne' }}</h1>
+<div class="p-2">
+  <mat-card>
+      <mat-card-header>
+          <mat-card-title>{{(id) ? 'Modifier' : 'Ajouter une nouvelle'}} campagne </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="pt-3">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" fxLayout="row wrap">
 
-<!-- Affichage du message de succès -->
+              <div fxFlex="100" fxFlex.gt-sm="100" class="px-2">
+                  <div fxLayout="row wrap">
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Nom de la campagne</mat-label>
+                              <input matInput formControlName="nom" required>
+                              <mat-error *ngIf="form.controls.nom.errors?.required">Le nom est
+                                  obligatoire</mat-error>
+                              <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4
+                                  caractères</mat-error>
+                          </mat-form-field>
+                      </div>
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Type de promo</mat-label>
+                              <mat-select formControlName="typePromo" required>
+                                  <mat-option *ngFor="let typepromo of typePromo" [value]="typepromo.id"
+                                      (onSelectionChange)=" typePromoSelect(typepromo)">
+                                      <span>{{promo(typepromo.name)}}</span>
+                                  </mat-option>
+                              </mat-select>
+                              <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
+                                  type de promo</mat-error>
+                          </mat-form-field>
+                      </div>
 
-
-<!-- Formulaire -->
-<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
-  <div mat-dialog-content>
-    <div fxLayout="row wrap">
-      <!-- Champ caché pour l'ID de la campagne -->
-      <input type="hidden" formControlName="id">
-
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Libelle</mat-label>
-        <input matInput formControlName="libelle" required>
-        <mat-error *ngIf="form.get('libelle').hasError('required')">Libelle est obligatoire</mat-error>
-      </mat-form-field>
-
-      <div fxFlex="100">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Username</mat-label>
-          <!-- Désactiver le champ indépendamment du mode -->
-          <input matInput formControlName="username"  >
-          <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
-        </mat-form-field>
-      </div>
-
-
-
-
-
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Type</mat-label>
-        <input matInput formControlName="type" required>
-        <mat-error *ngIf="form.get('type').hasError('required')">Type est obligatoire</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Date début</mat-label>
-        <input matInput [matDatepicker]="pickerStart" formControlName="dateDebut" [value]="dateDebut" required>
-        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-        <mat-datepicker #pickerStart></mat-datepicker>
-        <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error>
-      </mat-form-field>
-
-
-<!--
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Date début</mat-label>
-
-        <input matInput formControlName="dateDebut" required #dateInput>
-        <input matInput [matDatepicker]="pickerStart" required #pickerInput>
-        <mat-datepicker #pickerStart (selectedChange)="onDateInput($event)"></mat-datepicker>
-
-        <mat-error *ngIf="form.get('dateDebut').hasError('required')">Date début est obligatoire</mat-error>
-      </mat-form-field>
-
-      <button mat-raised-button (click)="openCalendar()">Open calendar</button> -->
+                      <!--#########################" LES CHAMPS CONDITIONNELLES ####################"""-->
 
 
 
 
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Date fin</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dateFin" required>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="form.get('dateFin').hasError('required')">Date fin est obligatoire</mat-error>
-      </mat-form-field>
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isOffre">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Type d'offre</mat-label>
+                              <mat-select formControlName="typeOffre" required>
+                                  <mat-option *ngFor="let typeoffre of typeOffre" [value]="typeoffre.value">
+                                      <span>{{typeoffre.nom}}</span>
+                                  </mat-option>
 
-      <div fxFlex="100" fxLayout="row">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Choisir les produits pour la campagne</mat-label>
-          <mat-select formControlName="produit" multiple>
-            <mat-option *ngFor="let produit of products" [value]="produit.id">{{ produit.nom }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+                              </mat-select>
+                              <mat-error *ngIf="form.controls.typePromo.errors?.required">Donne un
+                                  type d'offre</mat-error>
+                          </mat-form-field>
+                      </div>
 
 
 
-      <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
-        <p>{{ isUpdateMode ? 'Campagne modifiée avec succès' : 'Campagne ajoutée avec succès' }}</p>
-      </mat-dialog-content>
+
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isLivraison">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Zone de livraison</mat-label>
+                              <mat-select [formControl]="selectedCountries" multiple>
+                                  <mat-option *ngFor="let country of countries" [value]="country">
+                                      {{ country.nom }}
+                                  </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="isPromo">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Produits en promotions</mat-label>
+                            <mat-select [formControl]="selectedProducts" multiple panelClass="custom-panel">
+                                <mat-option *ngFor="let product of products" [value]="product">
+                                    {{ product.nom }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1"
+                        *ngIf="form.controls['typeOffre'].value === 'CADEAUX'">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Produits</mat-label>
+                            <mat-select [formControl]="selectedProducts2" multiple panelClass="custom-panel">
+                                <mat-option *ngFor="let product of products" [value]="product">
+                                    {{ product.nom }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1"
+                          *ngIf="!isOffre && !isLivraison || form.controls['typeOffre'].value === 'REDUCTION'">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Reduction en %</mat-label>
+                              <input matInput formControlName="reduction">
+                              <mat-error *ngIf="form.controls.reduction.errors?.required">Donne une
+                                  rduction</mat-error>
+                          </mat-form-field>
+                      </div>
 
 
-      <div class="py-1">
-        <mat-label>Image</mat-label>
-        <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
-        <!-- <mat-error *ngIf="form.get('image').hasError('required')">Image est obligatoire</mat-error> -->
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label> Montant minimum d'achat</mat-label>
+                              <input matInput formControlName="montantMinAchat">
+                              <mat-error *ngIf="form.controls.montantMinAchat.errors?.required">Le montant minimum est
+                                  obligatoire</mat-error>
+                              <mat-error *ngIf="form.controls.montantMinAchat.errors?.pattern">Le prix doit etre un
+                                  nombre </mat-error>
+                          </mat-form-field>
+                      </div>
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label> Montant maximum d'achat</mat-label>
+                              <input matInput formControlName="montantMaxAchat">
+                              <mat-error *ngIf="form.controls.montantMaxAchat.errors?.required">Le montant maximum est
+                                  obligatoire</mat-error>
+                              <mat-error *ngIf="form.controls.montantMaxAchat.errors?.pattern">Le prix doit etre un
+                                  nombre </mat-error>
+                          </mat-form-field>
+                      </div>
 
-      </div>
-
-      <img *ngIf="isUpdateMode" src="{{data.campagne.image}}" alt="" srcset="" class="image">
-
-    </div>
-  </div>
-
-  <div mat-dialog-actions>
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
-      <button mat-raised-button color="warn" type="button" (click)="dialogRef.close()">Close</button>
-      <button mat-raised-button color="primary" type="submit">{{ isUpdateMode ? 'Modifier' : 'Ajouter' }}</button>
-    </div>
-  </div>
-</form>
 
 
-      <!-- <div fxFlex="100">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Username</mat-label>
-          <input matInput [value]="form.get('username').value" [readonly]="true" tabindex="-1">
-          <mat-error *ngIf="form.get('username').hasError('required')">Username est obligatoire</mat-error>
-        </mat-form-field>
-      </div>
- -->
-<!-- <div fxFlex="100">
-      <mat-form-field  appearance="outline" class="w-100">
-        <mat-label>Choisir les produits pour la campagne</mat-label>
-        <mat-select formControlName="produit" multiple>
-          @for (produits of products; track products) {
-            <mat-option [value]="produits.id">{{produits.nom}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      </div> -->
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1" *ngIf="!isOffre">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Nombre d'utilisation</mat-label>
+                              <input matInput type="number" min="1" formControlName="nombreUtilisation">
+                          </mat-form-field>
+                      </div>
+                    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label> Commission en %</mat-label>
+                              <input matInput formControlName="commission">
+                              <mat-error *ngIf="form.controls.commission.errors?.pattern">La commission doit etre un nombre
+                              </mat-error>
+                              <mat-error
+                                  *ngIf="!form.controls.commission.errors?.pattern&&form.controls.commission.errors?.minlength">La commission
+                                   minimum est 100 FCFA</mat-error>
+                          </mat-form-field>
+                      </div>                              
+
+
+
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Date de début</mat-label>
+                              <input matInput [matDatepicker]="pickerDebut" formControlName="dateDebut" required>
+                              <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+                              <mat-datepicker #pickerDebut></mat-datepicker>
+                              <mat-error *ngIf="form.controls.dateDebut.errors?.required">Cette date est
+                                  obligatoire</mat-error>
+                          </mat-form-field>
+                      </div>
+                      <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Date de fin</mat-label>
+                              <input matInput [matDatepicker]="pickerFin" formControlName="dateFin" required>
+                              <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                              <mat-datepicker #pickerFin></mat-datepicker>
+                              <mat-error *ngIf="form.controls.dateFin.errors?.required">Cette date est
+                                  obligatoire</mat-error>
+                          </mat-form-field>
+                      </div>
+                      <div fxFlex="100" class="px-1">
+                          <mat-form-field appearance="outline" class="w-100">
+                              <mat-label>Description</mat-label>
+                              <textarea matInput formControlName="description" rows="7"></textarea>
+                          </mat-form-field>
+                      </div>
+                      <div fxFlex="100" class="mt-2 text-center w-100">
+                          <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </mat-card-content>
+
+
+
+  </mat-card>
+</div>

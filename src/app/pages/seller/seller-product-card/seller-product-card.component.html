@@ -1,8 +1,12 @@
 <mat-card *ngIf="product" class="product-item modern-card">
   <div class="item-image">
-    <mat-chip-listbox *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic">
+    <mat-chip-listbox *ngIf="product.campagne&&product.campagne.type == 'PROMOTION'">
+      <mat-chip-option color="warn" highlighted selectable="false">-{{product.campagne.reduction}}% OFF</mat-chip-option>
+    </mat-chip-listbox> 
+    <!-- <mat-chip-listbox *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic">
       <mat-chip-option color="warn" highlighted selectable="false">-{{product.priceBasic|discount: product.pricePromotion}}% OFF</mat-chip-option>
     </mat-chip-listbox>
+   -->
     <a [routerLink]="['/products', product.id, product.nom]" [ngStyle]="secondView ? { height: '200px' } : {}" class="image-link">
       <img [src]="product.image1" alt="Product Image" class="card-image">
     </a>
@@ -29,7 +33,7 @@
     </div>
     <div class="divider"></div>
     <div class="icons">
-      <app-controls [product]="product" [viewCol]="viewCol"></app-controls>
+      <app-controls [product]="product"></app-controls>
     </div>
   </div>
 </mat-card>

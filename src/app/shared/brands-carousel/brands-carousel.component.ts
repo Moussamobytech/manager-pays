@@ -10,7 +10,12 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class BrandsCarouselComponent {
 
-  @Input('brands') brands: Array<Brand> = [];
+  brands: Array<Brand> = [
+    { logo: "https://storage.googleapis.com/fidelity-e0007.appspot.com/2e11feeab444496fb9298a486801bce4.png"},
+    { logo: "https://storage.googleapis.com/fidelity-e0007.appspot.com/5e5de7d9ef024e9090167ae060fbc3e8.png" },
+    { logo: "https://storage.googleapis.com/fidelity-e0007.appspot.com/519337814c1d4bbeb2c9c000f6ef3a43.png" },
+    { logo: "https://storage.googleapis.com/fidelity-e0007.appspot.com/c42ca8d48d34487a9aa9251fb882af9a.png" }
+  ];
 
   public config: SwiperConfigInterface = { };
 

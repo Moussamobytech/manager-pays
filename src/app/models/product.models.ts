@@ -1,3 +1,4 @@
+import { Campagne } from "./campagne.models";
 import { Category } from "./category.models";
 
 export class Product {
@@ -29,9 +30,12 @@ export class Product {
                 public categorieNom: string,
                 public contact: string,
                 public user : string,
+                public userNom : string,
                 public createdAt:string,
                 public updatedAt:string,
                 public monthlyVisits: number,
                 public dailyVisits: number,
-                public yearlyVisits: number ){ }
+                public campagne:Campagne,
+                public yearlyVisits: number,
+                public isFavorite: boolean = false ){ }
   }

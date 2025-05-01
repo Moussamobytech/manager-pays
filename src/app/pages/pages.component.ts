@@ -2,15 +2,14 @@ import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, ElementR
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Settings, AppSettings } from '../app.settings';
 import { AppService } from '../app.service';
-// import { Category, Product } from '../app.models';
 import { SidenavMenuService } from '../theme/components/sidenav-menu/sidenav-menu.service';
 import { DomHandlerService } from '../dom-handler.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProductService } from '../services/product.service';
 import { Category } from '../models/category.models';
 import { Product } from '../models/product.models';
 import { FormControl } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, filter, map, of, Subject, Subscription, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, of, Subject, Subscription, switchMap } from 'rxjs';
+import { CartService } from '../services/carte.service';
 
 @Component({
   selector: 'app-pages',
@@ -27,7 +26,7 @@ export class PagesComponent implements OnInit {
   @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
   public produit: any;
   public AllProduits: Product[] = [];
-  // public produits: Product[] = [];
+  public filterItems = [ '1', '2', '3', '4' ];
 
   public sort : any;
   public settings: Settings;
@@ -38,8 +37,9 @@ export class PagesComponent implements OnInit {
   searchTerm = new FormControl('');
   suggestions: any[] = [];
   public showSuggestions: boolean = false;
-  public clickOutsideSubject = new Subject<Event>();
+  private skipNextSearch = false;
 
+  totalPanier:any = 0;
   constructor(public appSettings:AppSettings,
               public appService:AppService,
               public produitService : ProductService,
@@ -47,6 +47,7 @@ export class PagesComponent implements OnInit {
               public router:Router,
               public activatedRoute:ActivatedRoute,
               public domHandlerService: DomHandlerService,
+              private cartService:CartService,
               private cdRef: ChangeDetectorRef) {
     this.settings = this.appSettings.settings;
     this.getCategoriesSidenav()
@@ -54,18 +55,21 @@ export class PagesComponent implements OnInit {
 
 
   async ngOnInit() {
-    // console.log("this.menuItems res :::::: ",res)
     let res = await this.appService.getCategoriesSidenav().toPromise()
     this.sidenavMenuItems = res;
     this.getAllProduits();
     this.getCategories();
     setTimeout(() => {
       this.settings.theme = 'fidelity';
-      // this.settings.theme = 'green';
     });
 
     this.initializeSearch();
     document.addEventListener('click', this.onGlobalClick.bind(this));
+
+    this.cartService.cartCount$.subscribe((count) => {
+      this.totalPanier = count;
+    });
+
   }
 
   private initializeSearch(): void {
@@ -73,10 +77,15 @@ export class PagesComponent implements OnInit {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(term => {
-            this.showSuggestions = term.length >= 1;
-            return this.showSuggestions
-                ? this.appService.searchProducts1(this.categories, this.AllProduits, term)
-                : of([]);
+          if (this.skipNextSearch) {
+            this.skipNextSearch = false;
+            return of([]); // skip the search
+          }
+
+          this.showSuggestions = term.length >= 1;
+          return this.showSuggestions
+              ? this.appService.searchProductsAndCategories(this.categories, this.AllProduits, term)
+              : of([]);
         }),
         catchError(error => {
             console.error('Search error:', error);
@@ -90,22 +99,21 @@ export class PagesComponent implements OnInit {
 
   onGlobalClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (!target.closest('.suggestions') && !target.closest('.search-input')) {
+    if (!target.closest('.search-input')) {
       this.showSuggestions = false;
     }
   }
   selectSuggestion(suggestion: any,type): void {
+    this.skipNextSearch = true;
     this.searchTerm.setValue(suggestion.nom);
+
     if(type == 'product'){
       this.router.navigate(['/search-results'], { queryParams: { q: suggestion.nom } });
     }else{
-      this.router.navigate(['/products/'+suggestion.cle]);
+      this.router.navigate(['/categories/'+suggestion.cle]);
     }
-    this.showSuggestions = false; // Masquer les suggestions après la sélection
-  }
 
-  onClickOutside(): void {
-    this.showSuggestions = false; // Masquer les suggestions lorsque l'utilisateur clique à l'extérieur
+    this.showSuggestions = false; // Masquer les suggestions après la sélection
   }
 
   public getCategories(){
@@ -122,57 +130,24 @@ export class PagesComponent implements OnInit {
   }
 
   public async getCategoriesSidenav(){
-
     let res = await this.appService.getCategoriesSidenav().toPromise()
     console.log("this.menuItems res :::::: ",res)
     this.sidenavMenuItems = res;
   }
 
-  // public changeCategory(event) {
-  //   if (event.target) {
-  //     this.category = this.categories.find(category => category.nom === event.target.innerText);
-  //     console.log("Ma cat ", this.category)
-  //     if (this.category) {
-  //       this.router.navigate(['/products', this.category]); // Navigate to products page with category ID
-  //     }
-  //   }
-  //   if (this.domHandlerService.window?.innerWidth < 960) {
-  //     this.stopClickPropagate(event);
-  //   }
-  // }
   public changeCategory(event) {
     if (event) {
       const selectedCategory = this.categories.find(category => (category.cle === event)||category.id === event);
       if (selectedCategory) {
         this.category = selectedCategory;
         // Naviguer vers la page des produits avec l'ID de la catégorie
-        this.router.navigate(['/products', this.category.cle]);
+        this.router.navigate(['/categories', this.category.cle]);
       }
     }
     if (this.domHandlerService.window?.innerWidth < 960) {
       this.stopClickPropagate(event);
     }
   }
-
-  public remove(product) {
-      const index: number = this.appService.Data.cartList.indexOf(product);
-      if (index !== -1) {
-          this.appService.Data.cartList.splice(index, 1);
-          this.appService.Data.totalPrice = this.appService.Data.totalPrice - product.newPrice*product.cartCount;
-          this.appService.Data.totalCartCount = this.appService.Data.totalCartCount - product.cartCount;
-          this.appService.resetProductCartCount(product);
-      }
-  }
-
-  public clear(){
-    this.appService.Data.cartList.forEach(product=>{
-      this.appService.resetProductCartCount(product);
-    });
-    this.appService.Data.cartList.length = 0;
-    this.appService.Data.totalPrice = 0;
-    this.appService.Data.totalCartCount = 0;
-  }
-
 
   public changeTheme(theme: any){
     this.settings.theme = theme;
@@ -186,10 +161,19 @@ export class PagesComponent implements OnInit {
 
   public onSearch(event: Event): void {
     event.preventDefault();
-    if (this.searchTerm) {
-      // console.log(":::::::::searchTerm ",this.searchTerm.value)
-      this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
+
+    if (this.searchTerm.value) {
+      const suggestion = this.suggestions[0]?.item;
+      const type = this.suggestions[0]?.type;
+
+      if (this.suggestions.length === 0 || type === 'product') {
+        this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
+      } else {
+        this.router.navigate(['/categories/' + suggestion.cle]);
+      }
     }
+
+    this.showSuggestions = false;
   }
 
 
@@ -275,19 +259,9 @@ export class PagesComponent implements OnInit {
     document.removeEventListener('click', this.onGlobalClick.bind(this));
   }
 
-  // async getAllProduit() {
-  //   try {
-  //     this.produitService.getAllProducts().subscribe(produits => {
-  //       this.AllProduits = produits || [];
-  //       this.produits = this.AllProduits;
-  //       this.produits.sort = this.sort;
-  //     });
-  //   } catch (error) {
-  //     console.error("Erreur lors de la récupération des produits :", error);
-  //     this.AllProduits = [];
-  //     this.produits = [];
-  //   }
-  // }
+  changeFilter(filterItem:string){
+
+  }
 
 
 }

@@ -17,9 +17,12 @@ export class SellerCarousselComponent implements OnInit {
     clickable: true
   };
 
-  constructor(private router:Router) { }
+  constructor(private router:Router) {
+   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => {

@@ -14,9 +14,9 @@ import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
 // import { SellerComponent } from '../seller/seller.component';
 
 export const routes: Routes = [
-  { path: '', component: ProductsComponent, pathMatch: 'full' },
-  { path: ':name', component: ProductsComponent },
-  { path: ':id/:name', component: ProductComponent }
+  { path: '', component: ProductsComponent, pathMatch: 'full' },// All products display
+  // { path: ':name', component: ProductsComponent },
+  { path: ':id/:name', component: ProductComponent } // single product display
 ];
 
 @NgModule({

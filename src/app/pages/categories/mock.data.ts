@@ -1,0 +1,68 @@
+import { Category } from "src/app/models/category.models";
+
+export const MOCK_DATA = [
+  {
+    id: '1',
+    cle: 'CL001',
+    nom: 'Vetements',
+    image: 'assets/images/categories/clothes.png',
+    status: true,
+    createdAt: '2025-01-15T10:30:00Z',
+  },
+  {
+    id: '2',
+    cle: 'CL002',
+    nom: 'Chaussures',
+    image: 'assets/images/categories/shoes.png',
+    status: false,
+    createdAt: '2025-01-14T12:00:00Z',
+  },
+  {
+    id: '3',
+    cle: 'CL003',
+    nom: 'Sacs-Bijoux-Accesoire',
+    image: 'assets/images/categories/jewleries.png',
+    status: true,
+    createdAt: '2025-01-13T09:45:00Z',
+  },
+  {
+    id: '4',
+    cle: 'CL004',
+    nom: 'Beaute',
+    image: 'assets/images/categories/beauty.png',
+    status: true,
+    createdAt: '2025-01-12T08:20:00Z',
+  },
+  {
+    id: '5',
+    cle: 'CL005',
+    nom: 'Electronique',
+    image: 'assets/images/categories/electronic.png',
+    status: false,
+    createdAt: '2025-01-11T11:10:00Z',
+  },
+  {
+    id: '6',
+    cle: 'CL003',
+    nom: 'Electromenager',
+    image: 'assets/images/categories/house_electronic.png',
+    status: true,
+    createdAt: '2025-01-13T09:45:00Z',
+  },
+  {
+    id: '7',
+    cle: 'CL004',
+    nom: 'Decoration',
+    image: 'assets/images/categories/decoration.png',
+    status: true,
+    createdAt: '2025-01-12T08:20:00Z',
+  },
+  {
+    id: '8',
+    cle: 'CL005',
+    nom: 'Vehicules',
+    image: 'assets/images/categories/auto.png',
+    status: false,
+    createdAt: '2025-01-11T11:10:00Z',
+  },
+];

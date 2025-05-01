@@ -1,135 +1,191 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Data, AppService } from '../../app.service';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { AppService } from '../../app.service';
 import { Product } from 'src/app/models/product.models';
-import { DomHandlerService } from 'src/app/dom-handler.service';
-// import { Product } from '../../app.models';
+import { CommonService } from 'src/app/services/common.service';
+import { ProductService } from 'src/app/services/product.service';
+import { AuthenticationService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-controls',
   templateUrl: './controls.component.html',
-  styleUrls: ['./controls.component.scss']
+  styleUrls: ['./controls.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ControlsComponent implements OnInit {
   @Input() product: Product;
   @Input() type: string;
-  @Input() viewCol;
-  // @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter();
+  @Input() pageName: string;
+  @Output() onOpenProductDialog: EventEmitter<any> = new EventEmitter<any>();
   @Output() onQuantityChange: EventEmitter<any> = new EventEmitter<any>();
-  public count:number = 1;
-  // public align = 'center center';
-  styleConditions: boolean;
+  public count: number = 1;
+  currentUser: any;
 
-  constructor(public appService:AppService, public snackBar: MatSnackBar) { }
+  constructor(
+    private auth: AuthenticationService, 
+    public appService: AppService, 
+    public cm: CommonService, 
+    public produitService: ProductService,
+    private router: Router
+  ) {}
+
   ngOnInit() {
-    // if(this.product){
-    //   if(this.product.cartCount > 0){
-    //     this.count = this.product.cartCount;
-    //   }
-    // }
-    // this.layoutAlign();
-    this.styleConditions = ((window.innerWidth<=370&&this.viewCol==25)||(window.innerWidth<860&&window.innerWidth>=600&&!(this.viewCol==33.3)));
+
+    this.currentUser = this.auth.currentUser()
+    if (this.product) {
+      if (this.product.cartCount > 0) {
+        this.count = this.product.cartCount;
+        // console.log(this.count);
+      }
+    }
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.styleConditions = this.styleConditions;
+  public increment() {
+    if (this.count < this.product.quantite) {
+      this.count++;
+      this.updateQuantity(this.count, 'increment');
+    } else {
+      this.cm.openFailureSnackBar(`Vous ne pouvez pas choisir plus d'articles que ce qui est disponible. En stock ${this.product.quantite} articles.`);
+    }
   }
 
-  public openWA(product:Product){
+  public decrement() {
+    if (this.count > 1) {
+      this.count--;
+      this.updateQuantity(this.count, 'decrement');
+    }
+  }
+
+  private updateQuantity(count: number, action: string) {
+    const price = parseFloat(this.product.priceBasic || this.product.pricePromotion);
+    if (isNaN(price)) {
+      this.cm.openFailureSnackBar('Prix ​​du produit non valide. Veuillez vérifier les détails du produit.');
+      return;
+    }
+
+    const obj = {
+      productId: this.product.id,
+      soldQuantity: count,
+      total: count * price,
+    };
+
+    if (action === 'increment') {
+      this.changeQuantityInc(obj, this.product);
+    } else {
+      this.changeQuantityDec(obj, this.product);
+    }
+  }
+
+  public addToCart(product: Product): void {
+    const currentProduct = this.appService.Data.cartList.find((item) => item.id === product.id);
+    if (currentProduct) {
+      const availableCount = this.product.quantite;
+      const addedCount = currentProduct.cartCount + this.count;
+
+      if (addedCount <= availableCount) {
+        product.cartCount = addedCount;
+      } else {
+          this.cm.openFailureSnackBar("Vous ne pouvez pas ajouter plus d'articles que ce qui est disponible. En stock ${availableCount} articles et vous avez déjà ajouté ${currentProduct.cartCount} article(s) à votre panier.")
+        return;
+      }
+    } else {
+      product.cartCount = this.count;
+    }
+    this.appService.addToCart(product);
+  }
+
+  public openWA(product: Product) {
     this.appService.saveLogs({
-      'username' : window.navigator.product,
-      'utilisateur' : window.navigator.productSub,
-      'agent' : window.navigator.userAgent,
-      'vendor' : window.navigator.vendor,
-      'platform' : window.navigator.platform,
-      'service' : 'CONTACT_SELLER',
-      'amount' : product.priceBasic,
-      'extraData' : product?.id,
-      'localisation' : '',
-      'status' : 'SUCCEED',
-      'dateAction' : '',
-      'language' : window.navigator.language
+      username: window.navigator.product,
+      utilisateur: window.navigator.productSub,
+      agent: window.navigator.userAgent,
+      vendor: window.navigator.vendor,
+      platform: window.navigator.platform,
+      service: 'CONTACT_SELLER',
+      amount: product.priceBasic,
+      extraData: product?.id,
+      localisation: '',
+      status: 'SUCCEED',
+      dateAction: '',
+      language: window.navigator.language,
     });
-    let url = "https://wa.me/" + ((product.contact.length === 8 ? "223" + product.contact : "225" + product.contact) || "22376007979") +
-    "?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20" + encodeURIComponent(product?.nom || "") + ".%20Prix%20%3A%20" + encodeURIComponent(product?.priceBasic || "");
-      window.open(url,"_blank");
+
+    const contactPrefix = product.contact.length === 8 ? '+223' : '+225';
+    const url ='https://wa.me/' +(contactPrefix + product.contact || '+22376007979') +'?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20le%20produit%20' +encodeURIComponent(product?.nom || '') +'.%20Prix%20%3A%20' +encodeURIComponent(product?.priceBasic || '');
+    window.open(url, '_blank');
   }
-
-  // public layoutAlign(){
-  //   if(this.type == 'all'){
-  //     this.align = 'space-between center';
-  //   }
-  //   else if(this.type == 'wish'){
-  //     this.align = 'start center';
-  //   }
-  //   else{
-  //     this.align = 'center center';
-  //   }
-  // }
-
-  // public increment(){
-  //   if(this.count < this.product.availibilityCount){
-  //     this.count++;
-  //     let obj = {
-  //       productId: this.product.id,
-  //       soldQuantity: this.count,
-  //       total: this.count * this.product.newPrice
-  //     }
-  //     this.changeQuantity(obj);
-  //   }
-  //   else{
-  //     this.snackBar.open('You can not choose more items than available. In stock ' + this.count + ' items.', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-  //   }
-  // }
-
-  // public decrement(){
-  //   if(this.count > 1){
-  //     this.count--;
-  //     let obj = {
-  //       productId: this.product.id,
-  //       soldQuantity: this.count,
-  //       total: this.count * this.product.newPrice
-  //     }
-  //     this.changeQuantity(obj);
-  //   }
-  // }
-  // public addToCompare(product:Product){
-  //   this.appService.addToCompare(product);
-  // }
-
 
   // public addToWishList(product: Product) {
   //   this.appService.addToWishList(product);
   // }
 
-  // public addToCart(product: Product): void {
-  //   const currentProduct = this.appService.Data.cartList.find(item => item.id === product.id);
-  //   if (currentProduct) {
-  //     const availableCount = this.product.availibilityCount;
-  //     const addedCount = currentProduct.cartCount + this.count;
+  public openProductDialog(event: any) {
+    this.onOpenProductDialog.emit(event);
+  }
 
-  //     if (addedCount <= availableCount) {
-  //       product.cartCount = addedCount;
-  //     }
-  //     else{
-  //       const errorMessage = `You cannot add more items than available. In stock ${availableCount} items and you already added ${currentProduct.cartCount} item(s) to your cart`;
-  //       this.snackBar.open(errorMessage, '×', { panelClass: 'error', verticalPosition: 'top', duration: 5000 });
-  //       return;
-  //     }
-  //   }
-  //   else{
-  //     product.cartCount = this.count;
-  //   }
-  //   this.appService.addToCart(product);
-  // }
+  public changeQuantityInc(value: any, product: Product) {
+    this.appService.increment(product);
+    this.onQuantityChange.emit(value);
+  }
 
-  // public openProductDialog(event){
-  //   this.onOpenProductDialog.emit(event);
-  // }
+  public changeQuantityDec(value: any, product: Product) {
+    this.appService.decrement(product);
+    this.onQuantityChange.emit(value);
+  }
 
-  // public changeQuantity(value){
-  //     this.onQuantityChange.emit(value);
-  // }
+  toggleLike(product: any) {
+    if(!this.currentUser) {
+      this.cm.openFailureSnackBar("Veuillez vous connecter pour ajouter des produits aux favoris");
+      return;
+    }
+    this.produitService.addToFavorites(product.id, this.currentUser.id).subscribe({
+      next: (datas) => {
+        product.isFavorite = !product.isFavorite;
+        this.cm.openSuccessSnackBar(datas.message || "Produit ajouté aux favoris");
+        if (this.pageName === 'account-customer' && window.location.hash.includes('favoris')) {
+          this.router.navigate(['/account-customer']);
+          this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe({
+            next: (produits) => {
+              this.onQuantityChange.emit(produits);
+            }
+          });
+        }
+      },
+      error: (error) => {
+       // console.log("error!!!!!!!!!!! ", error);
+        if (error.status === 400) {
+          this.cm.openFailureSnackBar("Produit est déjà dans les favoris");
+        } else {
+          this.cm.openFailureSnackBar("Une erreur est survenue");
+        }
+      }
+    });
+  }
+  
 
+  public promo(key) {
+    let res = ""
+    switch (key) {
+      case "PROMOTION":
+        res = "En promotion"
+        break;
+
+      case "OFFRE_BIENVENUE":
+        res = "Offre bienvenue"
+        break;
+
+      case "LIVRAISON_GRATUITE":
+        res = "Livraison gratuite"
+        break;
+
+      case "PARRAINAGE":
+        res = "Parrainage"
+        break;
+
+      default:
+        res = "N/A"
+        break;
+    }
+    return res
+  }
 }

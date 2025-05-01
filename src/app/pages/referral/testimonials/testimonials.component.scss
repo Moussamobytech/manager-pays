@@ -1,0 +1,89 @@
+$medal-colors: (
+  "primary": #25224a,
+  "warn": #d81b60,
+  "fid_green": #548580
+);
+
+.testimonials-container {
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+
+  h2 {
+    margin-top: 25px;
+    font-size: 24px;
+    color: #25224a;
+  }
+
+  .testimonials-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px;
+    scroll-behavior: smooth;
+
+    @media (min-width: 768px) {
+      gap: 30px;
+    }
+
+    @media (min-width: 1024px) {
+      gap: 20px;
+    }
+
+    .testimonial-profile {
+      text-align: center;
+      width: 80%;
+      max-width: 300px;
+      flex-shrink: 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      // text-align: left;
+      transition: transform 0.2s ease-in-out;
+
+      &:hover {
+        transform: translateY(-2.5px);
+      }
+
+      @media (min-width: 768px) {
+        width: 45%;
+      }
+
+      @media (min-width: 1024px) {
+        width: 300px;
+      }
+
+      .medal {
+        i {
+          font-size: 40px;
+          margin-bottom: 10px;
+          border: 2px solid;
+          border-radius: 50%;
+        }
+
+        @each $name, $color in $medal-colors {
+          &.#{#{$name}} {
+            color: $color;
+            border-color: $color;
+          }
+        }
+      }
+
+      .testimonial-details {
+        h3 {
+          // margin: 0 0 10px;
+          line-height: normal;
+          font-size: 18px;
+        }
+
+        p {
+          font-size: 14px;
+          color: #555;
+        }
+      }
+    }
+  }
+
+}

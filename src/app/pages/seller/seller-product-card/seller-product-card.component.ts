@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Product } from 'src/app/models/product.models';
 
 @Component({
@@ -6,11 +6,15 @@ import { Product } from 'src/app/models/product.models';
   templateUrl: './seller-product-card.component.html',
   styleUrls: ['./seller-product-card.component.scss']
 })
-export class SellerProductCardComponent {
+export class SellerProductCardComponent implements OnInit {
   @Input() product: Product;
-  @Input() viewCol: 20|33.3|number;
+  @Input() viewCol: number;
   secondView: boolean;
   constructor() { }
+
+  ngOnInit(): void {
+    this.secondView= (this.viewCol == 100)&&(window.innerWidth<=600);
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['viewCol']) {

@@ -12,28 +12,26 @@ export class AuthGuard implements CanActivate, CanLoad {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      
-      let user  = JSON.parse(sessionStorage.getItem('currentUser')!);
-      // this.username = sessionStorage.getItem('username')!;
-      console.log("user :::: ",user);
 
-      if (user == null || user == undefined || JSON.stringify(user) === '{}' || user == "") {
-        this.router.navigate(['/sign-in'])
-        return false;
-      }
-      
-      return true;
+    let user  = JSON.parse(sessionStorage.getItem('currentUser')!);
+
+    if (user == null || user == undefined || JSON.stringify(user) === '{}' || user == "") {
+      this.router.navigate(['authentication'])
+      return false;
+    }
+
+    return true;
   }
   canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      
+
       let user  = JSON.parse(sessionStorage.getItem('currentUser')!);
       if (user == null || user == undefined || JSON.stringify(user) === '{}' || user == "") {
-        this.router.navigate(['/sign-in'])
+        this.router.navigate(['authentication'])
         return false;
       }
-      
+
       return true;
   }
 }

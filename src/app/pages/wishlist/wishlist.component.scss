@@ -1,37 +1,56 @@
-.wishlist-table.mat-mdc-table {
-    display: block;
-    overflow-x:auto;
-    .mat-mdc-row, .mat-mdc-header-row {
-        display: flex;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        align-items: center;
-        min-height: 48px;
-        padding: 0 24px;
-        min-width: 870px;
+$primary_color: #25224a;
+$gap_size: 16px;
+
+.main-container{
+  @media only screen and (max-width: 430px) {
+    margin-bottom: 50px;
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $gap_size;
+    // justify-content: center;
+
+    .main-title {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
-    .mat-mdc-row{
-        min-height: 100px;
+
+    h2 {
+      color: $primary_color;
+      font-weight: bold;
+
+      @media (max-width: 500px) {
+        font-size: 18px;
+      }
     }
-    .mat-mdc-cell, .mat-mdc-header-cell {
-        flex: 1;
-        overflow: hidden;
-        word-wrap: break-word;
+  }
+
+  .load-container {
+    margin-top: 20px;
+
+    @media (max-width: 400px) {
+      margin-bottom: 60px;
     }
-    .mat-mdc-header-cell {
-        font-size: 14px;
+
+    .load-more-wrapper {
+      margin: 20px 0;
     }
-    .mat-mdc-cell{
-        img{
-            width: 100px;
-        }
-        .product-name{
-            color: inherit;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .remove{
-            margin-left: 8px;
-        }
+  }
+
+  .sponsorship-title {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 24px;
+    color: $primary_color;
+    font-weight: bold;
+
+    @media (max-width: 500px) {
+      font-size: 20px;
     }
+  }
 }

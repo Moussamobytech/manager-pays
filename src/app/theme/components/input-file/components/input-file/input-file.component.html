@@ -2,13 +2,13 @@
   <label class="mat-orphan-label" [for]="id" [class.active]="files?.length" [innerHtml]="placeholder" *ngIf="placeholder"></label>
   <div class="files-container" fxFlexFill fxLayoutAlign="center center">
     <ng-container *ngFor="let file of files; let i = index">
-      <div fxflex="50" class="file-container" [ngClass]="classAnimation">
+      <div [fxFlex]="containerFlex" class="file-container" [ngClass]="classAnimation">
           <ng-container *ngTemplateOutlet="fileTemplate; context: { $implicit: file, index: i }"></ng-container>
       </div>
     </ng-container>
 
     <ng-container *ngIf="canAddFile">
-      <div fxflex="50" class="file-container">
+      <div [fxFlex]="containerFlex" class="file-container">
         <ng-container *ngIf="!addLink; else linkTemplate">
             <ng-container *ngTemplateOutlet="addTemplate"></ng-container>
         </ng-container>

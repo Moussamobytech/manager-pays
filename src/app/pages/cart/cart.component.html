@@ -1,64 +1,316 @@
-<mat-card *ngIf="appService.Data.cartList.length == 0" fxLayout="column" fxLayoutAlign="center center" class="text-center py-5">
+
+ <!--<section *ngIf="productList?.length === 0" class="empty-cart-card" fxLayout="column" fxLayoutAlign="center center">
+  <mat-icon class="cart-icon" aria-label="Cart Icon">shopping_cart</mat-icon> 
+  <i class="fa-solid fa-cart-shopping cart-icon"></i>
+  <h1 class="cart-title">Votre panier est actuellement vide !</h1>-->
+  <!-- <a [routerLink]="['/']" mat-raised-button color="primary" class="shop-button">
+    Retourner à la boutique
+  </a> 
+  <button class="shop-button" routerLink="/products"><i class="fa-solid fa-chevron-left"></i> Retourner à la boutique</button>
+</section>-->
+
+
+
+
+<mat-card *ngIf="productList.length == 0" fxLayout="column" fxLayoutAlign="center center" class="text-center py-5">
   <svg viewBox="0 0 24 24" class="mat-icon empty-cart-icon primary-color">
       <path d="M19 20C19 21.11 18.11 22 17 22C15.89 22 15 21.1 15 20C15 18.89 15.89 18 17 18C18.11 18 19 18.9 19 20M7 18C5.89 18 5 18.89 5 20C5 21.1 5.89 22 7 22C8.11 22 9 21.11 9 20S8.11 18 7 18M7.2 14.63L7.17 14.75C7.17 14.89 7.28 15 7.42 15H19V17H7C5.89 17 5 16.1 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2H4.27L5.21 4H20C20.55 4 21 4.45 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63M8.5 11H10V9H7.56L8.5 11M11 9V11H14V9H11M14 8V6H11V8H14M17.11 9H15V11H16L17.11 9M18.78 6H15V8H17.67L18.78 6M6.14 6L7.08 8H10V6H6.14Z" />
   </svg>
-  <h1 class="mt-3">Your Cart Is Currently Empty!</h1>
-  <p class="text-muted">Before proceed to checkout you must add some items to your shopping cart.</p>
-  <a [routerLink]="['/products']" mat-raised-button color="primary" class="mt-3">Return To Shop</a>
+  <h1 class="mt-3">Votre panier est actuellement vide !</h1>
+  <p class="text-muted">Avant de procéder au paiement, vous devez ajouter certains articles à votre panier.</p>
+  <a [routerLink]="['/products']" mat-raised-button color="primary" class="mt-3">Retourner à la boutique</a>
 </mat-card>
 
-<mat-card *ngIf="appService.Data.cartList?.length > 0" class="p-0">
+<!-- <div class="desktop-container" fxFlex="100" fxShow="false" fxShow.gt-xs="true">
 
-  <div class="mat-mdc-table cart-table">
-    <div class="mat-mdc-header-row">
-      <div class="mat-mdc-header-cell">Product</div>
-      <div class="mat-mdc-header-cell">Name</div>
-      <div class="mat-mdc-header-cell">Price</div>
-      <div class="mat-mdc-header-cell">Quantity</div>
-      <div class="mat-mdc-header-cell">Total</div>
-      <div class="mat-mdc-header-cell text-center">
-        <div class="px-2">
-          <button mat-raised-button color="warn" (click)="clear()">Clear All</button>
-        </div>
+  <!-- Table pour les grands écrans -->
+  <!-- <mat-card *ngIf="!isSmallScreen && productList.length > 0" class="p-0">
+      <div class="mat-mdc-table cart-table">
+          <div class="mat-mdc-header-row">
+              <div class="mat-mdc-header-cell">Produit</div>
+              <div class="mat-mdc-header-cell">Nom</div>
+              <div class="mat-mdc-header-cell">Prix</div>
+              <div class="mat-mdc-header-cell">Quantité</div>
+              <div class="mat-mdc-header-cell">Total</div>
+              <div class="mat-mdc-header-cell text-center">
+                  <div class="px-2">
+                      <button mat-raised-button color="warn" (click)="clear()">Tout supprimer</button>
+                  </div>
+              </div>
+          </div>
+          <div *ngFor="let product of productList" class="mat-mdc-row">
+              <div class="mat-mdc-cell samall"><img [src]="product.image1"></div>
+              <div class="mat-mdc-cell">{{product.nom}}</div>
+              <div class="mat-mdc-cell">{{ product?.priceBasic || product?.pricePromotion | number }} FCFA</div>
+              <div class="mat-mdc-cell text-muted">
+                  <app-controls [product]="product" [pageName]="pageName" [type]="'wish'"
+                      (onQuantityChange)="updateCart($event)"></app-controls>
+              </div>
+              <div class="mat-mdc-cell">{{ total[product.id] | number : '1.2-2' }} FCFA</div>
+              <div class="mat-mdc-cell text-center">
+                  <button mat-mini-fab color="warn" (click)="remove(product)">
+                      <mat-icon>close</mat-icon>
+                  </button>
+              </div>
+          </div>
+          <div class="mat-mdc-row">
+              <div class="mat-mdc-cell"><a [routerLink]="['/']" mat-raised-button color="primary">Continuer vos achats</a></div>
+              <div class="mat-mdc-cell"></div>
+              <div class="mat-mdc-cell"></div>
+              <div class="mat-mdc-cell text-right">
+                  <div fxLayout="column" fxLayoutAlign="center end" class="grand-total px-3">
+                      <span>Sous-total :</span>
+                      <span class="text-muted">Réduction :</span>
+                      <span class="new-price">Total :</span>
+                  </div>
+              </div>
+              <div class="mat-mdc-cell">
+                  <div fxLayout="column" fxLayoutAlign="center start" class="grand-total">
+                      <span>{{ grandTotal | number : '1.2-2'}} FCFA</span>
+                      <span class="text-muted">15%</span>
+                      <span class="new-price">{{ (grandTotal - (grandTotal*0.15)) | number : '1.2-2'}} FCFA</span>
+                  </div>
+              </div>
+              <div class="mat-mdc-cell text-center"><a [routerLink]="['/checkout']" mat-raised-button color="primary">Commander</a></div> -->
+              <!-- <div class="mat-mdc-cell text-center"><a (click)="monPanierContient()" mat-raised-button color="primary">Proceed To Checkout</a></div> -->
+          <!-- </div>
       </div>
-    </div>
-    <div *ngFor="let product of appService.Data.cartList" class="mat-mdc-row">
-      <div class="mat-mdc-cell"><img [src]="product.image1[0].small"></div>
-      <div class="mat-mdc-cell"><a [routerLink]="['/products', product.id, product.nom]" class="product-name">{{product.nom}}</a></div>
-      <div class="mat-mdc-cell">${{product.newPrice | number : '1.2-2'}}</div>
-      <div class="mat-mdc-cell text-muted">
-        <app-controls [product]="product" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>
+  </mat-card> -->
+
+
+
+  <!-- Table simplifiée pour les petits écrans *ngIf="productList.length == 0" -->
+  <!-- <mat-card *ngIf="isSmallScreen && productList.length > 0" class="p-0">
+    <div class="mat-mdc-table cart-table">
+      <div class="mat-mdc-header-row">
+        <div class="mat-mdc-header-cell">Product</div>
+        <div class="mat-mdc-header-cell">Détails</div>
       </div>
-      <div class="mat-mdc-cell">${{total[product.id] | number : '1.2-2'}}</div>
-      <div class="mat-mdc-cell text-center">
-        <div class="p-2">
-          <button mat-mini-fab color="warn" (click)="remove(product)" matTooltip="Clear">
-              <mat-icon>close</mat-icon>
-          </button>
-        </div>
+      <div *ngFor="let product of productList" class="mat-mdc-row">
+        <div class="mat-mdc-cell samall"><img [src]="product.image1"></div>
+        <div class="mat-mdc-cell text-muted details">
+
+          <div class="first-section">
+            <p><strong>{{product.nom}}</strong></p>
+            <p>{{ product?.priceBasic || product?.pricePromotion | number }} FCFA</p>
+            <p>{{ total[product.id] | number : '1.2-2' }} FCFA</p>
+          </div>
+
+          <div class="second-section">
+            <p><app-controls [product]="product" [pageName]="pageName" [type]="'wish'"
+                (onQuantityChange)="updateCart($event)"></app-controls></p>
+            <button mat-mini-fab color="warn" (click)="remove(product)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div> -->
+
+          <!--  <p><strong>{{product.nom}}</strong></p>
+          <p>{{ product?.priceBasic || product?.pricePromotion | number }} FCFA</p>
+          <p>Qty: {{ product.quantite }}</p>
+          <p>Total: {{ total[product.id] | number : '1.2-2' }} FCFA</p>
+          <button mat-mini-fab color="warn" (click)="remove(product)">
+            <mat-icon>close</mat-icon>
+          </button> -->
+        <!-- </div>
       </div>
 
+
+      <div class="mat-mdc-row miniTotal">
+        <div class="mat-mdc-cell text-center">
+          <div fxLayout="column" fxLayoutAlign="center start" class="grand-total px-3">
+            <span>Sous-total:</span>
+            <span class="text-muted">Réduction:</span>
+            <span class="new-price">Total:</span>
+          </div>
+        </div>
+        <div class="mat-mdc-cell">
+          <div fxLayout="column" fxLayoutAlign="center start" class="grand-total">
+            <span>{{ grandTotal | number : '1.2-2'}} FCFA</span>
+            <span class="text-muted">15%</span>
+            <span class="new-price">{{ (grandTotal - (grandTotal*0.15)) | number : '1.2-2'}} FCFA</span>
+          </div>
+        </div>
+        <div class="mat-mdc-cell text-center"><a [routerLink]="['/checkout']" mat-raised-button color="primary">Commander</a></div> -->
+        <!-- <div class="mat-mdc-cell text-center"><a (click)="monPanierContient()" mat-raised-button color="primary">Proceed To Checkout</a></div> -->
+      <!-- </div>
+
     </div>
-    <div class="mat-mdc-row">
-      <div class="mat-mdc-cell"><a [routerLink]="['/']" mat-raised-button color="primary">Continue shopping</a></div>
-      <div class="mat-mdc-cell"></div>
-      <div class="mat-mdc-cell"></div>
-      <div class="mat-mdc-cell text-right">
-        <div fxLayout="column" fxLayoutAlign="center end" class="grand-total px-3">
-          <span>SubTotal:</span>
-          <span class="text-muted">Discount:</span>
-          <span class="new-price">Grand total:</span>
+  </mat-card> -->
+<!-- </div> -->
+
+<div class="cart-container" *ngIf="productList?.length > 0" fxFlex="100">
+  <h2 class="cart-title">Mon Panier</h2>
+
+  <!-- Mobile-only: Back Button -->
+  <button class="back-button" routerLink="/" fxShow.xs fxShow.lt.xs>
+    <i class="fa-solid fa-chevron-left"></i> Ajouter Nouveau Produit
+  </button>
+
+  <!-- Product List: row on desktop, column on mobile -->
+
+  <div class="cart-items" fxLayout="row wrap">
+    <div class="cart-item" *ngFor="let product of productList" fxFlex.xs="100" fxFlex.gt-sm="48">
+      <div class="product-info">
+        <img [src]="product.image1" alt="Product Image" class="product-image" />
+        <div>
+          <p class="product-name">{{ product?.nom }}</p>
+          <p class="product-price">{{ product?.pricePromotion || product?.priceBasic }} F</p>
         </div>
       </div>
-      <div class="mat-mdc-cell">
-        <div fxLayout="column" fxLayoutAlign="center start" class="grand-total">
-          <span>${{ grandTotal | number : '1.2-2'}}</span>
-          <span class="text-muted">15%</span>
-          <span class="new-price">${{ (grandTotal - (grandTotal*0.15)) | number : '1.2-2'}}</span>
-        </div>
+     
+      <div class="summary-item" *ngIf="product?.campagne && product?.campagne.reduction">
+        <p>
+          Réduction - {{ product?.campagne.reduction }}%
+          (-
+          {{
+            ((product?.priceBasic || 0) * product?.campagne.reduction / 100) * product.cartCount | number : '1.0-0'
+          }} F)
+        </p>
+      
       </div>
-      <div class="mat-mdc-cell text-center"><a [routerLink]="['/checkout']" mat-raised-button color="primary">Proceed To Checkout</a></div>
+      
+      
+      <div class="product-actions">
+        <app-controls [product]="product" [pageName]="pageName" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>
+        <button class="delete-button" (click)="remove(product)"><i class="fa-solid fa-trash"></i></button>
+      </div>
+
+    
+
     </div>
+    
   </div>
 
-</mat-card>
+  <!-- Order Summary & Payment Form -->
+  <div class="summary-form-container">
+    <div class="summary">
+      <h3>Résumé de la commande</h3>
+      <div class="summary-item">
+        <p>Montant</p>
+        <p>{{ grandTotal }} F</p>
+      </div>
+      
+      <div class="summary-item">
+        <p>Reduction total</p>
+        <p>{{ getTotalReduction() | number : '1.0-0' }} F</p>
+      </div>
+
+  
+      <!-- <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
+        <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
+        <p>-{{ getProductDiscount(product) }} F</p>
+      </div>
+     -->
+      <div class="summary-item total">
+        <p>Total</p>
+        <p>{{ grandTotal - getTotalReduction() | number : '1.0-0' }} F</p>
+      </div>
+    </div>
+
+    <!-- Payment Form: horizontal on desktop, vertical on mobile 
+    <form class="payment-form" fxLayout="row">
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>* Numéro de téléphone</mat-label>
+        <input matInput type="text" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>* Prénom</mat-label>
+        <input matInput type="text" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>* Nom</mat-label>
+        <input matInput type="text" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
+        <mat-label>Mode de paiement</mat-label>
+        <mat-select required>
+          <mat-option value="cash">À la livraison</mat-option>
+          <mat-option value="Orange">Orange Money</mat-option>
+          <mat-option value="credit_card">Carte de Crédit Bancaire</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="actions" fxFlex>
+        <button class="back" routerLink="/">Retour</button>
+        <button class="validate" type="submit" routerLink="/">Valider</button>
+      </div>
+    </form>
+-->
+
+<form [formGroup]="billingForm">
+  <div fxLayout="row wrap" class="py-3">
+
+    <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+      <!-- Champ Pays -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Pays</mat-label>
+        <mat-select formControlName="country" required (selectionChange)="handleCountryChange($event)">
+          <mat-option *ngFor="let country of countries" [value]="country.id">
+            {{ country.nom }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+      <!-- Champ Téléphone -->
+      <mat-form-field appearance="outline" class="w-100 phone-number">
+        <mat-label>Téléphone</mat-label>
+        <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.indicatif }}</span>
+        <input matInput formControlName="phone" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
+      </mat-form-field>
+    </div>
+    
+
+    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+      <mat-form-field appearance="outline" class="w-100">
+          <mat-label>First name</mat-label>
+          <input matInput placeholder="First name" formControlName="firstName" required>
+          <!-- <mat-error *ngIf="billingForm.controls.firstName.errors?.required">First name is required</mat-error>
+     --> </mat-form-field>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+      <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Last name</mat-label>
+          <input matInput placeholder="Last name" formControlName="lastName" required>
+          <!-- <mat-error *ngIf="billingForm.controls.lastName.errors?.required">Last name is required</mat-error>
+     --> </mat-form-field>
+    </div>
+  </div>
+</form>
+
+<div class="buttons">
+  <button mat-button class="back-btn" routerLink="/">
+     Retour
+  </button>
+
+  <button mat-flat-button type="submit" class="vld-btn" (click)="commander()"  [disabled]="!billingForm.valid">
+    Valider <mat-icon>arrow_forward</mat-icon>
+  </button>
+</div>
+  </div>
+
+  <!-- Similar Products Section -->
+  <div class="similar-products">
+    <div class="main-title">
+      <h3 class="primary-color">Produits Similaires</h3>
+      <a routerLink="">Voir plus<mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
+    </div>
+    <div class="product-wrapper">
+      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('left')" class="simillar-prev">keyboard_arrow_left</mat-icon>
+
+      <div class="product-list" #simillarContainer>
+        <div class="similar-product" *ngFor="let similarProduct of productList">
+          <div [routerLink]="['/products', similarProduct.id, similarProduct.nom]">
+            <img [src]="similarProduct.image1" alt="Similar Product" />
+            <p class="similar-name text-truncate">{{ similarProduct.nom }}</p>
+            <p class="similar-price">{{ similarProduct.pricePromotion || similarProduct.priceBasic }} F</p>
+          </div>
+          <button class="buy-button">Acheter</button>
+        </div>
+      </div>
+
+      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('right')" class="simillar-next">keyboard_arrow_right</mat-icon>
+    </div>
+  </div>
+</div>
+

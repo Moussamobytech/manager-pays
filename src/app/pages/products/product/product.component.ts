@@ -9,6 +9,7 @@ import { ProductZoomComponent } from './product-zoom/product-zoom.component';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.models';
+import { CommonService } from 'src/app/services/common.service';
 // import { Product } from 'src/app/app.models';
 
 @Component({
@@ -18,94 +19,96 @@ import { Product } from 'src/app/models/product.models';
 })
 export class ProductComponent implements OnInit {
   @ViewChild('zoomViewer', { static: true }) zoomViewer;
-  @ViewChild(SwiperDirective, { static: true }) directiveRef: SwiperDirective;
-  public config: SwiperConfigInterface={};
+  // @ViewChild(SwiperDirective, { static: true }) directiveRef: SwiperDirective;
+  // public config: SwiperConfigInterface={};
   public product: Product;
-  public image: any;
-  public path: any;
+  public selectedImage: any;
+  // public path: any;
   public zoomImage: any;
   private sub: any;
   public form: UntypedFormGroup;
   public relatedProducts: Array<Product>;
   public views: any;
+  shopLink: string;
+  isCopied:boolean= false;
 
   constructor(public appService:AppService,
     private productService : ProductService,
               private activatedRoute: ActivatedRoute,
               public dialog: MatDialog,
-              public produitService : ProductService,
               public formBuilder: UntypedFormBuilder,
-              public domHandlerService: DomHandlerService) {  }
+              public domHandlerService: DomHandlerService,
+              private cm:CommonService,) {  }
 
   ngOnInit() {
-    console.log(window.location.href)
-    this.path = window.location.href
+    // this.path = window.location.href
     this.sub = this.activatedRoute.params.subscribe(params => {
       this.getProductById(params['id']);
     });
-    this.form = this.formBuilder.group({
-      'review': [null, Validators.required],
-      'name': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
-      'email': [null, Validators.compose([Validators.required, emailValidator])]
-    });
-    this.getRelatedProducts();
-    // this.inscrementViewsProduit()
+    // this.getRelatedProducts();
   }
 
-  ngAfterViewInit(){
-    this.config = {
-      observer: false,
-      slidesPerView: 4,
-      spaceBetween: 10,
-      keyboard: true,
-      navigation: true,
-      pagination: false,
-      loop: false,
-      preloadImages: false,
-      lazy: true,
-      breakpoints: {
-        480: {
-          slidesPerView: 2
-        },
-        600: {
-          slidesPerView: 3,
-        }
-      }
-    }
-  }
+  // ngAfterViewInit(){
+  //   this.config = {
+  //     observer: false,
+  //     slidesPerView: 4,
+  //     spaceBetween: 8,
+  //     keyboard: true,
+  //     navigation: true,
+  //     pagination: false,
+  //     loop: false,
+  //     preloadImages: false,
+  //     lazy: true,
+  //     // breakpoints: {
+  //     //   // 480: {
+  //     //   //   slidesPerView: 4
+  //     //   // },
+  //     //   600: {
+  //     //     slidesPerView:6 ,
+  //     //   }
+  //     // }
+  //   }
+  // }
 
   public getProductById(id:any){
-
-    this.appService.getProductById(id).subscribe(data=>{
-      this.product = data;
-      console.log("Produit :", this.product)
-      this.image = data.image1;
+    this.appService.getProductById(id).subscribe((data:any)=>{
+      let product = data;
+      let nom = (product.nom).toLowerCase();
+      this.product = {
+        ...product,
+        nom: nom.charAt(0).toUpperCase() + nom.slice(1),
+        pricePromotion: this.parsePrice(product.pricePromotion),
+        priceBasic: this.parsePrice(product.priceBasic),
+      };
+      this.shopLink = window.location.origin+"/#/sellers/"+this.product.user
+      this.selectedImage = data.image1;
       this.zoomImage = data.image1;
-      setTimeout(() => {
-        this.config.observer = true;
+      // setTimeout(() => {
+      //   this.config.observer = true;
         // this.getRelatedProducts();
        // this.directiveRef.setIndex(0);
-      });
+      // });
     });
   }
 
+  parsePrice (price: any) {
+    const parsedPrice = parseFloat(price);
+    return isNaN(parsedPrice) ? null : parsedPrice;
+  }
 
   public async getRelatedProducts(){
     console.log("res related :::::: ",this.product);
     console.log("res related :::::: ",this.product?.categorie);
     if (this.product && this.product?.categorie) {
-      let res = await this.productService.getProductByCategorieName(this.product.categorie)
+      // this enpoint does not work at all
+      let res = await this.productService.getProductByCategorieName(this.product.categorieNom)
       console.log("res related :::::: ",res);
       this.relatedProducts = res;
     }
-
-    // this.appService.getProducts('related').subscribe(data => {
-    //   this.relatedProducts = data;
-    // })
   }
 
   public selectImage(image){
-    this.image = image;
+    this.selectedImage = image;
     this.zoomImage = image;
   }
 
@@ -142,18 +145,42 @@ export class ProductComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  public onSubmit(values:Object):void {
-    if (this.form.valid) {
-      //email sent
+  shareLink(){
+    const shareData = {
+      title: '',
+      text: "Jette un coup d'œil à ce produit sur Fidelity Market ! 🔥 Tu vas adorer 😉 !",
+      url: this.shopLink
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .catch((error) => console.error('Erreur lors de l\'envoie: ', error));
+    } else {
+      this.cm.openWarningSnackBar("Partage non supporté sur ce navigateur, Lien copié !");
+      this.copyLink()
     }
   }
 
+  copyLink(): void {
+    navigator.clipboard.writeText(this.shopLink).then(
+      () => {
+        this.isCopied = true;
+        setTimeout(() => (this.isCopied = false), 3000);
+      },
+      (err) => {
+        console.error('Could not copy text: ', err);
+      }
+    );
+  }
 
-  // public inscrementViewsProduit(){
-  //   this.produitService.incrementProductViews(this.product.id).then((data =>{
-  //     this.views = data;
-  //     console.log("Viewsssssssss ",this.views);
-  //     }))
-  //  }
+  onImageError(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/logo_fidelity.gif';
+  }
 
+  onImageLoad(event: Event) {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = this.selectedImage;
+  }
 }
