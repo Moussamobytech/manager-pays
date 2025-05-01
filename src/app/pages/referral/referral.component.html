@@ -68,6 +68,12 @@
     </div>
   </div>
 
+  <div *ngIf="parrainageCampaigns.length == 0" class="empty-state">
+    <mat-icon class="empty-state-icon">campaign</mat-icon>
+    <h3 class="empty-state-title">Aucune campagne de parrainage en cours</h3>
+    <p class="empty-state-description">Des nouvelles campagnes de parrainage seront disponibles bientôt !</p>
+  </div>
+
   <div class="referal-benefits" fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start center">
     <div class="benefit" fxFlex="45" fxFlex.gt-xs="30" fxFlex.gt-sm="22" *ngFor="let benefit of benefits" >
       <div class="icon">
