@@ -49,6 +49,7 @@ import { AnalyticsService } from './services/analitycs.service';
 import { InfluencerService } from './services/influencer.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SearchResultsModule } from './pages/search-results/search-results.module';
+import { HeaderComponent } from './shared/header/header.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { SearchResultsModule } from './pages/search-results/search-results.modul
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
+    HeaderComponent,
     // SearchResultsComponent
 
   ],
@@ -112,8 +114,6 @@ import { SearchResultsModule } from './pages/search-results/search-results.modul
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
-
-
   ],
   bootstrap: [AppComponent]
 })

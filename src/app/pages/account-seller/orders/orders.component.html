@@ -1,4 +1,4 @@
-<div class="p-2">
+<!-- <div class="p-2">
   <mat-card>
     <div class="mat-mdc-table orders-table">
       <div class="mat-mdc-header-row">
@@ -40,12 +40,12 @@
             {{ sortKey === 'fournisseurUsername' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
           </mat-icon>
         </div>
-      
+
         <div class="mat-mdc-header-cell">Autre</div>
-      </div>
+      </div> -->
 
       <!-- Lignes de données -->
-      <div *ngFor="let order of sortedOrders() | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+      <!-- <div *ngFor="let order of sortedOrders() | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
         <div class="mat-mdc-cell image" (click)="openOrderDetails(order)">
           <img [src]="order.produitImage" alt="" width="50">
         </div>
@@ -60,12 +60,12 @@
           <div class="p-2 actions">
              <button  mat-mini-fab color="warn" matTooltip="View invoice" class="btn-invoice" (click)="openOrderDetails(order)">
               <mat-icon>remove_red_eye</mat-icon>
-            </button>
+            </button> -->
            <!-- <button mat-mini-fab color="primary" matTooltip="View">
               <mat-icon>receipt</mat-icon>
             </button> -->
-           
-          </div>
+
+          <!-- </div>
         </div>
       </div>
     </div>
@@ -73,9 +73,9 @@
 
   <div *ngIf="orders.length > 0" class="py-3 paginate centered">
     <mat-card class="text-center">
-      <pagination-controls 
-        class="product-pagination" 
-        [autoHide]="true" 
+      <pagination-controls
+        class="product-pagination"
+        [autoHide]="true"
         lang="fr"
         [maxSize]="5"
         (pageChange)="onPageChanged($event)">
@@ -105,6 +105,130 @@
     </button>
     <button mat-button color="warn" (click)="onNoClick()">Fermer</button>
   </div>
-  
-</ng-template>
 
+</ng-template> -->
+
+
+
+
+<div class="orders-container" fxLayout="column" fxLayoutGap="16px">
+  <!-- Header Section -->
+  <div class="header-section" fxLayout="row" fxLayoutAlign="space-between center">
+    <h1 class="title">Mes commandes</h1>
+    <div class="search-add" fxLayout="row" fxLayoutGap="10px">
+      <div class="search-bar">
+        <input type="text" placeholder="Rechercher" />
+        <mat-icon>search</mat-icon>
+      </div>
+      <button mat-mini-fab color="primary" aria-label="Add order">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <button class="filter-btn" [class.active]="selectedFilter === 'pending'">
+      En attente (2)
+    </button>
+    <button class="filter-btn" [class.active]="selectedFilter === 'delivered'">
+      Livré (3)
+    </button>
+    <button class="filter-btn" [class.active]="selectedFilter === 'cancelled'">
+      Annulé (1)
+    </button>
+    <div class="date-filter">
+      <span>7 jours</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </div>
+  </div>
+
+  <!-- Today Orders -->
+  <div class="time-section">
+    <h2 class="section-title">Aujourd'hui</h2>
+
+    <div class="order-card" *ngFor="let order of todayOrders" fxLayout="row" (click)="openOrderDetails(order)">
+      <div class="order-image">
+        <img [src]="order.produitImage" alt="Product image" />
+      </div>
+      <div class="order-info" fxLayout="column" fxFlex>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h3 class="product-name">{{order.produitNom}}</h3>
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+        <div class="status-tag" [ngClass]="getStatusClass(order.statutCommande.name)">
+          {{Status(order.statutCommande.name)}}
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div class="quantity">{{order.quantite}} article{{order.quantite > 1 ? 's' : ''}}</div>
+          <div class="dot"></div>
+          <div class="price">{{order.montant}}</div>
+        </div>
+        <div class="location" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon>location_on</mat-icon>
+          <span>{{order.location}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- This Week Orders -->
+  <div class="time-section">
+    <h2 class="section-title">Cette semaine</h2>
+
+    <div class="order-card" *ngFor="let order of weekOrders" fxLayout="row" (click)="openOrderDetails(order)">
+      <div class="order-image">
+        <img [src]="order.produitImage" alt="Product image" />
+      </div>
+      <div class="order-info" fxLayout="column" fxFlex>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <h3 class="product-name">{{order.produitNom}}</h3>
+          <mat-icon>chevron_right</mat-icon>
+        </div>
+        <div class="status-tag" [ngClass]="getStatusClass(order.statutCommande.name)">
+          {{Status(order.statutCommande.name)}}
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <div class="quantity">{{order.quantite}} article{{order.quantite > 1 ? 's' : ''}}</div>
+          <div class="dot"></div>
+          <div class="price">{{order.montant}}</div>
+        </div>
+        <div class="location" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon>location_on</mat-icon>
+          <span>{{order.location}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View More Button -->
+  <div class="view-more" fxLayout="row" fxLayoutAlign="center center">
+    <button mat-button color="primary" (click)="loadMoreOrders()">
+      Voir plus
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- Order Details Dialog -->
+<ng-template #orderDetailsDialog>
+  <h1 mat-dialog-title>Détails de la commande</h1>
+  <div mat-dialog-content *ngIf="selectedOrder">
+    <div class="mat-mdc-cell image center">
+      <img [src]="selectedOrder.produitImage" alt="" width="120" height="120">
+    </div>
+    <p><strong>Commande : </strong>{{ selectedOrder.codeCommande }}</p>
+    <p><strong>Date : </strong>{{ selectedOrder.dateCommande | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <p><strong>Produit : </strong>{{ selectedOrder.produitNom }}</p>
+    <p><strong>Quantité : </strong>{{ selectedOrder.quantite }}</p>
+    <p><strong>Montant : </strong>{{ selectedOrder.montant }}</p>
+    <p><strong>Status : </strong>{{ Status(selectedOrder.statutCommande.name) }}</p>
+    <p><strong>Fournisseur : </strong>{{ selectedOrder.fournisseurUsername }}</p>
+  </div>
+  <div mat-dialog-actions class="buttons space-around">
+    <button mat-button color="success" (click)="phoneCall(selectedOrder.fournisseurUsername)">
+      <mat-icon>call</mat-icon>
+    </button>
+    <button mat-button color="warn" (click)="closeDialog()">Fermer</button>
+  </div>
+</ng-template>

@@ -1,7 +1,7 @@
 
 <div *ngFor="let category of categories">
   <button mat-menu-item class="text-truncate" (click)="changeCategory(category.cle || category.id)">
-      <span>{{category.nom}}</span>
+    <span>{{category.nom}}</span>
   </button>
   <!-- PAs de sous categories pour l'instant -->
   <!-- <div *ngIf="category" class="sub-category">

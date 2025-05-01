@@ -55,7 +55,7 @@ export class TopMenuComponent implements OnInit {
     }
     else if(this.roles == "ROLE_PARTICULIER"){
      this.routes = "account-customer";
-    
+
   }
     // this.username = sessionStorage.getItem('username')!;
    console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
@@ -63,7 +63,7 @@ export class TopMenuComponent implements OnInit {
 
 
 
-  
+
   public changeCurrency(currency) {
     this.currency = currency;
   }

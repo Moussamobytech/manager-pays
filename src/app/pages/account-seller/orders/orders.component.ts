@@ -24,24 +24,29 @@ export class OrdersComponent implements OnInit {
     { number: '#1781', date: 'September 3, 2017', status: 'Refunded', total: '$49.00 for 2 items', invoice: false }
   ]*/
   user: User;
-  idUser: string;
-  username: string;
-  orders: Order[];
-  public page: any;
+  // idUser: string;
+  // username: string;
+  orders: Order[] = [];
+  // public page: any;
   public count = 6;
-  domHandlerService = inject(DomHandlerService);
+  // domHandlerService = inject(DomHandlerService);
+  selectedFilter: string = 'pending';
   selectedOrder: Order | null = null;
+  todayOrders: any[] = [];
+  weekOrders: any[] = [];
 
 
   constructor(private router: Router, public dialog: MatDialog, private authService: AuthenticationService, private commandeService: CommandeService) { }
 
   ngOnInit() {
-    this.getUser();
+    this.user = this.authService.currentUser();
+    // this.getUser();
     this.getAllCommande();
+    this.filterOrdersByDate();
   }
 
   getAllCommande() {
-    this.commandeService.getAllCommandeByUsername(this.username).subscribe(datas => {
+    this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(datas => {
       this.orders = datas;
       console.log("PANIER : ", JSON.stringify(datas));
 
@@ -49,55 +54,74 @@ export class OrdersComponent implements OnInit {
       //this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
       console.error('Error during recharge:', error);
     });
-
   }
-  getUser() {
-    this.user = this.authService.currentUser();
-    if (this.user != null) {
-      this.idUser = this.user.id;
-      this.username = this.user.username
-      console.log("1USERS :::::::::::::::: ", this.username);
+  // getUser() {
+  //   this.user = this.authService.currentUser();
+  //   if (this.user != null) {
+  //     // this.idUser = this.user.id;
+  //     this.username = this.user.username
+  //     console.log("1USERS :::::::::::::::: ", this.username);
+  //   }
+  // }
 
-    }
-  }
+  // public onPageChanged(event) {
+  //   this.page = event;
+  //   this.domHandlerService.winScroll(0, 0);
+  // }
 
-  public onPageChanged(event) {
-    this.page = event;
-    this.domHandlerService.winScroll(0, 0);
-  }
-
-  // Propriétés pour suivre l'état du tri
-  sortKey: string = '';
-  sortDirection: boolean = false; // false = ascendant, true = descendant
+  // // Propriétés pour suivre l'état du tri
+  // sortKey: string = '';
+  // sortDirection: boolean = false; // false = ascendant, true = descendant
 
   // Méthode pour gérer le tri
-  sortBy(key: string): void {
-    if (this.sortKey === key) {
-      // Inversez la direction si on clique sur la même colonne
-      this.sortDirection = !this.sortDirection;
-    } else {
-      // Définir une nouvelle colonne de tri et initialiser la direction
-      this.sortKey = key;
-      this.sortDirection = false; // Commencer par un tri ascendant
-    }
-  }
+  // sortBy(key: string): void {
+  //   if (this.sortKey === key) {
+  //     // Inversez la direction si on clique sur la même colonne
+  //     this.sortDirection = !this.sortDirection;
+  //   } else {
+  //     // Définir une nouvelle colonne de tri et initialiser la direction
+  //     this.sortKey = key;
+  //     this.sortDirection = false; // Commencer par un tri ascendant
+  //   }
+  // }
 
   // Méthode pour renvoyer les données triées
-  sortedOrders() {
-    return this.orders.sort((a, b) => {
-      let valA = a[this.sortKey];
-      let valB = b[this.sortKey];
+  // sortedOrders() {
+  //   return this.orders.sort((a, b) => {
+  //     let valA = a[this.sortKey];
+  //     let valB = b[this.sortKey];
 
-      if (typeof valA === 'string') {
-        valA = valA.toLowerCase();
-        valB = valB.toLowerCase();
-      }
+  //     if (typeof valA === 'string') {
+  //       valA = valA.toLowerCase();
+  //       valB = valB.toLowerCase();
+  //     }
 
-      if (this.sortDirection) {
-        return valA > valB ? -1 : valA < valB ? 1 : 0;
-      } else {
-        return valA < valB ? -1 : valA > valB ? 1 : 0;
-      }
+  //     if (this.sortDirection) {
+  //       return valA > valB ? -1 : valA < valB ? 1 : 0;
+  //     } else {
+  //       return valA < valB ? -1 : valA > valB ? 1 : 0;
+  //     }
+  //   });
+  // }
+
+  filterOrdersByDate(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    this.todayOrders = this.orders.filter(order => {
+      const orderDate = new Date(order.dateCommande);
+      orderDate.setHours(0, 0, 0, 0);
+      return orderDate.getTime() === today.getTime();
+    });
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    oneWeekAgo.setHours(0, 0, 0, 0);
+
+    this.weekOrders = this.orders.filter(order => {
+      const orderDate = new Date(order.dateCommande);
+      orderDate.setHours(0, 0, 0, 0);
+      return orderDate.getTime() < today.getTime() && orderDate.getTime() >= oneWeekAgo.getTime();
     });
   }
 
@@ -111,6 +135,7 @@ export class OrdersComponent implements OnInit {
       this.selectedOrder = null; // Réinitialiser après fermeture
     });
   }
+
   phoneCall(phoneNumber: string): void {
     const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/;
     if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
@@ -123,33 +148,69 @@ export class OrdersComponent implements OnInit {
   }
 
 
-  onNoClick(): void {
+  // onNoClick(): void {
+  //   this.dialog.closeAll();
+  // }
+
+  // public Status(key) {
+  //   let res = ""
+  //   switch (key) {
+  //     case "DELIVERED":
+  //       res = "Livrer"
+  //       break;
+
+  //     case "CANCEL":
+  //       res = "Annuler"
+  //       break;
+
+  //     case "PENDING":
+  //       res = "En attente"
+  //       break;
+  //       case "VALIDE":
+  //         res = "Validée"
+  //         break;
+
+  //     default:
+  //       res = "N/A"
+  //       break;
+  //   }
+  //   return res
+  // }
+
+  closeDialog(): void {
     this.dialog.closeAll();
   }
 
-  public Status(key) {
-    let res = ""
-    switch (key) {
-      case "DELIVERED":
-        res = "Livrer"
-        break;
-
-      case "CANCEL":
-        res = "Annuler"
-        break;
-
-      case "PENDING":
-        res = "En attente"
-        break;
-        case "VALIDE":
-          res = "Validée"
-          break;
-
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'status-pending';
+      case 'DELIVERED':
+        return 'status-delivered';
+      case 'CANCELLED':
+        return 'status-cancelled';
       default:
-        res = "N/A"
-        break;
+        return '';
     }
-    return res
+  }
+
+  Status(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'En attente';
+      case 'DELIVERED':
+        return 'Livré';
+      case 'CANCELLED':
+        return 'Annulé';
+      default:
+        return status;
+    }
+  }
+
+  loadMoreOrders(): void {
+    // Implementation to load more orders
+    console.log('Loading more orders...');
+    // This would typically make an API call with pagination parameters
   }
 
 }
