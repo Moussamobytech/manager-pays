@@ -44,7 +44,7 @@ export class SignInComponent implements OnInit {
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
       .map(country => ({
         ...country,
-        mask: this.getPhoneMask(country.nom),
+        mask: '0'.repeat(this.getPhoneLength(country.nom)),
         indicatif: `+${country.indicatif}`,
       }));
       this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
@@ -62,27 +62,46 @@ export class SignInComponent implements OnInit {
 
 
 
-  getPhoneMask(countryName: string): number {
-    const phoneLengths = {
-      "Bénin": "00 00 00 00",
-      "Burkina Faso": "00 00 00 00",
-      "Cap-Vert": "000 0000",
-      "Cote d'ivoire": "00 00 00 0000",
-      "Gambie": "000 0000",
-      "Ghana": "00 00 00 000",
-      "Guinée": "00 00 00 000",
-      "Guinée-Bissau": "000 0000",
-      "Libéria": "00 00 00 000",
-      "Mali": "00 00 00 00",
-      "Niger": "00 00 00 00",
-      "Nigeria": "00 00 00 0000",
-      "Sénégal": "00 00 00 000",
-      "Sierra Leone": "00 00 00 00",
-      "Togo": "00 00 00 00"
-    };
-
-    return phoneLengths[countryName] || 9; // Par défaut, retourne 9 si le pays n'est pas trouvé
+   getPhoneLength(countryName: string): number {
+    const countryMap: { names: string[]; length: number }[] = [
+      { names: ["bénin", "benin"], length: 8 },
+      { names: ["burkina faso", "bourkina faso", "burkina"], length: 8 },
+      { names: ["cap-vert", "cap vert"], length: 7 },
+      { names: ["côte d'ivoire", "cote d'ivoire", "ivoire"], length: 10 },
+      { names: ["gambie"], length: 7 },
+      { names: ["ghana", "gana"], length: 9 },
+      { names: ["guinée", "guinee"], length: 9 },
+      { names: ["guinée-bissau", "guinée bissau", "bissau"], length: 7 },
+      { names: ["libéria", "liberia"], length: 9 },
+      { names: ["mali", "malie", "malin"], length: 8 },
+      { names: ["niger", "nigér"], length: 8 },
+      { names: ["nigeria", "nigéria"], length: 10 },
+      { names: ["sénégal", "senegal"], length: 9 },
+      { names: ["sierra leone", "leone"], length: 8 },
+      { names: ["togo"], length: 8 },
+      { names: ["tchad"], length: 8 },
+      { names: ["tunisie", "tunis"], length: 8 },
+      { names: ["zambie"], length: 9 },
+      { names: ["zimbabwe"], length: 9 },
+      { names: ["afrique du sud", "afrique sud", "sud afrique"], length: 9 },
+      { names: ["botswana"], length: 9 },
+      { names: ["burundi"], length: 9 },
+      { names: ["cameroon", "cameroun"], length: 9 },
+      { names: ["central african republic", "république centrafricaine"], length: 9 },
+      { names: ["congo"], length: 9 },
+    ];
+  
+    const normalizedInput = countryName.trim().toLowerCase();
+  
+    for (const entry of countryMap) {
+      if (entry.names.some(name => name.toLowerCase() === normalizedInput)) {
+        return entry.length;
+      }
+    }
+  
+    return 9; // Valeur par défaut
   }
+  
 
 
 
