@@ -41,8 +41,8 @@ export class CartComponent implements OnInit {
   phoneMask: string = '00 00 00 00'; // Default mask for Mali
   isPopulatingForm: boolean = false;
   onlyProdTotal: any;
-  referralCode: string;
-  senderUsername: string;
+  referralCode: string = "";
+  senderUsername: string = "";
 
 
 
@@ -117,25 +117,43 @@ export class CartComponent implements OnInit {
   }
 
   getPhoneLength(countryName: string): number {
-    const phoneLengths: { [key: string]: number } = {
-      "Bénin": 8,
-      "Burkina Faso": 8,
-      "Cap-Vert": 7,
-      "Côte d'Ivoire": 10,
-      "Gambie": 7,
-      "Ghana": 9,
-      "Guinée": 9,
-      "Guinée-Bissau": 7,
-      "Libéria": 9,
-      "Mali": 8,
-      "Niger": 8,
-      "Nigeria": 10,
-      "Sénégal": 9,
-      "Sierra Leone": 8,
-      "Togo": 8
-    };
-
-    return phoneLengths[countryName] || 9; // Par défaut, retourne 9 si le pays n'est pas trouvé
+    const countryMap: { names: string[]; length: number }[] = [
+      { names: ["bénin", "benin"], length: 8 },
+      { names: ["burkina faso", "bourkina faso", "burkina"], length: 8 },
+      { names: ["cap-vert", "cap vert"], length: 7 },
+      { names: ["côte d'ivoire", "cote d'ivoire", "ivoire"], length: 10 },
+      { names: ["gambie"], length: 7 },
+      { names: ["ghana", "gana"], length: 9 },
+      { names: ["guinée", "guinee"], length: 9 },
+      { names: ["guinée-bissau", "guinée bissau", "bissau"], length: 7 },
+      { names: ["libéria", "liberia"], length: 9 },
+      { names: ["mali", "malie", "malin"], length: 8 },
+      { names: ["niger", "nigér"], length: 8 },
+      { names: ["nigeria", "nigéria"], length: 10 },
+      { names: ["sénégal", "senegal"], length: 9 },
+      { names: ["sierra leone", "leone"], length: 8 },
+      { names: ["togo"], length: 8 },
+      { names: ["tchad"], length: 8 },
+      { names: ["tunisie", "tunis"], length: 8 },
+      { names: ["zambie"], length: 9 },
+      { names: ["zimbabwe"], length: 9 },
+      { names: ["afrique du sud", "afrique sud", "sud afrique"], length: 9 },
+      { names: ["botswana"], length: 9 },
+      { names: ["burundi"], length: 9 },
+      { names: ["cameroon", "cameroun"], length: 9 },
+      { names: ["central african republic", "république centrafricaine"], length: 9 },
+      { names: ["congo"], length: 9 },
+    ];
+  
+    const normalizedInput = countryName.trim().toLowerCase();
+  
+    for (const entry of countryMap) {
+      if (entry.names.some(name => name.toLowerCase() === normalizedInput)) {
+        return entry.length;
+      }
+    }
+  
+    return 9; // Valeur par défaut
   }
 
   initializeBillingForm() {
@@ -408,7 +426,8 @@ onlyCartItemCount:any = 0
     }
 
     commander(){     
-      let user = this.user;      
+      let user = this.user;  
+      console.log("::::::::::::::: USER = ",user);
       if(user != null){    
         // Appliquer la réduction aux articles avant l'envoi
      //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));

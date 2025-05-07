@@ -24,7 +24,7 @@ export class SignUpComponent implements OnInit {
   countries: any
   /*countries = [
       { code: 'ML', name: 'Mali', phoneCode: '+223', placeholder: 'XX XX XX XX', mask: '00 00 00 00' },
-      { code: 'CI', name: 'Côte d’Ivoire', phoneCode: '+225', placeholder: 'XX XX XX XXXX', mask: '00 00 00 0000' }
+      { code: 'CI', name: 'Côte d'Ivoire', phoneCode: '+225', placeholder: 'XX XX XX XXXX', mask: '00 00 00 0000' }
   ];
   */
   selectedFile: File | null = null;
@@ -122,7 +122,7 @@ export class SignUpComponent implements OnInit {
       this.selectedVendeurCountry = datas
 
        // Définir le masque en fonction du pays sélectionné
-       let phoneLength = this.getPhoneLength(datas.nom); // Récupérer la longueur du numéro
+       let phoneLength = this.getPhoneLength(datas.nom.toLowerCase()); // Récupérer la longueur du numéro
        this.phoneMask = '0'.repeat(phoneLength); // Génère un masque comme "000000000"
        
        // Réinitialiser le champ de téléphone
@@ -131,27 +131,46 @@ export class SignUpComponent implements OnInit {
   }
 
 
-  getPhoneLength(countryName: string): number {
-    const phoneLengths: { [key: string]: number } = {
-      "Bénin": 8,
-      "Burkina Faso": 8,
-      "Cap-Vert": 7,
-      "Côte d'Ivoire": 10,
-      "Gambie": 7,
-      "Ghana": 9,
-      "Guinée": 9,
-      "Guinée-Bissau": 7,
-      "Libéria": 9,
-      "Mali": 8,
-      "Niger": 8,
-      "Nigeria": 10,
-      "Sénégal": 9,
-      "Sierra Leone": 8,
-      "Togo": 8
-    };
+   getPhoneLength(countryName: string): number {
+    const countryMap: { names: string[]; length: number }[] = [
+      { names: ["bénin", "benin"], length: 8 },
+      { names: ["burkina faso", "bourkina faso", "burkina"], length: 8 },
+      { names: ["cap-vert", "cap vert"], length: 7 },
+      { names: ["côte d'ivoire", "cote d'ivoire", "ivoire"], length: 10 },
+      { names: ["gambie"], length: 7 },
+      { names: ["ghana", "gana"], length: 9 },
+      { names: ["guinée", "guinee"], length: 9 },
+      { names: ["guinée-bissau", "guinée bissau", "bissau"], length: 7 },
+      { names: ["libéria", "liberia"], length: 9 },
+      { names: ["mali", "malie", "malin"], length: 8 },
+      { names: ["niger", "nigér"], length: 8 },
+      { names: ["nigeria", "nigéria"], length: 10 },
+      { names: ["sénégal", "senegal"], length: 9 },
+      { names: ["sierra leone", "leone"], length: 8 },
+      { names: ["togo"], length: 8 },
+      { names: ["tchad"], length: 8 },
+      { names: ["tunisie", "tunis"], length: 8 },
+      { names: ["zambie"], length: 9 },
+      { names: ["zimbabwe"], length: 9 },
+      { names: ["afrique du sud", "afrique sud", "sud afrique"], length: 9 },
+      { names: ["botswana"], length: 9 },
+      { names: ["burundi"], length: 9 },
+      { names: ["cameroon", "cameroun"], length: 9 },
+      { names: ["central african republic", "république centrafricaine"], length: 9 },
+      { names: ["congo"], length: 9 },
+    ];
   
-    return phoneLengths[countryName] || 9; // Par défaut, retourne 9 si le pays n'est pas trouvé
+    const normalizedInput = countryName.trim().toLowerCase();
+  
+    for (const entry of countryMap) {
+      if (entry.names.some(name => name.toLowerCase() === normalizedInput)) {
+        return entry.length;
+      }
+    }
+  
+    return 9; // Valeur par défaut
   }
+  
 
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
@@ -181,7 +200,7 @@ export class SignUpComponent implements OnInit {
 
       }
     } catch (error: any) {
-      this.snackBar.open('Une erreur s\'est produite', '×', { panelClass: 'warning', verticalPosition: 'top', duration: 3000 });
+      this.snackBar.open(error.message || 'Une erreur s\'est produite', '×', { panelClass: 'warning', verticalPosition: 'top', duration: 3000 });
     }
   }
 
@@ -215,7 +234,7 @@ export class SignUpComponent implements OnInit {
 
       }
     } catch (error: any) {
-      this.snackBar.open('Une erreur s\'est produite', '×', { panelClass: 'warning', verticalPosition: 'top', duration: 3000 });
+      this.snackBar.open(error.message || 'Une erreur s\'est produite', '×', { panelClass: 'warning', verticalPosition: 'top', duration: 3000 });
     }
   }
 

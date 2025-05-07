@@ -36,6 +36,7 @@ export class AnalyticsComponent implements OnInit {
 
   public selectedYear: FormControl = new FormControl(); // Contrôle de formulaire pour l'année
   public availableYears: any = [];
+  comm: any = 0;
 
 
   constructor(
@@ -88,10 +89,11 @@ export class AnalyticsComponent implements OnInit {
 
 public async getAllPaniers(id: any, year: number = new Date().getFullYear()) {
   this.ngxSpinnerService.show();
-
+  this.comm = 0;
   try {
     const data: any = await firstValueFrom(this.commandeService.getAllCommandeByFournisseur(id));
-
+    this.comm = data
+   
     // Filtrer les commandes livrées
     const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
 
