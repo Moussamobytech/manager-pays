@@ -52,6 +52,11 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser();
+
+    console.log("::: MY USER ::::: ",this.currentUser);
+    
+
+
     this.getNewArrivalsProducts();
     this.getTopRatedProducts();
     this.productInPromo();
