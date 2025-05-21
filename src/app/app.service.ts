@@ -98,7 +98,7 @@ export class AppService {
   public getAllProducts(): Observable<any> {
     return this.apiService.get('/produit/list');
   }
- 
+
   public searchProducts(term: string): Observable<Product[]> {
     let products = this.getAllProducts().pipe(
       map(products =>
@@ -113,10 +113,10 @@ export class AppService {
   public searchNotFoundTerme(terme:string):Observable<any>{
     return this.apiService.post(`/produit/search/${terme}`,null);
   }
-  
+
   public getAllSearchNotFoundTerme():Observable<any>{
     console.log(":: IN SEARCH ::::");
-    
+
     return this.apiService.get(`/produit/get-all-search-terme`);
   }
 
@@ -134,7 +134,7 @@ export class AppService {
       { name: 'item.description', weight: 1 }
     ],
     // 0.0 = exact only; raise for more permissive matching (0.3 is a good start)
-    threshold: 0.2,
+    threshold: 0.1,
     // allow matches anywhere in the string
     ignoreLocation: true,
     // sort by match score
@@ -150,94 +150,99 @@ export class AppService {
    * Includes synonym expansion and intelligent scoring
    */
   public searchProductsAndCategories(categories: Category[] = [], products: Product[] = [], term: string):
-  Observable<{ type: string; item: Category | Product }[]> {
-  const q = term.trim();
-  if (!q) {
-    return of([]);
-  }
-
-  // Cache lookup
-  if (this.cache.has(q)) {
-    return of(this.cache.get(q)!);
-  }
-
-  // Use expandTerm to get all relevant terms - this includes the original term
-  const expandedTerms = [q, ...this.synonymService.expandTerm(q)];
-
-  // 1. Tag and combine all items
-  const allItems: { type: string; item: Category | Product }[] = [
-    ...products.map(p => ({ type: 'product', item: p })),
-    ...categories.map(c => ({ type: 'category', item: c }))
-  ];
-
-  // 2. Build Fuse index
-  const fuse = new Fuse(allItems, this.fuseOptions);
-
-  // 3. Run searches for all expanded terms and combine results
-  let allResults: FuseResult<{ type: string; item: Category | Product }>[] = [];
-
-  expandedTerms.forEach(expandedTerm => {
-    const termResults = fuse.search(expandedTerm);
-    allResults = [...allResults, ...termResults];
-  });
-
-  // Remove duplicates from combined results by item ID
-  const seenIds = new Set<string>();
-  allResults = allResults.filter(result => {
-    const id = result.item.item.id || '';
-    if (seenIds.has(id)) {
-      return false;
+    Observable<{ type: string; item: Category | Product }[]> {
+    const q = term.trim();
+    if (!q) {
+      return of([]);
     }
-    seenIds.add(id);
-    return true;
-  });
 
-  // 4. Boost prefix matches & sort by adjusted score
-  const normalizedQ = this.normalize(q);
-  const boosted = allResults
-    .map(r => {
-      const nm = this.normalize(r.item.item.nom);
-
-      // Calculate match type bonuses
-      const isExactMatch = nm === normalizedQ;
-      const isPrefix = nm.startsWith(normalizedQ);
-      const isDirectSynonym = expandedTerms.slice(1).some(synonym =>
-        this.normalize(r.item.item.nom).includes(this.normalize(synonym))
-      );
-      const isSynonymPrefix = expandedTerms.slice(1).some(synonym =>
-        this.normalize(r.item.item.nom).startsWith(this.normalize(synonym))
-      );
-
-      // Apply score adjustments - lower scores are better in Fuse.js
-      let adjustedScore = (r.score ?? 1);
-      if (isExactMatch) adjustedScore -= 0.2;      // Strongest boost for exact matches
-      else if (isPrefix) adjustedScore -= 0.1;     // Boost prefix matches
-
-      if (isDirectSynonym) adjustedScore -= 0.08;  // Boost synonym matches
-      if (isSynonymPrefix) adjustedScore -= 0.12;  // Boost synonym prefix matches
-
-      return { item: r.item, adjustedScore, realScore: r.score };
-    })
-    .sort((a, b) => a.adjustedScore - b.adjustedScore);
-
-  // Filter out low-scoring results
-  const maybeMissing = boosted.find(r => r.realScore !== undefined && r.adjustedScore < 0.01);
-  console.log('maybeMissing', maybeMissing);
-  // 5. Remove same-named products/categories
-  const unique: { type: string; item: Category | Product }[] = [];
-  const seen = new Set<string>();
-  for (const { item } of boosted) {
-    const key = this.normalize(item.item.nom);
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(item);
+    // Cache lookup
+    if (this.cache.has(q)) {
+      return of(this.cache.get(q)!);
     }
-  }
 
-  // 6. Cache & return
-  this.cache.set(q, unique);
-  return of(unique);
-}
+    // Use expandTerm to get all relevant terms - this includes the original term
+    const expandedTerms = [q, ...this.synonymService.expandTerm(q)];
+
+    // 1. Tag and combine all items
+    const allItems: { type: string; item: Category | Product }[] = [
+      ...products.map(p => ({ type: 'product', item: p })),
+      ...categories.map(c => ({ type: 'category', item: c }))
+    ];
+
+    // 2. Build Fuse index
+    const fuse = new Fuse(allItems, this.fuseOptions);
+
+    // 3. Run searches for all expanded terms and combine results
+    let allResults: FuseResult<{ type: string; item: Category | Product }>[] = [];
+
+    expandedTerms.forEach(expandedTerm => {
+      const termResults = fuse.search(expandedTerm);
+      allResults = [...allResults, ...termResults];
+    });
+
+    // Remove duplicates from combined results by item ID
+    const seenIds = new Set<string>();
+    allResults = allResults.filter(result => {
+      const id = result.item.item.id || '';
+      if (seenIds.has(id)) {
+        return false;
+      }
+      seenIds.add(id);
+      return true;
+    });
+
+    // 4. Boost prefix matches & sort by adjusted score
+    const normalizedQ = this.normalize(q);
+    const boosted = allResults
+      .map(r => {
+        const nm = this.normalize(r.item.item.nom);
+
+        // Calculate match type bonuses
+        const isExactMatch = nm === normalizedQ;
+        const isPrefix = nm.startsWith(normalizedQ);
+        const isDirectSynonym = expandedTerms.slice(1).some(synonym =>
+          this.normalize(r.item.item.nom).includes(this.normalize(synonym))
+        );
+        const isSynonymPrefix = expandedTerms.slice(1).some(synonym =>
+          this.normalize(r.item.item.nom).startsWith(this.normalize(synonym))
+        );
+
+        // Apply score adjustments - lower scores are better in Fuse.js
+        let adjustedScore = (r.score ?? 1);
+        if (isExactMatch) adjustedScore -= 0.2;      // Strongest boost for exact matches
+        else if (isPrefix) adjustedScore -= 0.1;     // Boost prefix matches
+
+        if (isDirectSynonym) adjustedScore -= 0.08;  // Boost synonym matches
+        if (isSynonymPrefix) adjustedScore -= 0.12;  // Boost synonym prefix matches
+
+        return { item: r.item, adjustedScore, realScore: r.score };
+      })
+      .sort((a, b) => a.adjustedScore - b.adjustedScore);
+
+    // Filter out low-scoring results (Maybe missing Terms)
+    const lowScoreResults = boosted.filter(
+      ({ realScore }) => realScore !== undefined && realScore < 0.01
+    );
+    const hasLowScoreProducts = lowScoreResults.some(r => r.item.type === 'product');
+
+    // 5. Remove same-named products/categories
+    const unique: { type: string; item: Category | Product }[] = [];
+    const seen = new Set<string>();
+    for (const { item } of boosted) {
+      const key = this.normalize(item.item.nom);
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(item);
+      }
+    }
+
+    (unique as any).hasLowScoreProducts = hasLowScoreProducts
+
+    // 6. Cache & return
+    this.cache.set(q, unique);
+    return of(unique);
+  }
 
 
   // public searchProductsAndCategories(categories: Category[]=[], products: Product[], term: string): Observable<{ type: string, item: Category | Product }[]> {

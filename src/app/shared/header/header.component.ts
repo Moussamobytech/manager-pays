@@ -168,6 +168,13 @@ export class HeaderComponent implements OnInit {
         const suggestion = this.suggestions[0]?.item;
         const type = this.suggestions[0]?.type;
 
+        if ((this.suggestions as any).hasLowScoreProducts) {
+          this.appService.searchNotFoundTerme(this.searchTerm.value.trim())
+            .subscribe(response => {
+              console.log('searchNotFoundTerme response:', response);
+            });
+        }
+
         if (this.suggestions.length === 0 || type === 'product') {
           this.router.navigate(['/search-results'], { queryParams: { q: this.searchTerm.value } });
         } else {

@@ -336,29 +336,29 @@ $fid_green: #548580;
                   font-weight: 500;
                   font-size: 0.9rem;
                   text-decoration: none;
-                  
+
                   i {
                     font-size: 0.8rem;
                   }
-                  
+
                   &.promotion {
-                    background: rgba(#2196F3, 0.1);
-                    color: #2196F3;
+                    background: rgba($primary, 0.1);
+                    color: $primary;
                   }
-                  
-                  &.offre-bienvenue {
-                    background: rgba(#4CAF50, 0.1);
-                    color: #4CAF50;
+
+                  &.offre_bienvenue {
+                    background: rgba($fid_green, 0.1);
+                    color: $fid_green;
                   }
-                  
+
                   &.parrainage {
-                    background: rgba(#FF9800, 0.1);
-                    color: #FF9800;
+                    background: rgba($amber, 0.1);
+                    color: $amber
                   }
-                  
-                  &.livraison-gratuite {
-                    background: rgba(#9C27B0, 0.1);
-                    color: #9C27B0;
+
+                  &.livraison_gratuite {
+                    background: rgba($warn, 0.1);
+                    color: $warn;
                   }
                 }
               }
@@ -372,27 +372,67 @@ $fid_green: #548580;
             height: 20px;
             margin: 0 10px;
 
-            ::ng-deep {
-              .mat-slide-toggle {
-                &.mat-checked {
-                  .mat-slide-toggle-thumb {
-                    background-color: #4CAF50;
-                  }
-                  .mat-slide-toggle-bar {
-                    background-color: rgba(76, 175, 80, 0.54);
-                  }
-                }
-
-                &:not(.mat-checked) {
-                  .mat-slide-toggle-thumb {
-                    background-color: #f44336;
-                  }
-                  .mat-slide-toggle-bar {
-                    background-color: rgba(244, 67, 54, 0.54);
-                  }
-                }
+            input {
+              display: none;
+            }
+            .campaign__slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              border-radius: 20px;
+              transition: 0.3s;
+              &:before {
+                content: "";
+                position: absolute;
+                height: 16px;
+                width: 16px;
+                left: 2px;
+                bottom: 2px;
+                background-color: white;
+                border-radius: 50%;
+                transition: 0.3s;
               }
             }
+            input:checked + .campaign__slider {
+              background-color: $primary;
+              &.promotion {
+                background: $amber;
+              }
+              &.parrainage {
+                background: $warn;
+              }
+              &.livraison_gratuite {
+                background: $fid_green;
+              }
+            }
+            input:checked + .campaign__slider:before {
+              transform: translateX(16px);
+            }
+            // ::ng-deep {
+            //   .mat-slide-toggle {
+            //     &.mat-checked {
+            //       .mat-slide-toggle-thumb {
+            //         background-color: #4CAF50;
+            //       }
+            //       .mat-slide-toggle-bar {
+            //         background-color: rgba(76, 175, 80, 0.54);
+            //       }
+            //     }
+
+            //     &:not(.mat-checked) {
+            //       .mat-slide-toggle-thumb {
+            //         background-color: #f44336;
+            //       }
+            //       .mat-slide-toggle-bar {
+            //         background-color: rgba(244, 67, 54, 0.54);
+            //       }
+            //     }
+            //   }
+            // }
           }
 
           .campaign__edit-button {
@@ -475,7 +515,7 @@ $fid_green: #548580;
       justify-content: center;
       margin-right: 12px;
       font-size: 1.3rem;
-      &.promo {
+      &.promotion {
         background: $amber;
         color: $primary;
       }
@@ -483,7 +523,7 @@ $fid_green: #548580;
         background: $warn;
         color: beige;
       }
-      &.livraison {
+      &.livraison_gratuite {
         background: $fid_green;
         color: $amber;
       }
@@ -503,28 +543,28 @@ $fid_green: #548580;
     }
   }
 
-.campaign__type {
-  display: inline-block;
-  margin-left: auto;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 500;
-  text-decoration: underline;
-  
-  &.promotion {
-    color: #2196F3;
-  }
-  
-  &.offre-bienvenue {
-    color: #4CAF50;
-  }
-  
-  &.parrainage {
-    color: #FF9800;
-  }
-  
-  &.livraison-gratuite {
-    color: #9C27B0;
-  }
-}
+// .campaign__type {
+//   display: inline-block;
+//   margin-left: auto;
+//   padding: 4px 8px;
+//   border-radius: 4px;
+//   font-weight: 500;
+//   text-decoration: underline;
+
+//   &.promotion {
+//     color: #2196F3;
+//   }
+
+//   &.offre-bienvenue {
+//     color: #4CAF50;
+//   }
+
+//   &.parrainage {
+//     color: #FF9800;
+//   }
+
+//   &.livraison-gratuite {
+//     color: #9C27B0;
+//   }
+// }
 

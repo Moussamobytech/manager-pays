@@ -1,9 +1,8 @@
-<div class="p-2">
+<!-- <div class="p-2">
   <mat-card>
       <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
           <h2>Mes produits</h2>
           <button mat-raised-button color="warn" matTooltip="ajouter un produit" (click)="add()">
-            <!-- <mat-icon>add</mat-icon> -->
             {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
           </button>
       </div>
@@ -37,20 +36,6 @@
                   </div>
               </div>
           </div>
-          <!-- <div *ngFor="let follower of followers | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
-              <div class="mat-mdc-cell image">
-                  <img [src]="follower.image" alt="" width="50">
-              </div>
-              <div class="mat-mdc-cell">{{follower.name}}</div>
-              <div class="mat-mdc-cell">{{ ( stores | filterById : follower.storeId )?.name }}</div>
-              <div class="mat-mdc-cell">
-                  <div class="p-2 actions">
-                      <button mat-mini-fab color="warn" matTooltip="Delete" class="mx-1" (click)="remove(follower)">
-                          <mat-icon>delete</mat-icon>
-                      </button>
-                  </div>
-              </div>
-          </div> -->
       </div>
   </mat-card>
 
@@ -61,5 +46,103 @@
           </mat-card>
       </div>
   </div>
-</div>
+</div> -->
 
+
+
+
+
+
+
+<div class="products-container">
+  <div class="products-header">
+    <h1>Mes produits</h1>
+
+    <div class="header-contents">
+      <div class="search-container">
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="shop-search">
+          <input matInput placeholder="Cherchez un produit" autocomplete="off"
+          class="search-input" [formControl]="searchTerm"/>
+          <button class="search-btn" mat-icon-button matSuffix disabled>
+            <mat-icon class="search-icon">search</mat-icon>
+          </button>
+        </div>
+      </div>
+      <button class="add-btn" (click)="add()">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
+
+    <div class="filter-tabs">
+      <button [class.active]="filterType === 'all'" (click)="setFilter('all')">Tout</button>
+      <button [class.active]="filterType === 'actifs'" (click)="setFilter('actifs')">Actifs</button>
+      <button [class.active]="filterType === 'inactifs'" (click)="setFilter('inactifs')">Inactifs</button>
+    </div>
+  </div>
+
+  <div class="product-list">
+    <div *ngFor="let product of products" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="32">
+      <mat-card class="product-card">
+        <div class="head-details">
+          <div class="product-image">
+            <img [src]="product.image1" alt="product image" />
+          </div>
+          <div class="product-details" (click)="toggleOrderDetails(product.id)">
+            <div class="product-title">
+              <span class="product-name">{{ product.nom }}</span>
+            </div>
+            <div class="product-status">
+              <span class="status-badge" [ngClass]="{ 'active': product.etat === 'ACTIF', 'inactive': product.etat === 'INACTIF' }">
+                {{ formatedEtat(product.etat) }}
+              </span>
+              <span *ngIf="product.gain" class="gain-badge">
+                Gain: {{ product.gain }} F
+              </span>
+            </div>
+            <div class="product-price">
+              <p *ngIf="!product.pricePromotion||product.pricePromotion==product.priceBasic" class="price-basic">
+                Prix : {{ product.priceBasic | number : '1.0-2' }} F
+              </p>
+              <p *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic" class="price-promotion text-truncate">
+                Prix : {{ product.pricePromotion | number : '1.0-2' }} F
+                <span class="original-price">
+                  {{ product.priceBasic | number : '1.0-2' }} F
+                </span>
+              </p>
+            </div>
+
+            <div class="product-controls">
+              <label class="campaignswitch">
+                <input type="checkbox" [checked]="product.etat === 'ACTIF'" (change)="setStatus(product)" />
+                <span class="campaignslider" [ngClass]="{ 'active': product.etat === 'ACTIF', 'inactive': product.etat === 'INACTIF' }"></span>
+              </label>
+              <button class="edit-btn" (click)="edit(product.id)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="share-btn" [disabled]="copied.has(product.id)" (click)="shareProduct(product)">
+                <span>
+                  <mat-icon *ngIf="!copied.has(product.id)">share</mat-icon>
+                  <mat-icon *ngIf="copied.has(product.id)">check</mat-icon>
+                </span>
+              </button>
+              <div class="order-action">
+                <mat-icon [class.rotated]="isProductExpanded(product.id)">expand_more</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="expanded-details" *ngIf="isProductExpanded(product.id)" >
+          <mat-divider></mat-divider>
+          <div class="expanded-content">
+            <p *ngIf="product.description"><strong>Description:</strong> {{product.description | roundName: 50}}</p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="load-more-wrapper" *ngIf="products.length > 0 && products.length < filteredProducts.length">
+    <a (click)="loadMore()">Voir plus <mat-icon>chevron_right</mat-icon></a>
+  </div>
+</div>

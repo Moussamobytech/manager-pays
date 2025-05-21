@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { User } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-earnings',
@@ -13,7 +14,7 @@ export class EarningsComponent implements OnInit {
   referralHistory: any[] = [];
   showWithdrawalPopup: boolean = false;
 
-  currentUser: import("/home/coulibaly/Documents/Projets/Aplika/FIDELITY-NEW/e-commerce-front/src/app/models/user.models").User;
+  currentUser: User;
   idUser: string;
 
   constructor(

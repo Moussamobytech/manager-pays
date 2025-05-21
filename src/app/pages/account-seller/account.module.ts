@@ -15,7 +15,7 @@ import { SwiperModule } from 'src/app/theme/components/swiper/swiper.module';
 import { InputFileConfig, InputFileModule } from 'src/app/theme/components/input-file/input-file.module';
 import { AuthGuard } from 'src/app/helpers/auth.guard';
 import { HowWorksComponent } from './how_works/how_works.component';
-import { OrdersManageComponents } from './orders-manage/orders-manage.components';
+// import { OrdersManageComponents } from './orders-manage/orders-manage.components';
 //import { ParrainageComponent } from './parrainage/parrainage.component';
 //import { AddParrainageComponent } from './add-parrainage/add-parrainage.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -47,7 +47,7 @@ export const routes: Routes = [
       { path: 'addresses', component: AddressesComponent, data: { breadcrumb: 'Addresses' } },
       { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule), data: { breadcrumb: 'Clients' } },
       { path: 'orders', component: OrdersComponent, data: { breadcrumb: 'Achats' } },
-      { path: 'orders-manage', component: OrdersManageComponents, data: { breadcrumb: 'Commandes' } },
+      // { path: 'orders-manage', component: OrdersManageComponents, data: { breadcrumb: 'Commandes' } },
       { path: 'parrainage', component: ParrainageComponent, data: { breadcrumb: 'Parrainages' } },
       { path: 'add-parrainage', component: AddParrainageComponent, data: { breadcrumb: 'Créer une campagne' } },
       { path: 'add-parrainage/:id', component: AddParrainageComponent, data: { breadcrumb: 'Modifier la campagne' } },
@@ -78,7 +78,6 @@ export const routes: Routes = [
     ProductsComponent,
     HowWorksComponent,
     OrdersComponent,
-    OrdersManageComponents,
     ParrainageComponent,
     AddParrainageComponent,
     ImgImproveDialogComponent,

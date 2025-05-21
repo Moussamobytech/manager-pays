@@ -1,9 +1,9 @@
   export class Order {
-       id: string
+    id: string
     quantite: number;
     prixUnitaire: number;
     montant: number;
-    dateCommande: Date;
+    dateCommande: any;
     codeCommande: string;
     produitNom: string;
     produitDescription: string;
@@ -16,6 +16,4 @@
     clientUsername: string;
     statutCommande: any;
     fournisseurUsername:string;
-
-
   }

@@ -7,8 +7,8 @@ export class RoundNamePipe implements PipeTransform {
 
   transform(value: any, arg?: any): any {
     let values:string = value;
-    if(values.length > 15 && arg)
-      return values.substring(0,14)+'...';
+    if(values.length > arg)
+      return values.substring(0,arg)+'...';
     else
       return values;
   }
