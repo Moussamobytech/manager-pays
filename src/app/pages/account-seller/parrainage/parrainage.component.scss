@@ -280,7 +280,7 @@ $fid_green: #548580;
               font-size: 1.05rem;
             }
             .campaign__value {
-              font-size: 0.98rem;
+              font-size: 0.80rem;
               color: $primary;
               display: flex;
               gap: 16px;
@@ -301,7 +301,7 @@ $fid_green: #548580;
               }
             }
             .campaign__description {
-              font-size: 0.92rem;
+              font-size: 0.82rem;
               color: $primary;
 
               .campaign__description-text {
@@ -312,7 +312,7 @@ $fid_green: #548580;
               .campaign__dates {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 12px;
+                gap: 6px;
                 align-items: center;
 
                 .campaign__date-item {
@@ -320,7 +320,7 @@ $fid_green: #548580;
                   align-items: center;
                   gap: 8px;
                   color: #666;
-                  font-size: 0.9rem;
+                  font-size: 0.7rem;
 
                   i {
                     color: $primary;
@@ -368,7 +368,7 @@ $fid_green: #548580;
           .campaign__switch {
             position: relative;
             display: inline-block;
-            width: 36px;
+            width: 26px;
             height: 20px;
             margin: 0 10px;
 

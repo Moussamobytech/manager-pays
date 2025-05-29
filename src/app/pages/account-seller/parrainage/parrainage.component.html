@@ -334,7 +334,7 @@
             <i *ngIf="campagne.typePromo.name === 'LIVRAISON_GRATUITE'" class="fa-solid fa-truck"></i>
           </div>
           <div class="campaign__info" fxFlex>
-            <div class="campaign__title">{{ campagne.nom }}</div>
+            <div class="campaign__title">{{ campagne.nom.slice(0, 20) }}...</div>
             <div class="campaign__value">
               <ng-container *ngIf="campagne.reduction">
                 <span class="campaign__value-item">
