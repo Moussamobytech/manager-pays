@@ -135,7 +135,7 @@
         <div class="expanded-details" *ngIf="isProductExpanded(product.id)" >
           <mat-divider></mat-divider>
           <div class="expanded-content">
-            <p *ngIf="product.description"><strong>Description:</strong> {{product.description | roundName: 50}}</p>
+            <p *ngIf="product.description"><strong>Description:</strong> {{product.description | roundName: 50:true}}</p>
           </div>
         </div>
       </mat-card>

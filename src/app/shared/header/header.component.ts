@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, debounceTime, distinctUntilChanged, map, of, Subscription, switchMap } from 'rxjs';
 import { AppService } from 'src/app/app.service';
-import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { Category } from 'src/app/models/category.models';
 import { Product } from 'src/app/models/product.models';
@@ -19,11 +18,12 @@ import { SidenavMenuService } from 'src/app/theme/components/sidenav-menu/sidena
 export class HeaderComponent implements OnInit {
 
   // public showBackToTop:boolean = false;
-    public categories:Category[];
+    public categories: Category[];
+    public navCategories: Category[];
     public category:Category;//categorie selectionnée au  niveau de la bar de recherche
     public sidenavMenuItems:Array<any>;
-    @ViewChild('sidenav', { static: true }) sidenav:any;
-    @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
+    // @ViewChild('sidenav', { static: true }) sidenav:any;
+    // @ViewChild('suggestionsList') suggestionsListElement: ElementRef;
     public produit: any;
     public AllProduits: Product[] = [];
     public filterItems = [ '1', '2', '3', '4' ];
@@ -118,13 +118,17 @@ export class HeaderComponent implements OnInit {
     }
 
     public getCategories(){
-        let deflt: any =  {"nom":"Tous", "cle":"all"}
-        // this.category = data[0];
-        this.category = deflt;
+      let deflt: any =  {"nom":"Tous", "cle":"all"}
+      this.category = deflt;
       this.appService.getCategories().subscribe(data => {
-        this.categories = data;
-        // this.router.navigate(['/products']);
 
+        const parsePoids = (val: any): number => {
+          const n = Number(val);
+          return isNaN(n) ? 0 : n;
+        };
+        this.categories = data.filter(cat => cat.status === 'ACTIF');
+        const mainCats = this.categories.filter(cat => cat.hasSubCategory);
+        this.navCategories = mainCats.sort((a, b) => parsePoids(b.poids) - parsePoids(a.poids)).slice(0, (window.innerWidth > 600)?7:5);
         data.push({"nom":"Tous", "cle":"all"})
         this.appService.Data.categories = data;
       });
@@ -132,9 +136,9 @@ export class HeaderComponent implements OnInit {
 
     public async getCategoriesSidenav(){
       let res = await this.appService.getCategoriesSidenav().toPromise()
-      console.log("this.menuItems res :::::: ",res)
+      // console.log("this.menuItems res :::::: ",res)
       this.sidenavMenuItems = res;
-      console.log("this.menuItems :::::: ",this.sidenavMenuItems)
+      // console.log("this.menuItems :::::: ",this.sidenavMenuItems)
     }
 
     public changeCategory(event) {
@@ -150,10 +154,6 @@ export class HeaderComponent implements OnInit {
         this.stopClickPropagate(event);
       }
     }
-
-    // public changeTheme(theme: any){
-    //   this.settings.theme = theme;
-    // }
 
     public stopClickPropagate(event: any){
       event.stopPropagation();
@@ -185,60 +185,14 @@ export class HeaderComponent implements OnInit {
       this.showSuggestions = false;
     }
 
-
-    // public async getProduit() {
-    //   let res : Array<Product> = await this.produitService.products()
-    //   console.log("res product :::::::: ",res)
-    //   this.produit = res
-    //   // this.appService.getAllProducts().subscribe(data => {
-    //   //   this.produit = data;
-    //   // });
+    // ngAfterViewInit(){
+    //   this.router.events.subscribe(event => {
+    //     if (event instanceof NavigationEnd) {
+    //       this.sidenav.close();
+    //     }
+    //   });
+    //   this.sidenavMenuService.expandActiveSubMenu(this.sidenavMenuService.getSidenavMenuItems());
     // }
-    // public scrollToTop(){
-    //   var scrollDuration = 200;
-    //   var scrollStep = -this.domHandlerService.window?.pageYOffset / (scrollDuration / 20);
-    //   var scrollInterval = setInterval(()=>{
-    //     if(this.domHandlerService.window?.pageYOffset != 0){
-    //       this.domHandlerService.window?.scrollBy(0, scrollStep);
-    //     }
-    //     else{
-    //       clearInterval(scrollInterval);
-    //     }
-    //   },10);
-    //   if(this.domHandlerService.window?.innerWidth <= 768){
-    //     setTimeout(() => {
-    //       this.domHandlerService.winScroll(0, 0);
-    //     });
-    //   }
-    // }
-    // @HostListener('window:scroll', ['$event'])
-    // onWindowScroll($event) {
-    //   const scrollTop = Math.max(this.domHandlerService.window?.pageYOffset, this.domHandlerService.winDocument.documentElement.scrollTop, this.domHandlerService.winDocument.body.scrollTop);
-    //   let header_toolbar = this.domHandlerService.winDocument.getElementById('header-toolbar');
-    //   if(header_toolbar){
-    //     if(scrollTop >= header_toolbar.clientHeight) {
-    //       this.settings.mainToolbarFixed = true;
-    //     }
-    //     else{
-    //       if(!this.domHandlerService.winDocument.documentElement.classList.contains('cdk-global-scrollblock')){
-    //         this.settings.mainToolbarFixed = false;
-    //       }
-    //     }
-    //   }
-    //   else{
-    //     this.settings.mainToolbarFixed = true;
-    //   }
-    //   ($event.target.documentElement.scrollTop > 300) ? this.showBackToTop = true : this.showBackToTop = false;
-    // }
-
-    ngAfterViewInit(){
-      this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          this.sidenav.close();
-        }
-      });
-      this.sidenavMenuService.expandActiveSubMenu(this.sidenavMenuService.getSidenavMenuItems());
-    }
 
     public closeSubMenus(){
       if(this.domHandlerService.window?.innerWidth < 960){

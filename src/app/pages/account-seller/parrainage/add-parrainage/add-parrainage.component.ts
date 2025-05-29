@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Category } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { CategoryService } from 'src/app/services/category.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
-import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { ProductService } from 'src/app/services/product.service';
 import { User } from 'src/app/models/user.models';
 import { CampagneService } from 'src/app/services/campagne.service';
@@ -74,7 +71,7 @@ export class AddParrainageComponent implements OnInit {
   ]
    // Liste des pays avec leurs régions
    countries:any
-  
+
    // FormControls pour les selects
    selectedCountry = new FormControl('');
    selectedRegion = new FormControl('');
@@ -91,7 +88,7 @@ export class AddParrainageComponent implements OnInit {
     //  this.selectedRegions = []; // Réinitialise la sélection
     }
    // Ajoute ou enlève une région à la sélection
- 
+
 
      // Vérifie si toutes les régions sont sélectionnées
   isAllSelected(): boolean {
@@ -123,14 +120,14 @@ export class AddParrainageComponent implements OnInit {
   }
 
   constructor(
-    public appService: AppService, 
-    public formBuilder: UntypedFormBuilder, 
+    public appService: AppService,
+    public formBuilder: UntypedFormBuilder,
     private commonService: CommonMessageService,
-    private auth: AuthenticationService, 
-    private productService: ProductService, 
+    private auth: AuthenticationService,
+    private productService: ProductService,
     private campagneService: CampagneService,
     private countryService: CountryService,
-    
+
     private router: Router,private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) {
       this.form = this.fb.group({
@@ -141,8 +138,8 @@ export class AddParrainageComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
-    this.username = this.currentUser.username; 
-    this.getAllPromo();  
+    this.username = this.currentUser.username;
+    this.getAllPromo();
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'reduction': [null],
@@ -210,8 +207,10 @@ export class AddParrainageComponent implements OnInit {
   }
 
   async loadData() {
-    let res = await this.productService.productUser(this.currentUser.username)
+
+    let res = await this.productService.getProductBySeller(this.currentUser.username)
     this.products = res
+
   }
   //Controle pour la saisie de 0
   nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -251,13 +250,13 @@ export class AddParrainageComponent implements OnInit {
           zoneLivraison:this.selectedCountries.value,
           cadeauxProduit:this.selectedProducts2.value
         };
-  
+
         this.campagneService.add(data).subscribe({
-          next: (datas) => {           
-          
+          next: (datas) => {
+
               this.commonService.successToast(datas.message);
               this.router.navigate(["/account-seller/parrainage"]);
-           
+
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -266,13 +265,13 @@ export class AddParrainageComponent implements OnInit {
             if(err.status == "400"){
               this.commonService.errorToast(err.message);
             }
-            
+
             else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
           }
         });
-  
+
       } else {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
@@ -281,9 +280,9 @@ export class AddParrainageComponent implements OnInit {
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
   }
-  
 
-  async edit() {    
+
+  async edit() {
     let size = 0;
     try {
       if (this.form.valid) {
@@ -306,12 +305,12 @@ export class AddParrainageComponent implements OnInit {
           cadeauxProduit:this.selectedProducts2.value
         };
 
-      
+
         this.campagneService.edit(this.id,data).subscribe({
-          next: (datas) => {           
+          next: (datas) => {
               this.commonService.successToast(datas.message);
               this.router.navigate(["/account-seller/parrainage"]);
-           
+
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -341,8 +340,8 @@ export class AddParrainageComponent implements OnInit {
   public getCampagneById(){
     this.campagneService.find(this.id).then((data : any) =>{
       this.form.patchValue(data);
-      this.form.controls.typePromo.patchValue(data.typePromo.id); 
-      
+      this.form.controls.typePromo.patchValue(data.typePromo.id);
+
       // Récupérer les produits un par un à partir des IDs
       if (data.produitPromos && data.produitPromos.length > 0) {
         const products = [];

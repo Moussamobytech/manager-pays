@@ -51,8 +51,12 @@
         </div>
       </mat-toolbar-row>
     </mat-toolbar>
-    <app-menu fxShow="false" fxShow.gt-sm></app-menu>
+    <!-- <app-menu fxShow="false" fxShow.gt-sm></app-menu> -->
+    <mat-toolbar fxShow="false" fxShow.gt-sm id="menu-toolbar" class="top-navbar mat-elevation-z2" fxLayoutAlign="center center">
+      <a *ngFor="let category of navCategories" mat-button [routerLink]="['/categories', category.cle]" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ category.nom }}</a>
+    </mat-toolbar>
   </div>
+
 
   <div class="mobile-header bg-primary" fxFlex="100" fxShow="false" fxShow.xs="true" fxShow.lt.xs="true">
     <div color="primary" class="bg-primary" id="header-toolbar">
@@ -67,11 +71,14 @@
         </div>
         <div fxFlex fxFlex="15" class="header-item btns">
           <!-- <mat-icon (click)="sidenav.toggle()" class="menu-icon">menu</mat-icon> -->
-          <div class="cart-container" [routerLink]="['/cart']">
-            <span class="cart-count">{{ totalPanier }}</span>
-            <button [routerLink]="['/cart']" mat-icon-button matTooltip="Mon panier" class="cart-button">
-              <mat-icon>shopping_cart</mat-icon>
-            </button>
+          <div class="cart-wrapper" fxLayout="row" fxLayoutAlign="center center">
+            <div class="cart-container" [routerLink]="['/cart']">
+              <span class="cart-count">{{ totalPanier }}</span>
+              <button mat-icon-button matTooltip="Mon panier" class="cart-button">
+                <mat-icon>shopping_cart</mat-icon>
+              </button>
+            </div>
+            <app-top-menu></app-top-menu>
           </div>
         </div>
       </div>
@@ -83,25 +90,9 @@
           <a [routerLink]="'/categories'">Voir toutes les catégories <mat-icon>chevron_right</mat-icon></a>
         </div>
         <div class="category-item" fxFlex="97" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="10px">
-          <a fxFlex="20" [routerLink]="'/'" fxLayout="column" fxLayoutAlign="center center">
-            <img src="assets/icons/nav categories/cloth.png" alt="...">
-            <span class="fid_amber-color">Vêtements</span>
-          </a>
-          <a fxFlex="20" [routerLink]="'/'" fxLayout="column" fxLayoutAlign="center center">
-            <img src="assets/icons/nav categories/shoes.png" alt="...">
-            <span class="fid_amber-color">Chaussures</span>
-          </a>
-          <a fxFlex="20" [routerLink]="'/'" fxLayout="column" fxLayoutAlign="center center">
-            <img src="assets/icons/nav categories/back-pack.png" alt="...">
-            <span class="fid_amber-color">Accessoires</span>
-          </a>
-          <a fxFlex="20" [routerLink]="'/'" fxLayout="column" fxLayoutAlign="center center">
-            <img src="assets/icons/nav categories/beauty.png" alt="...">
-            <span class="fid_amber-color">Beauté</span>
-          </a>
-          <a fxFlex="20" [routerLink]="'/'" fxLayout="column" fxLayoutAlign="center center">
-            <img src="assets/icons/nav categories/electronic.png" alt="...">
-            <span class="fid_amber-color">Electronique</span>
+          <a *ngFor="let category of navCategories" [matTooltip]="category.nom" routerLink="/categories/{{category.cle}}" fxFlex="20" fxLayout="column" fxLayoutAlign="center center">
+            <img [src]="category.icon||'assets/icons/nav categories/broken_img.png'" alt="{{ category.cle }}">
+            <span class="fid_amber-color" >{{ category.nom}}</span>
           </a>
         </div>
       </div>

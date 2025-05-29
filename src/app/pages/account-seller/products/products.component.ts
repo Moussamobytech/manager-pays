@@ -97,7 +97,7 @@ export class ProductsComponent implements OnInit {
 
   // to load data from backend
   async loadData() {
-    let res = await this.productService.productUser(this.currentUser.username);
+    let res = await this.productService.getProductBySeller(this.currentUser.username);
     this.unchangedProducts = res;
     this.searchResults = [...this.unchangedProducts]; // Initialize search results with all products
     console.log(this.unchangedProducts);

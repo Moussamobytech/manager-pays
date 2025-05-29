@@ -7,10 +7,10 @@
       <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
     </div>
     <h2>{{user.firstname}} {{user.lastname}}</h2>
-  </div>  
+  </div>
 
   <div fxLayout="row wrap" class="card-container">
-    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(0, 5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24">
+    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(0, 5)" fxFlex="48" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
       <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
@@ -75,7 +75,7 @@
         </button>
       </div>
 
-      <mat-paginator 
+      <mat-paginator
         *ngIf="showMoreOrders"
         [pageSize]="pageSize"
         [pageSizeOptions]="pageSizeOptions"

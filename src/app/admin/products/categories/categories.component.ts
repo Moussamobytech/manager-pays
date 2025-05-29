@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Category } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,6 +6,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Category } from 'src/app/models/category.models';
 
 @Component({
   selector: 'app-categories',

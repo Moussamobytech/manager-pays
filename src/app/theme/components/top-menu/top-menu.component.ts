@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from '../../../app.service';
 import { Settings, AppSettings } from '../../../app.settings';
@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top-menu',
-  templateUrl: './top-menu.component.html'
+  templateUrl: './top-menu.component.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class TopMenuComponent implements OnInit {
 

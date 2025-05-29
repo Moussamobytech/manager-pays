@@ -36,7 +36,7 @@
       <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" fxFlex.md="50" fxFlex.gt-md="33.3"  class="p-2">
           <mat-card fxFlex="100">
               <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
-                  <h3 *ngIf="user.enabled" class="user-name">{{user.firstname+' '+user.lastname|capitalCase|roundName:(isAboveMdSize$|async)}}</h3>
+                  <h3 *ngIf="user.enabled" class="user-name">{{user.firstname+' '+user.lastname|capitalCase|roundName:null:(isAboveMdSize$|async)}}</h3>
                   <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
                   <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
                       <mat-icon>more_vert</mat-icon>

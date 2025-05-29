@@ -5,6 +5,8 @@ import { CampagneService } from 'src/app/services/campagne.service';
 import { Product } from 'src/app/models/product.models';
 import { SwiperConfigInterface } from 'src/app/theme/components/swiper/swiper.module';
 import { AuthenticationService } from 'src/app/services/auth.service';
+import { combineLatest, forkJoin, from, map, Observable, of } from 'rxjs';
+import { products } from 'src/app/admin/dashboard/dashboard.data';
 
 @Component({
   selector: 'app-home',
@@ -44,8 +46,8 @@ export class HomeComponent implements OnInit {
   currentUser: any = null;
 
   constructor(
-    public appService: AppService, 
-    public produitService: ProductService, 
+    public appService: AppService,
+    public produitService: ProductService,
     public campagneService: CampagneService,
     private auth: AuthenticationService
   ) { }
@@ -206,34 +208,28 @@ export class HomeComponent implements OnInit {
   }
 
   public async getTopRatedProducts() {
-    const products = await this.produitService.getProductByBest();
-    
-    // Récupérer les produits likés
-    if (this.currentUser) {
-      this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
-        this.topRateProducts = products.map((product: Product) => {
-          let nom = (product.nom).toLowerCase();
-          return {
-            ...product,
-            nom: nom.charAt(0).toUpperCase() + nom.slice(1),
-            priceBasic: this.parsePrice(product.priceBasic),
-            pricePromotion: this.parsePrice(product.pricePromotion),
-            isFavorite: likedProducts.some(liked => liked.id === product.id)
-          };
-        });
+    const topRated$ = from(this.produitService.getProductByBest()) as Observable<any>;
+    const likedIds$ = this.currentUser ? this.produitService.getProduitsLikesByUser(this.currentUser.id)
+      .pipe(map(likes => likes.map(l => l.id))) : of([] as number[]);
+
+    // combine and map to the final shape
+    combineLatest([topRated$, likedIds$])
+      .pipe(
+        map(([products, likedIds]) =>
+          products.map(product => {
+            const raw = product.nom.toLowerCase();
+            return {
+              ...product,
+              nom: raw.charAt(0).toUpperCase() + raw.slice(1),
+              priceBasic: this.parsePrice(product.priceBasic),
+              pricePromotion: this.parsePrice(product.pricePromotion),
+              isFavorite: likedIds.includes(product.id),
+            };
+          })
+        ),
+      ).subscribe(list => {
+        this.topRateProducts = list;
       });
-    } else {
-      this.topRateProducts = products.map((product: Product) => {
-        let nom = (product.nom).toLowerCase();
-        return {
-          ...product,
-          nom: nom.charAt(0).toUpperCase() + nom.slice(1),
-          priceBasic: this.parsePrice(product.priceBasic),
-          pricePromotion: this.parsePrice(product.pricePromotion),
-          isFavorite: false
-        };
-      });
-    }
   }
 
   parsePrice (price: any) {

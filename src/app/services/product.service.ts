@@ -104,10 +104,6 @@ getTotalViewsYear(): Observable<any> {
       .toPromise();
   }
 
-  productUser(id: any) {
-    return this.api.get(`/produit/list-by-user/` + id).toPromise();
-  }
-
   supprimer(id: string): Observable<any> {
     return this.api.delete(`/produit/supprimer/${id}`);
   }
@@ -115,62 +111,24 @@ getTotalViewsYear(): Observable<any> {
   products(): any {
     return this.api.get(`/produit/list`).toPromise();
   }
-  allProducts(): any {
+  getProductsWithCampaigns(): Promise<any> {
     return this.api.get(`/produit/products-with-campaigns`).toPromise();
   }
-  // searchProducts(term: string): Promise<Product[]> {
-  //   return this.products().then(products =>
-  //     products.filter(product =>
-  //       product.nom.toLowerCase().includes(term.toLowerCase())
-  //     )
-  //   );
-  // }
 
-  searchProducts(term: string): Promise<Product[]> {
-    return this.products().then(products =>
-      products.filter(product =>
-        product.nom.toLowerCase().includes(term.toLowerCase())
-      )
-    );
-  }
   public getCategories() {
     return this.api.get('/categorie/list').toPromise();
   }
 
-  public getProducts(type) {
-    return this.api.get('/produit/list-by-category/' + type).toPromise();
+  public getProductByCategorie(id: string): any {
+    return this.api.get('/produit/list-by-category/' + id).toPromise();
   }
 
-  // public getProductByCategorie(categorie: string) {
-  //   return this.api.get('/produit/list-by-category/' + categorie).toPromise();
-  // }
-  public getProductByCategorie(id: string): Observable<any> {
-    return this.api.get('/produit/list-by-category/' + id);
+  public getProductBySeller(username: string):Observable<any> {
+    return this.api.get('/produit/list-by-user/' + username);
   }
-
-  public getProductBySeller(id: string):Observable<any> {
-    return this.api.get('/produit/list-by-user/' + id);
-  }
-
-  public getProductByCategorieName(categorie: string) {
-    return this.api.get('/produit/list-by-category-name/' + categorie).toPromise();
-  }
-
-
-
 
   public getAllProducts() {
     return this.api.get('/produit/list').toPromise();
-  }
-
-  public async getProduct(): Promise<Product[]> {
-    try {
-      const response = await this.api.get('/produit/list').toPromise();
-      return response || [];
-    } catch (error) {
-      console.error('Error fetching products', error);
-      return [];
-    }
   }
 
   public getProductById(id) {
@@ -180,8 +138,6 @@ getTotalViewsYear(): Observable<any> {
   public viewProductById(id) {
     return this.api.post(`/produit/view-product/${id}`,null).toPromise();
   }
-
-
 
   public getProductByNewArrival(limit) {
     return this.api.get('/produit/new-arrivals?limit='+limit).toPromise();
@@ -240,6 +196,4 @@ getTotalViewsYear(): Observable<any> {
     );
   }
 
-
-  
 }
