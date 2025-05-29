@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
     { id: 6, name: "Chaussures" }
   ]
   selectedSubCategory: any = this.subCategories[0];
-  currentUser: any;
+  currentUser: any = null;
 
   constructor(
     public appService: AppService, 
@@ -52,8 +52,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser();
-
-    console.log("::: MY USER ::::: ",this.currentUser);
     
 
 
@@ -157,8 +155,7 @@ export class HomeComponent implements OnInit {
   }
 
   public async getNewArrivalsProducts() {
-    const products = await this.produitService.getProductByTop();
-    
+    const products = await this.produitService.getProductByNewArrival(15);
     // Récupérer les produits likés
     if (this.currentUser) {
       this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
@@ -185,24 +182,27 @@ export class HomeComponent implements OnInit {
         };
       }).sort((a, b) => new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime());
     }
+
+
   }
 
-  productInPromo() {
-    this.produitService.getproductOnPromo().subscribe(datas => {
+  async productInPromo() {
+    let productPromo = await this.produitService.getproductOnPromo(10);
+
       if (this.currentUser) {
         this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
-          this.promoProducts = datas.map(product => ({
+          this.promoProducts = productPromo.map(product => ({
             ...product,
             isFavorite: likedProducts.some(liked => liked.id === product.id)
           }));
         });
       } else {
-        this.promoProducts = datas.map(product => ({
+        this.promoProducts = productPromo.map(product => ({
           ...product,
           isFavorite: false
         }));
       }
-    });
+    
   }
 
   public async getTopRatedProducts() {

@@ -20,7 +20,7 @@ export class AuthenticationService {
     public async updateUserInfo(id : any, data : any){
         try {
             let res : any = await this.api.putFile('/users/update-user?id='+id,data).toPromise()
-            // console.log("res updateUserInfo :::: ",res);
+             console.log("res updateUserInfo :::: ",res);
             if (res) {
                 sessionStorage.setItem('currentUser', JSON.stringify(res));
             }

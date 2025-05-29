@@ -27,7 +27,7 @@ export class AccountSettingsComponent implements OnInit {
   countries: any
   /*countries = [
     { code: 'ML', name: 'Mali', phoneCode: '+223', placeholder: 'XX XX XX XX', mask: '00 00 00 00' },
-    { code: 'CI', name: 'Côte d’Ivoire', phoneCode: '+225', placeholder: 'XX XX XX XXXX', mask: '00 00 00 0000' }
+    { code: 'CI', name: 'Côte d'Ivoire', phoneCode: '+225', placeholder: 'XX XX XX XXXX', mask: '00 00 00 0000' }
   ];*/
   currentUser: any;
   constructor(
@@ -41,22 +41,24 @@ export class AccountSettingsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.getAllPays();
     this.currentUser = this.auth.currentUser()
-    let cur = this.currentUser;
+    this.getAllPays();
+
+    console.log("1111 === this.currentUser :::: ", this.currentUser);
+   // let cur = this.currentUser;
     //   this.selectedCountry = this.countries.find(c => c.code === 'ML');
 
     this.settingForm = this.formBuilder.group({
-      firstname: [(cur.firstname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
-      lastname: [(cur.lastname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
-      country: [(cur.countries.id || null),],
-      phoneNumber: [(cur.phoneNumber || null),Validators.required],
-      username: [(cur.phoneNumber || null),],
-      profiles: [cur.profiles || null],
-      boutiqueName: [cur.name || null],
-      adresse: [cur.adresse || null],
-      email: [(cur.email || null), Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
-      description: [cur.description || null],
+      firstname: [(this.currentUser.firstname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
+      lastname: [(this.currentUser.lastname || null), Validators.compose([Validators.required, Validators.minLength(3)])],
+      country: [(this.currentUser.countries.id || null),],
+      phoneNumber: [(this.currentUser.phoneNumber || null),Validators.required],
+      username: [(this.currentUser.phoneNumber || null),],
+      profiles: [this.currentUser.profiles || null],
+      boutiqueName: [this.currentUser.name || null],
+      adresse: [this.currentUser.adresse || null],
+      email: [(this.currentUser.email || null), Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+      description: [this.currentUser.description || null],
 
     });
 
@@ -74,7 +76,6 @@ export class AccountSettingsComponent implements OnInit {
   get paaseFormControls() { return this.passwordForm.controls; }
 
   public async onSettingFormSubmit(values: any) {
-
     if (this.settingForm.valid) {
         let data = {
             firstname: values.firstname,
@@ -84,15 +85,30 @@ export class AccountSettingsComponent implements OnInit {
             adresse: values.adresse,
             nom: values.boutiqueName,
             type: this.currentProfile(values.profiles),
-            idCountry:values.country,
+            idCountry: values.country,
         };
-        
         let res = await this.auth.updateUserInfo(this.currentUser.id, data);
         if (res == "OK") {
             this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', {
                 panelClass: 'success', verticalPosition: 'top', duration: 3000
             });
-            this.currentUser = await this.auth.info(this.currentUser.username); // update user info
+            // Mettre à jour les informations de l'utilisateur
+            this.currentUser = await this.auth.info(this.currentUser.username);
+            // Mettre à jour le formulaire avec les nouvelles données
+            this.settingForm.patchValue({
+                firstname: this.currentUser.firstname,
+                lastname: this.currentUser.lastname,
+                country: this.currentUser.countries.id,
+                phoneNumber: this.currentUser.phoneNumber,
+                username: this.currentUser.phoneNumber,
+                profiles: this.currentUser.profiles,
+                boutiqueName: this.currentUser.name,
+                adresse: this.currentUser.adresse,
+                email: this.currentUser.email,
+                description: this.currentUser.description
+            });
+
+            window.location.reload();
         } else {
             this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations !', '×', {
                 panelClass: 'error', verticalPosition: 'top', duration: 3000

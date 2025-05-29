@@ -1,5 +1,4 @@
 <div class="p-2">
-    <mat-card>
         <mat-card-header>
             <mat-card-title>{{(id) ? 'Modifier' : 'Ajouter une nouvelle'}} campagne </mat-card-title>
         </mat-card-header>
@@ -145,7 +144,7 @@
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Date de début</mat-label>
-                                <input matInput [matDatepicker]="pickerDebut" formControlName="dateDebut" required>
+                                <input matInput [matDatepicker]="pickerDebut" formControlName="dateDebut" [min]="minDate" required>
                                 <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
                                 <mat-datepicker #pickerDebut></mat-datepicker>
                                 <mat-error *ngIf="form.controls.dateDebut.errors?.required">Cette date est
@@ -155,7 +154,7 @@
                         <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Date de fin</mat-label>
-                                <input matInput [matDatepicker]="pickerFin" formControlName="dateFin" required>
+                                <input matInput [matDatepicker]="pickerFin" formControlName="dateFin" [min]="minDate" required>
                                 <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
                                 <mat-datepicker #pickerFin></mat-datepicker>
                                 <mat-error *ngIf="form.controls.dateFin.errors?.required">Cette date est
@@ -178,5 +177,5 @@
 
 
 
-    </mat-card>
+   
 </div>

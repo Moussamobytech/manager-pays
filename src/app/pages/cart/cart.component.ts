@@ -8,6 +8,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CountryService } from 'src/app/services/country.service';
 import { Router } from '@angular/router';
+import { CartService } from 'src/app/services/carte.service';
 
 @Component({
   selector: 'app-cart',
@@ -47,7 +48,7 @@ export class CartComponent implements OnInit {
 
 
   constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
-    private authService:AuthenticationService,   public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
+    private authService:AuthenticationService, private carteService:CartService,  public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
   ) { }
   public count:number = 1;
   public productList: any[];
@@ -309,6 +310,7 @@ onlyCartItemCount:any = 0
     this.productList.length = 0;
     this.appService.Data.totalPrice = 0;
     this.appService.Data.totalCartCount = 0;
+    this.carteService.updateCartCount(0)
     sessionStorage.removeItem('panier');
     sessionStorage.removeItem('totalCartCount');
   }
@@ -427,7 +429,7 @@ onlyCartItemCount:any = 0
 
     commander(){     
       let user = this.user;  
-      console.log("::::::::::::::: USER = ",user);
+      //console.log("::::::::::::::: USER = ",user);
       if(user != null){    
         // Appliquer la réduction aux articles avant l'envoi
      //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));
@@ -451,7 +453,7 @@ onlyCartItemCount:any = 0
 
         this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
           () => {
-            this.snackBar.open('Commande effectuée avec succès', '×', {
+            this.snackBar.open('Commande effectuée avec succès 1', '×', {
               panelClass: 'success',
               verticalPosition: 'top',
               duration: 3000

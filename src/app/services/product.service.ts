@@ -209,12 +209,11 @@ getTotalViewsYear(): Observable<any> {
   }
 
 
-  public getproductOnPromo():Observable<any>{
-    return this.api.get('/campagne/all-product-promo-active');
+  public getproductOnPromo(limit){
+    return this.api.get('/campagne/all-product-promo-active?limit='+limit).toPromise();
   }
 
   public addToFavorites(produitId: string,userId: string): Observable<any> {
-    console.log(':::::::::::: ',produitId,userId);
     
     return this.api.post(`/produit/like/${produitId}/${userId}`, null);
   }

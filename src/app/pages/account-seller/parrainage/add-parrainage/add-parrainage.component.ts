@@ -25,49 +25,48 @@ export class AddParrainageComponent implements OnInit {
   public username:string;
   sub: any;
   typePromo: any;
+  minDate: Date; // Date minimale pour le datepicker
 
+  isPromo: boolean = false;
+  isParrainage: boolean = false;
+  isOffre: boolean = false;
+  isLivraison: boolean = false;
 
- isPromo: boolean = false;
-isParrainage: boolean = false;
-isOffre: boolean = false;
-isLivraison: boolean = false;
+  typePromoSelect(typepromo: any) {
+    let res = ""  
 
-typePromoSelect(typepromo: any) {
-  let res = ""  
-
-  this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
-  res = typepromo.name
-  switch (res) {
-    case 'OFFRE_BIENVENUE':
-      this.isOffre = true;
-      this.isLivraison = false;
-      this.isPromo = false;
-      this.form.get('commission').clearValidators();
-      break;
-    case 'LIVRAISON_GRATUITE':
-      this.isLivraison = true;
-      this.isPromo = false;
-      this.isOffre = false;
-      this.form.get('commission').clearValidators();
-      break;
-    case 'PARRAINAGE':
-      this.isParrainage = true;
-      this.form.get('commission').setValidators([
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.min(1)
-      ]);
-      break;
-    case 'PROMOTION':
-      this.isPromo = true;
-      this.isLivraison = false;
-      this.isOffre = false;
-      this.form.get('commission').clearValidators();
-      break;
+    this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
+    res = typepromo.name
+    switch (res) {
+      case 'OFFRE_BIENVENUE':
+        this.isOffre = true;
+        this.isLivraison = false;
+        this.isPromo = false;
+        this.form.get('commission').clearValidators();
+        break;
+      case 'LIVRAISON_GRATUITE':
+        this.isLivraison = true;
+        this.isPromo = false;
+        this.isOffre = false;
+        this.form.get('commission').clearValidators();
+        break;
+      case 'PARRAINAGE':
+        this.isParrainage = true;
+        this.form.get('commission').setValidators([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.min(1)
+        ]);
+        break;
+      case 'PROMOTION':
+        this.isPromo = true;
+        this.isLivraison = false;
+        this.isOffre = false;
+        this.form.get('commission').clearValidators();
+        break;
+    }
+    this.form.get('commission').updateValueAndValidity();
   }
-  this.form.get('commission').updateValueAndValidity();
-}
-
 
   typeOffre = [
     {nom:'Reduction en %', value:'REDUCTION'},
@@ -137,10 +136,8 @@ typePromoSelect(typepromo: any) {
       this.form = this.fb.group({
         products: this.fb.array([], Validators.required)
       });
-  
-     }
-
-   
+      this.minDate = new Date(); // Initialiser la date minimale à aujourd'hui
+   }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
@@ -186,7 +183,6 @@ typePromoSelect(typepromo: any) {
     this.getAllPays();
   }
 
-
   getAllPays() {
     this.countryService.getAllCountries().subscribe(datas => {
       this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -214,10 +210,8 @@ typePromoSelect(typepromo: any) {
   }
 
   async loadData() {
-
     let res = await this.productService.productUser(this.currentUser.username)
     this.products = res
-    
   }
   //Controle pour la saisie de 0
   nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -228,18 +222,13 @@ typePromoSelect(typepromo: any) {
     return null;
   }
 
-  
-
   public async onSubmit() {
     if (this.id) {
       this.edit()
     } else {
       this.save()
     }
-
   }
-
- 
 
   async save() {    
     try {
@@ -261,7 +250,6 @@ typePromoSelect(typepromo: any) {
           produitPromos:this.selectedProducts.value?.map(product => product.id),
           zoneLivraison:this.selectedCountries.value,
           cadeauxProduit:this.selectedProducts2.value
-
         };
   
         this.campagneService.add(data).subscribe({
@@ -277,7 +265,6 @@ typePromoSelect(typepromo: any) {
             }
             if(err.status == "400"){
               this.commonService.errorToast(err.message);
-
             }
             
             else {

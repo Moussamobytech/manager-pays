@@ -37,7 +37,8 @@ export class PromoComponent implements OnInit {
   domWidth: number = window?.innerWidth;
   loadedProductCount:number; // nombre de produit actuellement chargee
   public usePagination = this.domWidth > 430; // basculer entre la pagination et le Voir plus
-
+  promoProducts: Product[];
+  currentUser: any = null;
 
   constructor(
     private common: CommonMessageService,
@@ -52,13 +53,15 @@ export class PromoComponent implements OnInit {
 
   async ngOnInit() {
     this.sortProducts();
+   // this.productInPromo();
     this.getDataFromBackend();
     this.onWindowResize();
   }
 
   public async getDataFromBackend() {
     try {
-      await this.getProducts();
+       // await this.getProducts();
+      await this.productInPromo();
       this.getCategories();
     } catch (error) {
       this.common.errorToast(
@@ -66,23 +69,54 @@ export class PromoComponent implements OnInit {
       );
     }
   }
+ 
 
-  private async getProducts() {
+ /* private async getProducts() {
     const products = await this.produitService.getProductByBest();
+
     const filteredProducts = products.filter((p) => p.etat === "ACTIF");
     this.products = filteredProducts.slice(0, !this.usePagination ? this.viewCount : undefined);
     this.unchangedProducts = filteredProducts;
     this.loadedProductCount = this.viewCount;
-  }
+  }*/
+  
 
+  private async productInPromo() {
+    let productPromo = await this.produitService.getproductOnPromo(50);
+    console.log("::: PRODUCT PROMO :::",productPromo);
+
+
+      if (this.currentUser) {
+        this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
+          this.products = productPromo.map(product => ({
+            ...product,
+            isFavorite: likedProducts.some(liked => liked.id === product.id)
+          }));
+        });
+      } else {
+        this.products = productPromo.map(product => ({
+          ...product,
+          isFavorite: false
+        }));
+      }
+  
+  }
+ 
   private getCategories() {
     this.appService.getCategories().subscribe((categories) => {
+      console.log(":::::::: ALL CATT = ",categories);
+      
       const productCategoriesId = Array.from(
         new Set(this.products.map((product) => product.categorie))
       );
+      console.log(":::::::: PROD CATT = ",productCategoriesId);
+
       this.usedCategories = categories.filter((category) =>
         productCategoriesId.includes(category.id)
       );
+
+      console.log(":::::::: USED CATT = ",this.usedCategories);
+
 
       this.checkedCategories = this.usedCategories.map((category) => category.id);
       this.updateAllBoxSelection();
