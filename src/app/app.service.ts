@@ -74,6 +74,14 @@ export class AppService {
     return this.apiService.post('/save-logs',data).subscribe(val =>{})
   }
 
+  public getCategoriesByChild(id: string): Observable<any> {
+    return this.apiService.get('/categorie/list-child'+(id == null || id == undefined ? '' : '?parent='+id));
+  }
+
+  public getCategoriesByChildEnable(id: string): Observable<any> {
+    return this.apiService.get('/categorie/list-child-enable'+(id == null ? '' : '?parent='+id));
+  }
+
   public getCategories(): Observable<any> {
     return this.apiService.get('/categorie/list');
   }
@@ -319,10 +327,11 @@ export class AppService {
    }
 
 
-  public addCategory(categorie: Category, image: File): Observable<any> {
+  public addCategory(categorie: Category, image: File, icon: File): Observable<any> {
     const formData = new FormData();
     formData.append('nom', categorie.nom);
     formData.append('image', image);
+    formData.append('icon', icon);
 
     // const headers = new HttpHeaders().append('Content-Disposition', 'multipart/form-data');
 
@@ -340,13 +349,15 @@ export class AppService {
     return this.apiService.postFile(`/brand/add`, formData, Headers);
   }
 
-  public updateCategory(id: string, nom: string, image: File): Observable<any> {
+  public updateCategory(id: string, nom: string, parentId: any, image: File, icon: File): Observable<any> {
     // Créer un objet FormData pour envoyer à l'API
     const formData: FormData = new FormData();
     // Ajouter les valeurs à l'objet FormData
     formData.append('id', id.toString());
     formData.append('nom', nom);
+    formData.append('parentId', parentId);
     formData.append('image', image);
+    formData.append('icon', icon);
 
     // Envoyer la requête PUT à l'API avec l'objet FormData
     return this.apiService.putFile(

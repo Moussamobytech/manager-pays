@@ -1,6 +1,7 @@
 export class Category {
   constructor(public id: string,
               public nom:string,
+              public poids:string,
               public hasSubCategory: boolean,
               public parentId: number,
               public image: File,

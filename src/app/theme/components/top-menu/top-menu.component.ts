@@ -48,15 +48,15 @@ export class TopMenuComponent implements OnInit {
     this.currency = this.currencies[0];
     this.changeLang("fr")
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
-    this.roles = this.user.profiles[0].name;
+  //   this.roles = this.user.profiles[0].name;
 
-    if (this.roles == "ROLE_BOUTIQUE") {
-     this.routes = "account-seller";
-    }
-    else if(this.roles == "ROLE_PARTICULIER"){
-     this.routes = "account-customer";
+  //   if (this.roles == "ROLE_BOUTIQUE") {
+  //    this.routes = "account-seller";
+  //   }
+  //   else if(this.roles == "ROLE_PARTICULIER"){
+  //    this.routes = "account-customer";
     
-  }
+  // }
     // this.username = sessionStorage.getItem('username')!;
    console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
   }

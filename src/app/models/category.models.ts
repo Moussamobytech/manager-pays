@@ -7,7 +7,7 @@ export class Category {
                 public createdAt:string,
                 public updatedAt:string,
                 public hasSubCategory: boolean,
-                public parentId: number){ }
+                public parentId: string){ }
 
 
 }

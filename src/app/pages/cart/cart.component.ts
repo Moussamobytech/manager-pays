@@ -8,6 +8,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CountryService } from 'src/app/services/country.service';
 import { Router } from '@angular/router';
+import {openKkiapayWidget, addKkiapayListener, removeKkiapayListener} from "kkiapay";
 
 @Component({
   selector: 'app-cart',
@@ -100,6 +101,11 @@ export class CartComponent implements OnInit {
       }
     });
     
+    addKkiapayListener('success',this.successHandler)
+  }
+
+  ngOnDestroy(){
+    removeKkiapayListener('success')
   }
 
   handleCountryChange(event: any) {
@@ -425,8 +431,12 @@ onlyCartItemCount:any = 0
       }, 0);
     }
 
+    successHandler() {
+      console.log("payment success...");
+    }
+
     commander(){     
-      let user = this.user;  
+      let user = this.user;
       console.log("::::::::::::::: USER = ",user);
       if(user != null){    
         // Appliquer la réduction aux articles avant l'envoi
@@ -448,16 +458,24 @@ onlyCartItemCount:any = 0
             totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
           };
         });
-
-        this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
+        
+        // this.router.navigate(["/cart"]);
+        this.appService.addCommande(user.id, user.username, this.referralCode, productsWithReduction).subscribe(
           () => {
-            this.snackBar.open('Commande effectuée avec succès', '×', {
+            
+            openKkiapayWidget({
+              amount: this.grandTotal - this.getTotalReduction() ,
+              api_key: "ed32fbf020e011f08a81bdf26ae54af2",
+              sandbox: true,
+              phone: "97000000",
+            });
+            this.snackBar.open('Commande initialisée avec succès', '×', {
               panelClass: 'success',
               verticalPosition: 'top',
               duration: 3000
             });
             this.clear()
-            this.router.navigate(["/cart"]);
+            this.router.navigate(["/"]);
           },
           error => {
             this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
