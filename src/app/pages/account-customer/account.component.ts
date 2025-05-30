@@ -22,7 +22,7 @@ export class AccountComponent implements OnInit {
     { icon: 'fas fa-sack-dollar', title: 'Mes gains', content: '20000F', routerLink: 'earnings', cardClass: 'amber' },
     { icon: 'fas fa-exchange-alt', title: 'Invite tes amis', content: 'Gagne jusqu\'à 5000 F par ami invité !', routerLink: '/referal', cardClass: 'primary' },
     { icon: 'fa-solid fa-phone', title: 'Mettre à jour', content: 'Mon numéro de téléphone', routerLink: 'settings', cardClass: 'primary' },
-    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', cardClass: 'amber' },
+    { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', routerLink: 'settings', cardClass: 'amber' },
   ];
   historiqueData = [
   { image: 'assets/images/ads/3.jpg', name: 'Chemise homme', price: '35 000F', status: 'Livrée', date: '05/02/2025', color: 'accent' },
@@ -48,9 +48,9 @@ export class AccountComponent implements OnInit {
   balance:any = 0;
 
   constructor(
-    private auth: AuthenticationService,
+    private auth: AuthenticationService, 
     private imgCompressService: ImageCompressService,
-    private cm: CommonService,
+    private cm: CommonService, 
     private produitService: ProductService,
     private commandeService: CommandeService
   ) { }
@@ -62,7 +62,7 @@ export class AccountComponent implements OnInit {
     //console.log('FAVORIS = :::::::::::: ',this.favorisProducts);
     this.currentUser = this.auth.currentUser()
     this.user = this.currentUser;
-    this.getAllCommande();
+    this.getAllCommande();    
     this.getProduitsLikes();
     this.loadReferralHistory();
   }
@@ -153,10 +153,9 @@ export class AccountComponent implements OnInit {
     this.selectedTab = tab;
   }
 
-  WhatsAppUs(title: string) {
+  WhatsAppUs(card: string) {
     //console.log(card);
-    if(title.toLowerCase().includes("revendeur")){
-      console.log("we are here!")
+    if(card.toLowerCase().includes("revendeur")){
       let message = "Bonjour, Je souhaiterais postuler pour devenir revendeur sur Fidelity Market.";
       const link = "https://wa.me/22376007979?text=" + encodeURIComponent(message);
       window.open(link, "_blank");
@@ -226,7 +225,7 @@ export class AccountComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
+    
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }

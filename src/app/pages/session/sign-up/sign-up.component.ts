@@ -217,7 +217,7 @@ export class SignUpComponent implements OnInit {
         formData.append('role', this.profil);
         formData.append('password', this.vendeurForm.value.confirmPassword);
         formData.append('typeOfUsername', 'phone');
-
+        
         // Vérifier si un fichier a été sélectionné avant de l'ajouter
         if (this.selectedFile) {
           formData.append('logo', this.selectedFile);
