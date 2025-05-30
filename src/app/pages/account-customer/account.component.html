@@ -10,8 +10,8 @@
   </div>
 
   <div fxLayout="row wrap" class="card-container">
-    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(0, 5)" fxFlex="48" fxFlex.gt-xs="32" fxFlex.gt-sm="24">
-      <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
+    <div *ngFor="let card of cards.slice(0, 5)" fxFlex="48" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
+      <div class="card" [ngClass]="card.cardClass">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
         <p>{{ card.content }}</p>
@@ -26,8 +26,8 @@
   </div>
 
   <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
-    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24">
-      <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
+    <div *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
+      <div class="card" [ngClass]="card.cardClass">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
         <p>{{ card.content }}</p>
