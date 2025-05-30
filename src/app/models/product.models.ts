@@ -37,5 +37,6 @@ export class Product {
                 public dailyVisits: number,
                 public campagne:Campagne,
                 public yearlyVisits: number,
+                public gain?: number,
                 public isFavorite: boolean = false ){ }
   }

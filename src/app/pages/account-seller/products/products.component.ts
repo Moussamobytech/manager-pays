@@ -21,17 +21,16 @@ import { FormControl } from '@angular/forms';
 export class ProductsComponent implements OnInit {
 
   currentUser: User;
-  products: any = [];
-  unchangedProducts: any = []; // Original complete list
-  filteredProducts: any = []; // Products after filter by state
-  searchResults: any = []; // Products after search
-  // public page: any;
-  count: number = 5;
-  domHandlerService = inject(DomHandlerService);
-  filterType: 'all' | 'actifs' | 'inactifs' = 'all';
-  loadedProductCount: number;
-  searchTerm = new FormControl(null);
+  public unchangedProducts: Product[] = []; // Initialize as empty array
+  public searchResults: Product[] = [];
+  public count = 12;
+  public loadedProductCount: number;
+  public products: Product[] = [];
+  public filteredProducts: Product[] = []; // Products after filter by state
+  public filterType: 'all' | 'actifs' | 'inactifs' = 'all';
+  public searchTerm = new FormControl(null);
   private searchSubscription: Subscription | undefined;
+  domHandlerService = inject(DomHandlerService);
   productCopiedId: string;
   copied = new Set<string>();
   expandedProductIds: string[] = [];
@@ -96,13 +95,20 @@ export class ProductsComponent implements OnInit {
   }
 
   // to load data from backend
-  async loadData() {
-    let res = await this.productService.getProductBySeller(this.currentUser.username);
-    this.unchangedProducts = res;
-    this.searchResults = [...this.unchangedProducts]; // Initialize search results with all products
-    console.log(this.unchangedProducts);
-    this.loadedProductCount = this.count;
-    this.setFilter(this.filterType); // Apply initial filter
+  loadData() {
+    this.productService.getProductBySeller(this.currentUser.username).subscribe({
+      next: (res: Product[]) => {
+        this.unchangedProducts = res || [];
+        this.searchResults = [...this.unchangedProducts];
+        this.loadedProductCount = this.count;
+        this.setFilter(this.filterType);
+      },
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.unchangedProducts = [];
+        this.searchResults = [];
+      }
+    });
   }
 
   // to redirect to add page
