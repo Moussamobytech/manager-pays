@@ -73,6 +73,7 @@ $card-shadow: rgba(0, 0, 0, 0.1);
 .categories-container, .subcategories-container {
   .main-title {
     @include title-section;
+    justify-content: space-between;
     margin-bottom: 8px;
   }
 
