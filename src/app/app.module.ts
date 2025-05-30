@@ -47,6 +47,7 @@ import { AdminConnectionComponent } from './pages/admin-connection/admin-connect
 // import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { AnalyticsService } from './services/analitycs.service';
 import { InfluencerService } from './services/influencer.service';
+import { CaracteristiquesService } from './services/caracteristiques.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SearchResultsModule } from './pages/search-results/search-results.module';
 import { HeaderComponent } from './shared/header/header.component';
