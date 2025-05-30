@@ -139,6 +139,8 @@ $card-shadow: rgba(0, 0, 0, 0.1);
   padding: 16px;
 
   .main-title {
+    justify-content: initial;
+
     button {
       color: $primary-color;
       background-color: $amber-color;
