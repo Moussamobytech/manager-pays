@@ -1,102 +1,254 @@
-$primary_color: #25224a;
-$card-bg: #605f5f36;
+// Variables
+$primary-color: #25224a;
+$amber-color: #feb930;
+$card-bg: linear-gradient(90deg, rgba(205, 255, 216, 1) 30%, rgba(148, 185, 255, 1) 81%);
 $card-shadow: rgba(0, 0, 0, 0.1);
 
-.container {
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin card-base($height: 170px) {
+  position: relative;
+  height: $height;
+  border-radius: 8px;
+  background: $card-bg;
+  box-shadow: 0 4px 6px $card-shadow;
+  cursor: pointer;
+  overflow: hidden;
+  outline: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 10px $card-shadow;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+@mixin title-section {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  color: $primary-color;
+
+  h2, h3 {
+    color: $primary-color;
+    font-weight: bold;
+    margin: 0;
+
+    @media (max-width: 500px) {
+      font-size: 17px;
+    }
+  }
+}
+
+@mixin card-title-base($position: absolute) {
+  position: $position;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: bold;
+  z-index: 2;
+
+  @media (max-width: 500px) {
+    font-size: 11px;
+  }
+}
+
+// Main containers
+.categories-container{
+  justify-content: space-between;
+}
+.categories-container, .subcategories-container {
+  .main-title {
+    @include title-section;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .main-subtitle {
+    @include title-section;
+    justify-content: left;
+    margin: 15px 0;
+  }
+
+  .card-container {
+    display: flex;
+    gap: 16px;
+  }
+}
+
+.categories-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
   margin-bottom: 60px;
 
-  .main-title {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+  .main-title a {
+    @include flex-center;
+    text-decoration: none;
+    font-size: 14px;
+    color: $primary-color;
+    transition: color 0.3s ease;
 
-    h2 {
-      color: $primary_color;
-      font-weight: bold;
-
-      @media (max-width: 500px) {
-        font-size: 17px;
-      }
+    &:hover {
+      color: darken($primary-color, 10%);
     }
 
-    a {
-      position: relative;
-      right: 0;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
+    mat-icon {
+      @include flex-center;
+      margin-left: 5px;
+      width: 14px;
+      height: 14px;
       font-size: 14px;
-      color: $primary_color;
-      transition: color 0.3s ease;
+      border: 1px solid $primary-color;
+      border-radius: 50%;
+      transition: border-color 0.3s ease;
 
       &:hover {
-        color: darken($primary_color, 10%);
-      }
-
-      mat-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 5px;
-        width: 14px;
-        height: 14px;
-        font-size: 14px;
-        border: 1px solid $primary_color;
-        border-radius: 50%;
-        transition: border-color 0.3s ease;
-
-        &:hover {
-          border-color: lighten($primary_color, 10%);
-        }
+        border-color: lighten($primary-color, 10%);
       }
     }
   }
 
   .card {
-    position: relative;
-    height: 150px;
-    border-radius: 8px;
-    background: $card-bg;
-    box-shadow: 0 4px 6px $card-shadow;
-    cursor: pointer;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 10px $card-shadow;
-    }
-
-    .card-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+    @include card-base;
 
     .card-title {
-      position: absolute;
+      @include card-title-base;
       top: 8px;
       left: 8px;
-      background: $primary_color;
-      color: #fff;
+      background: $primary-color;
       padding: 4px 8px;
-      border-radius: 4px;
       font-size: 16px;
-      font-weight: bold;
-      z-index: 2;
+    }
+  }
+}
 
-      @media (max-width: 500px) {
-        font-size: 11px;
+.subcategories-container {
+  padding: 16px;
+
+  .main-title {
+    justify-content: initial;
+
+    button {
+      color: $primary-color;
+      background-color: $amber-color;
+      border: 1px solid $primary-color;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .main-subtitle {
+    justify-content: space-between;
+    margin: 16px 0;
+  }
+
+  .card-container {
+    width: 100%;
+
+    .category-card {
+      @include card-base(120px);
+
+      &.selected {
+        background: $amber-color;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        outline: 2px solid #25224a;
+
+        .card-title {
+          background: rgba(255, 255, 255, 0.9);
+          color: $primary-color;
+        }
+      }
+
+      .card-title {
+        @include card-title-base;
+        bottom: 4px;
+        left: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 2px 6px;
+        font-size: 12px;
+        font-weight: 600;
+
+        .count {
+          margin-left: 4px;
+          font-weight: normal;
+        }
       }
     }
   }
 
+  .no-data-message {
+    @include flex-center;
+    flex-direction: column;
+    padding: var(--spacing-xl);
+    color: var(--primary-color);
+    opacity: 0.7;
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: var(--spacing-md);
+      opacity: 0.5;
+    }
+
+    p {
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+}
+
+.load-more {
+  @include flex-center;
+  width: 100%;
+  margin-top: 16px;
+
+  &-button {
+    background: #eee;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 24px;
+    font-weight: 600;
+    color: $primary-color;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+.filter-modal{
+  .filter-header{
+    @include flex-center;
+    justify-content: space-between;
+  }
+
+  .filter-actions{
+    display: flex;
+    justify-content: space-between;
+
+    .apply-btn{
+      background-color: $amber-color;
+      color: $primary-color;
+    }
+  }
 }
 

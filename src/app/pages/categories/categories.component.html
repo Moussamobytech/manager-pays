@@ -1,10 +1,159 @@
-<div class="container">
+<div class="categories-container"*ngIf="!parentCategory">
   <div class="main-title">
     <h2>Categories Disponibles</h2>
     <a routerLink="">Voir les boutiques <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
   </div>
-  <div fxFlex="47" fxFlex.gt-xs="30" fxFlex.gt-sm="22" fxFlex.gt-md="17" *ngFor="let category of categories" class="card">
-    <img [src]="'assets/images/logo_fidelity.gif'" (error)="onImageError($event)" (load)="onImageLoad($event,category.image)" alt="{{ category.nom }}" class="card-image" />
-    <div class="card-title">{{ category.nom }}</div>
+
+  <div class="main-subtitle">
+    <p>Chosir une categorie</p>
   </div>
+
+  <div fxFlex="100" fxLayout="row wrap" class="card-container">
+    <div fxFlex="47" fxFlex.gt-xs="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="card"
+    *ngFor="let category of categories.slice(0,loadIndex)" routerLink="{{ category.id }}">
+      <img [src]="'assets/images/logo_fidelity.gif'" (error)="onImageError($event)" (load)="onImageLoad($event,category.image)" alt="{{ category.nom }}" class="card-image" />
+      <div class="card-title">{{ category.nom }}</div>
+    </div>
+  </div>
+
+  <!-- Load More Button -->
+    <div class="load-more" *ngIf="categories.length > loadIndex">
+      <button class="load-more-button" (click)="onLoadMore()">
+        Voir plus <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
 </div>
+
+
+<!-- subcategories-and-products.component.html -->
+<div *ngIf="parentCategory" class="subcategories-container">
+  <div class="main-title">
+    <button routerLink="/categories" matTooltip="Retour">
+      <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    <h2>{{ parentCategory.nom }}</h2>
+  </div>
+
+  <div class="main-subtitle">
+    <p>Choisir une sous-catégorie</p>
+  </div>
+
+  <div fxLayout="row wrap" class="card-container">
+    <div *ngFor="let cat of subCategories" (click)="selectSubCategory(cat)" fxFlex="30" fxFlex.gt-xs="23"
+         fxFlex.gt-sm="18" class="category-card" [class.selected]="cat.id === selectedSubCategory?.id">
+      <img [src]="cat.image || 'assets/images/logo_fidelity.gif'"
+        (error)="onImageError($event)" alt="{{ cat.nom }}" class="card-image"/>
+      <div class="card-title">
+        {{ cat.nom }}
+        <span class="count">({{ CategoryProductCount(cat.id) }})</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- No subcategories template -->
+  <div *ngIf="subCategories.length === 0" class="no-data-message" role="alert">
+    <mat-icon>category</mat-icon>
+    <p>Aucune sous-catégorie disponible pour cette catégorie.</p>
+  </div>
+
+  <div class="products-container" #scrollTarget>
+    <div class="main-subtitle">
+      <h3>Produits</h3>
+      <button mat-icon-button (click)="openFilter()">
+        <mat-icon>tune</mat-icon>
+      </button>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutGap="8px" class="products-grid">
+      <div fxFlex="47" fxFlex.gt-xs="31" fxFlex.gt-sm="23"
+        fxFlex.gt-md="18" *ngFor="let product of subProducts.slice(0,loadIndex)">
+        <app-product-card [product]="product"></app-product-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- No subproducts template -->
+  <div *ngIf="subProducts.length === 0" class="no-data-message" role="alert">
+    <mat-icon>shopping_cart_off</mat-icon>
+    <p>Aucun produit disponible {{ subCategories.length > 0 ? "pour cette sous-catégorie" : "" }}.</p>
+  </div>
+
+  <!-- Load More Button -->
+    <div class="load-more" *ngIf="subProducts.length > loadIndex">
+      <button class="load-more-button" (click)="onLoadMore()">
+        Voir plus <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+</div>
+
+
+
+<ng-template #filterModalTemplate let-dialogRef="dialogRef">
+  <div class="filter-modal">
+    <!-- Modal Header -->
+    <div class="filter-header">
+      <h2 mat-dialog-title>
+        <mat-icon>tune</mat-icon>
+        Filtrer les produits
+      </h2>
+      <button mat-icon-button (click)="closeModal(dialogRef)" class="close-btn">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Modal Content -->
+    <div mat-dialog-content class="filter-content">
+      <!-- Price Range Filter -->
+      <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)">
+        <span> De: <b>{{ priceFrom }} F</b> </span>
+        <span> À: <b>{{ priceTo }} F</b> </span>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="(priceFrom<=250000) && (priceTo<=250000)" class="filter-price">
+        <mat-slider color="primary" [step]="950" [max]="250000" [min]="100" thumb-label="true">
+          <input matSliderThumb [(ngModel)]="priceFrom" />
+        </mat-slider>
+        <mat-slider color="warn" [step]="950" [max]="250000" [min]="100" thumb-label="true">
+          <input matSliderThumb [(ngModel)]="priceTo"/>
+        </mat-slider>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px" class="filter-price">
+        <mat-form-field appearance="outline" class="price-input">
+          <mat-label>Prix Min</mat-label>
+          <input matInput (keypress)="validateNumberPrice($event)" (paste)="validatePastePrice($event)"
+          [step]="950" type="number" [(ngModel)]="priceFrom" [min]="100"/>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="price-input">
+          <mat-label>Prix Max</mat-label>
+          <input matInput (keypress)="validateNumberPrice($event)" (paste)="validatePastePrice($event)"
+          [step]="950" type="number" [(ngModel)]="priceTo" [min]="priceFrom"/>
+        </mat-form-field>
+      </div>
+
+      <!-- Sort Filter -->
+      <div class="filter-section">
+        <h3>
+          <mat-icon>sort</mat-icon>
+          Trier par
+        </h3>
+        <mat-select [(value)]="sortBy" placeholder="Choisir un tri">
+          <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </div>
+
+    </div>
+
+    <!-- Modal Actions -->
+    <div mat-dialog-actions class="filter-actions">
+      <button mat-stroked-button (click)="closeModal(dialogRef, 'reset')" class="reset-btn">
+        <mat-icon>refresh</mat-icon>
+        Réinitialiser
+      </button>
+      <button mat-raised-button (click)="closeModal(dialogRef, 'apply')" class="apply-btn">
+        <mat-icon>check</mat-icon>
+        Appliquer
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -7,11 +7,11 @@
       <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
     </div>
     <h2>{{user.firstname}} {{user.lastname}}</h2>
-  </div>  
+  </div>
 
   <div fxLayout="row wrap" class="card-container">
-    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(0, 5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24">
-      <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
+    <div *ngFor="let card of cards.slice(0, 5)" fxFlex="48" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
+      <div class="card" [ngClass]="card.cardClass">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
         <p>{{ card.content }}</p>
@@ -26,8 +26,8 @@
   </div>
 
   <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
-    <div (click)="WhatsAppUs(card.title)" *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24">
-      <div class="card" [ngClass]="card.cardClass" [routerLink]="card.routerLink">
+    <div *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
+      <div class="card" [ngClass]="card.cardClass">
         <span class="card-icon"><i [class]="card.icon"></i></span>
         <h3>{{ card.title }}</h3>
         <p>{{ card.content }}</p>
@@ -70,12 +70,12 @@
       </div>
 
       <div class="see-more-container" *ngIf="!showMoreOrders && orders.length > 3">
-        <button mat-raised-button color="primary" class="see-more-btn" (click)="toggleShowMore()">
+        <button mat-raised-button  class="see-more-btn" (click)="toggleShowMore()">
           Voir plus d'historiques
         </button>
       </div>
 
-      <mat-paginator 
+      <mat-paginator
         *ngIf="showMoreOrders"
         [pageSize]="pageSize"
         [pageSizeOptions]="pageSizeOptions"

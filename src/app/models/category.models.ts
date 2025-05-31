@@ -3,13 +3,13 @@ export class Category {
                 public cle:string,
                 public nom:string,
                 public image:string,
+                public icon:string,
                 public status:string,
+                public poids:number,
                 public createdAt:string,
                 public updatedAt:string,
                 public hasSubCategory: boolean,
                 public parentId: string){ }
-
-
 }
 
 export class User {

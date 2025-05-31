@@ -55,7 +55,7 @@ export class ParrainageComponent implements OnInit {
   public campagne: any;
 //  public promo: any;
   public typePromo: any;
-  public activeCampagne: any;
+  public activeCampagnes: any;
   public page: any;
   public searchTerm: string = '';
   public selectedType: string = '';
@@ -195,11 +195,11 @@ export class ParrainageComponent implements OnInit {
     this.campagneService.getAllCampagneByUsername(username).subscribe({
       next: (datas) => {
         this.campagne = datas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        console.log(":::::::::::: ",JSON.stringify(this.campagne));
-        
+        console.log(":::::::::::: ",this.campagne);
+
         this.filteredCampaigns = [...this.campagne];
 
-        this.activeCampagne = datas
+        this.activeCampagnes = datas
           .filter(campagne => campagne.active)
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       },
@@ -272,9 +272,23 @@ export class ParrainageComponent implements OnInit {
     })
   }
 
-  setStatus(id: string, event: MatSlideToggleChange): void {
-    const newStatus = event.checked ? 'true' : 'false';
-    this.campagneService.updateState(id, newStatus).then(
+  // setStatus(id: string, event: MatSlideToggleChange): void {
+  //   const newStatus = event.checked ? 'true' : 'false';
+  //   this.campagneService.updateState(id, newStatus).then(
+  //     (response) => {
+  //       this.commonService.successToast('Statut de la campagne mis à jour avec succès');
+  //       this.getAllCampagne(this.username); // Recharger les campagnes pour mettre à jour l'affichage
+  //     },
+  //     (error) => {
+  //       console.error('Erreur lors de la mise à jour du statut:', error);
+  //       this.commonService.errorToast('Erreur lors de la mise à jour du statut');
+  //     }
+  //   );
+  // }
+
+  setStatus(campagne: any): void {
+    const newStatus = !campagne.active;
+    this.campagneService.updateState(campagne.id, newStatus).then(
       (response) => {
         this.commonService.successToast('Statut de la campagne mis à jour avec succès');
         this.getAllCampagne(this.username); // Recharger les campagnes pour mettre à jour l'affichage
@@ -285,6 +299,7 @@ export class ParrainageComponent implements OnInit {
       }
     );
   }
+
   public onPageChanged(event) {
     this.page = event;
     this.domHandlerService.winScroll(0, 0);
@@ -472,14 +487,14 @@ export class ParrainageComponent implements OnInit {
     console.log('Add campaign of type:', type);
   }
 
-  onEditCampaign(campaign: Campaign) {
-    // put logics
-    console.log('Edit campaign:', campaign);
-  }
+  // onEditCampaign(campaign: Campaign) {
+  //   // put logics
+  //   console.log('Edit campaign:', campaign);
+  // }
 
-  onToggleCampaign(campaign: Campaign) {
-    campaign.active = !campaign.active;
-  }
+  // onToggleCampaign(campaigne: Campaign) {
+  //   campaigne.active = !campaigne.active;
+  // }
 
   onLoadMore() {
     this.loadIndex += 4;
@@ -491,15 +506,15 @@ export class ParrainageComponent implements OnInit {
 
   filterCampaigns() {
     this.filteredCampaigns = this.campagne.filter(campaign => {
-      const matchesSearch = !this.searchTerm || 
+      const matchesSearch = !this.searchTerm ||
         campaign.nom.toLowerCase().includes(this.searchTerm.toLowerCase());
-      
-      const matchesType = !this.selectedType || 
+
+      const matchesType = !this.selectedType ||
         campaign.typePromo.name === this.selectedType;
-      
-      const matchesStatus = !this.selectedStatus || 
+
+      const matchesStatus = !this.selectedStatus ||
         campaign.active.toString() === this.selectedStatus;
-      
+
       return matchesSearch && matchesType && matchesStatus;
     });
   }

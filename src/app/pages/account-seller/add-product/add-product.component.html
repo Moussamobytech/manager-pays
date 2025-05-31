@@ -92,7 +92,7 @@
 
           <div fxFlex="50" fxFlex.gt-xs="33.3" class="px-1">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Color</mat-label>
+              <mat-label>Couleur</mat-label>
               <mat-select formControlName="color" multiple (selectionChange)="onColorSelectionChange($event)">
                 <mat-select-trigger>{{ selectedColors }}</mat-select-trigger>
                 <mat-option *ngFor="let color of colors" [value]="color">
@@ -107,7 +107,7 @@
 
           <div fxFlex="50" fxFlex.gt-xs="33.3" class="px-1">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Weight</mat-label>
+              <mat-label>Poids</mat-label>
               <input matInput min="0" formControlName="weight" type="number">
             </mat-form-field>
           </div>

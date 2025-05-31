@@ -47,11 +47,11 @@ export class AnalyticsComponent implements OnInit {
     private commandeService: CommandeService
   ) {
   }
-  ngOnInit() {
+  async ngOnInit() {
     this.currentUser = this.auth.currentUser()
   //  this.getAllPaniers(this.currentUser.username);
     this.initializeAvailableYears();
-    this.getAllPaniers(this.currentUser.username);
+    await this.getAllPaniers(this.currentUser.username);
     const currentYear = new Date().getFullYear();
     this.selectedYear.setValue(currentYear);
 
@@ -93,7 +93,7 @@ public async getAllPaniers(id: any, year: number = new Date().getFullYear()) {
   try {
     const data: any = await firstValueFrom(this.commandeService.getAllCommandeByFournisseur(id));
     this.comm = data
-   
+
     // Filtrer les commandes livrées
     const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
 
@@ -158,16 +158,16 @@ public async getAllPaniers(id: any, year: number = new Date().getFullYear()) {
 /*
   public async getAllPaniers(id: any) {
     this.ngxSpinnerService.show();
-  
+
     try {
       const data: any = await firstValueFrom(this.commandeService.getAllCommandeByFournisseur(id));
-  
+
       // Filtrer les commandes livrées
       const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
-  
+
       // Récupérer l'année actuelle
       const currentYear = new Date().getFullYear();
-  
+
       // Fonction pour formater la date en "Mois Année" (ex: "Janvier 2024")
       const getMonthYear = (dateStr: string) => {
         const date = new Date(dateStr);
@@ -176,15 +176,15 @@ public async getAllPaniers(id: any, year: number = new Date().getFullYear()) {
           timestamp: date.getTime() // Stocker un timestamp pour le tri
         };
       };
-  
+
       // Initialiser groupedByMonth avec un type explicite
       const groupedByMonth: Record<string, { value: number; timestamp: number }> = {};
-  
+
       // Regrouper les montants des ventes par mois, mais uniquement pour l'année en cours
       deliveredData.forEach((product: any) => {
         const { formatted, timestamp } = getMonthYear(product.dateCommande);
         const productYear = new Date(product.dateCommande).getFullYear(); // Extraire l'année de la commande
-  
+
         // Vérifier si l'année de la commande correspond à l'année en cours
         if (productYear === currentYear) {
           if (!groupedByMonth[formatted]) {
@@ -193,7 +193,7 @@ public async getAllPaniers(id: any, year: number = new Date().getFullYear()) {
           groupedByMonth[formatted].value += product.montant;
         }
       });
-  
+
       // Transformer les données pour le graphique et trier par date croissante
       const series = Object.entries(groupedByMonth)
         .map(([month, data]) => ({
@@ -203,14 +203,14 @@ public async getAllPaniers(id: any, year: number = new Date().getFullYear()) {
         }))
         .sort((a, b) => a.timestamp - b.timestamp) // Tri des dates du plus ancien au plus récent
         .map(({ name, value }) => ({ name, value })); // Supprimer timestamp après tri
-  
+
       this.analytics = [
         {
           name: 'Évolution des ventes',
           series: series
         }
       ];
-  
+
     } catch (error) {
       console.error("Erreur lors de la récupération des commandes :", error);
       this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");

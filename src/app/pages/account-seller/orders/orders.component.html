@@ -1,4 +1,4 @@
-<div class="p-2">
+<!-- <div class="p-2">
   <mat-card>
     <div class="mat-mdc-table orders-table">
       <div class="mat-mdc-header-row">
@@ -40,12 +40,11 @@
             {{ sortKey === 'fournisseurUsername' && sortDirection ? 'arrow_downward' : 'arrow_upward' }}
           </mat-icon>
         </div>
-      
-        <div class="mat-mdc-header-cell">Autre</div>
-      </div>
 
+        <div class="mat-mdc-header-cell">Autre</div>
+      </div> -->
       <!-- Lignes de données -->
-      <div *ngFor="let order of sortedOrders() | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+      <!-- <div *ngFor="let order of sortedOrders() | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
         <div class="mat-mdc-cell image" (click)="openOrderDetails(order)">
           <img [src]="order.produitImage" alt="" width="50">
         </div>
@@ -60,12 +59,12 @@
           <div class="p-2 actions">
              <button  mat-mini-fab color="warn" matTooltip="View invoice" class="btn-invoice" (click)="openOrderDetails(order)">
               <mat-icon>remove_red_eye</mat-icon>
-            </button>
+            </button> -->
            <!-- <button mat-mini-fab color="primary" matTooltip="View">
               <mat-icon>receipt</mat-icon>
             </button> -->
-           
-          </div>
+
+          <!-- </div>
         </div>
       </div>
     </div>
@@ -73,19 +72,19 @@
 
   <div *ngIf="orders.length > 0" class="py-3 paginate centered">
     <mat-card class="text-center">
-      <pagination-controls 
-        class="product-pagination" 
-        [autoHide]="true" 
+      <pagination-controls
+        class="product-pagination"
+        [autoHide]="true"
         lang="fr"
         [maxSize]="5"
         (pageChange)="onPageChanged($event)">
       </pagination-controls>
     </mat-card>
   </div>
-</div>
+</div> -->
 
 
-<ng-template #popupDetails>
+<!-- <ng-template #popupDetails>
   <h1 mat-dialog-title>Détails de la commande</h1>
   <div mat-dialog-content *ngIf="selectedOrder">
     <div class="mat-mdc-cell image center">
@@ -103,8 +102,274 @@
     <button mat-button color="success" (click)="phoneCall(selectedOrder.fournisseurUsername)">
       <mat-icon>call</mat-icon>
     </button>
-    <button mat-button color="warn" (click)="onNoClick()">Fermer</button>
+    <button mat-button color="warn" (click)="closeDialog()">Fermer</button>
+  </div>
+
+</ng-template>  -->
+
+
+
+
+<div class="orders-container">
+  <!-- Header with title and search -->
+  <div class="orders-header">
+    <h1>Mes commandes</h1>
+    <div class="search-add-container">
+      <div class="search-box" fxFlex="70">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Rechercher" [(ngModel)]="searchTerm" (input)="filterOrders()">
+      </div>
+      <!-- <button mat-mini-fab class="add-button">
+        <mat-icon>add</mat-icon>
+      </button> -->
+    </div>
   </div>
   
-</ng-template>
+  <!-- Filters -->
+  <div class="filters-container">
+    <div class="status-filters">
+      <button mat-button [class.active]="selectedStatusFilter === ''" (click)="filterByStatus('')">
+        Tous ({{getOrderCountByStatus('tout')}})
+      </button>
+      <button mat-button [class.active]="selectedStatusFilter === 'en-attente'" (click)="filterByStatus('en-attente')">
+        En attente ({{getOrderCountByStatus('en-attente')}})
+      </button>
+      <button mat-button [class.active]="selectedStatusFilter === 'livre'" (click)="filterByStatus('livre')">
+        Livré ({{getOrderCountByStatus('livre')}})
+      </button>
+      <button mat-button [class.active]="selectedStatusFilter === 'annule'" (click)="filterByStatus('annule')">
+        Annulé ({{getOrderCountByStatus('annule')}})
+      </button>
+    </div>
+    
+    <mat-form-field appearance="outline" class="time-filter">
+      <mat-select [(value)]="selectedTimeFilter" (selectionChange)="filterByTime()">
+        <mat-option value="aujourdhui">Aujourd'hui</mat-option>
+        <mat-option value="7-jours">7 jours</mat-option>
+        <mat-option value="1-mois">1 mois</mat-option>
+        <mat-option value="tout">Tout</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  
+  <!-- Orders Content -->
+  <div class="orders-content">
+    <!-- Today's orders -->
+    <div *ngIf="todayOrders.length > 0" class="orders-section">
+      <h2>Aujourd'hui</h2>
+      <div fxLayout="row wrap" fxLayoutGap="16px grid">
+        <div *ngFor="let order of todayOrders" fxFlex="100" fxFlex.gt-sm="48" class="order-card-container">
+          <mat-card class="order-card" (click)="toggleOrderDetails(order.id)">
+            <div class="order-card-content">
+              <div class="order-image">
+                <img [src]="order.produitImage" [alt]="order.produitNom">
+              </div>
+              <div class="order-details">
+                <h3>{{order.produitNom}}</h3>
+                <div class="order-status" [ngClass]="getStatusClass(order.statutCommande?.name)">
+                  {{getStatusText(order.statutCommande?.name)}}
+                </div>
+                <div class="order-info">
+                  <span>{{order.quantite}} article{{order.quantite > 1 ? 's' : ''}} <span class="dot">•</span> {{order.montant}} F</span>
+                </div>
+                <div class="order-location" *ngIf="order.clientAdresse">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{order.clientAdresse}}</span>
+                </div>
+              </div>
+              <div class="order-action">
+                <mat-icon [class.rotated]="isOrderExpanded(order.id)">expand_more</mat-icon>
+              </div>
+            </div>
+            
+            <!-- Expanded details -->
+            <div class="expanded-details" *ngIf="isOrderExpanded(order.id)">
+              <mat-divider></mat-divider>
+              <div class="expanded-content">
+                <p><strong>Code commande:</strong> {{order.codeCommande}}</p>
+                <p *ngIf="order.produitDescription"><strong>Description:</strong> {{order.produitDescription}}</p>
+                <p><strong>Client:</strong> {{order.clientFirstname}} {{order.clientLastname}}</p>
+                <!-- <p><strong>Téléphone:</strong> 
+                  <a (click)="phoneCall(order.clientPhoneNumber)">{{order.clientPhoneNumber}}</a>
+                </p> -->
+                <p *ngIf="order.clientEmail"><strong>Email:</strong> {{order.clientEmail}}</p>
+                <!-- <p><strong>Fournisseur:</strong> {{order.fournisseurUsername}}</p> -->
+                <p><strong>Date de commande:</strong> {{formatDate(order.dateCommande)}}</p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- This week's orders -->
+    <div *ngIf="weekOrders.length > 0" class="orders-section">
+      <h2>Cette semaine</h2>
+      <div fxLayout="row wrap" fxLayoutGap="16px grid">
+        <div *ngFor="let order of weekOrders" 
+            fxFlex="100" 
+            fxFlex.gt-sm="48"
+            class="order-card-container">
+          <mat-card class="order-card" (click)="toggleOrderDetails(order.id)">
+            <div class="order-card-content">
+              <div class="order-image">
+                <img [src]="order.produitImage" [alt]="order.produitNom">
+              </div>
+              <div class="order-details">
+                <h3>{{order.produitNom}}</h3>
+                <div class="order-status" [ngClass]="getStatusClass(order.statutCommande?.name)">
+                  {{getStatusText(order.statutCommande?.name)}}
+                </div>
+                <div class="order-info">
+                  <span>{{order.quantite}} article{{order.quantite > 1 ? 's' : ''}} <span class="dot">•</span> {{order.montant}} F</span>
+                </div>
+                <div class="order-location" *ngIf="order.clientAdresse">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{order.clientAdresse}}</span>
+                </div>
+              </div>
+              <div class="order-action">
+                <mat-icon [class.rotated]="isOrderExpanded(order.id)">expand_more</mat-icon>
+              </div>
+            </div>
+            
+            <!-- Expanded details -->
+            <div class="expanded-details" *ngIf="isOrderExpanded(order.id)">
+              <mat-divider></mat-divider>
+              <div class="expanded-content">
+                <p><strong>Code commande:</strong> {{order.codeCommande}}</p>
+                <p *ngIf="order.produitDescription">
+                  <strong>Description:</strong> {{order.produitDescription}}
+                </p>
+                <p><strong>Client:</strong> {{order.clientFirstname}} {{order.clientLastname}}</p>
+                <!-- <p><strong>Téléphone:</strong> 
+                  <a (click)="phoneCall(order.clientPhoneNumber)">{{order.clientPhoneNumber}}</a>
+                </p> -->
+                <p *ngIf="order.clientEmail"><strong>Email:</strong> {{order.clientEmail}}</p>
+                <!-- <p><strong>Fournisseur:</strong> {{order.fournisseurUsername}}</p> -->
+                <p><strong>Date de commande:</strong> {{formatDate(order.dateCommande)}}</p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- This month's orders -->
+    <div *ngIf="monthOrders.length > 0" class="orders-section">
+      <h2>Ce mois</h2>
+      <div fxLayout="row wrap" fxLayoutGap="16px grid">
+        <div *ngFor="let order of monthOrders" 
+            fxFlex="100" 
+            fxFlex.gt-sm="48"
+            class="order-card-container">
+          <mat-card class="order-card" (click)="toggleOrderDetails(order.id)">
+            <div class="order-card-content">
+              <div class="order-image">
+                <img [src]="order.produitImage" [alt]="order.produitNom">
+              </div>
+              <div class="order-details">
+                <h3>{{order.produitNom}}</h3>
+                <div class="order-status" [ngClass]="getStatusClass(order.statutCommande?.name)">
+                  {{getStatusText(order.statutCommande?.name)}}
+                </div>
+                <div class="order-info">
+                  <span>{{order.quantite}} article{{order.quantite > 1 ? 's' : ''}} <span class="dot">•</span> {{order.montant}} F</span>
+                </div>
+                <div class="order-location" *ngIf="order.clientAdresse">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{order.clientAdresse}}</span>
+                </div>
+              </div>
+              <div class="order-action">
+                <mat-icon [class.rotated]="isOrderExpanded(order.id)">expand_more</mat-icon>
+              </div>
+            </div>
+            
+            <!-- Expanded details -->
+            <div class="expanded-details" *ngIf="isOrderExpanded(order.id)">
+              <mat-divider></mat-divider>
+              <div class="expanded-content">
+                <p><strong>Code commande:</strong> {{order.codeCommande}}</p>
+                <p *ngIf="order.produitDescription"><strong>Description:</strong> {{order.produitDescription}}</p>
+                <p><strong>Client:</strong> {{order.clientFirstname}} {{order.clientLastname}}</p>
+                <!-- <p><strong>Téléphone:</strong> 
+                  <a (click)="phoneCall(order.clientPhoneNumber)">{{order.clientPhoneNumber}}</a>
+                </p> -->
+                <p *ngIf="order.clientEmail"><strong>Email:</strong> {{order.clientEmail}}</p>
+                <!-- <p><strong>Fournisseur:</strong> {{order.fournisseurUsername}}</p> -->
+                <p><strong>Date de commande:</strong> {{formatDate(order.dateCommande)}}</p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Older orders -->
+    <div *ngIf="olderOrders.length > 0" class="orders-section">
+      <h2>Plus ancien</h2>
+      <div fxLayout="row wrap" fxLayoutGap="16px grid">
+        <div *ngFor="let order of olderOrders" 
+             fxFlex="100" 
+             fxFlex.gt-sm="48"
+             class="order-card-container">
+          <mat-card class="order-card" (click)="toggleOrderDetails(order.id)">
+            <div class="order-card-content">
+              <div class="order-image">
+                <img [src]="order.produitImage" [alt]="order.produitNom">
+              </div>
+              <div class="order-details">
+                <h3>{{order.produitNom}}</h3>
+                <div class="order-status" [ngClass]="getStatusClass(order.statutCommande?.name)">
+                  {{getStatusText(order.statutCommande?.name)}}
+                </div>
+                <div class="order-info">
+                  <span>{{order.quantite}} article{{order.quantite > 1 ? 's' : ''}} <span class="dot">•</span> {{order.montant}} F</span>
+                </div>
+                <div class="order-location" *ngIf="order.clientAdresse">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{order.clientAdresse}}</span>
+                </div>
+              </div>
+              <div class="order-action">
+                <mat-icon [class.rotated]="isOrderExpanded(order.id)">expand_more</mat-icon>
+              </div>
+            </div>
+            
+            <!-- Expanded details -->
+            <div class="expanded-details" *ngIf="isOrderExpanded(order.id)">
+              <mat-divider></mat-divider>
+              <div class="expanded-content">
+                <p><strong>Code commande:</strong> {{order.codeCommande}}</p>
+                <p *ngIf="order.produitDescription"><strong>Description:</strong> {{order.produitDescription}}</p>
+                <p><strong>Client:</strong> {{order.clientFirstname}} {{order.clientLastname}}</p>
+                <!-- <p><strong>Téléphone:</strong> 
+                  <a (click)="phoneCall(order.clientPhoneNumber)">{{order.clientPhoneNumber}}</a>
+                </p> -->
+                <p *ngIf="order.clientEmail"><strong>Email:</strong> {{order.clientEmail}}</p>
+                <!-- <p><strong>Fournisseur:</strong> {{order.fournisseurUsername}}</p> -->
+                <p><strong>Date de commande:</strong> {{formatDate(order.dateCommande)}}</p>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    
+    <!-- No results message -->
+    <div *ngIf="filteredOrders.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <p>Aucune commande trouvée</p>
+    </div>
+    
+    <!-- Load more button -->
+    <div class="load-more-container" *ngIf="hasMoreOrders">
+      <button mat-button (click)="loadMoreOrders()" class="load-more-button">
+        <span>Voir plus</span>
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
 

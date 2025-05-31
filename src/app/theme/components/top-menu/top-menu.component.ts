@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from '../../../app.service';
 import { Settings, AppSettings } from '../../../app.settings';
@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top-menu',
-  templateUrl: './top-menu.component.html'
+  templateUrl: './top-menu.component.html',
+  encapsulation: ViewEncapsulation.None,
 })
 export class TopMenuComponent implements OnInit {
 
@@ -50,20 +51,20 @@ export class TopMenuComponent implements OnInit {
     this.user = JSON.parse(sessionStorage.getItem('currentUser')!);
   //   this.roles = this.user.profiles[0].name;
 
-  //   if (this.roles == "ROLE_BOUTIQUE") {
-  //    this.routes = "account-seller";
-  //   }
-  //   else if(this.roles == "ROLE_PARTICULIER"){
-  //    this.routes = "account-customer";
-    
-  // }
+    if (this.roles == "ROLE_BOUTIQUE") {
+     this.routes = "account-seller";
+    }
+    else if(this.roles == "ROLE_PARTICULIER"){
+     this.routes = "account-customer";
+
+  }
     // this.username = sessionStorage.getItem('username')!;
    console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
   }
 
 
 
-  
+
   public changeCurrency(currency) {
     this.currency = currency;
   }

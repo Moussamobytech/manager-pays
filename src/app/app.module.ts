@@ -19,7 +19,7 @@ import { SharedModule } from './shared/shared.module';
 import { PagesComponent } from './pages/pages.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { TopMenuComponent } from './theme/components/top-menu/top-menu.component';
-import { MenuComponent } from './theme/components/menu/menu.component';
+// import { MenuComponent } from './theme/components/menu/menu.component';
 import { SidenavMenuComponent } from './theme/components/sidenav-menu/sidenav-menu.component';
 import { BreadcrumbComponent } from './theme/components/breadcrumb/breadcrumb.component';
 import { OptionsComponent } from './theme/components/options/options.component';
@@ -47,9 +47,10 @@ import { AdminConnectionComponent } from './pages/admin-connection/admin-connect
 // import { SearchResultsComponent } from './pages/search-results/search-results.component';
 import { AnalyticsService } from './services/analitycs.service';
 import { InfluencerService } from './services/influencer.service';
+import { CaracteristiquesService } from './services/caracteristiques.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { SearchResultsModule } from './pages/search-results/search-results.module';
-import { CaracteristiquesService } from './services/caracteristiques.service';
+import { HeaderComponent } from './shared/header/header.component';
 
 @NgModule({
   declarations: [
@@ -58,11 +59,12 @@ import { CaracteristiquesService } from './services/caracteristiques.service';
     NotFoundComponent,
     AdminConnectionComponent,
     TopMenuComponent,
-    MenuComponent,
+    // MenuComponent,
     SidenavMenuComponent,
     BreadcrumbComponent,
     OptionsComponent,
     FooterComponent,
+    HeaderComponent,
     // SearchResultsComponent
 
   ],
@@ -114,8 +116,6 @@ import { CaracteristiquesService } from './services/caracteristiques.service';
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
-
-
   ],
   bootstrap: [AppComponent]
 })

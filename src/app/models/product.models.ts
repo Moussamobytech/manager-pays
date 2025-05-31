@@ -26,7 +26,7 @@ export class Product {
                 public size: Array<string>,
                 public weight: number,
                 public etat: string,
-                public categorie: string,
+                public categorie: any,
                 public categorieNom: string,
                 public contact: string,
                 public user : string,
@@ -37,5 +37,6 @@ export class Product {
                 public dailyVisits: number,
                 public campagne:Campagne,
                 public yearlyVisits: number,
+                public gain?: number,
                 public isFavorite: boolean = false ){ }
   }

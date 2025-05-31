@@ -1,11 +1,11 @@
 
  <!--<section *ngIf="productList?.length === 0" class="empty-cart-card" fxLayout="column" fxLayoutAlign="center center">
-  <mat-icon class="cart-icon" aria-label="Cart Icon">shopping_cart</mat-icon> 
+  <mat-icon class="cart-icon" aria-label="Cart Icon">shopping_cart</mat-icon>
   <i class="fa-solid fa-cart-shopping cart-icon"></i>
   <h1 class="cart-title">Votre panier est actuellement vide !</h1>-->
   <!-- <a [routerLink]="['/']" mat-raised-button color="primary" class="shop-button">
     Retourner à la boutique
-  </a> 
+  </a>
   <button class="shop-button" routerLink="/products"><i class="fa-solid fa-chevron-left"></i> Retourner à la boutique</button>
 </section>-->
 
@@ -18,7 +18,7 @@
   </svg>
   <h1 class="mt-3">Votre panier est actuellement vide !</h1>
   <p class="text-muted">Avant de procéder au paiement, vous devez ajouter certains articles à votre panier.</p>
-  <a [routerLink]="['/products']" mat-raised-button color="primary" class="mt-3">Retourner à la boutique</a>
+  <a [routerLink]="['/products']" mat-raised-button  class="mt-3 monBtn">Retourner à la boutique</a>
 </mat-card>
 
 <!-- <div class="desktop-container" fxFlex="100" fxShow="false" fxShow.gt-xs="true">
@@ -157,7 +157,7 @@
           <p class="product-price">{{ product?.pricePromotion || product?.priceBasic }} F</p>
         </div>
       </div>
-     
+
       <div class="summary-item" *ngIf="product?.campagne && product?.campagne.reduction">
         <p>
           Réduction - {{ product?.campagne.reduction }}%
@@ -166,19 +166,19 @@
             ((product?.priceBasic || 0) * product?.campagne.reduction / 100) * product.cartCount | number : '1.0-0'
           }} F)
         </p>
-      
+
       </div>
-      
-      
+
+
       <div class="product-actions">
         <app-controls [product]="product" [pageName]="pageName" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>
         <button class="delete-button" (click)="remove(product)"><i class="fa-solid fa-trash"></i></button>
       </div>
 
-    
+
 
     </div>
-    
+
   </div>
 
   <!-- Order Summary & Payment Form -->
@@ -189,13 +189,13 @@
         <p>Montant</p>
         <p>{{ grandTotal }} F</p>
       </div>
-      
+
       <div class="summary-item">
         <p>Reduction total</p>
         <p>{{ getTotalReduction() | number : '1.0-0' }} F</p>
       </div>
 
-  
+
       <!-- <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
         <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
         <p>-{{ getProductDiscount(product) }} F</p>
@@ -207,7 +207,7 @@
       </div>
     </div>
 
-    <!-- Payment Form: horizontal on desktop, vertical on mobile 
+    <!-- Payment Form: horizontal on desktop, vertical on mobile
     <form class="payment-form" fxLayout="row">
       <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
         <mat-label>* Numéro de téléphone</mat-label>
@@ -250,7 +250,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    
+
     <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
       <!-- Champ Téléphone -->
       <mat-form-field appearance="outline" class="w-100 phone-number">
@@ -259,7 +259,7 @@
         <input matInput formControlName="phone" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
       </mat-form-field>
     </div>
-    
+
 
     <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
       <mat-form-field appearance="outline" class="w-100">

@@ -1,11 +1,11 @@
-import { Component, OnInit, inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Order } from 'src/app/models/order.models';
 import { User } from 'src/app/models/user.models';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommandeService } from 'src/app/services/commande.service';
-import { DomHandlerService } from 'src/app/dom-handler.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-orders',
@@ -13,143 +13,281 @@ import { Router } from '@angular/router';
   styleUrls: ['./orders.component.scss']
 })
 export class OrdersComponent implements OnInit {
-  @ViewChild('popupDetails') popupDetails: TemplateRef<any>;
-
-  /*public orders = [
-    { number: '#3258', date: 'March 29, 2018', status: 'Completed', total: '$140.00 for 2 items', invoice: true },
-    { number: '#3145', date: 'February 14, 2018', status: 'On hold', total: '$255.99 for 1 item', invoice: false },
-    { number: '#2972', date: 'January 7, 2018', status: 'Processing', total: '$255.99 for 1 item', invoice: true },
-    { number: '#2971', date: 'January 5, 2018', status: 'Completed', total: '$73.00 for 1 item', invoice: true },
-    { number: '#1981', date: 'December 24, 2017', status: 'Pending Payment', total: '$285.00 for 2 items', invoice: false },
-    { number: '#1781', date: 'September 3, 2017', status: 'Refunded', total: '$49.00 for 2 items', invoice: false }
-  ]*/
   user: User;
-  idUser: string;
-  username: string;
-  orders: Order[];
-  public page: any;
-  public count = 6;
-  domHandlerService = inject(DomHandlerService);
-  selectedOrder: Order | null = null;
+  unchangedOrders: Order[] = [];
+  allOrders: Order[] = [];
+  filteredOrders: Order[] = [];
+  todayOrders: Order[] = [];
+  weekOrders: Order[] = [];
+  monthOrders: Order[] = [];
+  olderOrders: Order[] = [];
+  expandedOrderIds: string[] = [];
+  
+  searchTerm: string = '';
+  selectedStatusFilter: string = '';
+  selectedTimeFilter: string = 'tout'; 
+  
+  pageSize = 6;
+  loadedPageCount: number = 6;
+  hasMoreOrders: boolean = false;
 
-
-  constructor(private router: Router, public dialog: MatDialog, private authService: AuthenticationService, private commandeService: CommandeService) { }
+  constructor(
+    private router: Router, 
+    public dialog: MatDialog, 
+    private authService: AuthenticationService, 
+    private commandeService: CommandeService,
+    private cm: CommonService
+  ) { }
 
   ngOnInit() {
-    this.getUser();
-    this.getAllCommande();
+    this.user = this.authService.currentUser();
+    if(this.user) {
+      this.getAllCommande();
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   getAllCommande() {
-    this.commandeService.getAllCommandeByUsername(this.username).subscribe(datas => {
-      this.orders = datas;
-      console.log("PANIER : ", JSON.stringify(datas));
-
-    }, error => {
-      //this.snackBar.open('Une erreur lors de la connexion, merci de réessayer !', '×', { panelClass: 'error', verticalPosition: 'top', duration: 3000 });
-      console.error('Error during recharge:', error);
-    });
-
-  }
-  getUser() {
-    this.user = this.authService.currentUser();
-    if (this.user != null) {
-      this.idUser = this.user.id;
-      this.username = this.user.username
-      console.log("1USERS :::::::::::::::: ", this.username);
-
-    }
-  }
-
-  public onPageChanged(event) {
-    this.page = event;
-    this.domHandlerService.winScroll(0, 0);
-  }
-
-  // Propriétés pour suivre l'état du tri
-  sortKey: string = '';
-  sortDirection: boolean = false; // false = ascendant, true = descendant
-
-  // Méthode pour gérer le tri
-  sortBy(key: string): void {
-    if (this.sortKey === key) {
-      // Inversez la direction si on clique sur la même colonne
-      this.sortDirection = !this.sortDirection;
-    } else {
-      // Définir une nouvelle colonne de tri et initialiser la direction
-      this.sortKey = key;
-      this.sortDirection = false; // Commencer par un tri ascendant
-    }
-  }
-
-  // Méthode pour renvoyer les données triées
-  sortedOrders() {
-    return this.orders.sort((a, b) => {
-      let valA = a[this.sortKey];
-      let valB = b[this.sortKey];
-
-      if (typeof valA === 'string') {
-        valA = valA.toLowerCase();
-        valB = valB.toLowerCase();
+    this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(
+      orders => {
+        this.unchangedOrders = [...orders.filter(order => order.dateCommande 
+          <= new Date().toISOString() && order.statutCommande?.name !== "VALIDE")];
+        this.applyFilters();
+      }, 
+      error => {
+        this.cm.openFailureSnackBar('Une erreur lors de la récupération des commandes, merci de réessayer !')
+        console.error('Error fetching orders:', error);
       }
-
-      if (this.sortDirection) {
-        return valA > valB ? -1 : valA < valB ? 1 : 0;
-      } else {
-        return valA < valB ? -1 : valA > valB ? 1 : 0;
-      }
-    });
+    );
   }
 
-  openOrderDetails(order: Order): void {
-    this.selectedOrder = order; // Stocker l'objet sélectionné
-    const dialogRef = this.dialog.open(this.popupDetails, {
-      width: '400px',
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      this.selectedOrder = null; // Réinitialiser après fermeture
-    });
-  }
   phoneCall(phoneNumber: string): void {
     const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/;
     if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
-      console.error('Numéro de téléphone invalide.');
+      this.cm.openFailureSnackBar('Numéro de téléphone invalide.');
       return;
     }
 
-    const telUrl = `tel:+${phoneNumber}`;
+    const telUrl = `tel:${phoneNumber}`;
     window.open(telUrl, '_self');
   }
 
-
-  onNoClick(): void {
-    this.dialog.closeAll();
+  loadMoreOrders() {
+    this.loadedPageCount += this.pageSize;
+    this.displayPaginatedOrders();
   }
-
-  public Status(key) {
-    let res = ""
-    switch (key) {
-      case "DELIVERED":
-        res = "Livrer"
-        break;
-
-      case "CANCEL":
-        res = "Annuler"
-        break;
-
-      case "PENDING":
-        res = "En attente"
-        break;
-        case "VALIDE":
-          res = "Validée"
-          break;
-
-      default:
-        res = "N/A"
-        break;
+  
+  displayPaginatedOrders() {
+    this.allOrders = this.filteredOrders.slice(0, this.loadedPageCount);
+    this.hasMoreOrders = this.filteredOrders.length > this.loadedPageCount;
+    this.groupOrdersByDate();
+  }
+  
+  filterOrders() {
+    this.loadedPageCount = this.pageSize; // Reset pagination when applying new search
+    this.applyFilters();
+  }
+  
+  filterByStatus(status: string) {
+    this.selectedStatusFilter = this.selectedStatusFilter === status ? '' : status;
+    this.loadedPageCount = this.pageSize; // Reset pagination when changing filter
+    this.applyFilters();
+  }
+  
+  filterByTime() {
+    this.loadedPageCount = this.pageSize; // Reset pagination when changing time filter
+    this.applyFilters();
+  }
+  
+  applyFilters() {
+    let filtered = [...this.unchangedOrders];
+    
+    // Apply search filter
+    if (this.searchTerm && this.searchTerm.trim() !== '') {
+      const term = this.searchTerm.toLowerCase().trim();
+      filtered = filtered.filter(order => 
+        (order.produitNom && order.produitNom.toLowerCase().includes(term))
+      );
     }
-    return res
+    
+    // Apply status filter
+    if (this.selectedStatusFilter) {
+      filtered = filtered.filter(order => {
+        const status =  order.statutCommande?.name;
+        if (this.selectedStatusFilter === 'en-attente') 
+          return status === 'PENDING';
+        else if (this.selectedStatusFilter === 'livre') 
+          return status === 'DELIVERED';
+        else if (this.selectedStatusFilter === 'annule') 
+          return status === 'CANCEL';
+        return true;
+      });
+    }
+    
+    // Apply time filter
+    if (this.selectedTimeFilter !== 'tout') {
+      const now = new Date();
+      
+      if (this.selectedTimeFilter === 'aujourdhui') {
+        filtered = filtered.filter(order => {
+          const orderDate = new Date(order.dateCommande);
+          return this.isSameDay(orderDate, now);
+        });
+      } else if (this.selectedTimeFilter === '7-jours') {
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(now.getDate() - 7);
+        filtered = filtered.filter(order => {
+          const orderDate = new Date(order.dateCommande);
+          return orderDate >= sevenDaysAgo;
+        });
+      } else if (this.selectedTimeFilter === '1-mois') {
+        const oneMonthAgo = new Date(now);
+        oneMonthAgo.setMonth(now.getMonth() - 1);
+        filtered = filtered.filter(order => {
+          const orderDate = new Date(order.dateCommande);
+          return orderDate >= oneMonthAgo;
+        });
+        console.log("Filtered orders for 1 month:", filtered);
+      }
+    }
+    
+    // Sort orders by date (newest first)
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.dateCommande).getTime();
+      const dateB = new Date(b.dateCommande).getTime();
+      return dateB - dateA;
+    });
+    
+    this.filteredOrders = filtered;
+    console.log("Filtered orders:", this.filteredOrders);
+    this.displayPaginatedOrders();
+    this.groupOrdersByDate();
   }
+  
+  groupOrdersByDate() {
+    console.log("allorders", this.allOrders);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    // Calculate start of week (Monday)
+    const weekStart = new Date(today);
+    const day = today.getDay();
+    const diffToMonday = day === 0 ? 6 : day - 1; // Adjust for week starting on Monday (0=Monday)
+    weekStart.setDate(today.getDate() - diffToMonday);
+    
+    // Calculate start of month
+    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    
+    this.todayOrders = this.allOrders.filter(order => {
+      const orderDate = new Date(order.dateCommande);
+      return this.isSameDay(orderDate, now);
+    });
+    
+    this.weekOrders = this.allOrders.filter(order => {
+      const orderDate = new Date(order.dateCommande);
+      return !this.isSameDay(orderDate, now) && 
+             orderDate >= weekStart && 
+             orderDate < today;
+    });
+    
+    this.monthOrders = this.allOrders.filter(order => {
+      const orderDate = new Date(order.dateCommande);
+      return !this.isSameDay(orderDate, now) && 
+             !(orderDate >= weekStart && orderDate < today) &&
+             orderDate >= monthStart && 
+             orderDate < today;
+    });
+    
+    this.olderOrders = this.allOrders.filter(order => {
+      const orderDate = new Date(order.dateCommande);
+      console.log("Order Date",orderDate);
+      console.log("Month Start",monthStart);
+      console.log("Order Date < Month Start",orderDate < monthStart);
+      return orderDate < monthStart;
+    });
 
+    console.log("Loaded Page Count",this.loadedPageCount);
+    console.log("Today Orders",this.todayOrders);
+    console.log("Week Orders",this.weekOrders);
+    console.log("Month Orders",this.monthOrders);
+    console.log("Older Orders",this.olderOrders);
+    console.log("filtered Orders",this.filteredOrders);
+  }
+  
+  isSameDay(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  }
+  
+  toggleOrderDetails(orderId: string) {
+    if (this.expandedOrderIds.includes(orderId)) {
+      this.expandedOrderIds = this.expandedOrderIds.filter(id => id !== orderId);
+    } else {
+      this.expandedOrderIds.push(orderId);
+    }
+  }
+  
+  isOrderExpanded(orderId: string): boolean {
+    return this.expandedOrderIds.includes(orderId);
+  }
+  
+  getStatusText(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'En attente';
+      case 'DELIVERED':
+        return 'Livré';
+      case 'CANCEL':
+        return 'Annulé';
+      default:
+        return status || 'Inconnu';
+    }
+  }
+  
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'waiting';
+      case 'DELIVERED':
+        return 'delivered';
+      case 'CANCEL':
+        return 'cancelled';
+      default:
+        return '';
+    }
+  }
+  
+  getOrderCountByStatus(status: string): number {
+    if (!this.unchangedOrders || this.unchangedOrders.length === 0) {
+      return 0;
+    }
+    
+    if (status === 'en-attente') {
+      return this.unchangedOrders.filter(order => 
+        order.statutCommande?.name === 'PENDING'
+      ).length;
+    } else if (status === 'livre') {
+      return this.unchangedOrders.filter(order => 
+        order.statutCommande?.name === 'DELIVERED'
+      ).length;
+    } else if (status === 'annule') {
+      return this.unchangedOrders.filter(order => 
+        order.statutCommande?.name === 'CANCEL'
+      ).length;
+    } else if (status === 'tout') {
+      return this.unchangedOrders.length;
+    }
+    return 0;
+  }
+  
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  }
 }

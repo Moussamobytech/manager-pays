@@ -202,7 +202,7 @@
         </div>
       </div>
       <div style="text-align: center;" mat-dialog-content *ngIf="allCodesCampagne == ''">
-        <strong>Vous n'avez pas de codes généré pour cette campagne 
+        <strong>Vous n'avez pas de codes généré pour cette campagne
           <button mat-raised-button class="bleu mr-2" matTooltip="Générer un code" (click)="openDialog()">
             Générer un code
           </button>
@@ -291,11 +291,11 @@
         </ul>
       </div>
     </div>
-    
+
 
     <!-- Active Campaigns List -->
-    <section class="campaign__active-list">
-      <div class="campaign__filters" fxLayout="row wrap" fxLayoutGap="16px">
+   <section class="campaign__active-list">
+      <!-- <div class="campaign__filters" fxLayout="row wrap" fxLayoutGap="16px">
         <mat-form-field appearance="outline" fxFlex="100" fxFlex.gt-sm="300px">
           <mat-label>Rechercher une campagne</mat-label>
           <input matInput [(ngModel)]="searchTerm" (keyup)="filterCampaigns()" placeholder="Nom de la campagne...">
@@ -321,8 +321,9 @@
           </mat-select>
         </mat-form-field>
       </div>
+    -->
 
-      <h3>Mes campagnes actives</h3>
+      <h3>Mes campagnes</h3>
       <div class="campaign__active-items" fxLayout="row wrap">
         <div *ngFor="let campagne of filteredCampaigns.slice(0, loadIndex)"
           class="campaign__active-item" fxFlex="100" fxFlex.gt-sm="48" >
@@ -333,7 +334,7 @@
             <i *ngIf="campagne.typePromo.name === 'LIVRAISON_GRATUITE'" class="fa-solid fa-truck"></i>
           </div>
           <div class="campaign__info" fxFlex>
-            <div class="campaign__title">{{ campagne.nom }}</div>
+            <div class="campaign__title">{{ campagne.nom.slice(0, 20) }}...</div>
             <div class="campaign__value">
               <ng-container *ngIf="campagne.reduction">
                 <span class="campaign__value-item">
@@ -362,13 +363,17 @@
               </div>
             </div>
           </div>
-          <label class="campaign__switch">
+          <!-- <label class="campaign__switch">
             <mat-slide-toggle
               [checked]="campagne.active"
               (change)="setStatus(campagne.id, $event)"
               [color]="campagne.active ? 'primary' : 'warn'"
               [ngClass]="campagne.typePromo.name.toLowerCase()">
             </mat-slide-toggle>
+          </label> -->
+          <label class="campaign__switch">
+            <input type="checkbox" [checked]="campagne.active" (change)="setStatus(campagne)">
+            <span class="campaign__slider" [ngClass]="campagne.typePromo.name.toLowerCase()"></span>
           </label>
           <div class="campaign__actions">
             <button class="campaign__action-button" matTooltip="Détails" (click)="openCampagneDetail(campagne)">

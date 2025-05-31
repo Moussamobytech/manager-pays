@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, FormArray, AbstractControl, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Category } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { CategoryService } from 'src/app/services/category.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
-import { ImageCompressService } from 'src/app/services/image-compress.servive';
 import { ProductService } from 'src/app/services/product.service';
 import { User } from 'src/app/models/user.models';
 import { CampagneService } from 'src/app/services/campagne.service';
@@ -25,49 +22,48 @@ export class AddParrainageComponent implements OnInit {
   public username:string;
   sub: any;
   typePromo: any;
+  minDate: Date; // Date minimale pour le datepicker
 
+  isPromo: boolean = false;
+  isParrainage: boolean = false;
+  isOffre: boolean = false;
+  isLivraison: boolean = false;
 
- isPromo: boolean = false;
-isParrainage: boolean = false;
-isOffre: boolean = false;
-isLivraison: boolean = false;
+  typePromoSelect(typepromo: any) {
+    let res = ""  
 
-typePromoSelect(typepromo: any) {
-  let res = ""  
-
-  this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
-  res = typepromo.name
-  switch (res) {
-    case 'OFFRE_BIENVENUE':
-      this.isOffre = true;
-      this.isLivraison = false;
-      this.isPromo = false;
-      this.form.get('commission').clearValidators();
-      break;
-    case 'LIVRAISON_GRATUITE':
-      this.isLivraison = true;
-      this.isPromo = false;
-      this.isOffre = false;
-      this.form.get('commission').clearValidators();
-      break;
-    case 'PARRAINAGE':
-      this.isParrainage = true;
-      this.form.get('commission').setValidators([
-        Validators.required,
-        Validators.pattern('^[0-9]*$'),
-        Validators.min(1)
-      ]);
-      break;
-    case 'PROMOTION':
-      this.isPromo = true;
-      this.isLivraison = false;
-      this.isOffre = false;
-      this.form.get('commission').clearValidators();
-      break;
+    this.isPromo = this.isParrainage = this.isOffre = this.isLivraison = false;
+    res = typepromo.name
+    switch (res) {
+      case 'OFFRE_BIENVENUE':
+        this.isOffre = true;
+        this.isLivraison = false;
+        this.isPromo = false;
+        this.form.get('commission').clearValidators();
+        break;
+      case 'LIVRAISON_GRATUITE':
+        this.isLivraison = true;
+        this.isPromo = false;
+        this.isOffre = false;
+        this.form.get('commission').clearValidators();
+        break;
+      case 'PARRAINAGE':
+        this.isParrainage = true;
+        this.form.get('commission').setValidators([
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.min(1)
+        ]);
+        break;
+      case 'PROMOTION':
+        this.isPromo = true;
+        this.isLivraison = false;
+        this.isOffre = false;
+        this.form.get('commission').clearValidators();
+        break;
+    }
+    this.form.get('commission').updateValueAndValidity();
   }
-  this.form.get('commission').updateValueAndValidity();
-}
-
 
   typeOffre = [
     {nom:'Reduction en %', value:'REDUCTION'},
@@ -75,7 +71,7 @@ typePromoSelect(typepromo: any) {
   ]
    // Liste des pays avec leurs régions
    countries:any
-  
+
    // FormControls pour les selects
    selectedCountry = new FormControl('');
    selectedRegion = new FormControl('');
@@ -92,7 +88,7 @@ typePromoSelect(typepromo: any) {
     //  this.selectedRegions = []; // Réinitialise la sélection
     }
    // Ajoute ou enlève une région à la sélection
- 
+
 
      // Vérifie si toutes les régions sont sélectionnées
   isAllSelected(): boolean {
@@ -124,28 +120,26 @@ typePromoSelect(typepromo: any) {
   }
 
   constructor(
-    public appService: AppService, 
-    public formBuilder: UntypedFormBuilder, 
+    public appService: AppService,
+    public formBuilder: UntypedFormBuilder,
     private commonService: CommonMessageService,
-    private auth: AuthenticationService, 
-    private productService: ProductService, 
+    private auth: AuthenticationService,
+    private productService: ProductService,
     private campagneService: CampagneService,
     private countryService: CountryService,
-    
+
     private router: Router,private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) {
       this.form = this.fb.group({
         products: this.fb.array([], Validators.required)
       });
-  
-     }
-
-   
+      this.minDate = new Date(); // Initialiser la date minimale à aujourd'hui
+   }
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
-    this.username = this.currentUser.username; 
-    this.getAllPromo();  
+    this.username = this.currentUser.username;
+    this.getAllPromo();
     this.form = this.formBuilder.group({
       'nom': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
       'reduction': [null],
@@ -186,7 +180,6 @@ typePromoSelect(typepromo: any) {
     this.getAllPays();
   }
 
-
   getAllPays() {
     this.countryService.getAllCountries().subscribe(datas => {
       this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -215,9 +208,9 @@ typePromoSelect(typepromo: any) {
 
   async loadData() {
 
-    let res = await this.productService.productUser(this.currentUser.username)
+    let res = await this.productService.getProductBySeller(this.currentUser.username)
     this.products = res
-    
+
   }
   //Controle pour la saisie de 0
   nonZeroValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -228,18 +221,13 @@ typePromoSelect(typepromo: any) {
     return null;
   }
 
-  
-
   public async onSubmit() {
     if (this.id) {
       this.edit()
     } else {
       this.save()
     }
-
   }
-
- 
 
   async save() {    
     try {
@@ -261,15 +249,14 @@ typePromoSelect(typepromo: any) {
           produitPromos:this.selectedProducts.value?.map(product => product.id),
           zoneLivraison:this.selectedCountries.value,
           cadeauxProduit:this.selectedProducts2.value
-
         };
-  
+
         this.campagneService.add(data).subscribe({
-          next: (datas) => {           
-          
+          next: (datas) => {
+
               this.commonService.successToast(datas.message);
               this.router.navigate(["/account-seller/parrainage"]);
-           
+
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -277,15 +264,14 @@ typePromoSelect(typepromo: any) {
             }
             if(err.status == "400"){
               this.commonService.errorToast(err.message);
-
             }
-            
+
             else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
           }
         });
-  
+
       } else {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
@@ -294,9 +280,9 @@ typePromoSelect(typepromo: any) {
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
   }
-  
 
-  async edit() {    
+
+  async edit() {
     let size = 0;
     try {
       if (this.form.valid) {
@@ -319,12 +305,12 @@ typePromoSelect(typepromo: any) {
           cadeauxProduit:this.selectedProducts2.value
         };
 
-      
+
         this.campagneService.edit(this.id,data).subscribe({
-          next: (datas) => {           
+          next: (datas) => {
               this.commonService.successToast(datas.message);
               this.router.navigate(["/account-seller/parrainage"]);
-           
+
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -354,8 +340,8 @@ typePromoSelect(typepromo: any) {
   public getCampagneById(){
     this.campagneService.find(this.id).then((data : any) =>{
       this.form.patchValue(data);
-      this.form.controls.typePromo.patchValue(data.typePromo.id); 
-      
+      this.form.controls.typePromo.patchValue(data.typePromo.id);
+
       // Récupérer les produits un par un à partir des IDs
       if (data.produitPromos && data.produitPromos.length > 0) {
         const products = [];

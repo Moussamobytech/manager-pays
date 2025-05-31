@@ -53,6 +53,8 @@ export class ProductsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log("1 :::::::::::::::::::::::: PROD ");
+
     this.sortProducts();
     this.getDataFromBackend();
     this.onWindowResize();
@@ -71,6 +73,8 @@ export class ProductsComponent implements OnInit {
 
   private async getProducts() {
     const products = await this.produitService.getProductByBest();
+    console.log(":::::::::::::::::::::::: PROD ",products);
+    
     const filteredProducts = products.filter((p) => p.etat === "ACTIF");
     this.promoProducts = filteredProducts.slice(0, !this.usePagination ? this.viewCount : undefined);
     this.unchangedProducts = filteredProducts;

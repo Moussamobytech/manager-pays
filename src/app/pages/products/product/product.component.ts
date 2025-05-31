@@ -101,7 +101,7 @@ export class ProductComponent implements OnInit {
     console.log("res related :::::: ",this.product?.categorie);
     if (this.product && this.product?.categorie) {
       // this enpoint does not work at all
-      let res = await this.productService.getProductByCategorieName(this.product.categorieNom)
+      let res = await this.productService.getProductByCategorie(this.product.id)
       console.log("res related :::::: ",res);
       this.relatedProducts = res;
     }

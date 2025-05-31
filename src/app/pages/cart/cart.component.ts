@@ -8,7 +8,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CountryService } from 'src/app/services/country.service';
 import { Router } from '@angular/router';
+<<<<<<< HEAD
 import {openKkiapayWidget, addKkiapayListener, removeKkiapayListener} from "kkiapay";
+=======
+import { CartService } from 'src/app/services/carte.service';
+>>>>>>> origin/adama_Gaoussou_maquette
 
 @Component({
   selector: 'app-cart',
@@ -48,7 +52,7 @@ export class CartComponent implements OnInit {
 
 
   constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
-    private authService:AuthenticationService,   public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
+    private authService:AuthenticationService, private carteService:CartService,  public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
   ) { }
   public count:number = 1;
   public productList: any[];
@@ -315,6 +319,7 @@ onlyCartItemCount:any = 0
     this.productList.length = 0;
     this.appService.Data.totalPrice = 0;
     this.appService.Data.totalCartCount = 0;
+    this.carteService.updateCartCount(0)
     sessionStorage.removeItem('panier');
     sessionStorage.removeItem('totalCartCount');
   }
@@ -436,8 +441,13 @@ onlyCartItemCount:any = 0
     }
 
     commander(){     
+<<<<<<< HEAD
       let user = this.user;
       console.log("::::::::::::::: USER = ",user);
+=======
+      let user = this.user;  
+      //console.log("::::::::::::::: USER = ",user);
+>>>>>>> origin/adama_Gaoussou_maquette
       if(user != null){    
         // Appliquer la réduction aux articles avant l'envoi
      //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));
@@ -462,6 +472,7 @@ onlyCartItemCount:any = 0
         // this.router.navigate(["/cart"]);
         this.appService.addCommande(user.id, user.username, this.referralCode, productsWithReduction).subscribe(
           () => {
+<<<<<<< HEAD
             
             openKkiapayWidget({
               amount: this.grandTotal - this.getTotalReduction() ,
@@ -470,6 +481,9 @@ onlyCartItemCount:any = 0
               phone: "97000000",
             });
             this.snackBar.open('Commande initialisée avec succès', '×', {
+=======
+            this.snackBar.open('Commande effectuée avec succès 1', '×', {
+>>>>>>> origin/adama_Gaoussou_maquette
               panelClass: 'success',
               verticalPosition: 'top',
               duration: 3000

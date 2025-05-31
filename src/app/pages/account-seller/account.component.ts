@@ -40,7 +40,7 @@ export class AccountComponent implements OnInit {
   selectedLogoName: string = null;
   public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
-    { name: 'Mes commandes', href: 'orders-manage', icon: 'shop' },
+    { name: 'Commandes', href: 'orders', icon: 'shop' },
 
     { name: 'Campagne', href: 'parrainage', icon: 'campaign' },
     { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },

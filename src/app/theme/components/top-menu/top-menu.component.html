@@ -1,88 +1,53 @@
 <div class="top-menu">
+  <span fxShow="false" fxShow.gt-sm>
+    <a mat-button (click)="promptInstall()" *ngIf="installButtonVisible">Telecharger l’Appli</a>
+  </span>
 
-    <!-- <a mat-button [matMenuTriggerFor]="currencyMenu" #currencyMenuTrigger="matMenuTrigger">
-        {{currency}}<mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-    </a>
-    <mat-menu #currencyMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown">
-        <span (mouseleave)="currencyMenuTrigger.closeMenu()">
-            <button mat-menu-item *ngFor="let cur of currencies" (click)="changeCurrency(cur)">
-                <span>{{cur}}</span>
-            </button>
-        </span>
-    </mat-menu> -->
+  <div fxShow="false" fxShow.gt-xs="true">
+    <button mat-button [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
+      <span fxShow.gt-sm>Mon compte</span>&nbsp;
+      <mat-icon class="mat-icon-sm caret" iconPositionEnd>account_circle</mat-icon>
+    </button>
+  </div>
 
-    <!-- <a mat-button [matMenuTriggerFor]="langMenu" #langMenuTrigger="matMenuTrigger">
-        <img [src]="'assets/images/flags/'+translateService.currentLang+'.svg'" width="18" [alt]="translateService.currentLang">
-        <span fxShow="false" fxShow.gt-sm class="flag-menu-title">{{getLangText(translateService.currentLang)}}</span>
-        <mat-icon class="mat-icon-sm caret" iconPositionEnd>arrow_drop_down</mat-icon>
-    </a>
-    <mat-menu #langMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="app-dropdown">
-        <span (mouseleave)="langMenuTrigger.closeMenu()">
-            <button *ngFor="let lang of translateService.getLangs()" mat-menu-item (click)="changeLang(lang)">
-                <img [src]="'assets/images/flags/'+lang+'.svg'" width="18" [alt]="lang" class="mat-elevation-z1">
-                <span class="px-2">{{getLangText(lang)}}</span>
-            </button>
-        </span>
-    </mat-menu> -->
+  <div fxShow="false" fxShow.xs="true" fxShow.lt.xs="true">
+    <button mat-icon-button matTooltip="Mon compte" [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
 
-    <span fxShow="false" fxShow.gt-sm>
-        <!-- <a mat-button routerLink="/compare">{{ 'COMPARE' | translate }} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</a> -->
-        <!-- <a mat-button routerLink="/wishlist">{{ 'WISHLIST' | translate }} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</a> -->
-        <a mat-button (click)="promptInstall()" *ngIf="installButtonVisible">Telecharger l’Appli</a>
+  <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="primary account">
+    <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
+      <a mat-menu-item routerLink="authentication/sign-in">
+        <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>
+        <span>{{ 'SIGN_IN' | translate }}</span>
+      </a>
+      <a mat-menu-item routerLink="authentication/sign-up">
+        <mat-icon class="mat-icon-sm">person_add</mat-icon>
+        <span>{{ 'SIGN_UP' | translate }}</span>
+      </a>
     </span>
-
-    <a mat-button [matMenuTriggerFor]="accountMenu" #accountMenuTrigger="matMenuTrigger">
-        <mat-icon fxShow="false" class="mat-icon-sm account-icon">person</mat-icon>
-        <!-- <span fxShow="false" fxShow.gt-sm>{{ 'ACCOUNT' | translate }}</span> -->
-        <span fxShow.gt-sm>Compte</span>&nbsp;
-        <!-- <span fxShow.gt-sm>{{ 'SELL' | translate }}</span> -->
-        <mat-icon class="mat-icon-sm caret" iconPositionEnd>account_circle</mat-icon>
-    </a>
-    <mat-menu #accountMenu="matMenu" [overlapTrigger]="false" xPosition="before" class="primary account">
-        <span *ngIf="user == null || user == undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
-            <a mat-menu-item routerLink="authentication/sign-in">
-                <mat-icon class="mat-icon-sm">exit_to_app</mat-icon>
-                <span>{{ 'SIGN_IN' | translate }}</span>
-            </a>
-            <a mat-menu-item routerLink="authentication/sign-up">
-              <mat-icon class="mat-icon-sm">person_add</mat-icon>
-              <span>{{ 'SIGN_UP' | translate }}</span>
-          </a>
-        </span>
-        <span *ngIf="user != null && user != undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
-            <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">
-                <img src="assets/images/others/user.jpg" alt="user-image" width="50">
-                <p>{{user.firstname + " "+ user.lastname}} <br> <small>{{user.username}}
-                    <!-- <span *ngIf="settings.rtl">&rlm;</span>(152<mat-icon class="mat-icon-xs">star</mat-icon>) -->
-                </small></p>
-            </div>
-            <div class="divider"></div>
-            <a mat-menu-item routerLink="/{{routes}}">
-                <mat-icon class="mat-icon-sm">settings</mat-icon>
-                <span>{{'NAV.SETTING'| translate}}</span>
-            </a>
-            <!-- <a mat-menu-item routerLink="/compare" fxHide="false" fxHide.gt-sm>
-                <mat-icon class="mat-icon-sm">compare</mat-icon>
-                <span>Compare <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.compareList.length}})</span>
-            </a> -->
-            <!-- <a mat-menu-item routerLink="/wishlist" fxHide="false" fxHide.gt-sm>
-                <mat-icon class="mat-icon-sm">favorite</mat-icon>
-            <span>{{'Wishlist'| translate}} <span *ngIf="settings.rtl">&rlm;</span>({{appService.Data.wishList.length}})</span>
-            </a> -->
-            <!-- <a mat-menu-item routerLink="/">
-                <mat-icon class="mat-icon-sm">lock</mat-icon>
-                <span>Lock screen</span>
-            </a> -->
-            <a mat-menu-item routerLink="/faq">
-                <mat-icon class="mat-icon-sm">help</mat-icon>
-                <span>Help</span>
-            </a>
-            <div class="divider"></div>
-            <a mat-menu-item routerLink="/authentication/sign-in" (click)="logout()">
-                <mat-icon class="mat-icon-sm">power_settings_new</mat-icon>
-                <span>{{ 'LOGOUT' | translate }}</span>
-            </a>
-        </span>
-    </mat-menu>
-
+    <span *ngIf="user != null && user != undefined" (mouseleave)="accountMenuTrigger.closeMenu()">
+      <div fxLayout="row" fxLayoutAlign="space-around center" class="user-info">
+        <img src="assets/images/others/user.jpg" alt="user-image" width="50">
+        <p>{{user.firstname + " "+ user.lastname}} <br>
+          <small>{{user.username}}</small>
+        </p>
+      </div>
+      <div class="divider"></div>
+      <a mat-menu-item routerLink="/{{routes}}">
+        <mat-icon class="mat-icon-sm">settings</mat-icon>
+        <span>{{'NAV.SETTING'| translate}}</span>
+      </a>
+      <a mat-menu-item routerLink="/faq">
+        <mat-icon class="mat-icon-sm">help</mat-icon>
+        <span>Help</span>
+      </a>
+      <div class="divider"></div>
+      <a mat-menu-item routerLink="/authentication/sign-in" (click)="logout()">
+        <mat-icon class="mat-icon-sm">power_settings_new</mat-icon>
+        <span>{{ 'LOGOUT' | translate }}</span>
+      </a>
+    </span>
+  </mat-menu>
 </div>

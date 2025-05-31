@@ -14,7 +14,11 @@ export class EarningsComponent implements OnInit {
   referralHistory: any[] = [];
   showWithdrawalPopup: boolean = false;
 
+<<<<<<< HEAD
   currentUser!: User;
+=======
+  currentUser: User;
+>>>>>>> origin/adama_Gaoussou_maquette
   idUser: string;
 
   constructor(
