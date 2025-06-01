@@ -190,7 +190,7 @@ export class HomeComponent implements OnInit {
 
   async productInPromo() {
     let productPromo = await this.produitService.getproductOnPromo(10);
-
+    console.log("productPromo :::::::: ",productPromo)
       if (this.currentUser) {
         this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
           this.promoProducts = productPromo.map(product => ({

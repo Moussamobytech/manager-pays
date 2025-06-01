@@ -15,7 +15,7 @@ import { FormControl } from '@angular/forms';
 })
 export class AnalyticsComponent implements OnInit {
 
-  public analytics: any[];
+  public analytics: any[] = [];
   public showXAxis = true;
   public showYAxis = true;
   public gradient = false;
@@ -62,10 +62,13 @@ export class AnalyticsComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-    if (this.previousWidthOfResizedDiv != this.resizedDiv.nativeElement.clientWidth) {
-   //   this.analytics = [...analytics];
+  //   if (this.previousWidthOfResizedDiv != this.resizedDiv.nativeElement.clientWidth) {
+  //  //   this.analytics = [...analytics];
+  //   }
+    if (this.resizedDiv && this.resizedDiv.nativeElement) {
+      this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
     }
-    this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
+    
   }
 
 

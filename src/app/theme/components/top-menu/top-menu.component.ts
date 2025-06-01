@@ -59,7 +59,7 @@ export class TopMenuComponent implements OnInit {
 
   }
     // this.username = sessionStorage.getItem('username')!;
-   console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
+  //  console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
   }
 
 
