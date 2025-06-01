@@ -181,6 +181,8 @@ export class ProductComponent implements OnInit {
 
   onImageLoad(event: Event) {
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = this.selectedImage;
+    if (this.selectedImage && this.selectedImage != 'null') {
+      imgElement.src = this.selectedImage;
+    }
   }
 }
