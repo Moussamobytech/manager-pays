@@ -38,6 +38,8 @@ export class ProductsCardComponent implements OnInit {
 
   onImageLoad(event: Event) {
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = this.product.image1;
+    if (this.product?.image1 && this.product.image1 != 'null') {
+      imgElement.src = this.product.image1;
+    }
   }
 }

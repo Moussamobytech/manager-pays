@@ -271,7 +271,9 @@ export class CategoriesComponent implements OnInit {
 
   onImageLoad(event: Event, image: string) {
     const imgElement = event.target as HTMLImageElement;
-    imgElement.src = image;
+    if (image && image != 'null') {
+      imgElement.src = image;
+    }
   }
 
   onLoadMore() {
