@@ -139,7 +139,7 @@ $fid_green: #548580;
           display: flex;
           flex-direction: column;
           position: relative;
-          min-width: 150px;
+          // min-width: 150px;
 
           &.active {
             border-color: #ffa500;
@@ -336,26 +336,26 @@ $fid_green: #548580;
                   font-weight: 500;
                   font-size: 0.9rem;
                   text-decoration: none;
-                  
+
                   i {
                     font-size: 0.8rem;
                   }
-                  
+
                   &.promotion {
                     background: rgba(#2196F3, 0.1);
                     color: #2196F3;
                   }
-                  
+
                   &.offre-bienvenue {
                     background: rgba(#4CAF50, 0.1);
                     color: #4CAF50;
                   }
-                  
+
                   &.parrainage {
                     background: rgba(#FF9800, 0.1);
                     color: #FF9800;
                   }
-                  
+
                   &.livraison-gratuite {
                     background: rgba(#9C27B0, 0.1);
                     color: #9C27B0;
@@ -510,19 +510,19 @@ $fid_green: #548580;
   border-radius: 4px;
   font-weight: 500;
   text-decoration: underline;
-  
+
   &.promotion {
     color: #2196F3;
   }
-  
+
   &.offre-bienvenue {
     color: #4CAF50;
   }
-  
+
   &.parrainage {
     color: #FF9800;
   }
-  
+
   &.livraison-gratuite {
     color: #9C27B0;
   }
