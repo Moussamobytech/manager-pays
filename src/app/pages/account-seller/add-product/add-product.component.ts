@@ -24,7 +24,9 @@ export class AddProductComponent implements OnInit {
   public colors = ["#5C6BC0","#66BB6A","#EF5350","#BA68C8","#FF4081","#9575CD","#90CAF9","#B2DFDB","#DCE775","#FFD740","#00E676","#FBC02D","#FF7043","#F5F5F5","#696969"];
   public sizes = ["S","M","L","XL","2XL","32", "36","38","46","52","13.3\"","15.4\"","17\"","21\"","23.4\""];
   public selectedColors:string;
-  public categories:Category[];
+  public categories:Category[] = [];
+  public parents:Category[] = [];
+  public subCategories:Category[] = [];
   private sub1: any;
   private sub2: any;
   private currentUser: User;
@@ -37,7 +39,7 @@ export class AddProductComponent implements OnInit {
     private category: CategoryService, private auth: AuthenticationService, private productService :  ProductService, private router: Router,
     private imgCompressService: ImageCompressService, private dialog: MatDialog, private imgProcessing:ImageProcessingService ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.currentUser = this.auth.currentUser()
     // console.log("currentUser :::::::: ",this.currentUser)   #5C6BC0,#66BB6A,#EF5350
     this.form = this.formBuilder.group({
@@ -50,11 +52,14 @@ export class AddProductComponent implements OnInit {
       "weight": null,
       "size": null,
       "user": this.currentUser.username,
+      "parent": [Validators.required ],
       "categorie": [Validators.required ],
       "colors":[],
       "tailles":[]
     });
-    this.getCategories();
+    await this.getCategories();
+    console.log("categories :::: ",this.categories.length);
+    
     this.sub1 = this.activatedRoute.params.subscribe(params => {
       if(params['id']){
         this.id = params['id'];
@@ -76,24 +81,43 @@ export class AddProductComponent implements OnInit {
   //   }
   //   return null;
   // }
-  public getCategories(){
-    this.category.categories().subscribe(data => {
-      this.categories = data;
-    });
+
+  setSubList(){
+    this.subCategories = this.categories.filter(person => person?.parentId == this.form.value.parent);
+    console.log(this.subCategories.length);
+  }
+
+  public async getCategories(){
+    let res = await this.category.categories().toPromise()
+    this.categories = res;
+    this.parents = this.categories.filter(value => value.parentId == null)
+    // this.category.categories().subscribe(data => {
+    //   this.categories = data;
+    //   // this.parents =this.categories;
+    //   // console.log(this.categories.length);
+    //   this.parents = this.categories.filter(value => value.parentId == null)
+    //   // console.log(this.parents.length);
+    // });
+    
   }
 
   public getProductById(){
     this.productService.find(this.id).then((data : any) =>{
 
+      data.parent = data.categorie.parentId
+      console.log("data ::::: ",data);
       this.form.patchValue(data);
-      this.form.controls.categorie.setValue(data.categorie.id);
+      // console.log("patchValue ::::: ",this.subCategories.length);
+      // this.form.controls.parent.setValue(data.categorie.parentId);
+      this.subCategories = this.categories.filter(person => person?.parentId == data.categorie.parentId);
+      console.log("patchValue 2 ::::: ",this.subCategories.length);
+      
       this.form.patchValue({
-        colors: data.colors
-      });
-      this.form.patchValue({
+        colors: data.colors,
+        categorie : data.categorie.id,
         tailles: data.tailles
       });
-
+      
       const images: any[] = [];
       data.images.forEach(item=>{
         let image = {

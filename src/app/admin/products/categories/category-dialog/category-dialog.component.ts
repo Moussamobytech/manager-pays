@@ -17,8 +17,8 @@ export class CategoryDialogComponent implements OnInit {
   @Output() categorySubmitted: EventEmitter<any> = new EventEmitter<any>();
 
   public form: UntypedFormGroup;
-  public selectedImage: File;
-  public selectedIcon: File;
+  public selectedImage: File = null;
+  public selectedIcon: File = null;
   public categories: Category[] = [];
 
   public category: any = {};
@@ -68,7 +68,7 @@ export class CategoryDialogComponent implements OnInit {
       const values: Category = this.form.value;
 
       if (values.id) {
-          this.appService.updateCategory(values.id, values.nom, values.parentId, this.selectedImage, this.selectedIcon).subscribe(
+          this.appService.updateCategory(values.id, values.nom, values.parentId, values.poids, this.selectedImage, this.selectedIcon).subscribe(
               response => {
                   console.log('Catégorie mise à jour avec succès:', response);
                   console.log("Image : ", values.image);

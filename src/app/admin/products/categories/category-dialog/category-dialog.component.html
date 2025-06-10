@@ -124,7 +124,7 @@
             </div>
             <div class="py-1">
                 <mat-label>{{"CATEGORY.ICON"|translate}}</mat-label>
-                <input type="file" formControlName="icon" (change)="onFileSelected($event)" accept="image/*">
+                <input type="file" formControlName="icon" (change)="onIconSelected($event)" accept="image/*">
                 <mat-error *ngIf="form.get('icon').hasError('required')">{{"FIELD_ERROR.IMAGE_REQUIRED"|translate}}</mat-error>
             </div>
         </div>

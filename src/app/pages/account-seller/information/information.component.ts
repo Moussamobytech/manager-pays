@@ -115,7 +115,7 @@ export class InformationComponent implements OnInit {
       this.sellerId = params['sellerId'];
       let code = params['code'];
       
-      if(this.sellerId.length < 3) {
+      if(this.sellerId && this.sellerId.length < 3) {
         this.router.navigate(['/']);
         return;
       }
@@ -141,7 +141,8 @@ export class InformationComponent implements OnInit {
 
     // Récupération des bannières serveur
     this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
-      const serverBanners = [datas.image1, datas.image2, datas.image3]
+      if(datas != null || datas != undefined){
+        const serverBanners = [datas.image1, datas.image2, datas.image3]
         .filter(img => img)
         .map(img => ({ preview: img }));
 
@@ -155,6 +156,8 @@ export class InformationComponent implements OnInit {
       this.infoForm.patchValue({
         banners: mergedBanners
       });
+      }
+      
     });
 
     const logo = [{ preview: this.imgLink + cur.logo }]
@@ -168,12 +171,12 @@ export class InformationComponent implements OnInit {
       profiles: [cur.profiles || null],
       boutiqueName: [cur.name || null],
       adresse: [cur.adresse || null],
-      ////////////////////////////////////////////////
+      // ////////////////////////////////////////////////
       email: [(cur.email || null), Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
       description: [cur.description || null],
       logo: [logo || null],
       banners: [curBanners || null],
-      country: [cur.countries.id || null],
+      country: [cur.countries?.id || null],
       city: [(null)],
       deliveryCountries: this.formBuilder.array([])
     });

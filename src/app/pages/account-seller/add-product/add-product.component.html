@@ -50,7 +50,7 @@
 
       <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
         <div fxLayout="row wrap">
-          <div fxFlex="100" fxFlex.gt-xs="50" class="px-1">
+          <div fxFlex="100" fxFlex.gt-xs="100" class="px-1">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Nom</mat-label>
               <input matInput formControlName="nom" required>
@@ -61,8 +61,19 @@
           <div fxFlex="100" fxFlex.gt-xs="50" class="px-1">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Categorie</mat-label>
-              <mat-select formControlName="categorie" required>
-                <mat-option *ngFor="let cat of categories" [value]="cat.id">
+              <mat-select (ngModelChange)="setSubList()" formControlName="parent" required>
+                <mat-option *ngFor="let cat of parents" [value]="cat.id">
+                    <span>{{ cat.nom }}</span>
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls.categorie.errors?.required">categorie est obligatoire</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.gt-xs="50" class="px-1">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Sous Categorie</mat-label>
+              <mat-select  formControlName="categorie" required>
+                <mat-option *ngFor="let cat of subCategories" [value]="cat.id">
                     <span>{{ cat.nom }}</span>
                 </mat-option>
               </mat-select>
