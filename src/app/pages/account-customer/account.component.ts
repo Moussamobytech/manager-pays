@@ -61,6 +61,7 @@ export class AccountComponent implements OnInit {
    // this.favorisProducts = await this.produitService.getProductByNewArrival(50)
     //console.log('FAVORIS = :::::::::::: ',this.favorisProducts);
     this.currentUser = this.auth.currentUser()
+    
     this.user = this.currentUser;
     this.getAllCommande();    
     this.getProduitsLikes();
@@ -71,6 +72,7 @@ export class AccountComponent implements OnInit {
   getProduitsLikes(){
     this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(datas =>{
       this.tailles = datas.length;
+        
       // Marquer tous les produits comme favoris
       this.produitsLikes = datas.map(product => ({
         ...product,
@@ -124,6 +126,7 @@ export class AccountComponent implements OnInit {
   getAllCommande() {
     this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(datas => {
       this.orders = datas;
+      
       this.dataSource = new MatTableDataSource<any>(this.orders);
       this.dataSource.paginator = this.paginator;
       // Configurer le filtre pour rechercher dans plusieurs champs

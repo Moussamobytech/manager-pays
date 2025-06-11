@@ -138,6 +138,7 @@ export class AddParrainageComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.auth.currentUser()
+    console.log("Monthis.currentUser",this.currentUser)
     this.username = this.currentUser.username;
     this.getAllPromo();
     this.form = this.formBuilder.group({
@@ -208,7 +209,7 @@ export class AddParrainageComponent implements OnInit {
 
   async loadData() {
 
-    let res = await this.productService.getProductBySeller(this.currentUser.username)
+    let res = await this.productService.getProductBySeller(this.currentUser.username).toPromise();
     this.products = res
 
   }
@@ -242,7 +243,7 @@ export class AddParrainageComponent implements OnInit {
           montantMaxAchat: this.form.value.montantMaxAchat,
           dateDebut: this.form.value.dateDebut,
           dateFin: this.form.value.dateFin,
-          username: this.form.value.username,
+          username: this.currentUser.username,
           seuilRetrait: this.form.value.seuilRetrait,
           typePromo:this.form.value.typePromo,
           typeOffre:this.form.value.typeOffre,
@@ -251,14 +252,24 @@ export class AddParrainageComponent implements OnInit {
           cadeauxProduit:this.selectedProducts2.value
         };
 
+        console.log();
+        console.log("Mon formData Username = ",data.username)
+
+
         this.campagneService.add(data).subscribe({
           next: (datas) => {
+            console.log("00 :::::::::::::::::::::: ",data);
+            
+            console.log("0 ::::::::::::::::::::::: ",datas);
+            
 
               this.commonService.successToast(datas.message);
               this.router.navigate(["/account-seller/parrainage"]);
 
           },
           error: (err) => {
+            console.log("1 ::::::::::::::::::::: ",err);
+            
             if (err && err.statusCode == "BAD_REQUEST") {
               this.commonService.errorToast(err.body.message);
             }

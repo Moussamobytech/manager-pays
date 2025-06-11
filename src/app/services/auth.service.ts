@@ -19,6 +19,7 @@ export class AuthenticationService {
 
     public async updateUserInfo(id : any, data : any){
         try {
+          console.log("data updateUserInfo :::: ",data);
             let res : any = await this.api.putFile('/users/update-user?id='+id,data).toPromise()
              console.log("res updateUserInfo :::: ",res);
             if (res) {

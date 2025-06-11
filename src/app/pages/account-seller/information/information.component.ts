@@ -115,7 +115,7 @@ export class InformationComponent implements OnInit {
       this.sellerId = params['sellerId'];
       let code = params['code'];
       
-      if(this.sellerId.length < 3) {
+      if(this.sellerId?.length < 3) {
         this.router.navigate(['/']);
         return;
       }
@@ -141,7 +141,7 @@ export class InformationComponent implements OnInit {
 
     // Récupération des bannières serveur
     this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
-      const serverBanners = [datas.image1, datas.image2, datas.image3]
+      const serverBanners = [datas?.image1, datas?.image2, datas?.image3]
         .filter(img => img)
         .map(img => ({ preview: img }));
 
