@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   cards = [
-    { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: 0, cardClass: 'amber', routerLink: '/account-seller/orders-manage' },
+    { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: 0, cardClass: 'amber', routerLink: '/account-seller/orders' },
     { icon: 'fas fa-clipboard-list', title: 'Produits actifs', content: 'Ajouter des produits', value: 0, cardClass: 'primary', routerLink: '/account-seller/products-seller' },
     { icon: 'fas fa-search', title: 'Visiteurs', content: 'Pour mes produits', value: 0, cardClass: 'primary', routerLink: '/account-seller/dashboard' },
     { icon: 'fas fa-chart-line', title: 'Ventes du mois', content: '1000 F', value: '+10%', cardClass: 'amber', routerLink: '/account-seller/dashboard' },

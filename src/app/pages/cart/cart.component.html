@@ -18,7 +18,7 @@
   </svg>
   <h1 class="mt-3">Votre panier est actuellement vide !</h1>
   <p class="text-muted">Avant de procéder au paiement, vous devez ajouter certains articles à votre panier.</p>
-  <a [routerLink]="['/products']" mat-raised-button  class="mt-3 monBtn">Retourner à la boutique</a>
+  <a [routerLink]="['/categories']" mat-raised-button  class="mt-3 monBtn">Ajouter un produit</a>
 </mat-card>
 
 <!-- <div class="desktop-container" fxFlex="100" fxShow="false" fxShow.gt-xs="true">
@@ -207,6 +207,16 @@
       </div>
     </div>
 
+  <div class="livraison" >
+    <h3>Informations de Livraison</h3>
+    
+    <!-- Informations de livraison conditionnelles -->
+    <div *ngIf="transportFee && deliveryDelay" class="mt-2">
+      <p>Frais de transport : <strong>{{ transportFee | currency:'XOF' }}</strong></p>
+      <p>Délai de livraison estimé : <strong>{{ deliveryDelay }}</strong></p>
+    </div>
+    
+  </div>
     <!-- Payment Form: horizontal on desktop, vertical on mobile
     <form class="payment-form" fxLayout="row">
       <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
@@ -239,7 +249,7 @@
 <form [formGroup]="billingForm">
   <div fxLayout="row wrap" class="py-3">
 
-    <div fxFlex="100" fxFlex.gt-sm="20" class="px-1">
+    <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
       <!-- Champ Pays -->
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Pays</mat-label>
@@ -248,6 +258,19 @@
             {{ country.nom }}
           </mat-option>
         </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+      <!-- Champ Ville -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Ville</mat-label>
+        <mat-select formControlName="city" required>
+          <mat-option *ngFor="let city of cities" [value]="city.id">
+            {{ city.nom }}
+          </mat-option>
+        </mat-select>
+        <!-- <mat-error *ngIf="billingForm.controls.city.errors?.required">City is required</mat-error> -->
       </mat-form-field>
     </div>
 

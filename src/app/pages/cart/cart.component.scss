@@ -493,7 +493,7 @@ $background-light: #f9f9f9;
 
 //::::::::::::::::::::::
 .monBtn{
-  background-color: $primary-color;
+  background-color: $amber-color;
   color: white;
 }
 .text-center{
@@ -502,4 +502,65 @@ $background-light: #f9f9f9;
   align-content: center;
   align-items: center;
 
+}
+
+.livraison {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
+
+  h3 {
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  div {
+    margin: 16px 0;
+    padding: 16px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    p {
+      margin: 8px 0;
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+
+      &:first-child {
+        color: #2c3e50;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  // Style spécifique pour chaque type de livraison
+  div[ng-reflect-ng-if="true"] {
+    border-left: 4px solid;
+    
+    &:nth-child(1) {
+      border-left-color: #4CAF50; // Vert pour capitale
+    }
+    
+    &:nth-child(2) {
+      border-left-color: #2196F3; // Bleu pour autres régions
+    }
+    
+    &:nth-child(3) {
+      border-left-color: #FF9800; // Orange pour villes étrangères
+    }
+  }
 }

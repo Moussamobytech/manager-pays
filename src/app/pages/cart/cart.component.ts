@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { AppService } from '../../app.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from 'src/app/models/product.models';
@@ -9,6 +10,9 @@ import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@
 import { CountryService } from 'src/app/services/country.service';
 import { Router } from '@angular/router';
 import { CartService } from 'src/app/services/carte.service';
+import { Observable } from 'rxjs';
+import { RegionService } from 'src/app/services/region.service';
+import { J } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-cart',
@@ -32,6 +36,12 @@ export class CartComponent implements OnInit {
   scrollAmount: number = 0;
   selectedCountries = new FormControl([]);
   
+   COUNTRY_ALIASES: { [key: string]: string } = {
+    "Cote D'ivoire": "cotedivoire",
+    "congo brazzaville": "republique du congo",
+    "congo kinshasa": "rdc"
+    // ajoute d'autres variantes si nécessaire
+  };
 
 
   phoneMinLength: number = 8; // Longueur par défaut pour le Mali
@@ -44,10 +54,22 @@ export class CartComponent implements OnInit {
   onlyProdTotal: any;
   referralCode: string = "";
   senderUsername: string = "";
+  cities: any;
+  isCapitalCity: boolean = false;
+  isOtherRegion: boolean = false;
+  isForeignCity: boolean = false;
+  
+  transportFee: number = 0;
+  deliveryDelay: string = '';
+  
+  sellerCountry: any = null; // Pour stocker le pays du vendeur
 
 
 
-  constructor(private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,
+
+  
+
+  constructor(private http: HttpClient, private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,private regionService:RegionService,
     private authService:AuthenticationService, private carteService:CartService,  public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
   ) { }
   public count:number = 1;
@@ -102,19 +124,29 @@ export class CartComponent implements OnInit {
     });
     
   }
+  getCapitalByCountryName(name: string): Observable<any> {
+    return this.http.get(`https://restcountries.com/v3.1/name/${name}`);
+  }
 
   handleCountryChange(event: any) {
     this.countryService.getById(event.value).subscribe(datas => {
-//console.log("::::::::::::::: DATAS = ",datas);
-      this.selectedCountry = datas
-      // Définir le masque en fonction du pays sélectionné
-      let phoneLength = this.getPhoneLength(datas.nom); // Récupérer la longueur du numéro
-      this.phoneMask = '0'.repeat(phoneLength); // Génère un masque comme "000000000"
-      // Réinitialiser le champ de téléphone
+      this.selectedCountry = datas;
+      this.getCityByCountry(datas.nom);
+      let phoneLength = this.getPhoneLength(datas.nom);
+      this.phoneMask = '0'.repeat(phoneLength);
       this.billingForm.controls['phone'].setValue('');
 
 
-    })
+     this.getCapitalByCountryName(datas.nom).subscribe(apiData => {
+        const capital = apiData?.[0]?.capital?.[0];
+        console.log("Capital from API:", capital);
+      });
+      
+      // Reset shipping flags when country changes
+      this.isCapitalCity = false;
+      this.isOtherRegion = false;
+      this.isForeignCity = false;
+    });
   }
 
   getPhoneLength(countryName: string): number {
@@ -165,6 +197,12 @@ export class CartComponent implements OnInit {
       username:[''],
       phone: ['', Validators.required],
       country: ['',Validators.required],
+      city: ['', Validators.required],
+    });
+
+    // Add subscription to city changes
+    this.billingForm.get('city')?.valueChanges.subscribe(cityId => {
+      this.checkCityType(cityId);
     });
   }
   
@@ -183,14 +221,22 @@ export class CartComponent implements OnInit {
     }
   }
 
+  ///::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  ///::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  ///::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   getAllArticleInPanier(){
     // Parse the stringified JSON array
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
 
-
     // Check if the productList is an array
     if (Array.isArray(this.productList)) {
+      // Récupérer le pays du vendeur du premier produit
+      if (this.productList.length > 0 && this.productList[0].user) {
+        console.log("::::::::::::::: PRODUCT LIST = ",this.productList[0].userNom);
+        this.getSellerCountry(this.productList[0].userNom);
+      }
+
       this.productList.forEach(product => {
         this.total[product.id] = product.cartCount * parseFloat(product.priceBasic);
         if(product.pricePromotion){
@@ -200,7 +246,6 @@ export class CartComponent implements OnInit {
           this.grandTotal += product.cartCount * parseFloat(product.priceBasic); 
         }
 
-
         this.cartItemCount[product.id] = product.cartCount;
         this.cartItemCountTotal += product.cartCount;
         this.product = product;
@@ -209,6 +254,57 @@ export class CartComponent implements OnInit {
       console.error("Product list is not an array.");
     }
   }
+
+  // Nouvelle méthode pour récupérer le pays du vendeur
+  getSellerCountry(sellerId: string) {
+    this.authService.info(sellerId).then(
+      (seller) => {
+        if (seller && seller.countries) {
+         this.sellerCountry = seller.countries.id ? seller.countries : null;
+         console.log("::::::::::::::: SELLER KA PAYS = ",this.sellerCountry);
+
+          if (this.sellerCountry) {
+            // Vérifier si le pays du vendeur est défini
+            this.selectedCountry = this.sellerCountry;
+            this.getCityByCountry(this.sellerCountry.id);
+          }
+        }
+      }
+    ).catch(error => {
+      console.error("Erreur lors de la récupération des informations du vendeur:", error);
+    });
+  }
+
+  // Modifier la méthode checkCityType pour utiliser le pays du vendeur
+  checkCityType(cityId: string) {
+    if (!this.selectedCountry || !cityId || !this.sellerCountry) return;
+  
+    const selectedCity = this.cities.find(city => city.id === cityId);
+    if (!selectedCity) return;
+  
+    // Vérifie si la ville est la capitale du pays du vendeur
+    const isSameCountry = selectedCity.countryId === this.sellerCountry.id;
+    this.isCapitalCity = selectedCity.isCapital === true && isSameCountry;
+  
+    // Si ce n'est pas la capitale, mais dans le même pays => autre région
+    this.isOtherRegion = !this.isCapitalCity && isSameCountry;
+  
+    // Sinon, ville étrangère
+    this.isForeignCity = !this.isCapitalCity && !this.isOtherRegion;
+  
+    // Appliquer les frais de transport et délais estimés
+    if (this.isCapitalCity) {
+      this.transportFee = 1000;
+      this.deliveryDelay = '48h';
+    } else if (this.isOtherRegion) {
+      this.transportFee = 2000;
+      this.deliveryDelay = '3 à 4 jours';
+    } else if (this.isForeignCity) {
+      this.transportFee = 3000;
+      this.deliveryDelay = '5 à 7 jours';
+    }
+  }
+  
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
@@ -237,36 +333,6 @@ monPanierContient(){
   );
 
 }
-/*public updateCart(value) {
-  console.log("::::::::::::::::::: VALUE = ", value);
-
-  if (value) {
-    // Calcul du total par produit
-    this.total[value.productId] = value.total * value.soldQuantity; // Vérifie si value.total est déjà totalisé
-
-    // Mise à jour de la quantité de l'article dans le panier
-    this.cartItemCount[value.productId] = value.soldQuantity;
-
-    // Recalcul du grand total et du total des quantités
-    this.grandTotal = Object.values(this.total).reduce((sum, price) => sum + price, 0);
-    this.cartItemCountTotal = Object.values(this.cartItemCount).reduce((sum, count) => sum + count, 0);
-
-    // Mise à jour des données globales de l'application
-    this.appService.Data.totalPrice = this.grandTotal;
-    this.appService.Data.totalCartCount = this.cartItemCountTotal;
-
-    // Mise à jour des éléments du panier
-    this.appService.Data.cartList.forEach(product => {
-      if (this.cartItemCount[product.productId]) {
-        product.totalPrice = this.total[product.productId]; // Ajout du total par produit si nécessaire
-      }
-    });
-  }
-
-  this.getAllArticleInPanier();
-}*/
-
-
 
 onlyCartItemCount:any = 0
   public updateCart(value){
@@ -420,6 +486,51 @@ onlyCartItemCount:any = 0
         this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       })
     }
+
+  
+    
+     normalizeCountryName(country: string): string {
+      const cleaned = country
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z ]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    
+      return this.COUNTRY_ALIASES[cleaned] || cleaned;
+    }
+    
+    
+    getCityByCountry(country: string) {
+      const normalizedCountry = this.normalizeCountryName(country);
+    
+      this.regionService.getRegionsByCountryCode(normalizedCountry).subscribe(datas => {
+        if (datas.length > 0) {
+          const regions = datas[0].states;
+          this.cities = regions.map((regionName, index) => ({
+            id: index + 1,
+            nom: regionName
+          }));
+          this.selectedCountries.setValue(this.cities);
+        } else {
+          this.cities = [];
+        }
+      }, error => {
+        this.snackBar.open('Une erreur s\'est produite lors de la récupération des villes.', '×', {
+          panelClass: 'error',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+        console.error("Erreur lors de la récupération des villes:", error);
+      });
+    }
+    
+    
+    
+
+
+
+
 
     getTotalReduction(): number {
       return this.productList.reduce((total, product) => {

@@ -99,6 +99,10 @@ export class ProductsComponent implements OnInit {
     this.productService.getProductBySeller(this.currentUser.username).subscribe({
       next: (res: Product[]) => {
         this.unchangedProducts = res || [];
+        // Sort products by creation date (newest first)
+        this.unchangedProducts.sort((a, b) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
         this.searchResults = [...this.unchangedProducts];
         this.loadedProductCount = this.count;
         this.setFilter(this.filterType);

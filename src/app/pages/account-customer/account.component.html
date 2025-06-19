@@ -46,12 +46,12 @@
 
   <div class="tab-content">
     <div *ngIf="selectedTab === 'historique'" class="historique">
-      <div class="search-container" fxLayout="row" fxLayoutAlign="center center">
+    <!--  <div class="search-container" fxLayout="row" fxLayoutAlign="center center">
         <mat-form-field appearance="outline" class="w-100" style="max-width: 500px;">
           <mat-label>Rechercher</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer par produit, montant, quantité ou date" #input>
         </mat-form-field>
-      </div>
+      </div>-->
       <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
         <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" class="historique-items">
           <div class="historique-item">

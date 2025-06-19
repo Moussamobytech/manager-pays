@@ -84,7 +84,7 @@ export class AddProductComponent implements OnInit {
 
   public getProductById(){
     this.productService.find(this.id).then((data : any) =>{
-
+      console.log("::::::::::::: data ::: ",data)
       this.form.patchValue(data);
       this.form.controls.categorie.setValue(data.categorie.id);
       this.form.patchValue({
@@ -151,8 +151,8 @@ export class AddProductComponent implements OnInit {
         data.append('user', this.form.value.user);
         data.append('categorie', this.form.value.categorie);
         data.append('weight', this.form.value.weight);
-        data.append('colors', this.form.value.color);
-        data.append('tailles', this.form.value.size);
+        data.append('colors', this.form.value.colors);
+        data.append('tailles', this.form.value.tailles);
         // console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",data)
         let res = await this.productService.add(data);
@@ -191,7 +191,7 @@ export class AddProductComponent implements OnInit {
           this.commonService.errorToast("La prix promo ne peut pas être supérieur au prix de base")
           return;
         }
-
+        console.log("this.form.value ::: ",this.form.value)
         var data = new FormData();
         data.append('nom', this.form.value.nom);
         data.append('description', this.form.value.description);
@@ -210,6 +210,7 @@ export class AddProductComponent implements OnInit {
         data.append('colors',  this.form.value.colors);
         data.append('categorie', this.form.value.categorie);
         data.append('tailles', this.form.value.tailles);
+
 
         // data.append('weight', "5");
         //console.log("images ::: ",this.form.value.images)

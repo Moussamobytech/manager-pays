@@ -36,6 +36,11 @@ export class CategoriesComponent implements OnInit {
     { value: 'MOST_RECENT', label: 'Plus récent' }
   ];
 
+  // Category filter properties
+  searchTerm: string = '';
+  selectedCategories: string[] = [];
+  isAllBoxSelected: boolean = false;
+
   @ViewChild('filterModalTemplate', { static: false }) filterModalTemplate!: TemplateRef<any>
   @ViewChild('scrollTarget', { static: false }) scrollTarget!: ElementRef
 
@@ -197,30 +202,39 @@ export class CategoriesComponent implements OnInit {
   }
 
   applyFilters(): void {
-    // Start with unchanged products
     let filteredProducts = [...this.unchangedSubProducts];
 
-    // Apply price filter
-    if (this.priceFrom !== null && this.priceTo !== null) {
-      const minPrice = Math.min(this.priceFrom, this.priceTo);
-      const maxPrice = Math.max(this.priceFrom, this.priceTo);
-
-      filteredProducts = filteredProducts.filter((product) => {
-        const price = Number(product.pricePromotion) || Number(product.priceBasic) || 0;
-        return price >= minPrice && price <= maxPrice;
-      });
+    // Apply category filter
+    if (this.selectedCategories.length > 0 && !this.isAllBoxSelected) {
+      filteredProducts = filteredProducts.filter(product => 
+        this.selectedCategories.includes(product.categorie?.id)
+      );
     }
 
-    // Update subProducts with filtered results
-    this.subProducts = filteredProducts;
+    // Apply price range filter
+    if (this.priceFrom !== 100 || this.priceTo !== 250000) {
+      filteredProducts = filteredProducts.filter(product => 
+        product.prix >= this.priceFrom && product.prix <= this.priceTo
+      );
+    }
 
     // Apply sorting
-    if (this.sortBy) {
-      this.onSortChange(this.sortBy);
+    switch (this.sortBy) {
+      case 'LOWEST_FIRST':
+        filteredProducts.sort((a, b) => a.prix - b.prix);
+        break;
+      case 'HIGHEST_FIRST':
+        filteredProducts.sort((a, b) => b.prix - a.prix);
+        break;
+      case 'PROMO':
+        filteredProducts.sort((a, b) => (b.campagne?.type ? 1 : 0) - (a.campagne?.type ? 1 : 0));
+        break;
+      case 'MOST_RECENT':
+        filteredProducts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        break;
     }
 
-    // Reset load index to show filtered results from beginning
-    this.loadIndex = this.count;
+    this.subProducts = filteredProducts;
   }
 
   // Helper method to apply current filters without opening modal
@@ -278,5 +292,26 @@ export class CategoriesComponent implements OnInit {
 
   onLoadMore() {
     this.loadIndex += this.count;
+  }
+
+  // Category filter methods
+  toggleAllCategories(checked: boolean): void {
+    this.isAllBoxSelected = checked;
+    if (checked) {
+      this.selectedCategories = this.categories.map(cat => cat.id);
+    } else {
+      this.selectedCategories = [];
+    }
+    this.applyFilters();
+  }
+
+  onCategoryChange(checked: boolean, categoryId: string): void {
+    if (checked) {
+      this.selectedCategories.push(categoryId);
+    } else {
+      this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
+    }
+    this.isAllBoxSelected = this.selectedCategories.length === this.categories.length;
+    this.applyFilters();
   }
 }

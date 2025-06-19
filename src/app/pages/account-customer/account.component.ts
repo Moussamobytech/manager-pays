@@ -19,7 +19,7 @@ export class AccountComponent implements OnInit {
   showMoreCards: boolean = false;
   displayedOrdersCount: number = 3; // Nombre initial d'ordres affichés
   cards = [
-    { icon: 'fas fa-sack-dollar', title: 'Mes gains', content: '20000F', routerLink: 'earnings', cardClass: 'amber' },
+    { icon: 'fas fa-sack-dollar', title: 'Mes gains', content: '0F', routerLink: 'earnings', cardClass: 'amber' },
     { icon: 'fas fa-exchange-alt', title: 'Invite tes amis', content: 'Gagne jusqu\'à 5000 F par ami invité !', routerLink: '/referal', cardClass: 'primary' },
     { icon: 'fa-solid fa-phone', title: 'Mettre à jour', content: 'Mon numéro de téléphone', routerLink: 'settings', cardClass: 'primary' },
     { icon: 'fas fa-chart-line', title: 'Devenir revendeur', content: 'Gagner des commissions sur chaque vente !', routerLink: '', cardClass: 'amber', action: 'WhatsAppUs' },

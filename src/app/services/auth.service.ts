@@ -105,6 +105,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
       }
     }
 
+
      getUserInfo(username: string): Observable<any>{
    
        return this.api.get(`/users/info-user-by-username?username=`+username);

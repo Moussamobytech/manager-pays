@@ -40,7 +40,10 @@
       <mat-error *ngIf="loginFormControls?.password.errors?.minlength"> Mot de passe n'est pas assez long, minimum 6 caractères </mat-error>
     </mat-form-field>
 
-    <a class="forgot-password" routerLink="#">Mot de passe oublié</a>
+   <div class="forgot-password-container" fxLayout="row" fxLayoutAlign="space-between center">
+    <a class="forgot-password" (click)="WhatsAppUs()">Mot de passe oublié</a>
+    <a class="forgot-password" routerLink="/authentication/sign-up">Créer un compte</a>
+   </div>
 
     <div class="buttons">
       <button mat-button type="button" class="back-btn" routerLink="/authentication">

@@ -36,6 +36,10 @@ export class CountryService {
     return this.api.get(`/country/getAll`);
   }
 
+  getCityByCountry(id: any): Observable<any> {
+    return this.api.get(`/region/getAllByCountrie/${id}`);
+  }
+
   updateState(id: any, status) {
     return this.api
       .put(`/country/status/${id}/${status}`, null)

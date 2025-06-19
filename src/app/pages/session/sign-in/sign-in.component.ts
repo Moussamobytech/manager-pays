@@ -125,4 +125,9 @@ export class SignInComponent implements OnInit {
       );
     }
   }
+  WhatsAppUs() {    
+      let message = "Bonjour, J'ai oublié mon mot de passe et je ne sais pas comment le réinitialiser. Pouvez-vous m'aider ?";
+      const link = "https://wa.me/22376007979?text=" + encodeURIComponent(message);
+      window.open(link, "_blank");
+  }
 }

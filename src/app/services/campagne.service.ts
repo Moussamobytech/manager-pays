@@ -77,7 +77,6 @@ export class CampagneService {
 ///!:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
    public add(formData: any):Observable<any> {
-    console.log("Mon formData",formData)
     return  this.api.post(`/campagne/add-campagne`, formData);
   }
   public edit(id:string,formData: any):Observable<any> {    

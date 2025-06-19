@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ContactComponent } from './contact.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 export const routes: Routes = [
   { path: '', component: ContactComponent, pathMatch: 'full' }
@@ -14,10 +15,14 @@ export const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
   declarations: [
-    ContactComponent
-  ]
+    ContactComponent,
+  ],
+  providers: [provideNgxMask()]
+
 })
 export class ContactModule { }
