@@ -7,6 +7,7 @@
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table">
           <div class="mat-mdc-header-row mat-toolbar mat-primary">
+              <div class="mat-mdc-header-cell" style="width: 10%;">Pays</div>
               <div class="mat-mdc-header-cell" style="width: 10%;">Email</div>
               <div class="mat-mdc-header-cell" style="width: 10%;">{{"FIELD.PHONE" | translate}}</div>
               <div class="mat-mdc-header-cell" style="width: 10%;">{{"FIELD.LASTNAME" | translate}}</div>
@@ -15,6 +16,7 @@
 
           </div>
           <div *ngFor="let item of contact | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+              <div class="mat-mdc-cell" style="width: 10%;">{{getCountryNameFromPhoneNumber(item.phoneNumber)}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.email |translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.phoneNumber |translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.name}}</div>

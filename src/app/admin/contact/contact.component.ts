@@ -7,6 +7,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
+import { CountryService } from 'src/app/services/country.service';
 
 @Component({
   selector: 'app-contact',
@@ -20,9 +21,10 @@ export class ContactComponent implements OnInit {
  public count = 5;
  public viewCol: number = 25;
  public settings:Settings;
+  countries: any;
 
 
-  constructor(public formBuilder: UntypedFormBuilder, public appService : AppService,public domHandlerService: DomHandlerService , public dialog: MatDialog, public appSettings:AppSettings) {
+  constructor(public countryService:CountryService, public formBuilder: UntypedFormBuilder, public appService : AppService,public domHandlerService: DomHandlerService , public dialog: MatDialog, public appSettings:AppSettings) {
     this.settings = this.appSettings.settings;
 
    }
@@ -30,6 +32,7 @@ export class ContactComponent implements OnInit {
   ngOnInit() {
    this.initForm();
    this.getContact();
+    this.getAllPays();
    if(this.domHandlerService.window?.innerWidth < 1280){
     this.viewCol = 33.3;
   };
@@ -56,10 +59,8 @@ initForm(){
   public onContactFormSubmit(): void {
 
     if (this.contactForm.valid) {
-          console.log('1 Contact ajouté avec succès:');
 
       const values: Contact = this.contactForm.value; // Récupérer les valeurs du formulaire
-      console.log(values);
       this.appService.addContact(values).subscribe(
         (response) => {
           console.log('Contact ajouté avec succès:', response);
@@ -75,10 +76,11 @@ initForm(){
   }
   public getContact(){
     this.appService.getContact().subscribe(data =>{
-      this.contact = data;
-      console.log("contact :"+ this.contact);
-    })
-  }
+      this.contact = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  })}
+ // console.log("2 Contact data: ", JSON.stringify(this.contact));
+
+
   public openContactDialog(data: any) {
     const dialogRef = this.dialog.open(ContactDetailComponent, {
       data: {
@@ -137,5 +139,44 @@ initForm(){
   public onSubmit(){
     console.log(this.contactForm.value);
   }
+
+
+
+  getAllPays() {
+    this.countryService.getAllCountries().subscribe(datas => {
+      this.countries = datas
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .map(country => ({
+          ...country,
+          indicatif: `+${country.indicatif}`,
+        }));
+  
+    });
+  }
+  getCountryNameFromPhoneNumber(phoneNumber: string): string | null {
+    if (!phoneNumber || !this.countries || this.countries.length === 0) return null;
+  
+    const indicatifs = this.countries
+      .map(c => c.indicatif)
+      .sort((a, b) => b.length - a.length);
+  
+    const matchingIndicatif = indicatifs.find(ind => phoneNumber.startsWith(ind));
+  
+    if (matchingIndicatif) {
+      const country = this.getCountryByPhoneIndicatif(matchingIndicatif);
+      return country?.nom || null;
+    }
+  
+    return null;
+  }
+  
+  
+  getCountryByPhoneIndicatif(indicatif: string) {
+    if (!this.countries || this.countries.length === 0) {
+      return null;
+    }
+    return this.countries.find(country => country.indicatif === indicatif);
+  }
+  
 
 }
