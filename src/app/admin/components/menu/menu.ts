@@ -18,7 +18,7 @@ export const menuItems = [
     new Menu (150, 'ADMIN_NAV.CONTACT', '/admin/contact/contact', null, 'contact_mail', null, false, 0),
     new Menu (160, 'ADMIN_NAV.NEWSLETTER', '/admin/newsletter/newsletter', null, 'email', null, false, 0),
     new Menu (160, 'Pays', '/admin/country', null, 'public', null, false, 0),
-    new Menu (161, 'Les termes de recherce', '/admin/search-terme', null, 'public', null, false, 0),
+    new Menu (161, 'Les termes de recherce', '/admin/search-terme', null, 'search', null, false, 0),
     
 
 

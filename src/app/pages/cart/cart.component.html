@@ -195,6 +195,11 @@
         <p>{{ getTotalReduction() | number : '1.0-0' }} F</p>
       </div>
 
+      <div class="summary-item">
+        <p>Frais de livraison</p>
+        <p>{{ transportFee }} F</p>
+      </div>
+
 
       <!-- <div class="summary-item" *ngIf="product?.pricePromotion && product?.pricePromotion !== product?.priceBasic">
         <p>Réduction - {{ product?.priceBasic | discount: product?.pricePromotion }}% OFF</p>
@@ -203,20 +208,11 @@
      -->
       <div class="summary-item total">
         <p>Total</p>
-        <p>{{ grandTotal - getTotalReduction() | number : '1.0-0' }} F</p>
+        <p>{{ (grandTotal + transportFee) - getTotalReduction() | number : '1.0-0' }} F</p>
       </div>
     </div>
 
-  <div class="livraison" >
-    <h3>Informations de Livraison</h3>
-    
-    <!-- Informations de livraison conditionnelles -->
-    <div *ngIf="transportFee && deliveryDelay" class="mt-2">
-      <p>Frais de transport : <strong>{{ transportFee | currency:'XOF' }}</strong></p>
-      <p>Délai de livraison estimé : <strong>{{ deliveryDelay }}</strong></p>
-    </div>
-    
-  </div>
+  
     <!-- Payment Form: horizontal on desktop, vertical on mobile
     <form class="payment-form" fxLayout="row">
       <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
@@ -300,6 +296,13 @@
     </div>
   </div>
 </form>
+  
+  <!-- Informations de livraison conditionnelles -->
+  <div *ngIf="transportFee && deliveryDelay" class="mt-2">
+    <p>Délai de livraison estimé : <strong>{{ deliveryDelay }}</strong></p>
+    <p>Le livreur te contactera au : <strong>{{ userContact }}</strong></p>
+  </div>
+  
 
 <div class="buttons">
   <button mat-button class="back-btn" routerLink="/">

@@ -63,6 +63,7 @@ export class CartComponent implements OnInit {
   deliveryDelay: string = '';
   
   sellerCountry: any = null; // Pour stocker le pays du vendeur
+  userContact: any;
 
 
 
@@ -131,16 +132,14 @@ export class CartComponent implements OnInit {
   handleCountryChange(event: any) {
     this.countryService.getById(event.value).subscribe(datas => {
       this.selectedCountry = datas;
-      this.getCityByCountry(datas.nom);
+      const id = this.selectedCountry.id;
+//      this.getCityByCountry(datas.nom);
+      this.getAllRegionsByCountry(id);
+
       let phoneLength = this.getPhoneLength(datas.nom);
       this.phoneMask = '0'.repeat(phoneLength);
       this.billingForm.controls['phone'].setValue('');
 
-
-     this.getCapitalByCountryName(datas.nom).subscribe(apiData => {
-        const capital = apiData?.[0]?.capital?.[0];
-        console.log("Capital from API:", capital);
-      });
       
       // Reset shipping flags when country changes
       this.isCapitalCity = false;
@@ -229,12 +228,15 @@ export class CartComponent implements OnInit {
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
 
+
+   // console.log("::::::::::::::: PRODUCT LIST = ",this.productList[0]);
+
     // Check if the productList is an array
     if (Array.isArray(this.productList)) {
       // Récupérer le pays du vendeur du premier produit
       if (this.productList.length > 0 && this.productList[0].user) {
-        console.log("::::::::::::::: PRODUCT LIST = ",this.productList[0].userNom);
-        this.getSellerCountry(this.productList[0].userNom);
+        this.userContact = this.productList[0].contact;
+        this.getSellerCountry(this.productList[0].contact);
       }
 
       this.productList.forEach(product => {
@@ -257,26 +259,71 @@ export class CartComponent implements OnInit {
 
   // Nouvelle méthode pour récupérer le pays du vendeur
   getSellerCountry(sellerId: string) {
-    this.authService.info(sellerId).then(
+    this.authService.getUserByPhone(sellerId).subscribe(
+      (seller) => {
+        if (seller && seller.countries) { 
+          this.sellerCountry = seller.countries.id ? seller.countries : null;
+          if (this.sellerCountry) {
+            // Vérifier si le pays du vendeur est défini
+            this.selectedCountry = this.sellerCountry;
+            // this.getCityByCountry(this.sellerCountry.id);
+          }
+        }
+      },
+      (error) => {
+        console.error("Erreur lors de la récupération des informations du vendeur:", error);
+      }
+    );
+   /* this.authService.getUserByPhone(sellerId).then(
       (seller) => {
         if (seller && seller.countries) {
-         this.sellerCountry = seller.countries.id ? seller.countries : null;
-         console.log("::::::::::::::: SELLER KA PAYS = ",this.sellerCountry);
+          this.sellerCountry = seller.countries.id ? seller.countries : null;
+          console.log("::::::::::::::: SELLER KA PAYS = ",this.sellerCountry);
 
           if (this.sellerCountry) {
             // Vérifier si le pays du vendeur est défini
             this.selectedCountry = this.sellerCountry;
-            this.getCityByCountry(this.sellerCountry.id);
+          // this.getCityByCountry(this.sellerCountry.id);
           }
         }
       }
     ).catch(error => {
       console.error("Erreur lors de la récupération des informations du vendeur:", error);
     });
+    */
   }
 
   // Modifier la méthode checkCityType pour utiliser le pays du vendeur
   checkCityType(cityId: string) {
+    if(this.selectedCountry.nom != this.sellerCountry.nom){
+      this.isForeignCity = true;
+      this.isCapitalCity = false;
+      this.isOtherRegion = false;
+      this.transportFee = 3000; // Frais de transport pour une ville étrangère
+      this.deliveryDelay = '5 à 7 jours';
+    }
+    if(this.selectedCountry.nom == this.sellerCountry.nom){
+
+      if(cityId == this.cities[0].id){
+        this.isCapitalCity = true;
+        this.isOtherRegion = false; 
+        this.isForeignCity = false;
+        this.transportFee = 1000; // Frais de transport pour la capitale
+        this.deliveryDelay = '48h';
+      }else{
+        this.isCapitalCity = false;
+        this.isOtherRegion = true;
+        this.isForeignCity = false;
+        this.transportFee = 2000; // Frais de transport pour une autre région
+        this.deliveryDelay = '3 à 4 jours';
+      }
+
+    }
+
+
+/*
+
+
     if (!this.selectedCountry || !cityId || !this.sellerCountry) return;
   
     const selectedCity = this.cities.find(city => city.id === cityId);
@@ -302,7 +349,7 @@ export class CartComponent implements OnInit {
     } else if (this.isForeignCity) {
       this.transportFee = 3000;
       this.deliveryDelay = '5 à 7 jours';
-    }
+    }*/
   }
   
 
@@ -487,6 +534,11 @@ onlyCartItemCount:any = 0
       })
     }
 
+    getAllRegionsByCountry(id:string){
+      this.countryService.getCityByCountry(id).subscribe(datas =>{
+        this.cities = datas.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      })
+    }
   
     
      normalizeCountryName(country: string): string {
@@ -500,8 +552,7 @@ onlyCartItemCount:any = 0
       return this.COUNTRY_ALIASES[cleaned] || cleaned;
     }
     
-    
-    getCityByCountry(country: string) {
+    /*getCityByCountry(country: string) {
       const normalizedCountry = this.normalizeCountryName(country);
     
       this.regionService.getRegionsByCountryCode(normalizedCountry).subscribe(datas => {
@@ -524,14 +575,9 @@ onlyCartItemCount:any = 0
         console.error("Erreur lors de la récupération des villes:", error);
       });
     }
+    */
     
-    
-    
-
-
-
-
-
+  
     getTotalReduction(): number {
       return this.productList.reduce((total, product) => {
         return total + ((product?.priceBasic || 0) * (product?.campagne?.reduction || 0) / 100 * product.cartCount);

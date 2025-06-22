@@ -120,7 +120,7 @@ public async onSubmit() {
 
 }
 
-async save() {    
+async save() {  
   try {
     if (this.form.valid) {
       const data = {
@@ -137,7 +137,7 @@ async save() {
         seuilRetrait: this.form.value.seuilRetrait,
         typePromo:this.form.value.typePromo,
         typeOffre:this.form.value.typeOffre,
-        produitPromos:this.selectedProducts.value,
+        produitPromos:this.selectedProducts.value?.map(product => product.id),
         zoneLivraison:this.selectedCountries.value,
         cadeauxProduit:this.selectedProducts2.value
 
@@ -145,7 +145,8 @@ async save() {
       
 
       this.campagneService.add(data).subscribe({
-        next: (datas) => {           
+        next: (datas) => {      
+            console.log("datas == ",datas);     
         
             this.commonService.successToast(datas.message);
             this.router.navigate(["/admin/campagne/campagne-list"]);
@@ -153,9 +154,11 @@ async save() {
         },
         error: (err) => {
           if (err && err.statusCode == "BAD_REQUEST") {
+            console.log("ERRRRR == ",err);
             this.commonService.errorToast(err.body.message);
           }
           if(err.status == "400"){
+            console.log("ERRRRR == ",err);
             this.commonService.errorToast(err.message);
 
           }
