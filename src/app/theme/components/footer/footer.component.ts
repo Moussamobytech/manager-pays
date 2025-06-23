@@ -16,12 +16,25 @@ export class FooterComponent implements OnInit {
   accountLink: string = null;
   currentUser: any;
 
+  menuItems = [
+    { label: 'Accueil', link: '/', iconWhite: 'assets/icons/footer/home_w.png', iconActive: 'assets/icons/footer/home.png', exact: true },
+    // { label: 'Parrainer', link: '/referal', iconWhite: 'assets/icons/footer/gift_w.png', iconActive: 'assets/icons/footer/gift.png', exact: false },
+    { label: 'Catégories', link: '/categories', iconWhite: 'assets/icons/footer/category_w.png', iconActive: 'assets/icons/footer/category.png', exact: false },
+    { label: 'Compte', link: '', iconWhite: 'assets/icons/footer/account_w.png', iconActive: 'assets/icons/footer/account.png', exact: false, isAccount: true },
+  ];
+
   constructor(public formBuilder: UntypedFormBuilder, public appService : AppService,
     private analitycsService: AnalyticsService) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser') ?? null);
     this.accountLink = this.currentUser && this.currentUser.profiles[0].name.toLowerCase().includes('boutique') ? '/account-seller' : '/account-customer';
+    this.menuItems = this.menuItems.map(item => {
+      if (item.isAccount) {
+        return { ...item, link: this.accountLink };
+      }
+      return item;
+    });
 
     this.initForm()
     this.analitycsService.trackEvent('footer loaded', 'footer loaded into view','view');

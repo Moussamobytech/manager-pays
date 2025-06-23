@@ -29,60 +29,17 @@ export class InformationComponent implements OnInit {
 
   selectedTab = 'general';
   phoneMask: string = '00 00 00 00'; // Default mask for Mali
-
-  // tabs = [
-  //   { label: 'Informations générales', value: 'informations', icon: 'gears' },
-  //   { label: 'Apparence de la boutique', value: 'apparence', icon: 'qrcode' },
-  //   { label: 'Gestion de la livraison', value: 'gestion', icon: 'truck' },
-  //   { label: 'Sécurité du compte', value: 'securite', icon: 'lock' }
-  // ];
-
   tabs = [
-    { 
-      value: 'general', 
-      label: 'Informations générales', 
-      sublabel: 'Nom, adresse, contacts',
-      icon: 'user' 
-    },
-    { 
-      value: 'security', 
-      label: 'Sécurité du compte', 
-      sublabel: 'Mot de passe',
-      icon: 'shield' 
-    },
-    { 
-      value: 'appearance', 
-      label: 'Apparence de ma boutique', 
-      sublabel: 'Logo, couleurs, bannière',
-      icon: 'palette' 
-    },
-    { 
-      value: 'shipping', 
-      label: 'Gestion de la livraison', 
-      sublabel: 'Zones, tarifs, délais',
-      icon: 'truck' 
-    },
-    { 
-      value: 'payments', 
-      label: 'Paiments', 
-      sublabel: 'Méthodes, commissions',
-      icon: 'credit-card' 
-    },
-    { 
-      value: 'notifications', 
-      label: 'Notifications', 
-      sublabel: 'Email, SMS, WhatsApp',
-      icon: 'bell' 
-    },
-    { 
-      value: 'help', 
-      label: 'Besoin d\'aide', 
-      sublabel: 'Contacter l\'équipe Fidelity',
-      icon: 'circle-info' 
-    }
+    { value: 'general', label: 'Informations générales', sublabel: 'Nom, adresse, contacts', icon: 'user' },
+    { value: 'security', label: 'Sécurité du compte', sublabel: 'Mot de passe', icon: 'shield' },
+    { value: 'appearance', label: 'Apparence de ma boutique', sublabel: 'Logo, couleurs, bannière', icon: 'palette' },
+    // { value: 'shipping', label: 'Gestion de la livraison', sublabel: 'Zones, tarifs, délais', icon: 'truck' },
+    // { value: 'payments', label: 'Paiments', sublabel: 'Méthodes, commissions', icon: 'credit-card' },
+    { value: 'notifications', label: 'Notifications', sublabel: 'Email, SMS, WhatsApp', icon: 'bell' },
+    { value: 'help', label: 'Besoin d\'aide', sublabel: 'Contacter l\'équipe Fidelity', icon: 'circle-info' }
   ];
 
-  
+
 
   // availableCountries = ['Mali', 'Senegal', 'Ivory Coast'];
   public selectedCountries: string[] = [];
@@ -114,14 +71,14 @@ export class InformationComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.sellerId = params['sellerId'];
       let code = params['code'];
-      
+
       if(this.sellerId?.length < 3) {
         this.router.navigate(['/']);
         return;
       }
 
       this.shopLink = this.sellerId;
-      
+
       if(code && code.length == 10){
         // Stocker le code dans le sessionStorage
         sessionStorage.setItem('referralCode', code);
@@ -259,15 +216,15 @@ export class InformationComponent implements OnInit {
       { names: ["central african republic", "république centrafricaine"], length: 9 },
       { names: ["congo"], length: 9 },
     ];
-  
+
     const normalizedInput = countryName.trim().toLowerCase();
-  
+
     for (const entry of countryMap) {
       if (entry.names.some(name => name.toLowerCase() === normalizedInput)) {
         return entry.length;
       }
     }
-  
+
     return 9; // Valeur par défaut
   }
 

@@ -8,44 +8,14 @@
         </p>
       </div>
           <div fxLayout="row wrap">
-              <!-- <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                  <mat-form-field appearance="outline" class="w-100">
-                      <mat-label>Nom</mat-label>
-                      <input matInput formControlName="nom" required>
-                      <mat-error *ngIf="form.controls.nom.errors?.required">nom est obligatoire</mat-error>
-                      <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4 caractères</mat-error>
-                  </mat-form-field>
-              </div>
-              <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-                  <mat-form-field appearance="outline" class="w-100">
-                      <mat-label>Categorie</mat-label>
-                      <mat-select formControlName="categorie" required>
-                          <mat-option *ngFor="let cat of categories" [value]="cat.id">
-                              <span>{{ cat.nom }}</span>
-                          </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="form.controls.categorie.errors?.required">La categorie est obligatoire</mat-error>
-                  </mat-form-field>
-              </div> -->
 
       <div fxFlex="100" fxFlex.gt-sm="40" class="px-2">
         <input-file formControlName="images" [containerFlex]="inputFileFlex" [fileLimit]="5" fileAccept="image/*"></input-file>
 
-        <!-- <div fxLayout="row" fxLayoutAlign="space-between center" class="toggle-container">
-          <div fxLayout="row" fxLayoutAlign="start center">
-            <p>Amélioration automatique</p>
-            <mat-icon class="ml-2 info" (click)="showAutoInfo = true">info</mat-icon>
-            <div class="popover info" *ngIf="showAutoInfo">
-              Ceci active l'amélioration automatique des images pour une meilleure qualité.
-            </div>
-          </div>
-
-          <mat-slide-toggle [color]="autoState ? 'warn' : 'primary'" [checked]="autoState"
-          (change)="setAutoEdit($event)"> </mat-slide-toggle>
-        </div> -->
-        <div class="text-center w-100 mb-4">
+        <!-- AI Image Improvement feature disabled for now -->
+        <!-- <div class="text-center w-100 mb-4">
           <button mat-raised-button [disabled]="isImproveBtnDisabled" (click)="openImageImproveDialog()" class="improve-btn" type="button"><i class="fa-solid fa-wand-magic-sparkles"></i> Améliorer</button>
-        </div>
+        </div> -->
       </div>
 
       <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">

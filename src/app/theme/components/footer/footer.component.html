@@ -11,20 +11,21 @@
       </form>
       <div *ngIf="contactForm.get('email').invalid && (contactForm.get('email').dirty || contactForm.get('email').touched)">
         <div *ngIf="contactForm.get('email').errors?.['required']">
-          Email is required.
+          L'email est obligatoire.
         </div>
         <div *ngIf="contactForm.get('email').errors?.['email']">
-          Invalid email address.
+          Adresse email invalide.
         </div>
       </div>
     </div>
     <div fxLayout="row wrap" fxLayoutAlign="space-between" class="py-4 border-bottom-mute theme-container">
         <div fxFlex="100" fxFlex.gt-sm="20" fxFlex.sm="40">
           <h3 class="col-title">{{'LINKS' | translate}}</h3>
-          <p class="mt-3"><a routerLink="/" class="link secondary-color">Accueil</a></p>
-          <p class="mt-1"><a routerLink="/referal" class="link secondary-color">Parrainer</a></p>
-          <p class="mt-1"><a routerLink="/categories" class="link secondary-color">Catégories</a></p>
-          <p class="mt-1"><a [routerLink]="accountLink" class="link secondary-color">{{'ACCOUNT' | translate}}</a></p>
+          <p class="mt-1" *ngFor="let item of menuItems">
+            <a [routerLink]="item.link" class="link secondary-color">
+              {{ item.label }}
+            </a>
+          </p>
           <p class="mt-1"><a routerLink="/contact" class="link secondary-color"> {{'CONTACT' | translate}}</a></p>
           <p class="mt-1"><a routerLink="/faq" class="link secondary-color">{{'FAQ' | translate}}</a></p>
         </div>
@@ -62,43 +63,20 @@
   <footer class="footer-menu">
     <nav aria-label="Footer Navigation">
       <ul>
-        <li>
-          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item">
-            <div class="icon-container">
-              <img src="assets/icons/footer/home_w.png" class="icon white-img" alt="Home">
-              <img src="assets/icons/footer/home.png" class="icon active-img" alt="Home">
-            </div>
-            <span>Accueil</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/referal" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" class="nav-item">
-            <div class="icon-container">
-              <img src="assets/icons/footer/gift_w.png" class="icon white-img" alt="Gift">
-              <img src="assets/icons/footer/gift.png" class="icon active-img" alt="Gift">
-            </div>
-            <span>Parrainer</span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/categories" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" class="nav-item">
-            <div class="icon-container">
-              <img src="assets/icons/footer/category_w.png" class="icon white-img" alt="Category">
-              <img src="assets/icons/footer/category.png" class="icon active-img" alt="Category">
-            </div>
-            <span>Catégories</span>
-          </a>
-        </li>
-        <li>
-          <a [routerLink]="accountLink" routerLinkActive="active" [ngClass]="{ 'active': isOtherRoutesActive() }" [routerLinkActiveOptions]="{ exact: false }" class="nav-item">
-            <div class="icon-container">
-              <img src="assets/icons/footer/account_w.png" class="icon white-img" alt="account">
-              <img src="assets/icons/footer/account.png" class="icon active-img" alt="account">
-            </div>
-            <span>Compte</span>
-          </a>
-        </li>
-      </ul>
+  <li *ngFor="let item of menuItems">
+    <a [routerLink]="item.link" routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.exact }" class="nav-item"
+      [ngClass]="{ 'active': item.isAccount && isOtherRoutesActive() }"
+      >
+      <div class="icon-container">
+        <img [src]="item.iconWhite" class="icon white-img" [alt]="item.label">
+        <img [src]="item.iconActive" class="icon active-img" [alt]="item.label">
+      </div>
+      <span>{{ item.label }}</span>
+    </a>
+  </li>
+</ul>
+
     </nav>
   </footer>
 </div>

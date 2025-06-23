@@ -41,8 +41,7 @@ export class AccountComponent implements OnInit {
   public links = [
     { name: 'Dashboard', href: 'dashboard', icon: 'dashboard' },
     { name: 'Commandes', href: 'orders', icon: 'shop' },
-
-    { name: 'Campagne', href: 'parrainage', icon: 'campaign' },
+    // { name: 'Campagne', href: 'parrainage', icon: 'campaign' },
     { name: 'Mes produits', href: 'products-seller', icon: 'add_shopping_cart' },
     //{ name: 'Mes clients', href: 'customers', icon: 'people_outline' },
     // { name: 'Mes achats', href: 'orders', icon: 'shopping_cart' },
