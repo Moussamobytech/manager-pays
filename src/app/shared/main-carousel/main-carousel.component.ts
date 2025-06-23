@@ -9,10 +9,10 @@ import { SwiperConfigInterface, SwiperPaginationInterface } from '../../theme/co
 })
 export class MainCarouselComponent implements OnInit {
   public slides = [
-    { title: 'PROFITEZ DE -20% SUR VOS PREMIER ACHAT 🎉!', subtitle: 'Parainez vos amies et offrez-leur -20% sur leur premier achat. 🎁', image: 'assets/images/ads/promotion.png' },
-    { title: 'PLUS FIABLE ET SÉCURISÉ QUE LES RÉSEAUX SOCIAUX', subtitle: 'Tous les vendeurs et produits sont vérifiés avant publication.', image: 'assets/images/ads/6.jpg'},
-    { title: 'LIVRAISON POSSIBLE PARTOUT', subtitle: 'Vous n’avez pas de temps? Nous vous livrons à domicile.', image: 'assets/images/ads/7.jpg' },
-    { title: 'VOUS ETES COMMERCANTS?', subtitle: 'Ouvrez votre boutique en ligne en créant un compte.', image: '../../assets/images/ads/8.jpg' },
+    { title: '🎁 -10% dès ta première commande !', subtitle: 'Invite tes proches et gagne à chaque achat.', image: 'assets/images/ads/promotion.png' },
+    { title: '🚚 Livraison partout, sans stress', subtitle: 'On te livre chez toi, peu importe la ville.', image: 'assets/images/ads/7.jpg' },
+    { title: '✅ Plus fiable que les réseaux sociaux', subtitle: 'Tous nos vendeurs sont vérifiés. Livraison garantie ou remboursé.', image: 'assets/images/ads/6.jpg'},
+    { title: '🛍️ Vends partout en Afrique', subtitle: 'Crée ta boutique en ligne en 2 minutes. Paiement & livraison intégrés.', image: '../../assets/images/ads/8.jpg' },
   ];
   public slideConfig = {
     slidesToShow: 1,
