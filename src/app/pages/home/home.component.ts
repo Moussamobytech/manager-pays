@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit {
   ]
   selectedSubCategory: any = this.subCategories[0];
   currentUser: any = null;
-  promoLength: any = 0;
 
   constructor(
     public appService: AppService,
@@ -55,7 +54,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser();
-    
+
 
 
     this.getNewArrivalsProducts();
@@ -191,7 +190,6 @@ export class HomeComponent implements OnInit {
 
   async productInPromo() {
     let productPromo = await this.produitService.getproductOnPromo(10);
-    this.promoLength = productPromo.length;
     console.log("productPromo :::::::: ",productPromo.length)
 
       if (this.currentUser) {
@@ -209,7 +207,7 @@ export class HomeComponent implements OnInit {
           isFavorite: false
         }));
       }
-    
+
   }
 
   public async getTopRatedProducts() {

@@ -13,7 +13,6 @@
             </div>
           </div>
         </div>
-        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button> -->
         <mat-icon class="swiper-button-prev swipe-arrow subcategory-prev">keyboard_arrow_left</mat-icon>
         <mat-icon class="swiper-button-next swipe-arrow subcategory-next">keyboard_arrow_right</mat-icon>
       </div>
@@ -26,8 +25,6 @@
             <app-product-card  [product]="product"></app-product-card>
           </div>
         </div>
-        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
-        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button> -->
       </div>
       <div class="more-item">
         <a routerLink="/categories">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
@@ -35,7 +32,7 @@
     </div>
   </div>
 
-  <div class="home-section" *ngIf="promoLength > 0">
+  <div class="home-section" *ngIf="promoProducts.length > 0">
     <h2>Promo</h2>
     <div class="products-carousel">
       <div class="swiper-container " [swiper]="ProductConfig">
@@ -44,8 +41,6 @@
             <app-product-card [product]="product"></app-product-card>
           </div>
         </div>
-        <!-- <button mat-icon-button class="swiper-button-prev swipe-arrow"><mat-icon>keyboard_arrow_left</mat-icon></button>
-        <button mat-icon-button class="swiper-button-next swipe-arrow"><mat-icon>keyboard_arrow_right</mat-icon></button> -->
       </div>
       <div class="more-item">
         <a routerLink="/promo">Voir plus <mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
@@ -71,7 +66,7 @@
     </div>
   </div>
 
- 
+
 </div>
 
 <app-brands-carousel></app-brands-carousel>

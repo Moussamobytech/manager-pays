@@ -34,15 +34,13 @@ export class CartComponent implements OnInit {
   profil : string = "user";
   isSmallScreen: boolean = false;
   scrollAmount: number = 0;
-  selectedCountries = new FormControl([]);
-  
-   COUNTRY_ALIASES: { [key: string]: string } = {
+  // selectedCountries = new FormControl([]);
+  COUNTRY_ALIASES: { [key: string]: string } = {
     "Cote D'ivoire": "cotedivoire",
     "congo brazzaville": "republique du congo",
     "congo kinshasa": "rdc"
     // ajoute d'autres variantes si nécessaire
   };
-
 
   phoneMinLength: number = 8; // Longueur par défaut pour le Mali
   phoneMaxLength: number = 8; // Longueur par défaut pour le Mali
@@ -58,10 +56,10 @@ export class CartComponent implements OnInit {
   isCapitalCity: boolean = false;
   isOtherRegion: boolean = false;
   isForeignCity: boolean = false;
-  
+
   transportFee: number = 0;
   deliveryDelay: string = '';
-  
+
   sellerCountry: any = null; // Pour stocker le pays du vendeur
   userContact: any;
   customerPhone: string = '';
@@ -69,17 +67,14 @@ export class CartComponent implements OnInit {
 
 
   
+  public count:number = 1;
+  public productList: any[];
+  pageName:string="cart";
+  billingForm: UntypedFormGroup;
 
   constructor(private http: HttpClient, private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,private regionService:RegionService,
     private authService:AuthenticationService, private carteService:CartService,  public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
   ) { }
-  public count:number = 1;
-  public productList: any[];
-
-  pageName:string="cart";
-
-    billingForm: UntypedFormGroup;
-  
 
   ngOnInit() {
     this.getAllPays()
@@ -106,24 +101,24 @@ export class CartComponent implements OnInit {
 
     this.billingForm.get('phone')?.valueChanges.subscribe((phone: string) => {
       if (this.isPopulatingForm || !phone || !this.phoneMask || !this.selectedCountry) return;
-    
+
       // Vérifie si la longueur du numéro est complète
       if (phone.length === this.phoneMask.length) {
       //  const fullPhoneNumber = this.selectedCountry.indicatif + phone;
-    
+
         this.isPopulatingForm = true;
         this.customerPhone = phone;
         this.loadUserByPhone(phone);
-    
+
         // Ne vide plus le champ ici
-    
+
         // Débloquer après un court délai
         setTimeout(() => {
           this.isPopulatingForm = false;
         }, 100);
       }
     });
-    
+
   }
   getCapitalByCountryName(name: string): Observable<any> {
     return this.http.get(`https://restcountries.com/v3.1/name/${name}`);
@@ -140,7 +135,7 @@ export class CartComponent implements OnInit {
       this.phoneMask = '0'.repeat(phoneLength);
       this.billingForm.controls['phone'].setValue('');
 
-      
+
       // Reset shipping flags when country changes
       this.isCapitalCity = false;
       this.isOtherRegion = false;
@@ -176,15 +171,15 @@ export class CartComponent implements OnInit {
       { names: ["central african republic", "république centrafricaine"], length: 9 },
       { names: ["congo"], length: 9 },
     ];
-  
+
     const normalizedInput = countryName.trim().toLowerCase();
-  
+
     for (const entry of countryMap) {
       if (entry.names.some(name => name.toLowerCase() === normalizedInput)) {
         return entry.length;
       }
     }
-  
+
     return 9; // Valeur par défaut
   }
 
@@ -204,7 +199,7 @@ export class CartComponent implements OnInit {
       this.checkCityType(cityId);
     });
   }
-  
+
   // ngAfterViewInit(): void {
   //   setTimeout(() => {
   //     this.onResize();
@@ -245,7 +240,7 @@ export class CartComponent implements OnInit {
           this.grandTotal += product.cartCount * parseFloat(product.pricePromotion);
         }
         else{
-          this.grandTotal += product.cartCount * parseFloat(product.priceBasic); 
+          this.grandTotal += product.cartCount * parseFloat(product.priceBasic);
         }
 
         this.cartItemCount[product.id] = product.cartCount;
@@ -275,23 +270,6 @@ export class CartComponent implements OnInit {
         console.error("Erreur lors de la récupération des informations du vendeur:", error);
       }
     );
-   /* this.authService.getUserByPhone(sellerId).then(
-      (seller) => {
-        if (seller && seller.countries) {
-          this.sellerCountry = seller.countries.id ? seller.countries : null;
-          console.log("::::::::::::::: SELLER KA PAYS = ",this.sellerCountry);
-
-          if (this.sellerCountry) {
-            // Vérifier si le pays du vendeur est défini
-            this.selectedCountry = this.sellerCountry;
-          // this.getCityByCountry(this.sellerCountry.id);
-          }
-        }
-      }
-    ).catch(error => {
-      console.error("Erreur lors de la récupération des informations du vendeur:", error);
-    });
-    */
   }
 
   // Modifier la méthode checkCityType pour utiliser le pays du vendeur
@@ -308,7 +286,7 @@ export class CartComponent implements OnInit {
 
       if(cityId == this.cities[0].id){
         this.isCapitalCity = true;
-        this.isOtherRegion = false; 
+        this.isOtherRegion = false;
         this.isForeignCity = false;
         this.transportFee = 1500; // Frais de transport pour la capitale
         this.deliveryDelay = '48h';
@@ -321,44 +299,9 @@ export class CartComponent implements OnInit {
       }
 
     }
-
-
-/*
-
-
-    if (!this.selectedCountry || !cityId || !this.sellerCountry) return;
-  
-    const selectedCity = this.cities.find(city => city.id === cityId);
-    if (!selectedCity) return;
-  
-    // Vérifie si la ville est la capitale du pays du vendeur
-    const isSameCountry = selectedCity.countryId === this.sellerCountry.id;
-    this.isCapitalCity = selectedCity.isCapital === true && isSameCountry;
-  
-    // Si ce n'est pas la capitale, mais dans le même pays => autre région
-    this.isOtherRegion = !this.isCapitalCity && isSameCountry;
-  
-    // Sinon, ville étrangère
-    this.isForeignCity = !this.isCapitalCity && !this.isOtherRegion;
-  
-    // Appliquer les frais de transport et délais estimés
-    if (this.isCapitalCity) {
-      this.transportFee = 1000;
-      this.deliveryDelay = '48h';
-    } else if (this.isOtherRegion) {
-      this.transportFee = 2000;
-      this.deliveryDelay = '3 à 4 jours';
-    } else if (this.isForeignCity) {
-      this.transportFee = 3000;
-      this.deliveryDelay = '5 à 7 jours';
-    }*/
   }
-  
 
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 monPanierContient(){
   this.appService.addCommande(this.idUser, this.senderUsername, this.referralCode, this.productList).subscribe(
     () => {
@@ -387,7 +330,7 @@ onlyCartItemCount:any = 0
   public updateCart(value){
     let onlyProdTotal:any
     //console.log("My value = ",value);
-    
+
     if(value){
       this.total[value.productId] = value.total;
       this.cartItemCount[value.productId] = value.soldQuantity;
@@ -439,14 +382,6 @@ onlyCartItemCount:any = 0
       const priceBasic = parseFloat(product.priceBasic);
       return (priceBasic * product.campagne.reduction)/10
     }
-    /*
-    const priceBasic = parseFloat(product.priceBasic);
-    const pricePromotion = parseFloat(product.pricePromotion);
-    if (isNaN(priceBasic) || isNaN(pricePromotion)) {
-      return 0;
-    }
-
-    return priceBasic - pricePromotion;*/
   }
 
   swipeSimilarProduct(direction: 'left' | 'right'): void {
@@ -485,12 +420,12 @@ onlyCartItemCount:any = 0
   loadUserByPhone(phone:string){
     this.authService.getUserByPhone(phone).subscribe(
       datas => {
-        if(datas != null){ 
+        if(datas != null){
                 this.populateBillingForm(datas);
                 this.user = datas;
-             //   sessionStorage.setItem('currentUser', JSON.stringify(this.user));  
+             //   sessionStorage.setItem('currentUser', JSON.stringify(this.user));
         }
-         
+
           },
       error => {
         this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
@@ -501,10 +436,10 @@ onlyCartItemCount:any = 0
         console.error("Erreur lors du chargement de user:", error);
       }
     );
-  
+
   }
 
-  
+
 
     onCountryChange(country: string): void {
       if (country === 'mali') {
@@ -518,7 +453,7 @@ onlyCartItemCount:any = 0
         this.phoneMaxLength = 10;
         this.phonePlaceholder = 'xxxxxxxxxx';
       }
-  
+
       // Mettre à jour les validateurs de téléphone
       const phoneControl = this.billingForm.get('phone');
       phoneControl?.setValidators([
@@ -530,308 +465,194 @@ onlyCartItemCount:any = 0
     }
 
 
+    // getAllPays() {
+    //   this.countryService.getAllCountries().subscribe(datas => {
+    //     this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    //   })
+    // }
+
     getAllPays() {
-      this.countryService.getAllCountries().subscribe(datas => {
+    this.countryService.getAllCountries().subscribe(datas => {
+      this.countries = datas
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .map(country => ({
+        ...country,
+        mask: '0'.repeat(this.getPhoneLength(country.nom)),
+        indicatif: `+${country.indicatif}`,
+      }));
+      this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
+      this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
+    })
+  }
 
-        this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-      })
-    }
+  getAllRegionsByCountry(id:string){
+    this.countryService.getCityByCountry(id).subscribe(datas =>{
+      this.cities = datas.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    })
+  }
 
-    getAllRegionsByCountry(id:string){
-      this.countryService.getCityByCountry(id).subscribe(datas =>{
-        this.cities = datas.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      })
-    }
-  
-    
-     normalizeCountryName(country: string): string {
-      const cleaned = country
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-zA-Z ]/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-    
-      return this.COUNTRY_ALIASES[cleaned] || cleaned;
-    }
-    
-    /*getCityByCountry(country: string) {
-      const normalizedCountry = this.normalizeCountryName(country);
-    
-      this.regionService.getRegionsByCountryCode(normalizedCountry).subscribe(datas => {
-        if (datas.length > 0) {
-          const regions = datas[0].states;
-          this.cities = regions.map((regionName, index) => ({
-            id: index + 1,
-            nom: regionName
-          }));
-          this.selectedCountries.setValue(this.cities);
-        } else {
-          this.cities = [];
+    normalizeCountryName(country: string): string {
+    const cleaned = country
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z ]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return this.COUNTRY_ALIASES[cleaned] || cleaned;
+  }
+
+
+  getTotalReduction(): number {
+    return this.productList.reduce((total, product) => {
+      return total + ((product?.priceBasic || 0) * (product?.campagne?.reduction || 0) / 100 * product.cartCount);
+    }, 0);
+  }
+
+  commander(){
+    let user = this.user;
+    //console.log("::::::::::::::: USER = ",user);
+    if(user != null){
+      // Appliquer la réduction aux articles avant l'envoi
+    //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));
+      const productsWithReduction = this.productList.map(product => {
+        if (product.campagne && product.campagne.reduction) {
+          const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
+          const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
+          return {
+            ...product,
+            user: product.user.id, // Ne garder que l'ID de l'utilisateur
+            pricePromotion: finalPrice,
+            totalPrice: finalPrice * product.cartCount
+          };
         }
-      }, error => {
-        this.snackBar.open('Une erreur s\'est produite lors de la récupération des villes.', '×', {
-          panelClass: 'error',
-          verticalPosition: 'top',
-          duration: 3000
-        });
-        console.error("Erreur lors de la récupération des villes:", error);
+        return {
+          ...product,
+          user: product.user.id, // Ne garder que l'ID de l'utilisateur
+          totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
+        };
       });
-    }
-    */
-    
-  
-    getTotalReduction(): number {
-      return this.productList.reduce((total, product) => {
-        return total + ((product?.priceBasic || 0) * (product?.campagne?.reduction || 0) / 100 * product.cartCount);
-      }, 0);
-    }
 
-    commander(){     
-      let user = this.user;  
-      //console.log("::::::::::::::: USER = ",user);
-      if(user != null){    
-        // Appliquer la réduction aux articles avant l'envoi
-     //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));
-        const productsWithReduction = this.productList.map(product => {
-          if (product.campagne && product.campagne.reduction) {
-            const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
-            const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
-            return {
-              ...product,
-              user: product.user.id, // Ne garder que l'ID de l'utilisateur
-              pricePromotion: finalPrice,
-              totalPrice: finalPrice * product.cartCount
-            };
-          }
-          return {
-            ...product,
-            user: product.user.id, // Ne garder que l'ID de l'utilisateur
-            totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
-          };
-        });
-
-        this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
-          () => {
-            this.snackBar.open('Commande effectuée avec succès 1', '×', {
-              panelClass: 'success',
-              verticalPosition: 'top',
-              duration: 3000
-            });
-            this.clear()
-            this.router.navigate(["/cart"]);
-          },
-          error => {
-            this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
-              panelClass: 'error',
-              verticalPosition: 'top',
-              duration: 3000
-            });
-            console.error("Erreur lors la commande des articles:", error);
-          }
-        ); 
-      }
-      else if (this.billingForm.valid) {    
-        const values = this.billingForm.value;
-    
-        // Génération du numéro de téléphone complet basé sur le pays
-        const countryCode = this.selectedCountry.indicatif;
-        const phone = countryCode + values["phone"];
-
-        // Création du payload
-        const formData = new FormData();
-
-        formData.append("username", phone);
-        formData.append("firstname", values["firstName"]);
-        formData.append("lastname", values["lastName"]);
-        formData.append("password", values["phone"] || '');
-        formData.append("phoneNumber", values["phone"]);
-        formData.append("addresse", values["addresse"] || '');
-        formData.append("countries", values["country"]);
-        formData.append("state", values["state"] || '');
-        formData.append("boutique", values["company"] || '');
-        formData.append("role", this.profil || 'user');
-        formData.append("typeOfUsername", 'phone');
-        //formData.append('password', );
-
-        if(this.referralCode){
-          formData.append("parrainLogin", this.senderUsername );
-          formData.append("isInvited", "true");
-        }
-        
-        // Appliquer la réduction aux articles avant l'envoi
-        const productsWithReduction = this.productList.map(product => {
-          if (product.campagne && product.campagne.reduction) {
-            const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
-            const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
-            return {
-              ...product,
-              user: product.user.id, // Ne garder que l'ID de l'utilisateur
-              pricePromotion: finalPrice,
-              totalPrice: finalPrice * product.cartCount
-            };
-          }
-          return {
-            ...product,
-            user: product.user.id, // Ne garder que l'ID de l'utilisateur
-            totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
-          };
-        });
-      
-        // Création du compte
-        this.authService.signup(formData).toPromise()
-          .then(async (res: any) => {
-            try {
-              // Connexion de l'utilisateur
-              const username = formData.get('username') as string;
-              const password = formData.get('password') as string;
-              
-              const loginData = await this.authService.login(username, password).toPromise();
-              const userInfo = await this.authService.info(loginData.username);
-      
-              if (!userInfo) {
-                throw new Error('Impossible de récupérer les informations du client, merci de réessayer à nouveau');
-              }
-              
-      
-              // Récupération de l'utilisateur par téléphone et ajout de la commande
-              const phone = formData.get('phoneNumber') as string;
-              const myUser = await this.authService.getUserByPhone(phone).toPromise();
-              await this.appService.addCommande(myUser.id,this.senderUsername,this.referralCode, productsWithReduction).toPromise();
-      
-              this.snackBar.open('Commande effectuée avec succès', '×', {
-                panelClass: 'success',
-                verticalPosition: 'top',
-                duration: 3000
-              });
-      
-              this.clear();
-              this.router.navigate(["/cart"]);
-      
-            } catch (error: any) {
-              console.error('Erreur lors du processus :', error);
-              this.snackBar.open(error.message || 'Une erreur s\'est produite.', '×', {
-                panelClass: 'error',
-                verticalPosition: 'top',
-                duration: 3000
-              });
-            }
-          })
-          .catch((error: any) => {
-            console.error('Erreur lors de la création du compte :', error);
-            this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte!', '×', {
-              panelClass: 'error',
-              verticalPosition: 'top',
-              duration: 3000
-            });
+      this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
+        () => {
+          this.snackBar.open('Commande effectuée avec succès 1', '×', {
+            panelClass: 'success',
+            verticalPosition: 'top',
+            duration: 3000
           });
-      }
+          this.clear()
+          this.router.navigate(["/cart"]);
+        },
+        error => {
+          this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
+            panelClass: 'error',
+            verticalPosition: 'top',
+            duration: 3000
+          });
+          console.error("Erreur lors la commande des articles:", error);
+        }
+      );
     }
+    else if (this.billingForm.valid) {
+      const values = this.billingForm.value;
 
-/*
-    commander(){     
+      // Génération du numéro de téléphone complet basé sur le pays
+      const countryCode = this.selectedCountry.indicatif;
+      const phone = countryCode + values["phone"];
 
-      let user = this.user;      
-      if(user != null){    
-        this.appService.addCommande(user.id, this.productList).subscribe(
-          () => {
+      // Création du payload
+      const formData = new FormData();
+
+      formData.append("username", phone);
+      formData.append("firstname", values["firstName"]);
+      formData.append("lastname", values["lastName"]);
+      formData.append("password", values["phone"] || '');
+      formData.append("phoneNumber", values["phone"]);
+      formData.append("addresse", values["addresse"] || '');
+      formData.append("countries", values["country"]);
+      formData.append("state", values["state"] || '');
+      formData.append("boutique", values["company"] || '');
+      formData.append("role", this.profil || 'user');
+      formData.append("typeOfUsername", 'phone');
+      //formData.append('password', );
+
+      if(this.referralCode){
+        formData.append("parrainLogin", this.senderUsername );
+        formData.append("isInvited", "true");
+      }
+
+      // Appliquer la réduction aux articles avant l'envoi
+      const productsWithReduction = this.productList.map(product => {
+        if (product.campagne && product.campagne.reduction) {
+          const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
+          const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
+          return {
+            ...product,
+            user: product.user.id, // Ne garder que l'ID de l'utilisateur
+            pricePromotion: finalPrice,
+            totalPrice: finalPrice * product.cartCount
+          };
+        }
+        return {
+          ...product,
+          user: product.user.id, // Ne garder que l'ID de l'utilisateur
+          totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
+        };
+      });
+
+      // Création du compte
+      this.authService.signup(formData).toPromise()
+        .then(async (res: any) => {
+          try {
+            // Connexion de l'utilisateur
+            const username = formData.get('username') as string;
+            const password = formData.get('password') as string;
+
+            const loginData = await this.authService.login(username, password).toPromise();
+            const userInfo = await this.authService.info(loginData.username);
+
+            if (!userInfo) {
+              throw new Error('Impossible de récupérer les informations du client, merci de réessayer à nouveau');
+            }
+
+
+            // Récupération de l'utilisateur par téléphone et ajout de la commande
+            const phone = formData.get('phoneNumber') as string;
+            const myUser = await this.authService.getUserByPhone(phone).toPromise();
+            await this.appService.addCommande(myUser.id,this.senderUsername,this.referralCode, productsWithReduction).toPromise();
+
             this.snackBar.open('Commande effectuée avec succès', '×', {
               panelClass: 'success',
               verticalPosition: 'top',
               duration: 3000
             });
-            this.clear()
-            this.router.navigate(["/cart"]);
-              },
-          error => {
-            this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
-              panelClass: 'error',
-              verticalPosition: 'top',
-              duration: 3000
-            });
-            console.error("Erreur lors la commande des articles:", error);
-          }
-        ); 
-      }
-      else if (this.billingForm.valid) {    
-        const values = this.billingForm.value;
-    
-        // Génération du numéro de téléphone complet basé sur le pays
-        const countryCode = this.selectedCountry.indicatif;
-        const phone = countryCode + values["phone"];
-      
-        // Création du payload
-        const formData = new FormData();
 
-        formData.append("username", phone);
-        formData.append("firstname", values["firstName"]);
-        formData.append("lastname", values["lastName"]);
-        formData.append("password", values["phone"] || '');
-        formData.append("phoneNumber", values["phone"]);
-        formData.append("addresse", values["addresse"] || '');
-        formData.append("country", values["country"]);
-        formData.append("state", values["state"] || '');
-       // formData.append("code", values["zip"] ? values["zip"].toString() : '');
-       // formData.append("rccm", values["rccm"] || '');
-        formData.append("boutique", values["company"] || '');
-       // formData.append("email", values["email"] || '');
-        formData.append("role", this.profil || 'user'); // Si c'est un tableau, il faut l'adapter
-        formData.append("typeOfUsername", 'phone');
-        
-      
-        // Création du compte
-        this.authService.signup(formData).toPromise()
-          .then(async (res: any) => {
-            try {
-              // Connexion de l'utilisateur
-              const username = formData.get('username') as string;
-              const password = formData.get('password') as string;
-              
-              const loginData = await this.authService.login(username, password).toPromise();
-                            const userInfo = await this.authService.info(loginData.username);
-      
-              if (!userInfo) {
-                throw new Error('Impossible de récupérer les informations du client, merci de réessayer à nouveau');
-              }
-      
-              // Récupération de l'utilisateur par téléphone et ajout de la commande
-              const phone = formData.get('phoneNumber') as string;
-              const myUser = await this.authService.getUserByPhone(phone).toPromise();
-              await this.appService.addCommande(myUser.id, this.productList).toPromise();
-      
-              this.snackBar.open('Commande effectuée avec succès', '×', {
-                panelClass: 'success',
-                verticalPosition: 'top',
-                duration: 3000
-              });
-      
-              this.clear();
-              this.router.navigate(["/cart"]);
-      
-            } catch (error: any) {
-              console.error('Erreur lors du processus :', error);
-              this.snackBar.open(error.message || 'Une erreur s\'est produite.', '×', {
-                panelClass: 'error',
-                verticalPosition: 'top',
-                duration: 3000
-              });
-            }
-          })
-          .catch((error: any) => {
-            console.error('Erreur lors de la création du compte :', error);
-            this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte!', '×', {
+            this.clear();
+            this.router.navigate(["/cart"]);
+
+          } catch (error: any) {
+            console.error('Erreur lors du processus :', error);
+            this.snackBar.open(error.message || 'Une erreur s\'est produite.', '×', {
               panelClass: 'error',
               verticalPosition: 'top',
               duration: 3000
             });
+          }
+        })
+        .catch((error: any) => {
+          console.error('Erreur lors de la création du compte :', error);
+          this.snackBar.open(error.message || 'Une erreur s\'est produite lors de la création du compte!', '×', {
+            panelClass: 'error',
+            verticalPosition: 'top',
+            duration: 3000
           });
-      }
-      
-    }*/
-      
+        });
+    }
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.productList = this.productList.filter(product => 
+    this.productList = this.productList.filter(product =>
       product.nom.toLowerCase().includes(filterValue.toLowerCase())
     );
   }
