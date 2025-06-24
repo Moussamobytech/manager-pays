@@ -64,7 +64,7 @@ export class CartComponent implements OnInit {
   
   sellerCountry: any = null; // Pour stocker le pays du vendeur
   userContact: any;
-
+  customerPhone: string = '';
 
 
 
@@ -112,7 +112,7 @@ export class CartComponent implements OnInit {
       //  const fullPhoneNumber = this.selectedCountry.indicatif + phone;
     
         this.isPopulatingForm = true;
-    
+        this.customerPhone = phone;
         this.loadUserByPhone(phone);
     
         // Ne vide plus le champ ici
@@ -261,6 +261,7 @@ export class CartComponent implements OnInit {
   getSellerCountry(sellerId: string) {
     this.authService.getUserByPhone(sellerId).subscribe(
       (seller) => {
+
         if (seller && seller.countries) { 
           this.sellerCountry = seller.countries.id ? seller.countries : null;
           if (this.sellerCountry) {
@@ -295,11 +296,12 @@ export class CartComponent implements OnInit {
 
   // Modifier la méthode checkCityType pour utiliser le pays du vendeur
   checkCityType(cityId: string) {
+
     if(this.selectedCountry.nom != this.sellerCountry.nom){
       this.isForeignCity = true;
       this.isCapitalCity = false;
       this.isOtherRegion = false;
-      this.transportFee = 3000; // Frais de transport pour une ville étrangère
+      this.transportFee = 12000; // Frais de transport pour une ville étrangère
       this.deliveryDelay = '5 à 7 jours';
     }
     if(this.selectedCountry.nom == this.sellerCountry.nom){
@@ -308,13 +310,13 @@ export class CartComponent implements OnInit {
         this.isCapitalCity = true;
         this.isOtherRegion = false; 
         this.isForeignCity = false;
-        this.transportFee = 1000; // Frais de transport pour la capitale
+        this.transportFee = 1500; // Frais de transport pour la capitale
         this.deliveryDelay = '48h';
       }else{
         this.isCapitalCity = false;
         this.isOtherRegion = true;
         this.isForeignCity = false;
-        this.transportFee = 2000; // Frais de transport pour une autre région
+        this.transportFee = 2500; // Frais de transport pour une autre région
         this.deliveryDelay = '3 à 4 jours';
       }
 
@@ -530,6 +532,7 @@ onlyCartItemCount:any = 0
 
     getAllPays() {
       this.countryService.getAllCountries().subscribe(datas => {
+
         this.countries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       })
     }
@@ -831,5 +834,13 @@ onlyCartItemCount:any = 0
     this.productList = this.productList.filter(product => 
       product.nom.toLowerCase().includes(filterValue.toLowerCase())
     );
+  }
+
+
+  openWhatsapp() {
+      let message = "Bonjour, Je souhaiterais me renseigner sur les critèes de livraison sur fidelity.";
+      const link = "https://wa.me/22376007979?text=" + encodeURIComponent(message);
+      window.open(link, "_blank");
+    
   }
 }

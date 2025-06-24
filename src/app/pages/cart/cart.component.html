@@ -1,9 +1,8 @@
-
- <!--<section *ngIf="productList?.length === 0" class="empty-cart-card" fxLayout="column" fxLayoutAlign="center center">
+<!--<section *ngIf="productList?.length === 0" class="empty-cart-card" fxLayout="column" fxLayoutAlign="center center">
   <mat-icon class="cart-icon" aria-label="Cart Icon">shopping_cart</mat-icon>
   <i class="fa-solid fa-cart-shopping cart-icon"></i>
   <h1 class="cart-title">Votre panier est actuellement vide !</h1>-->
-  <!-- <a [routerLink]="['/']" mat-raised-button color="primary" class="shop-button">
+<!-- <a [routerLink]="['/']" mat-raised-button color="primary" class="shop-button">
     Retourner à la boutique
   </a>
   <button class="shop-button" routerLink="/products"><i class="fa-solid fa-chevron-left"></i> Retourner à la boutique</button>
@@ -14,17 +13,18 @@
 
 <mat-card *ngIf="productList.length == 0" fxLayout="column" fxLayoutAlign="center center" class="text-center py-5">
   <svg viewBox="0 0 24 24" class="mat-icon empty-cart-icon primary-color">
-      <path d="M19 20C19 21.11 18.11 22 17 22C15.89 22 15 21.1 15 20C15 18.89 15.89 18 17 18C18.11 18 19 18.9 19 20M7 18C5.89 18 5 18.89 5 20C5 21.1 5.89 22 7 22C8.11 22 9 21.11 9 20S8.11 18 7 18M7.2 14.63L7.17 14.75C7.17 14.89 7.28 15 7.42 15H19V17H7C5.89 17 5 16.1 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2H4.27L5.21 4H20C20.55 4 21 4.45 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63M8.5 11H10V9H7.56L8.5 11M11 9V11H14V9H11M14 8V6H11V8H14M17.11 9H15V11H16L17.11 9M18.78 6H15V8H17.67L18.78 6M6.14 6L7.08 8H10V6H6.14Z" />
+    <path
+      d="M19 20C19 21.11 18.11 22 17 22C15.89 22 15 21.1 15 20C15 18.89 15.89 18 17 18C18.11 18 19 18.9 19 20M7 18C5.89 18 5 18.89 5 20C5 21.1 5.89 22 7 22C8.11 22 9 21.11 9 20S8.11 18 7 18M7.2 14.63L7.17 14.75C7.17 14.89 7.28 15 7.42 15H19V17H7C5.89 17 5 16.1 5 15C5 14.65 5.09 14.32 5.24 14.04L6.6 11.59L3 4H1V2H4.27L5.21 4H20C20.55 4 21 4.45 21 5C21 5.17 20.95 5.34 20.88 5.5L17.3 11.97C16.96 12.58 16.3 13 15.55 13H8.1L7.2 14.63M8.5 11H10V9H7.56L8.5 11M11 9V11H14V9H11M14 8V6H11V8H14M17.11 9H15V11H16L17.11 9M18.78 6H15V8H17.67L18.78 6M6.14 6L7.08 8H10V6H6.14Z" />
   </svg>
   <h1 class="mt-3">Votre panier est actuellement vide !</h1>
   <p class="text-muted">Avant de procéder au paiement, vous devez ajouter certains articles à votre panier.</p>
-  <a [routerLink]="['/categories']" mat-raised-button  class="mt-3 monBtn">Ajouter un produit</a>
+  <a [routerLink]="['/categories']" mat-raised-button class="mt-3 monBtn">Ajouter un produit</a>
 </mat-card>
 
 <!-- <div class="desktop-container" fxFlex="100" fxShow="false" fxShow.gt-xs="true">
 
   <!-- Table pour les grands écrans -->
-  <!-- <mat-card *ngIf="!isSmallScreen && productList.length > 0" class="p-0">
+<!-- <mat-card *ngIf="!isSmallScreen && productList.length > 0" class="p-0">
       <div class="mat-mdc-table cart-table">
           <div class="mat-mdc-header-row">
               <div class="mat-mdc-header-cell">Produit</div>
@@ -72,15 +72,15 @@
                   </div>
               </div>
               <div class="mat-mdc-cell text-center"><a [routerLink]="['/checkout']" mat-raised-button color="primary">Commander</a></div> -->
-              <!-- <div class="mat-mdc-cell text-center"><a (click)="monPanierContient()" mat-raised-button color="primary">Proceed To Checkout</a></div> -->
-          <!-- </div>
+<!-- <div class="mat-mdc-cell text-center"><a (click)="monPanierContient()" mat-raised-button color="primary">Proceed To Checkout</a></div> -->
+<!-- </div>
       </div>
   </mat-card> -->
 
 
 
-  <!-- Table simplifiée pour les petits écrans *ngIf="productList.length == 0" -->
-  <!-- <mat-card *ngIf="isSmallScreen && productList.length > 0" class="p-0">
+<!-- Table simplifiée pour les petits écrans *ngIf="productList.length == 0" -->
+<!-- <mat-card *ngIf="isSmallScreen && productList.length > 0" class="p-0">
     <div class="mat-mdc-table cart-table">
       <div class="mat-mdc-header-row">
         <div class="mat-mdc-header-cell">Product</div>
@@ -104,14 +104,14 @@
             </button>
           </div> -->
 
-          <!--  <p><strong>{{product.nom}}</strong></p>
+<!--  <p><strong>{{product.nom}}</strong></p>
           <p>{{ product?.priceBasic || product?.pricePromotion | number }} FCFA</p>
           <p>Qty: {{ product.quantite }}</p>
           <p>Total: {{ total[product.id] | number : '1.2-2' }} FCFA</p>
           <button mat-mini-fab color="warn" (click)="remove(product)">
             <mat-icon>close</mat-icon>
           </button> -->
-        <!-- </div>
+<!-- </div>
       </div>
 
 
@@ -131,8 +131,8 @@
           </div>
         </div>
         <div class="mat-mdc-cell text-center"><a [routerLink]="['/checkout']" mat-raised-button color="primary">Commander</a></div> -->
-        <!-- <div class="mat-mdc-cell text-center"><a (click)="monPanierContient()" mat-raised-button color="primary">Proceed To Checkout</a></div> -->
-      <!-- </div>
+<!-- <div class="mat-mdc-cell text-center"><a (click)="monPanierContient()" mat-raised-button color="primary">Proceed To Checkout</a></div> -->
+<!-- </div>
 
     </div>
   </mat-card> -->
@@ -163,7 +163,7 @@
           Réduction - {{ product?.campagne.reduction }}%
           (-
           {{
-            ((product?.priceBasic || 0) * product?.campagne.reduction / 100) * product.cartCount | number : '1.0-0'
+          ((product?.priceBasic || 0) * product?.campagne.reduction / 100) * product.cartCount | number : '1.0-0'
           }} F)
         </p>
 
@@ -171,7 +171,8 @@
 
 
       <div class="product-actions">
-        <app-controls [product]="product" [pageName]="pageName" [type]="'wish'" (onQuantityChange)="updateCart($event)"></app-controls>
+        <app-controls [product]="product" [pageName]="pageName" [type]="'wish'"
+          (onQuantityChange)="updateCart($event)"></app-controls>
         <button class="delete-button" (click)="remove(product)"><i class="fa-solid fa-trash"></i></button>
       </div>
 
@@ -212,7 +213,7 @@
       </div>
     </div>
 
-  
+
     <!-- Payment Form: horizontal on desktop, vertical on mobile
     <form class="payment-form" fxLayout="row">
       <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex.gt-xs="48">
@@ -242,77 +243,84 @@
     </form>
 -->
 
-<form [formGroup]="billingForm">
-  <div fxLayout="row wrap" class="py-3">
+    <form [formGroup]="billingForm">
+      <div fxLayout="row wrap" class="py-3">
 
-    <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
-      <!-- Champ Pays -->
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Pays</mat-label>
-        <mat-select formControlName="country" required (selectionChange)="handleCountryChange($event)">
-          <mat-option *ngFor="let country of countries" [value]="country.id">
-            {{ country.nom }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+          <!-- Champ Pays -->
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Pays</mat-label>
+            <mat-select formControlName="country" required (selectionChange)="handleCountryChange($event)">
+              <mat-option *ngFor="let country of countries" [value]="country.id">
+                {{ country.nom }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-    <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
-      <!-- Champ Ville -->
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Ville</mat-label>
-        <mat-select formControlName="city" required>
-          <mat-option *ngFor="let city of cities" [value]="city.id">
-            {{ city.nom }}
-          </mat-option>
-        </mat-select>
-        <!-- <mat-error *ngIf="billingForm.controls.city.errors?.required">City is required</mat-error> -->
-      </mat-form-field>
-    </div>
+        <div fxFlex="100" fxFlex.gt-sm="25" class="px-1">
+          <!-- Champ Ville -->
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Ville</mat-label>
+            <mat-select formControlName="city" required>
+              <mat-option *ngFor="let city of cities" [value]="city.id">
+                {{ city.nom }}
+              </mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="billingForm.controls.city.errors?.required">City is required</mat-error> -->
+          </mat-form-field>
+        </div>
 
-    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-      <!-- Champ Téléphone -->
-      <mat-form-field appearance="outline" class="w-100 phone-number">
-        <mat-label>Téléphone</mat-label>
-        <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.indicatif }}</span>
-        <input matInput formControlName="phone" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
-      </mat-form-field>
-    </div>
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+          <!-- Champ Téléphone -->
+          <mat-form-field appearance="outline" class="w-100 phone-number">
+            <mat-label>Téléphone</mat-label>
+            <span matPrefix>&nbsp;&nbsp;{{ selectedCountry?.indicatif }}</span>
+            <input matInput formControlName="phone" [placeholder]="selectedCountry?.placeholder" [mask]="phoneMask" />
+          </mat-form-field>
+        </div>
 
 
-    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-      <mat-form-field appearance="outline" class="w-100">
-          <mat-label>First name</mat-label>
-          <input matInput placeholder="First name" formControlName="firstName" required>
-          <!-- <mat-error *ngIf="billingForm.controls.firstName.errors?.required">First name is required</mat-error>
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>First name</mat-label>
+            <input matInput placeholder="First name" formControlName="firstName" required>
+            <!-- <mat-error *ngIf="billingForm.controls.firstName.errors?.required">First name is required</mat-error>
      --> </mat-form-field>
-    </div>
-    <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
-      <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Last name</mat-label>
-          <input matInput placeholder="Last name" formControlName="lastName" required>
-          <!-- <mat-error *ngIf="billingForm.controls.lastName.errors?.required">Last name is required</mat-error>
+        </div>
+        <div fxFlex="100" fxFlex.gt-sm="50" class="px-1">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Last name</mat-label>
+            <input matInput placeholder="Last name" formControlName="lastName" required>
+            <!-- <mat-error *ngIf="billingForm.controls.lastName.errors?.required">Last name is required</mat-error>
      --> </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+    <!-- Informations de livraison conditionnelles -->
+    <div *ngIf="transportFee && deliveryDelay" class="m-3" fxLayout="column" fxLayoutAlign="center center">
+      <p> 🚚 Délai de livraison estimée: <strong>{{ deliveryDelay }}</strong></p>
+      <p *ngIf="customerPhone">📲 Le livreur te contactera au: <strong>{{ customerPhone }}</strong></p>
+      <div *ngIf="isForeignCity">
+        <p>📦 Expédition depuis: {{sellerCountry.nom}}</p>
+        <p> 💰 Frais de livraison valables jusqu’à 2 kg.</p>
+        <p>Au-delà, on te contacte avant envoi</p>
+        <p> 🙋‍♀️ Besoin d’aide ? Contacte-nous sur <strong (click)="openWhatsapp()">WhatsApp</strong> </p>
+
+      </div>
     </div>
-  </div>
-</form>
-  
-  <!-- Informations de livraison conditionnelles -->
-  <div *ngIf="transportFee && deliveryDelay" class="mt-2">
-    <p>Délai de livraison estimé : <strong>{{ deliveryDelay }}</strong></p>
-    <p>Le livreur te contactera au : <strong>{{ userContact }}</strong></p>
-  </div>
-  
 
-<div class="buttons">
-  <button mat-button class="back-btn" routerLink="/">
-     Retour
-  </button>
 
-  <button mat-flat-button type="submit" class="vld-btn" (click)="commander()"  [disabled]="!billingForm.valid">
-    Valider <mat-icon>arrow_forward</mat-icon>
-  </button>
-</div>
+    <div class="buttons">
+      <button mat-button class="back-btn" routerLink="/">
+        Retour
+      </button>
+
+      <button mat-flat-button type="submit" class="vld-btn" (click)="commander()" [disabled]="!billingForm.valid">
+        Valider <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Similar Products Section -->
@@ -322,7 +330,8 @@
       <a routerLink="">Voir plus<mat-icon matIconSuffix>keyboard_arrow_right</mat-icon></a>
     </div>
     <div class="product-wrapper">
-      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('left')" class="simillar-prev">keyboard_arrow_left</mat-icon>
+      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('left')"
+        class="simillar-prev">keyboard_arrow_left</mat-icon>
 
       <div class="product-list" #simillarContainer>
         <div class="similar-product" *ngFor="let similarProduct of productList">
@@ -335,8 +344,8 @@
         </div>
       </div>
 
-      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('right')" class="simillar-next">keyboard_arrow_right</mat-icon>
+      <mat-icon *ngIf="showSimilarNav" (click)="swipeSimilarProduct('right')"
+        class="simillar-next">keyboard_arrow_right</mat-icon>
     </div>
   </div>
 </div>
-

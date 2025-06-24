@@ -6,9 +6,13 @@
       <img *ngIf="currentUser.logo" [src]="'https://image.geotrac.io/minio/api/v1/view?bucket=ecommerce-bucket&file='+currentUser.logo" class="profile-icon" alt="logo">
       <img src="assets/images/icons/camera_icon.png" class="camera-icon" alt="...">
     </div>
+   <div class="customer_account_info" fxLayout="column" fxLayoutAlign="start center" routerLink="/account-customer/settings">
     <h2>{{user.firstname}} {{user.lastname}}</h2>
+    <p class="phone">+{{user.username}}</p>
+   </div>
   </div>
 
+  <!--
   <div fxLayout="row wrap" class="card-container">
     <div *ngFor="let card of cards.slice(0, 5)" fxFlex="48" fxFlex.gt-xs="32" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
       <div class="card" [ngClass]="card.cardClass">
@@ -18,6 +22,20 @@
       </div>
     </div>
   </div>
+-->
+
+<div class="title-container">
+  <h3>Mes commandes recentes</h3>
+  <p (click)="toggleShowMore()">
+    {{ showMoreOrders ? 'Voir moins' : 'Voir plus' }}
+  </p>
+</div>
+<hr class="section-separator">
+
+<div class="not-favoris" *ngIf="tailles === 0">
+  Tu n’as pas encore commander.
+  <button  type="button"  routerLink="/cart">Commander un produit</button>
+</div>
 
   <div class="see-more-container" *ngIf="cards.length > 5">
     <button mat-raised-button color="primary" class="see-more-btn" (click)="showMoreCards = !showMoreCards">
@@ -25,7 +43,7 @@
     </button>
   </div>
 
-  <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
+ <!-- <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
     <div *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
       <div class="card" [ngClass]="card.cardClass">
         <span class="card-icon"><i [class]="card.icon"></i></span>
@@ -43,56 +61,77 @@
       <i class="fa-solid fa-heart"></i> Mes favoris
     </button>
   </div>
+-->
+
+
 
   <div class="tab-content">
-    <div *ngIf="selectedTab === 'historique'" class="historique">
+    <div class="historique">
     <!--  <div class="search-container" fxLayout="row" fxLayoutAlign="center center">
         <mat-form-field appearance="outline" class="w-100" style="max-width: 500px;">
           <mat-label>Rechercher</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer par produit, montant, quantité ou date" #input>
         </mat-form-field>
       </div>-->
-      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px">
+      <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px" *ngIf="taillesOrders > 0">
         <div *ngFor="let order of showMoreOrders ? dataSource.filteredData : orders.slice(0, 3)" fxFlex="100" fxFlex.gt-sm="32" class="historique-items">
           <div class="historique-item">
             <img [src]="order.produitImage" alt="Image Produit">
             <div>
               <p>{{ order.produitNom }}</p>
               <p>{{ order.montant | number }} F</p>
-              <p>Quantité: {{ order.quantite }}</p>
+             <!-- <p>Quantité: {{ order.quantite }}</p>-->
             </div>
             <div class="status">
-              <p [ngClass]="getStatusColor(order.statutCommande.name)">{{ getStatusLabel(order.statutCommande.name) }}</p>
+              <p [ngClass]="getStatusColor(order.statutCommande.name)">
+                <ng-container [ngSwitch]="order.statutCommande.name">
+                  <i *ngSwitchCase="'PENDING'" class="fa fa-truck"></i>
+                  <i *ngSwitchCase="'DELIVERED'" class="fa fa-check-circle"></i>
+                  <i *ngSwitchCase="'CANCEL'" class="fa fa-times-circle"></i>
+                </ng-container>
+                {{ getStatusLabel(order.statutCommande.name) }}
+              </p>
               <p>{{ order.dateCommande | date:'dd/MM/yyyy' }}</p>
+              <button class="button-again" type="button">Acheter à nouveau</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="see-more-container" *ngIf="!showMoreOrders && orders.length > 3">
+     <!-- <div class="see-more-container" *ngIf="!showMoreOrders && orders.length > 3">
         <button mat-raised-button  class="see-more-btn" (click)="toggleShowMore()">
           Voir plus d'historiques
         </button>
-      </div>
+      </div> 
 
       <mat-paginator
-        *ngIf="showMoreOrders"
+       // *ngIf="showMoreOrders"
         [pageSize]="pageSize"
         [pageSizeOptions]="pageSizeOptions"
         showFirstLastButtons
         aria-label="Select page of orders">
       </mat-paginator>
+    -->
+  </div>
+   
+     <div class="title-container">
+      <h3>Mes favoris</h3>
+      <p *ngIf="favorisProducts.length > 2" (click)="toggleShowMoreProduct()">
+        {{ showMoreProduct ? 'Voir moins' : 'Voir plus' }}
+      </p>
+      
     </div>
+    <hr class="section-separator">
+    
+    <div class="favoris">
+      <div class="not-favoris" *ngIf="tailles === 0">
+        Tu n'as pas encore de produit favoris
+        <button  type="button"  routerLink="/products">Ajouter un produit</button>
+      </div>
 
-    <div *ngIf="selectedTab === 'favoris'" class="favoris">
-      <h3 *ngIf="tailles === 0">
-        <mat-icon>sentiment_neutral</mat-icon>
-        Aucun favoris pour l'instant, mais vous pouvez en&nbsp;
-        <a routerLink="/products">ajouter</a>&nbsp;!
-      </h3>
-
-      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="favorisProducts.length > 0">
-        <div *ngFor="let product of favorisProducts" fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
+      <div fxLayout="row wrap" fxLayoutGap="10px" fxLayoutGap.gt-md="20px" *ngIf="tailles > 0">
+        <div *ngFor="let product of (showMoreProduct ? favorisProducts : favorisProducts.slice(0, 4))"
+             fxFlex="47" fxFlex.sm="31" fxFlex.gt-sm="23" fxFlex.gt-md="18" class="favoris-item">
           <app-product-card [product]="product" [pageName]="'account-customer'"></app-product-card>
         </div>
       </div>

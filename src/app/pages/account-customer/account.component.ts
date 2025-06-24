@@ -41,11 +41,12 @@ export class AccountComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('input') input: ElementRef;
-  pageSize = 10;
-  pageSizeOptions = [10, 20, 30];
-  tailles: any;
+  pageSize = 2;
+  pageSizeOptions = [5, 10, 15];
+  tailles: any = 0;
   referralHistory: any;
   balance:any = 0;
+  taillesOrders: number = 0;
 
   constructor(
     private auth: AuthenticationService, 
@@ -63,10 +64,16 @@ export class AccountComponent implements OnInit {
     this.currentUser = this.auth.currentUser()
     
     this.user = this.currentUser;
+
     this.getAllCommande();    
     this.getProduitsLikes();
     this.loadReferralHistory();
   }
+  showMoreProduct = false;
+
+toggleShowMoreProduct() {
+  this.showMoreProduct = !this.showMoreProduct;
+}
 
 
   getProduitsLikes(){
@@ -126,7 +133,7 @@ export class AccountComponent implements OnInit {
   getAllCommande() {
     this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(datas => {
       this.orders = datas;
-      
+      this.taillesOrders = this.orders.length;
       this.dataSource = new MatTableDataSource<any>(this.orders);
       this.dataSource.paginator = this.paginator;
       // Configurer le filtre pour rechercher dans plusieurs champs
@@ -183,7 +190,7 @@ export class AccountComponent implements OnInit {
   getStatusLabel(status: string): string {
     switch(status.toUpperCase()) {
       case 'PENDING':
-        return 'En attente';
+        return 'En cours';
       case 'DELIVERED':
         return 'Livré';
       case 'CANCEL':
