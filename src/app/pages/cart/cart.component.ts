@@ -480,8 +480,8 @@ onlyCartItemCount:any = 0
         mask: '0'.repeat(this.getPhoneLength(country.nom)),
         indicatif: `+${country.indicatif}`,
       }));
-      this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
-      this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
+    //  this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
+    //  this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
     })
   }
 

@@ -449,38 +449,81 @@ form {
   }
 
   .cart-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $background-light;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid $border-color;
+  
     .product-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+      min-width: 0; // Allows flexbox truncation
+  
       .product-image {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
+        border-radius: 5px;
+        object-fit: cover;
+        flex-shrink: 0;
       }
-
+  
+      div {
+        min-width: 0; // Allows truncation
+        flex: 1;
+      }
+  
       .product-name {
-        font-size: 14px;
+        font-weight: bold;
+        font-size: 16px;
+        margin: 0 0 5px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-
+  
       .product-price {
-        font-size: 13px;
+        font-size: 14px;
+        color: $primary-color;
+        margin: 0;
+        font-weight: 500;
       }
     }
-
+  
     .product-actions {
-      justify-content: center;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+  
+      .delete-button {
+        @include button-style($background-light, $primary-color, 14px, 8px 12px);
+        border: 1px solid $border-color;
+  
+        &:hover {
+          background-color: #ff4444;
+          color: white;
+          border-color: #ff4444;
+        }
+      }
     }
   }
 
-  .buttons {
-    flex-direction: column;
+  
 
-    .back-btn,
-    .vld-btn {
-      width: 100%;
-    }
-  }
+   .buttons {
+     flex-direction: column;
+
+     .back-btn,
+     .vld-btn {
+       width: 100%;
+     }
+   }
 
   .similar-products {
     .product-list {

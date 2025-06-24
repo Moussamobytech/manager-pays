@@ -140,7 +140,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
               // login successful if there's a jwt token in the response
               if (user && user.token) {
                   let roles = user.authorities[0].authority
-                  // console.log("roles :: ", roles);
+                   console.log("roles :: ", roles);
                   // store user details and jwt in session
                   sessionStorage.setItem('currentUser', JSON.stringify(user));
                   sessionStorage.setItem('auth-token', JSON.stringify(user.token));

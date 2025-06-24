@@ -74,7 +74,7 @@
               </mat-select-trigger>
               <mat-option *ngFor="let country of countries" [value]="country.id">
                 {{ country.indicatif }}
-                <img class="country-icon" src="assets/icons/countries/{{ country.nom }}.png" alt=""/>
+                <img class="country-icon" src="assets/icons/countries/{{ country.nom }}.png" alt="" />
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -103,7 +103,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Prénom</mat-label>
             <input matInput placeholder="Prénom" formControlName="firstName" required />
-            <mat-error *ngIf="billingForm.controls.firstName.hasError('required')" >Prénom est requis</mat-error>
+            <mat-error *ngIf="billingForm.controls.firstName.hasError('required')">Prénom est requis</mat-error>
           </mat-form-field>
         </div>
 
@@ -111,7 +111,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Nom</mat-label>
             <input matInput placeholder="Nom" formControlName="lastName" required />
-            <mat-error *ngIf="billingForm.controls.lastName.hasError('required')" >Nom est requis</mat-error>
+            <mat-error *ngIf="billingForm.controls.lastName.hasError('required')">Nom est requis</mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -155,12 +155,15 @@
     </div>
 
 
+
+
+
       <div class="buttons">
         <button mat-button class="back-btn" routerLink="/">
           Retour
         </button>
 
-        <button mat-flat-button type="submit" class="vld-btn" (click)="commander()"  [disabled]="!billingForm.valid">
+        <button mat-flat-button type="submit" class="vld-btn" (click)="commander()" [disabled]="!billingForm.valid">
           Valider <mat-icon>arrow_forward</mat-icon>
         </button>
       </div>

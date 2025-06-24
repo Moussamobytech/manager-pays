@@ -32,12 +32,12 @@
 </div>
 <hr class="section-separator">
 
-<div class="not-favoris" *ngIf="tailles === 0">
+<div class="not-favoris" *ngIf="taillesOrders === 0">
   Tu n’as pas encore commander.
   <button  type="button"  routerLink="/cart">Commander un produit</button>
 </div>
 
-  <div class="see-more-container" *ngIf="cards.length > 5">
+  <div class="see-more-container" *ngIf="taillesOrders > 5">
     <button mat-raised-button color="primary" class="see-more-btn" (click)="showMoreCards = !showMoreCards">
       {{ showMoreCards ? 'Voir moins' : 'Voir plus' }}
     </button>
@@ -125,7 +125,7 @@
     
     <div class="favoris">
       <div class="not-favoris" *ngIf="tailles === 0">
-        Tu n'as pas encore de produit favoris
+        Tu n'as pas en core de produit favoris
         <button  type="button"  routerLink="/products">Ajouter un produit</button>
       </div>
 
