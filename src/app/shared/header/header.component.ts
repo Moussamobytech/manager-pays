@@ -56,8 +56,6 @@ export class HeaderComponent implements OnInit {
 
 
     async ngOnInit() {
-      let res = await this.appService.getCategoriesSidenav().toPromise()
-      this.sidenavMenuItems = res;
       this.getAllProduits();
       this.getCategories();
       // setTimeout(() => {
@@ -121,14 +119,17 @@ export class HeaderComponent implements OnInit {
       let deflt: any =  {"nom":"Tous", "cle":"all"}
       this.category = deflt;
       this.appService.getCategories().subscribe(data => {
-
+       
         const parsePoids = (val: any): number => {
           const n = Number(val);
           return isNaN(n) ? 0 : n;
         };
         this.categories = data.filter(cat => cat.status === 'ACTIF');
-        const mainCats = this.categories.filter(cat => cat.hasSubCategory);
-        this.navCategories = mainCats.sort((a, b) => parsePoids(b.poids) - parsePoids(a.poids)).slice(0, (window.innerWidth > 600)?7:5);
+        // const mainCats = this.categories.filter(cat => cat.parentId == null);
+        this.navCategories = this.categories.sort((a, b) => parsePoids(b.poids) - parsePoids(a.poids)).slice(0, (window.innerWidth > 600)?7:5);
+        // this.navCategories = mainCats.sort((a, b) => parsePoids(b.poids) - parsePoids(a.poids)).slice(0, (window.innerWidth > 600)?7:5);
+        console.log("this.navCategories", this.navCategories);
+        
         data.push({"nom":"Tous", "cle":"all"})
         this.appService.Data.categories = data;
       });
@@ -136,7 +137,7 @@ export class HeaderComponent implements OnInit {
 
     public async getCategoriesSidenav(){
       let res = await this.appService.getCategoriesSidenav().toPromise()
-      // console.log("this.menuItems res :::::: ",res)
+      console.log("this.menuItems res :::::: ",res)
       this.sidenavMenuItems = res;
       // console.log("this.menuItems :::::: ",this.sidenavMenuItems)
     }

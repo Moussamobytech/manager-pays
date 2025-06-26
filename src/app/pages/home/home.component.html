@@ -9,7 +9,7 @@
         <div class="swiper-wrapper">
           <div *ngFor="let subCategory of subCategories; let i = index" class="swiper-slide">
             <div class="subcategory-item" [class.selected]="i === selectedSubCategory.id" (click)="onSubCategoryClick(subCategory)">
-              <span>{{subCategory.name}}</span>
+              <span>{{subCategory.nom}}</span>
             </div>
           </div>
         </div>
