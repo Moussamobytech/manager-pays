@@ -44,7 +44,7 @@ export class AccountSettingsComponent implements OnInit {
     this.currentUser = this.auth.currentUser()
     this.getAllPays();
 
-    console.log("1111 === this.currentUser :::: ", this.currentUser);
+   // console.log("1111 === this.currentUser :::: ", this.currentUser);
    // let cur = this.currentUser;
     //   this.selectedCountry = this.countries.find(c => c.code === 'ML');
 

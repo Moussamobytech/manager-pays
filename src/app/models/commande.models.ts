@@ -7,5 +7,9 @@ export class Commande {
     codeCommande?: string | null; 
     clientUsername?:string | null;
     clientPhone?:string | null;
+
+    deliveryPrice?:string | null;
+    deliveryCountry?:string | null;
+    deliveryDelay?:string | null;
   }
   

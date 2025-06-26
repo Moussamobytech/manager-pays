@@ -79,8 +79,12 @@ export class CommandeListComponent implements OnInit {
      /// this.ngxSpinnerService.show(); // Assurez-vous d'afficher le spinner avant la requête
     
       await this.commandeService.getAllCommande().pipe(
-        map((commande: any) => {           
-          return commande;
+        map((commande: any) => {  
+          console.log(";;;;;;;;;;;;;; ", JSON.stringify(commande));
+            
+          let c = commande.sort((a, b) => new Date(b.dateCommande).getTime() - new Date(a.dateCommande).getTime());      
+       
+          return c;
         }),
         catchError((error: any) => {
           console.error("Erreur lors de la récupération des commandes : ", error);

@@ -132,7 +132,8 @@ toggleShowMoreProduct() {
 
   getAllCommande() {
     this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(datas => {
-      this.orders = datas;
+      this.orders = datas.sort((a, b) => new Date(b.dateCommande).getTime() - new Date(a.dateCommande).getTime());      
+      
       this.taillesOrders = this.orders.length;
       this.dataSource = new MatTableDataSource<any>(this.orders);
       this.dataSource.paginator = this.paginator;
@@ -181,7 +182,7 @@ toggleShowMoreProduct() {
       case 'CANCEL':
         return 'warn'; // #d81b60 (rouge)
       case 'VALIDE':
-        return 'primary'; // #25224a (bleu foncé)
+        return 'primary'; //rgb(22, 93, 4) (bleu foncé)
       default:
         return 'primary';
     }

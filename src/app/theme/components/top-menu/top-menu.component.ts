@@ -56,10 +56,13 @@ export class TopMenuComponent implements OnInit {
     }
     else if(this.roles == "ROLE_PARTICULIER"){
      this.routes = "account-customer";
-
   }
+  else if(this.roles == "ROLE_USER"){
+    this.routes = "account-customer";
+
+ }
     // this.username = sessionStorage.getItem('username')!;
-   console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
+   //console.log("TopMenuComponent user :::: ", this.user.profiles[0].name);
   }
 
 

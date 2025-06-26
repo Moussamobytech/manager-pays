@@ -59,6 +59,8 @@ export class CartComponent implements OnInit {
 
   transportFee: number = 0;
   deliveryDelay: string = '';
+  deliveryPrice: number = 0; // Prix de la livraison
+  deliveryCountry: string = ''; // Pour stocker le pays de livraison
 
   sellerCountry: any = null; // Pour stocker le pays du vendeur
   userContact: any;
@@ -128,6 +130,7 @@ export class CartComponent implements OnInit {
     this.countryService.getById(event.value).subscribe(datas => {
       this.selectedCountry = datas;
       const id = this.selectedCountry.id;
+      this.deliveryCountry = this.selectedCountry.nom; // Mettre à jour le pays de livraison
 //      this.getCityByCountry(datas.nom);
       this.getAllRegionsByCountry(id);
 
@@ -303,7 +306,9 @@ export class CartComponent implements OnInit {
 
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
 monPanierContient(){
-  this.appService.addCommande(this.idUser, this.senderUsername, this.referralCode, this.productList).subscribe(
+  let deliveryPrice = this.transportFee.toString();
+
+  this.appService.addCommande(this.idUser, this.senderUsername, this.referralCode,deliveryPrice,this.deliveryCountry,this.deliveryDelay, this.productList).subscribe(
     () => {
       this.snackBar.open('Commande effectuée avec succès', '×', {
         panelClass: 'success',
@@ -343,7 +348,7 @@ onlyCartItemCount:any = 0
         this.cartItemCountTotal +=count;
       });
 
-      this.appService.Data.totalPrice = this.grandTotal;
+      this.appService.Data.totalPrice = this.grandTotal + this.transportFee;
       this.appService.Data.totalCartCount = this.cartItemCountTotal;
 
       this.appService.Data.cartList.forEach(product=>{
@@ -511,6 +516,7 @@ onlyCartItemCount:any = 0
 
   commander(){
     let user = this.user;
+    let deliveryPrice = this.transportFee.toString();
     //console.log("::::::::::::::: USER = ",user);
     if(user != null){
       // Appliquer la réduction aux articles avant l'envoi
@@ -533,9 +539,9 @@ onlyCartItemCount:any = 0
         };
       });
 
-      this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
+      this.appService.addCommande(user.id, this.senderUsername, this.referralCode,deliveryPrice,this.deliveryCountry,this.deliveryDelay, productsWithReduction).subscribe(
         () => {
-          this.snackBar.open('Commande effectuée avec succès 1', '×', {
+          this.snackBar.open('Commande effectuée avec succès', '×', {
             panelClass: 'success',
             verticalPosition: 'top',
             duration: 3000
@@ -619,7 +625,7 @@ onlyCartItemCount:any = 0
             // Récupération de l'utilisateur par téléphone et ajout de la commande
             const phone = formData.get('phoneNumber') as string;
             const myUser = await this.authService.getUserByPhone(phone).toPromise();
-            await this.appService.addCommande(myUser.id,this.senderUsername,this.referralCode, productsWithReduction).toPromise();
+            await this.appService.addCommande(myUser.id,this.senderUsername,this.referralCode,deliveryPrice,this.deliveryCountry,this.deliveryDelay, productsWithReduction).toPromise();
 
             this.snackBar.open('Commande effectuée avec succès', '×', {
               panelClass: 'success',

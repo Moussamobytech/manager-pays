@@ -32,7 +32,7 @@ export class ProductsCarouselComponent implements OnInit {
    }
 
   public getProductByCategorie(type: string){
-    console.log("cateeeeeee ",type);
+    //console.log("cateeeeeee ",type);
 
     if(type == "best"){
 
@@ -97,21 +97,21 @@ export class ProductsCarouselComponent implements OnInit {
 
   public async getProduitByPromotion() {
     this.products = await this.produitService.getProductByTop()
-    console.log("res promotion :::::::: ",this.products)
+   // console.log("res promotion :::::::: ",this.products)
   }
   public async getProduitByBest() {
     this.products = await this.produitService.getProductByTop()
-    console.log("res best :::::::: ",this.products)
+   // console.log("res best :::::::: ",this.products)
   }
 
   public async getNewArrivals() {
     this.products = await this.produitService.getProductByNewArrival("yes")
-    console.log("res newArrivals :::::::: ",this.products)
+   // console.log("res newArrivals :::::::: ",this.products)
 
   }
   public async getTopRate() {
     this.products = await this.produitService.getProductByTop()
-    console.log("res topRate :::::::: ",this.products)
+   // console.log("res topRate :::::::: ",this.products)
   }
 
 

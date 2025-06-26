@@ -554,9 +554,9 @@ export class AppService {
 
 
 
-  public addCommande(id: string, senderUsername: string, referralCode: string, product:Product[]): Observable<any> {
+  public addCommande(id: string, senderUsername: string, referralCode: string,deliveryPrice:string,deliveryCountry:string,deliveryDelay,product:Product[]): Observable<any> {
 
-    return this.apiService.post(`/commande/addTest?id=${id}&senderUsername=${senderUsername}&referralCode=${referralCode}`, product);
+    return this.apiService.post(`/commande/addTest?id=${id}&senderUsername=${senderUsername}&referralCode=${referralCode}&deliveryPrice=${deliveryPrice}&deliveryCountry=${deliveryCountry}&deliveryDelay=${deliveryDelay}`, product);
   }
 
 

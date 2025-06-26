@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
   ]
   selectedSubCategory: any = this.subCategories[0];
   currentUser: any = null;
+  productPromoLength: any = 0;
 
   constructor(
     public appService: AppService,
@@ -190,7 +191,7 @@ export class HomeComponent implements OnInit {
 
   async productInPromo() {
     let productPromo = await this.produitService.getproductOnPromo(10);
-    console.log("productPromo :::::::: ",productPromo.length)
+    this.productPromoLength = productPromo.length;
 
       if (this.currentUser) {
         this.produitService.getProduitsLikesByUser(this.currentUser.id).subscribe(likedProducts => {
