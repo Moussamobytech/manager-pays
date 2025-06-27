@@ -182,7 +182,7 @@ getTotalViewsYear(): Observable<any> {
     return this.api.delete(`/produit/unlike/${productId}/${userId}`);
   }
   public getProduitsLikesByUser(userId: string): Observable<any> {
-    console.log('USER ID :::::::::::: ',userId);
+   // console.log('USER ID :::::::::::: ',userId);
     return this.api.get(`/produit/likes/${userId}`).pipe(
       map((response: any) => {
         if (Array.isArray(response)) {

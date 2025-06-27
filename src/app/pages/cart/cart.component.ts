@@ -9,6 +9,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CountryService } from 'src/app/services/country.service';
 import { Router } from '@angular/router';
+import {openKkiapayWidget, addKkiapayListener, removeKkiapayListener} from "kkiapay";
 import { CartService } from 'src/app/services/carte.service';
 import { Observable } from 'rxjs';
 import { RegionService } from 'src/app/services/region.service';
@@ -59,6 +60,8 @@ export class CartComponent implements OnInit {
 
   transportFee: number = 0;
   deliveryDelay: string = '';
+  deliveryPrice: number = 0; // Prix de la livraison
+  deliveryCountry: string = ''; // Pour stocker le pays de livraison
 
   sellerCountry: any = null; // Pour stocker le pays du vendeur
   userContact: any;
@@ -122,12 +125,19 @@ export class CartComponent implements OnInit {
   }
   getCapitalByCountryName(name: string): Observable<any> {
     return this.http.get(`https://restcountries.com/v3.1/name/${name}`);
+    
+    addKkiapayListener('success',this.successHandler)
+  }
+
+  ngOnDestroy(){
+    removeKkiapayListener('success')
   }
 
   handleCountryChange(event: any) {
     this.countryService.getById(event.value).subscribe(datas => {
       this.selectedCountry = datas;
       const id = this.selectedCountry.id;
+      this.deliveryCountry = this.selectedCountry.nom; // Mettre à jour le pays de livraison
 //      this.getCityByCountry(datas.nom);
       this.getAllRegionsByCountry(id);
 
@@ -303,7 +313,9 @@ export class CartComponent implements OnInit {
 
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
 monPanierContient(){
-  this.appService.addCommande(this.idUser, this.senderUsername, this.referralCode, this.productList).subscribe(
+  let deliveryPrice = this.transportFee.toString();
+
+  this.appService.addCommande(this.idUser, this.senderUsername, this.referralCode,deliveryPrice,this.deliveryCountry,this.deliveryDelay, this.productList).subscribe(
     () => {
       this.snackBar.open('Commande effectuée avec succès', '×', {
         panelClass: 'success',
@@ -343,7 +355,7 @@ onlyCartItemCount:any = 0
         this.cartItemCountTotal +=count;
       });
 
-      this.appService.Data.totalPrice = this.grandTotal;
+      this.appService.Data.totalPrice = this.grandTotal + this.transportFee;
       this.appService.Data.totalCartCount = this.cartItemCountTotal;
 
       this.appService.Data.cartList.forEach(product=>{
@@ -509,60 +521,80 @@ onlyCartItemCount:any = 0
     }, 0);
   }
 
-  commander(){
-    let user = this.user;
-    //console.log("::::::::::::::: USER = ",user);
-    if(user != null){
-      // Appliquer la réduction aux articles avant l'envoi
-    //   console.log("::::::::::::::: PRODUCT LIST = ",JSON.stringify(this.productList));
-      const productsWithReduction = this.productList.map(product => {
-        if (product.campagne && product.campagne.reduction) {
-          const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
-          const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
-          return {
-            ...product,
-            user: product.user.id, // Ne garder que l'ID de l'utilisateur
-            pricePromotion: finalPrice,
-            totalPrice: finalPrice * product.cartCount
-          };
-        }
+  successHandler() {
+    console.log("payment success...");
+  }
+
+  commander() {
+    const user = this.user;
+    const deliveryPrice = this.transportFee.toString();
+
+    // Prépare la liste des produits avec réduction si applicable
+    const productsWithReduction = this.productList.map(product => {
+      if (product.campagne && product.campagne.reduction) {
+        const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
+        const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
         return {
           ...product,
           user: product.user.id, // Ne garder que l'ID de l'utilisateur
-          totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
+          pricePromotion: finalPrice,
+          totalPrice: finalPrice * product.cartCount
         };
-      });
+      }
+      return {
+        ...product,
+        user: product.user.id, // Ne garder que l'ID de l'utilisateur
+        totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
+      };
+    });
 
-      this.appService.addCommande(user.id, this.senderUsername, this.referralCode, productsWithReduction).subscribe(
+    // Cas 1 : Utilisateur déjà connecté
+    if (user != null) {
+      this.appService.addCommande(
+        user.id,
+        this.senderUsername,
+        this.referralCode,
+        deliveryPrice,
+        this.deliveryCountry,
+        this.deliveryDelay,
+        productsWithReduction
+      ).subscribe(
         () => {
-          this.snackBar.open('Commande effectuée avec succès 1', '×', {
+          // Paiement Kkiapay (si besoin)
+          openKkiapayWidget({
+            amount: (this.grandTotal + this.transportFee) - this.getTotalReduction(),
+            api_key: "ed32fbf020e011f08a81bdf26ae54af2",
+            sandbox: true,
+            phone: "97000000",
+          });
+          this.snackBar.open('Commande initialisée avec succès', '×', {
             panelClass: 'success',
             verticalPosition: 'top',
             duration: 3000
           });
-          this.clear()
-          this.router.navigate(["/cart"]);
+          this.clear();
+          this.router.navigate(["/"]);
         },
         error => {
-          this.snackBar.open('Une erreur s\'est produite. Veillez réesayé !', '×', {
+          this.snackBar.open('Une erreur s\'est produite. Veillez réessayer !', '×', {
             panelClass: 'error',
             verticalPosition: 'top',
             duration: 3000
           });
-          console.error("Erreur lors la commande des articles:", error);
+          console.error("Erreur lors de la commande des articles:", error);
         }
       );
+      return;
     }
-    else if (this.billingForm.valid) {
-      const values = this.billingForm.value;
 
-      // Génération du numéro de téléphone complet basé sur le pays
+    // Cas 2 : Nouveau client (création de compte)
+    if (this.billingForm.valid) {
+      const values = this.billingForm.value;
       const countryCode = this.selectedCountry.indicatif;
       const phone = countryCode + values["phone"];
 
-      // Création du payload
+      // Création du payload pour le compte
       const formData = new FormData();
-
       formData.append("username", phone);
       formData.append("firstname", values["firstName"]);
       formData.append("lastname", values["lastName"]);
@@ -574,40 +606,17 @@ onlyCartItemCount:any = 0
       formData.append("boutique", values["company"] || '');
       formData.append("role", this.profil || 'user');
       formData.append("typeOfUsername", 'phone');
-      //formData.append('password', );
-
-      if(this.referralCode){
-        formData.append("parrainLogin", this.senderUsername );
+      if (this.referralCode) {
+        formData.append("parrainLogin", this.senderUsername);
         formData.append("isInvited", "true");
       }
 
-      // Appliquer la réduction aux articles avant l'envoi
-      const productsWithReduction = this.productList.map(product => {
-        if (product.campagne && product.campagne.reduction) {
-          const reductionAmount = (product.priceBasic * product.campagne.reduction / 100);
-          const finalPrice = product.pricePromotion ? product.pricePromotion : (product.priceBasic - reductionAmount);
-          return {
-            ...product,
-            user: product.user.id, // Ne garder que l'ID de l'utilisateur
-            pricePromotion: finalPrice,
-            totalPrice: finalPrice * product.cartCount
-          };
-        }
-        return {
-          ...product,
-          user: product.user.id, // Ne garder que l'ID de l'utilisateur
-          totalPrice: (product.pricePromotion || product.priceBasic) * product.cartCount
-        };
-      });
-
-      // Création du compte
       this.authService.signup(formData).toPromise()
         .then(async (res: any) => {
           try {
             // Connexion de l'utilisateur
             const username = formData.get('username') as string;
             const password = formData.get('password') as string;
-
             const loginData = await this.authService.login(username, password).toPromise();
             const userInfo = await this.authService.info(loginData.username);
 
@@ -615,21 +624,46 @@ onlyCartItemCount:any = 0
               throw new Error('Impossible de récupérer les informations du client, merci de réessayer à nouveau');
             }
 
-
-            // Récupération de l'utilisateur par téléphone et ajout de la commande
+            // Ajout de la commande
             const phone = formData.get('phoneNumber') as string;
             const myUser = await this.authService.getUserByPhone(phone).toPromise();
-            await this.appService.addCommande(myUser.id,this.senderUsername,this.referralCode, productsWithReduction).toPromise();
-
-            this.snackBar.open('Commande effectuée avec succès', '×', {
-              panelClass: 'success',
-              verticalPosition: 'top',
-              duration: 3000
-            });
+            await this.appService.addCommande(
+              myUser.id,
+              this.senderUsername,
+              this.referralCode,
+              deliveryPrice,
+              this.deliveryCountry,
+              this.deliveryDelay,
+              productsWithReduction
+            ).subscribe(
+              () => {
+                // Paiement Kkiapay (si besoin)
+                openKkiapayWidget({
+                  amount: (this.grandTotal + this.transportFee) - this.getTotalReduction(),
+                  api_key: "ed32fbf020e011f08a81bdf26ae54af2",
+                  sandbox: true,
+                  phone: "97000000",
+                });
+                this.snackBar.open('Commande initialisée avec succès', '×', {
+                  panelClass: 'success',
+                  verticalPosition: 'top',
+                  duration: 3000
+                });
+                this.clear();
+                this.router.navigate(["/"]);
+              },
+              error => {
+                this.snackBar.open('Une erreur s\'est produite. Veillez réessayer !', '×', {
+                  panelClass: 'error',
+                  verticalPosition: 'top',
+                  duration: 3000
+                });
+                console.error("Erreur lors de la commande des articles:", error);
+              }
+            );
 
             this.clear();
             this.router.navigate(["/cart"]);
-
           } catch (error: any) {
             console.error('Erreur lors du processus :', error);
             this.snackBar.open(error.message || 'Une erreur s\'est produite.', '×', {
@@ -664,4 +698,5 @@ onlyCartItemCount:any = 0
       window.open(link, "_blank");
     
   }
+
 }

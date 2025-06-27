@@ -4,7 +4,7 @@
       <div class="image-selector">
         <div class="main-image">
           <button mat-icon-button (click)="openZoomViewer()" fxHide="false" fxHide.gt-md><mat-icon>fullscreen</mat-icon></button>
-          <img (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'" (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave($event)" alt="Selected Image">
+          <img [alt]="'Product Image'" class="card-image" (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'">
         </div>
 
         <div class="image-buttons">
@@ -58,7 +58,7 @@
 
       <div class="controls-container">
         <div class="user-section"><i class="fa-solid fa-shop"></i> Vendue par <span>{{product?.userNom}}</span></div>
-        <div class="referals">
+        <!-- <div class="referals">
           <div class="referal-btn">
             <div><span>P</span></div>
             <div>
@@ -71,6 +71,8 @@
             <mat-icon *ngIf="isCopied">check</mat-icon>
           </button>
         </div>
+      -->
+
         <div class="py-1"><app-controls [product]="product" [type]="'all'"></app-controls></div>
       </div>
 

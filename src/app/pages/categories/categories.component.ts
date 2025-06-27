@@ -64,7 +64,7 @@ export class CategoriesComponent implements OnInit {
     return this.productService.getCategories().then((data: any) => {
       this.categoriesAndSubCategories = data.filter(cat => cat.status === 'ACTIF');
       this.categories = this.categoriesAndSubCategories
-        .filter(cat => cat.hasSubCategory).map(category => ({
+        .filter(cat => cat.parentId == null).map(category => ({
           ...category,
           image: category.image || 'assets/images/categories/default-category.png'
         }));

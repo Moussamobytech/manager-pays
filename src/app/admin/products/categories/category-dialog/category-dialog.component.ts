@@ -17,7 +17,8 @@ export class CategoryDialogComponent implements OnInit {
   @Output() categorySubmitted: EventEmitter<any> = new EventEmitter<any>();
 
   public form: UntypedFormGroup;
-  public selectedImage: File;
+  public selectedImage: File = null;
+  public selectedIcon: File = null;
   public categories: Category[] = [];
 
   public category: any = {};
@@ -32,15 +33,19 @@ export class CategoryDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.isUpdateMode = !!this.data.category; // Déterminer le mode en fonction de la présence de données de catégorie
-
+    this.categories = this.data.list
+    
     // Initialiser le formulaire en fonction du mode
     this.form = this.fb.group({
       id: this.isUpdateMode ? this.data.category.id : 0,
       nom: [this.isUpdateMode ? this.data.category.nom : null, Validators.required],
       hasSubCategory: this.isUpdateMode ? this.data.category.hasSubCategory : false,
-      parentId: this.isUpdateMode ? this.data.category.parentId : 0,
+      parentId: this.isUpdateMode ? this.data.category.parentId : null,
+      poids: this.isUpdateMode ? this.data.category.poids : 1,
+      icon: null,
       image: null,
     });
+    
     if (this.isUpdateMode) {
       this.form.patchValue(this.data.category);
     }
@@ -50,14 +55,20 @@ export class CategoryDialogComponent implements OnInit {
   onFileSelected(event) {
     this.selectedImage = event.target.files[0] as File;
     console.log(this.selectedImage);
-}
+  }
 
-public onSubmit() {
-  if (this.form.valid) {
+  onIconSelected(event) {
+    this.selectedIcon = event.target.files[0] as File;
+    console.log(this.selectedIcon);
+  }
+
+  
+  public onSubmit() {
+    if (this.form.valid) {
       const values: Category = this.form.value;
 
       if (values.id) {
-          this.appService.updateCategory(values.id, values.nom, this.selectedImage).subscribe(
+          this.appService.updateCategory(values.id, values.nom, values.parentId, values.poids, this.selectedImage, this.selectedIcon).subscribe(
               response => {
                   console.log('Catégorie mise à jour avec succès:', response);
                   console.log("Image : ", values.image);
@@ -65,6 +76,7 @@ public onSubmit() {
                   setTimeout(() => {
                       this.dialogRef.close();
                   }, 3000);
+                  
                   this.router.navigate(['/admin/products/categories']);
               },
               error => {
@@ -72,7 +84,7 @@ public onSubmit() {
               }
           );
       } else {
-          this.appService.addCategory(values, this.selectedImage).subscribe(
+          this.appService.addCategory(values, this.selectedImage, this.selectedIcon).subscribe(
               response => {
                   console.log('Catégorie ajoutée avec succès:', response);
                   // console.log('Modification de la catégorie : ', this.selectedImage);

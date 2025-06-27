@@ -37,13 +37,13 @@
   <button  type="button"  routerLink="/cart">Commander un produit</button>
 </div>
 
-  <div class="see-more-container" *ngIf="taillesOrders > 5">
+  <!-- <div class="see-more-container" *ngIf="taillesOrders > 5">
     <button mat-raised-button color="primary" class="see-more-btn" (click)="showMoreCards = !showMoreCards">
       {{ showMoreCards ? 'Voir moins' : 'Voir plus' }}
     </button>
   </div>
 
- <!-- <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
+ <div fxLayout="row wrap" class="card-container" *ngIf="showMoreCards">
     <div *ngFor="let card of cards.slice(5)" fxFlex="100" fxFlex.gt-xs="48" fxFlex.gt-sm="24" (click)="card.action ? WhatsAppUs(card.title) : null" [routerLink]="card.action ? null : card.routerLink">
       <div class="card" [ngClass]="card.cardClass">
         <span class="card-icon"><i [class]="card.icon"></i></span>
@@ -86,13 +86,13 @@
               <p [ngClass]="getStatusColor(order.statutCommande.name)">
                 <ng-container [ngSwitch]="order.statutCommande.name">
                   <i *ngSwitchCase="'PENDING'" class="fa fa-truck"></i>
-                  <i *ngSwitchCase="'DELIVERED'" class="fa fa-check-circle"></i>
+                  <i *ngSwitchCase="'VALIDE'" class="fa fa-check-circle"></i>
                   <i *ngSwitchCase="'CANCEL'" class="fa fa-times-circle"></i>
                 </ng-container>
                 {{ getStatusLabel(order.statutCommande.name) }}
               </p>
               <p>{{ order.dateCommande | date:'dd/MM/yyyy' }}</p>
-              <button class="button-again" type="button">Acheter à nouveau</button>
+              <button class="button-again" type="button" routerLink="/products" >Acheter à nouveau</button>
             </div>
           </div>
         </div>

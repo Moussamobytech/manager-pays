@@ -40,6 +40,22 @@
                 {{ "Quantité" | translate }}
                 <a (click)="sortCommandes('quantite')"><mat-icon>swap_vert</mat-icon></a>
               </div>
+              
+              <div class="header-cell filter-cell fixed-width">
+                Pays livraison
+                <a (click)="sortCommandes('deliveryCountry')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Prix livraison
+                <a (click)="sortCommandes('deliveryPrice')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                Delai livraison
+                <a (click)="sortCommandes('deliveryDelay')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+
+
+
               <div class="header-cell filter-cell fixed-width">
                 Montant
                 <a (click)="sortCommandes('montant')"><mat-icon>swap_vert</mat-icon></a>
@@ -66,6 +82,12 @@
             <div *ngFor="let commande of (sortedCommandes || commandes) | CommandeSearchPipe: searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="data-row">
               <div class="data-cell fixed-width"> {{ commande.codeCommande | capitalCase }} </div>
               <div class="data-cell fixed-width"> {{ commande.quantite }} </div>
+
+              <div class="data-cell fixed-width"> {{ commande.deliveryCountry || 'N/A'}} </div>
+              <div class="data-cell fixed-width"> {{ commande.deliveryPrice || 'N/A'}} </div>
+              <div class="data-cell fixed-width"> {{ commande.deliveryDelay || 'N/A'}} </div>
+
+
               <div class="data-cell fixed-width" > {{ commande.montant }} </div>
               <div class="data-cell fixed-width" > {{ commande.clientPhone }} </div>
 

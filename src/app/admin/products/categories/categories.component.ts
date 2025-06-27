@@ -6,6 +6,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { ActivatedRoute } from '@angular/router';
 import { Category } from 'src/app/models/category.models';
 
 @Component({
@@ -15,24 +16,40 @@ import { Category } from 'src/app/models/category.models';
 })
 export class CategoriesComponent implements OnInit {
   public categories:Category[] = [];
+  public all :Category[] = [];
   public tous:any
   public page: any;
-  public count = 6;
+  public parentId: any;
+  public count = 10;
   domHandlerService = inject(DomHandlerService);
   public settings:Settings;
-  constructor(public appService: AppService, public dialog: MatDialog, public appSettings:AppSettings) {
+  constructor(public appService: AppService, public dialog: MatDialog, public appSettings:AppSettings,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.settings = this.appSettings.settings;
   }
 
   ngOnInit(): void {
-    this.getCategories();
+    this.activatedRoute.params.subscribe(params => {
+      console.log("params['id'] ::: ",params['id'])
+      this.parentId = params['id'];
+      this.getCategories(params['id']);
+    });
+    this.getCategoriesAll()
   }
 
-  public getCategories(){
-    this.appService.getCategories().subscribe(data => {
+  public getCategories(id){
+    this.appService.getCategoriesByChild(id).subscribe(data => {
       this.categories = data;
       // this.categories.shift();
       console.log('Categories ', this.categories);
+    });
+  }
+
+  public getCategoriesAll(){
+    this.appService.getCategories().subscribe(data => {
+      console.log(data)
+      this.all = data;
     });
   }
 
@@ -45,6 +62,7 @@ export class CategoriesComponent implements OnInit {
     const dialogRef = this.dialog.open(CategoryDialogComponent, {
       data: {
         category: data,
+        list: this.all,
         categories: this.categories
       },
       panelClass: ['theme-dialog'],
@@ -52,17 +70,18 @@ export class CategoriesComponent implements OnInit {
       direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
     dialogRef.afterClosed().subscribe(category => {
-      if(category){
-        const index: number = this.categories.findIndex(x => x.id == category.id);
-        if(index !== -1){
-          this.categories[index] = category;
-        }
-        else{
-          let last_category = this.categories[this.categories.length - 1];
-          category.id = last_category.id + 1;
-          this.categories.push(category);
-        }
-      }
+      // if(category){
+      //   const index: number = this.categories.findIndex(x => x.id == category.id);
+      //   if(index !== -1){
+      //     this.categories[index] = category;
+      //   }
+      //   else{
+      //     let last_category = this.categories[this.categories.length - 1];
+      //     category.id = last_category.id + 1;
+      //     this.categories.push(category);
+      //   }
+      // }
+      this.getCategories(this.parentId);
     });
 
 

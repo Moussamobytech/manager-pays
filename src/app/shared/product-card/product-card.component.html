@@ -8,7 +8,7 @@
     </mat-chip-listbox> -->
 
     <a [routerLink]="['/products', product.id, product.nom]" (click)="setProductViewCount(product.id)" class="image-link" [ngStyle]="secondView ? { height: '200px' } : {}">
-      <img [alt]="'Product Image'" class="card-image" (error)="onImageError($event)" (load)="onImageLoad($event)" [src]="'assets/images/logo_fidelity.gif'">
+      <img (load)="onImageLoad($event)" [alt]="'Product Image'" class="card-image" (error)="onImageError($event)"  [src]="'assets/images/logo_fidelity.gif'">
     </a>
   </div>
 

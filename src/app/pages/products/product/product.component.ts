@@ -22,7 +22,7 @@ export class ProductComponent implements OnInit {
   // @ViewChild(SwiperDirective, { static: true }) directiveRef: SwiperDirective;
   // public config: SwiperConfigInterface={};
   public product: Product;
-  public selectedImage: any;
+  public selectedImage: any = 'assets/images/logo_fidelity.gif'; // Default image
   // public path: any;
   public zoomImage: any;
   private sub: any;
@@ -73,6 +73,7 @@ export class ProductComponent implements OnInit {
   public getProductById(id:any){
     this.appService.getProductById(id).subscribe((data:any)=>{
       let product = data;
+      this.selectedImage = data.image1;
       let nom = (product.nom).toLowerCase();
       this.product = {
         ...product,
@@ -81,7 +82,6 @@ export class ProductComponent implements OnInit {
         priceBasic: this.parsePrice(product.priceBasic),
       };
       this.shopLink = window.location.origin+"/#/sellers/"+this.product.user
-      this.selectedImage = data.image1;
       this.zoomImage = data.image1;
       // setTimeout(() => {
       //   this.config.observer = true;
@@ -97,12 +97,12 @@ export class ProductComponent implements OnInit {
   }
 
   public async getRelatedProducts(){
-    console.log("res related :::::: ",this.product);
-    console.log("res related :::::: ",this.product?.categorie);
+    //console.log("res related :::::: ",this.product);
+    //console.log("res related :::::: ",this.product?.categorie);
     if (this.product && this.product?.categorie) {
       // this enpoint does not work at all
       let res = await this.productService.getProductByCategorie(this.product.id)
-      console.log("res related :::::: ",res);
+      //console.log("res related :::::: ",res);
       this.relatedProducts = res;
     }
   }
@@ -180,6 +180,7 @@ export class ProductComponent implements OnInit {
   }
 
   onImageLoad(event: Event) {
+    // Check if the image is already loaded
     const imgElement = event.target as HTMLImageElement;
     if (this.selectedImage && this.selectedImage != 'null') {
       imgElement.src = this.selectedImage;

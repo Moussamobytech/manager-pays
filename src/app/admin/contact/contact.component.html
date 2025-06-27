@@ -16,7 +16,7 @@
 
           </div>
           <div *ngFor="let item of contact | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
-              <div class="mat-mdc-cell" style="width: 10%;">{{getCountryNameFromPhoneNumber(item.phoneNumber)}}</div>
+              <div class="mat-mdc-cell" style="width: 10%;">{{getCountryNameFromPhoneNumber(item.phoneNumber) || 'N/A'}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.email |translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.phoneNumber |translate}}</div>
               <div class="mat-mdc-cell" style="width: 10%;">{{item.name}}</div>

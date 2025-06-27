@@ -231,6 +231,8 @@
     "IMAGE": "Image",
     "PAGE_TITLE": "Liste des Categories",
     "ADD_BTN": "Ajouter une Categorie",
+    "SIZE": "Poids",
+    "ICON": "Icon",
     "PRICE": "Prix"
   },
   "SORTINGS": {

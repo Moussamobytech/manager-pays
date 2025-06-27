@@ -9,7 +9,7 @@
         <div class="swiper-wrapper">
           <div *ngFor="let subCategory of subCategories; let i = index" class="swiper-slide">
             <div class="subcategory-item" [class.selected]="i === selectedSubCategory.id" (click)="onSubCategoryClick(subCategory)">
-              <span>{{subCategory.name}}</span>
+              <span>{{subCategory.nom}}</span>
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div class="home-section" *ngIf="promoProducts.length > 0">
+  <div class="home-section" *ngIf="productPromoLength > 0">
     <h2>Promo</h2>
     <div class="products-carousel">
       <div class="swiper-container " [swiper]="ProductConfig">
