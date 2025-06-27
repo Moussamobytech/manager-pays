@@ -521,6 +521,10 @@ onlyCartItemCount:any = 0
     }, 0);
   }
 
+  successHandler() {
+    console.log("payment success...");
+  }
+
   commander() {
     const user = this.user;
     const deliveryPrice = this.transportFee.toString();

@@ -79,9 +79,7 @@ export class CommandeListComponent implements OnInit {
      /// this.ngxSpinnerService.show(); // Assurez-vous d'afficher le spinner avant la requête
     
       await this.commandeService.getAllCommande().pipe(
-        map((commande: any) => {  
-          console.log(";;;;;;;;;;;;;; ", JSON.stringify(commande));
-            
+        map((commande: any) => {              
           let c = commande.sort((a, b) => new Date(b.dateCommande).getTime() - new Date(a.dateCommande).getTime());      
        
           return c;
@@ -233,6 +231,12 @@ getSortValue(commande: Commande, keyWord: string): any {
         return commande.clientUsername.toLowerCase() || '';
     case "dateCommande": 
       return new Date(commande.dateCommande).getTime() || 0;
+    case "deliveryCountry":
+      return commande.deliveryCountry.toLowerCase() || '';
+      case "deliveryPrice":
+        return commande.deliveryPrice.toLowerCase() || '';
+        case "deliveryDelay":
+          return commande.deliveryDelay.toLowerCase() || '';
     default:
       return '';
   }
