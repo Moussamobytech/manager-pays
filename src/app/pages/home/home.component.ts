@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
     // this.listCampagne();
     // this.getAllProduit();
     // this.getBrands();
-    // this.getCategorie();
+    this.getCategorie();
     // this.nomProduits();
   }
 
@@ -128,10 +128,18 @@ export class HomeComponent implements OnInit {
   onSubCategoryClick(subCategory:any): void {
     this.selectedSubCategory = subCategory;
   }
+  
 
   public getCategorie(){
+    const parsePoids = (val: any): number => {
+      const n = Number(val);
+      return isNaN(n) ? 0 : n;
+    };
     this.appService.getCategories().subscribe(data =>{
       this.categories = data;
+      this.categories = data.filter(cat => cat.status === 'ACTIF');
+        this.subCategories = this.categories.sort((a, b) => parsePoids(b.poids) - parsePoids(a.poids)).slice(0, 10);
+        // console.log("this.navCategories ok", this.subCategories);
     })
   }
 

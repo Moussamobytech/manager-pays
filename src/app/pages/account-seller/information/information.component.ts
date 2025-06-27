@@ -112,7 +112,9 @@ export class InformationComponent implements OnInit {
       this.infoForm.patchValue({
         banners: mergedBanners
       });
-    });
+      }
+      
+    );
 
     const logo = [{ preview: this.imgLink + cur.logo }]
     const description = cur.description || "";
@@ -125,12 +127,12 @@ export class InformationComponent implements OnInit {
       profiles: [cur.profiles || null],
       boutiqueName: [cur.name || null],
       adresse: [cur.adresse || null],
-      ////////////////////////////////////////////////
+      // ////////////////////////////////////////////////
       email: [(cur.email || null), Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
       description: [cur.description || null],
       logo: [logo || null],
       banners: [curBanners || null],
-      country: [cur.countries.id || null],
+      country: [cur.countries?.id || null],
       city: [(null)],
       deliveryCountries: this.formBuilder.array([])
     });

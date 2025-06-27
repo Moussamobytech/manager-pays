@@ -100,6 +100,20 @@
                 <input matInput formControlName="nom" required>
                 <mat-error *ngIf="form.get('nom').hasError('required')">{{"FIELD_ERROR.NAME_REQUIRED"|translate}}</mat-error>
             </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{'PRODUCTS.CATEGORY' | translate}}</mat-label>
+                <mat-select formControlName="parentId">
+                    <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                        <span>{{cat.nom}}</span>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{"CATEGORY.SIZE"|translate}}</mat-label>
+                <input matInput formControlName="poids" required>
+                <mat-error *ngIf="form.get('poids').hasError('required')">{{"FIELD_ERROR.NAME_REQUIRED"|translate}}</mat-error>
+            </mat-form-field>
+            
             <mat-dialog-content *ngIf="showSuccessMessage" class="form-container">
               <p>{{ isUpdateMode ? 'Catégorie modifiée avec succès' : 'Catégorie ajoutée avec succès' }}</p>
           </mat-dialog-content>
@@ -107,6 +121,11 @@
                 <mat-label>{{"CATEGORY.IMAGE"|translate}}</mat-label>
                 <input type="file" formControlName="image" (change)="onFileSelected($event)" accept="image/*">
                 <mat-error *ngIf="form.get('image').hasError('required')">{{"FIELD_ERROR.IMAGE_REQUIRED"|translate}}</mat-error>
+            </div>
+            <div class="py-1">
+                <mat-label>{{"CATEGORY.ICON"|translate}}</mat-label>
+                <input type="file" formControlName="icon" (change)="onIconSelected($event)" accept="image/*">
+                <mat-error *ngIf="form.get('icon').hasError('required')">{{"FIELD_ERROR.IMAGE_REQUIRED"|translate}}</mat-error>
             </div>
         </div>
     </div>

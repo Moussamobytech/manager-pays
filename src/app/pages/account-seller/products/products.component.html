@@ -103,7 +103,7 @@
               <p *ngIf="!product.pricePromotion||product.pricePromotion==product.priceBasic" class="price-basic">
                 Prix : {{ product.priceBasic | number : '1.0-2' }} F
               </p>
-              <p *ngIf="product.pricePromotion&&product.pricePromotion!=product.priceBasic" class="price-promotion text-truncate">
+              <p *ngIf="product.pricePromotion!='null'&&product.pricePromotion!=product.priceBasic" class="price-promotion text-truncate">
                 Prix : {{ product.pricePromotion | number : '1.0-2' }} F
                 <span class="original-price">
                   {{ product.priceBasic | number : '1.0-2' }} F

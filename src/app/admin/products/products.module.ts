@@ -18,6 +18,7 @@ import { ProductStateComponent } from './product-state/product-state.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'product-list', pathMatch: 'full'},
   { path: 'categories', component: CategoriesComponent, data: { breadcrumb: 'Categories' } },
+  { path: 'categories/:id', component: CategoriesComponent, data: { breadcrumb: 'Categories / Child' } },
   { path: 'product-list', component: ProductListComponent, data: { breadcrumb: 'Product List' } },
   { path: 'product-state', component: ProductStateComponent, data: { breadcrumb: 'Product State' } },
   { path: 'product-detail', component: ProductDetailComponent, data: { breadcrumb: 'Product Detail' } },

@@ -1,11 +1,12 @@
-// export class Category {
-//   constructor(public id: string,
-//               public nom:string,
-//               public hasSubCategory: boolean,
-//               public parentId: number,
-//               public image: File,
-//               public status : string= 'actif'){ }
-// }
+export class Category {
+  constructor(public id: string,
+              public nom:string,
+              public poids:string,
+              public hasSubCategory: boolean,
+              public parentId: number,
+              public image: File,
+              public status : string= 'actif'){ }
+}
 
 export class Products {
   constructor(public id: string,

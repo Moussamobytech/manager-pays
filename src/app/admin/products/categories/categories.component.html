@@ -12,6 +12,7 @@
                 <!-- <div class="mat-mdc-header-cell">Has SubCategory</div>
                 <div class="mat-mdc-header-cell">Parent Category</div> -->
                   <div class="mat-mdc-header-cell">{{"CATEGORY.IMAGE"|translate}}</div>
+                  <div class="mat-mdc-header-cell">{{"CATEGORY.SIZE"|translate}}</div>
                   <div class="mat-mdc-header-cell"></div>
               </div>
               <div *ngFor="let cat of categories | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
@@ -28,12 +29,14 @@
                     </a>
 
                   </div>
+                <div class="mat-mdc-cell">{{cat.poids}}</div>
 
                   <div class="mat-mdc-cell">
                       <div class="p-2 actions">
-                          <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
-                              <mat-icon>edit</mat-icon>
-                          </button>
+                        <a [routerLink]="['/admin/products/categories/'+cat.id]" mat-mini-fab color="accent" [matTooltip]="'BTN.VIEW'|translate" class="mx-2 view"><mat-icon>subdirectory_arrow_right</mat-icon></a>
+                        <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
                         <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(cat)">
                             <mat-icon>delete</mat-icon>
                         </button>
@@ -41,7 +44,7 @@
                         <!-- <mat-slide-toggle [color]="cat.status ? 'primary' : 'warn'" [checked]="cat.status" (change)="setStatus(cat.id, $event)">
                           {{ cat.status ? 'Actif' : 'Inactif' }}
                       </mat-slide-toggle> -->
-                        <button mat-mini-fab [color]="cat.status === 'INACTIF' ? 'accent' : 'primary'" [matTooltip]="'BTN.DEACTIVATE'|translate" class="mx-1"  (click)="setStatus(cat.id, cat.status==='INACTIF'? 'actif': 'inactif')" >
+                        <button mat-mini-fab [color]="cat.status === 'INACTIF' ? 'primary' : 'accent'" [matTooltip]="cat.status === 'INACTIF' ? 'Activer' : 'Désactiver'" class="mx-1"  (click)="setStatus(cat.id, cat.status==='INACTIF'? 'actif': 'inactif')" >
                           <mat-icon>{{ cat.status === 'INACTIF' ? 'check_circle' : 'block' }}</mat-icon>
 
                         </button>
@@ -58,7 +61,7 @@
     <div *ngIf="categories.length > 0" fxLayout="row wrap">
         <div fxFlex="100">
             <mat-card class="p-0 text-center">
-                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="15" (pageChange)="onPageChanged($event)"></pagination-controls>
             </mat-card>
         </div>
     </div>

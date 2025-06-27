@@ -90,7 +90,7 @@
           <a [routerLink]="'/categories'">Voir toutes les catégories <mat-icon>chevron_right</mat-icon></a>
         </div>
         <div class="category-item" fxFlex="97" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="10px">
-          <a *ngFor="let category of navCategories" [matTooltip]="category.nom" routerLink="/categories/{{category.cle}}" fxFlex="20" fxLayout="column" fxLayoutAlign="center center">
+          <a *ngFor="let category of navCategories?.slice(0, 4)" [matTooltip]="category.nom" routerLink="/categories/{{category.cle}}" fxFlex="20" fxLayout="column" fxLayoutAlign="center center">
             <img [src]="category.icon||'assets/icons/nav categories/broken_img.png'" alt="{{ category.cle }}">
             <span class="fid_amber-color" >{{ category.nom}}</span>
           </a>
