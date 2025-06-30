@@ -124,6 +124,15 @@
                     <mat-error *ngIf="formRegion.controls.pays.errors?.required">Donne le pays</mat-error>
                 </mat-form-field>
 
+                <div class="w-100 mb-3">
+                  <label class="mb-2">Est-ce la capitale ?</label>
+                  <mat-radio-group formControlName="capitale" class="d-flex gap-3">
+                    <mat-radio-button [value]=true>Oui</mat-radio-button>
+                    <mat-radio-button [value]=false>Non</mat-radio-button>
+                  </mat-radio-group>
+                  <mat-error *ngIf="formRegion.controls.capitale.errors?.required" class="mt-2">Veuillez indiquer si c'est la capitale</mat-error>
+                </div>
+
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Description</mat-label>
                   <textarea matInput formControlName="description" cols="30" rows="3"></textarea>
@@ -145,22 +154,16 @@
   </ng-template>
 
   <ng-template #paysDetails>
-    <h1 mat-dialog-title>Détails du pays</h1>
+    <h1 mat-dialog-title>Détails du pays: {{monPays.nom}}</h1>
     <div mat-dialog-content>
 
-      <div class="nomDuPays">
-         <span style="font-weight: bold;"> Nom du pays : </span> {{monPays.nom}}
-      </div>
       <div class="indicatifDuPays">
         <span style="font-weight: bold;"> Indicatif du pays : </span> {{monPays.indicatif}}
       </div>
     
       <div class="listregionForPays">
-        <div class="titreRegion">
-          Liste des régions du : {{monPays.nom}}
-        </div>
         <div *ngFor="let region of allRegions let i = index">
-          {{i + 1}} - {{region.nom}}
+          {{i + 1}} - <strong>{{region.nom}}</strong> {{region.capitale ? 'Capitale' : ''}}
         </div>
       </div>
 

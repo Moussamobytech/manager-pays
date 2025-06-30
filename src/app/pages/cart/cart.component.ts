@@ -283,7 +283,7 @@ export class CartComponent implements OnInit {
   }
 
   // Modifier la méthode checkCityType pour utiliser le pays du vendeur
-  checkCityType(cityId: string) {
+  checkCityType(cityId: any) {
 
     if(this.selectedCountry.nom != this.sellerCountry.nom){
       this.isForeignCity = true;
@@ -294,7 +294,7 @@ export class CartComponent implements OnInit {
     }
     if(this.selectedCountry.nom == this.sellerCountry.nom){
 
-      if(cityId == this.cities[0].id){
+      if(cityId.capitale){
         this.isCapitalCity = true;
         this.isOtherRegion = false;
         this.isForeignCity = false;

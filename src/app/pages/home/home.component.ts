@@ -242,4 +242,11 @@ export class HomeComponent implements OnInit {
     return isNaN(parsedPrice) ? null : parsedPrice;
   }
 
+
+  limitWordLength(text, maxLength) {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
+  
+
 }

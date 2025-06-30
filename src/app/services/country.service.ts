@@ -9,6 +9,8 @@ import { Commande } from '../models/commande.models';
 export class CountryService {
 
   addRegion(data: any): Observable<any> {
+    console.log("Form Region ", data);
+
     return this.api.post(`/region/create`, data);
   }
   getAllRegions(): Observable<any> {

@@ -9,7 +9,7 @@
         <div class="swiper-wrapper">
           <div *ngFor="let subCategory of subCategories;" class="swiper-slide">
             <div class="subcategory-item" [class.selected]="subCategory.id == selectedSubCategory.id" (click)="onSubCategoryClick(subCategory)">
-              <span>{{subCategory.nom}}</span>
+              <span>{{limitWordLength(subCategory.nom,15)}}</span>
             </div>
           </div>
         </div>

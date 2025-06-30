@@ -85,7 +85,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Ville</mat-label>
             <mat-select formControlName="city" required>
-              <mat-option *ngFor="let city of cities" [value]="city.id">{{ city.nom }}</mat-option>
+              <mat-option *ngFor="let city of cities" [value]="city">{{ city.nom }}</mat-option>
             </mat-select>
             <mat-error *ngIf="billingForm.controls.city.hasError('required')"> La ville est requise </mat-error>
           </mat-form-field>

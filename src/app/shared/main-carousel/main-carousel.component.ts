@@ -12,7 +12,7 @@ export class MainCarouselComponent implements OnInit {
     { title: '🎁 -10% dès ta première commande !', subtitle: 'Invite tes proches et gagne à chaque achat.', image: 'assets/images/ads/promotion.png' },
     { title: '🚚 Livraison partout, sans stress', subtitle: 'On te livre chez toi, peu importe la ville.', image: 'assets/images/ads/7.jpg' },
     { title: '✅ Plus fiable que les réseaux sociaux', subtitle: 'Tous nos vendeurs sont vérifiés. Livraison garantie ou remboursé.', image: 'assets/images/ads/6.jpg'},
-    { title: '🛍️ Vends partout en Afrique', subtitle: 'Crée ta boutique en ligne en 2 minutes. Paiement & livraison intégrés.', image: '../../assets/images/ads/8.jpg' },
+    { title: '🛍️ Vends partout en Afrique', subtitle: 'Crée ta boutique en ligne en 2 minutes. Paiement & livraison intégrés.', image: 'assets/images/ads/8.jpg' },
   ];
   public slideConfig = {
     slidesToShow: 1,

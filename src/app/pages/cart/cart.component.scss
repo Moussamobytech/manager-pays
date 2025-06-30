@@ -37,7 +37,7 @@ $background-light: #f9f9f9;
 }
 
 .monBtn {
-  @include button-style($amber-color, white);
+  @include button-style($amber-color, $primary-color);
 }
 
 .text-center {

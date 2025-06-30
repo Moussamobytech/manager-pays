@@ -69,6 +69,7 @@ export class CountryComponent implements OnInit {
       'nom': [null, Validators.required],
       'pays': [null, Validators.required],
       'description': [null],
+      'capitale': [0, Validators.required]
     });
     this.getAllRegions();
     this.getAllCountries();
@@ -92,7 +93,6 @@ export class CountryComponent implements OnInit {
     this.appService.getBrands().subscribe((data) => {
 
       this.brand = data;
-      console.log("Data received ", this.brand);
     });
   }
 
@@ -132,7 +132,7 @@ export class CountryComponent implements OnInit {
       // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
       this.appService.setEtatBrand(id, event.checked).subscribe(
         () => {
-          console.log(`Etat du brand ${id} modifié avec succès à ${event.checked}.`);
+       //   console.log(`Etat du brand ${id} modifié avec succès à ${event.checked}.`);
           // Mettre à jour l'état du brand dans votre application si nécessaire
         },
         error => {
@@ -200,7 +200,7 @@ export class CountryComponent implements OnInit {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
     } catch (error) {
-      console.log(error);
+     // console.log(error);
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
 
@@ -210,7 +210,8 @@ export class CountryComponent implements OnInit {
       const data = {
         nom: this.formRegion.value.nom,
         idCountrie: this.formRegion.value.pays,
-        description: this.formRegion.value.description
+        description: this.formRegion.value.description,
+        capitale: this.formRegion.value.capitale 
       };
       this.countryService.addRegion(data).subscribe({
         next: (datas) => {
@@ -270,7 +271,7 @@ export class CountryComponent implements OnInit {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
     } catch (error) {
-      console.log(error);
+    //  console.log(error);
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
 
@@ -294,7 +295,6 @@ export class CountryComponent implements OnInit {
   }
   public updateState(id, state) {
     this.countryService.updateState(id, state).then((data: any) => {
-      console.log(data)
     })
   }
 
@@ -315,7 +315,7 @@ export class CountryComponent implements OnInit {
             if (index !== -1) {
               this.allCountries.splice(index, 1);
             }
-            console.log("Pays successfully deleted.");
+           // console.log("Pays successfully deleted.");
           },
           (error) => {
             console.error("Error deleting produit:", error);
@@ -363,7 +363,7 @@ export class CountryComponent implements OnInit {
     });
     this.monPays = pays;
     this.countryService.getAllRegionsByCountrie(pays.id).subscribe( datas =>{
-      console.log("My Regions List ",datas);
+    //  console.log("My Regions List ",datas);
       this.allRegions = datas;
     //  dialogRef.componentInstance.allRegions = datas;
     })

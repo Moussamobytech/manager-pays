@@ -7,6 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { SharedModule } from '../../shared/shared.module';
 import { PipesModule } from '../../theme/pipes/pipes.module';
 import { CountryComponent } from './country.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 export const routes: Routes = [
   { path: '', component: CountryComponent, pathMatch: 'full' }
@@ -22,9 +23,10 @@ export const routes: Routes = [
     NgxPaginationModule,
     SharedModule,
     PipesModule,
+    MatRadioModule
   ],
   declarations: [
-  CountryComponent
+    CountryComponent
   ]
 })
 export class CountryModule { }
