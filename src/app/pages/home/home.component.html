@@ -4,11 +4,11 @@
   <div class="home-section">
     <h2>Nouveautés</h2>
 
-    <div class="subcategory-carousel">
+    <div class="subcategory-carousel" *ngIf="subCategories">
       <div class="swiper-container" [swiper]="SubCategoryConfig">
         <div class="swiper-wrapper">
-          <div *ngFor="let subCategory of subCategories; let i = index" class="swiper-slide">
-            <div class="subcategory-item" [class.selected]="i === selectedSubCategory.id" (click)="onSubCategoryClick(subCategory)">
+          <div *ngFor="let subCategory of subCategories;" class="swiper-slide">
+            <div class="subcategory-item" [class.selected]="subCategory.id == selectedSubCategory.id" (click)="onSubCategoryClick(subCategory)">
               <span>{{subCategory.nom}}</span>
             </div>
           </div>

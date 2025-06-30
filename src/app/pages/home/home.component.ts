@@ -6,7 +6,7 @@ import { Product } from 'src/app/models/product.models';
 import { SwiperConfigInterface } from 'src/app/theme/components/swiper/swiper.module';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { combineLatest, forkJoin, from, map, Observable, of } from 'rxjs';
-import { products } from 'src/app/admin/dashboard/dashboard.data';
+import { Category } from 'src/app/models/category.models';
 
 @Component({
   selector: 'app-home',
@@ -33,16 +33,8 @@ export class HomeComponent implements OnInit {
   promoProducts: Product[];
   public ProductConfig: SwiperConfigInterface = { };
   public SubCategoryConfig: SwiperConfigInterface = { };
-  subCategories: any [] = [
-    { id: 0, name: "Vetements Femme" },
-    { id: 1, name: "Telephone" },
-    { id: 2, name: "Sacs" },
-    { id: 3, name: "Vetement Homme" },
-    { id: 4, name: "Montres" },
-    { id: 5, name: "Pentalons" },
-    { id: 6, name: "Chaussures" }
-  ]
-  selectedSubCategory: any = this.subCategories[0];
+  subCategories: Category [];
+  selectedSubCategory: Category;
   currentUser: any = null;
   productPromoLength: any = 0;
 
@@ -128,7 +120,7 @@ export class HomeComponent implements OnInit {
   onSubCategoryClick(subCategory:any): void {
     this.selectedSubCategory = subCategory;
   }
-  
+
 
   public getCategorie(){
     const parsePoids = (val: any): number => {
@@ -139,7 +131,8 @@ export class HomeComponent implements OnInit {
       this.categories = data;
       this.categories = data.filter(cat => cat.status === 'ACTIF');
         this.subCategories = this.categories.sort((a, b) => parsePoids(b.poids) - parsePoids(a.poids)).slice(0, 10);
-        // console.log("this.navCategories ok", this.subCategories);
+        this.selectedSubCategory = this.subCategories[0];
+        // console.log("this.subCategories ok", this.subCategories);
     })
   }
 
