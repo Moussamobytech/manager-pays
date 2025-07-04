@@ -67,6 +67,7 @@ export class CartComponent implements OnInit {
   userContact: any;
   customerPhone: string = '';
 
+  hasForeignProducts: boolean = false;
 
 
   
@@ -74,6 +75,8 @@ export class CartComponent implements OnInit {
   public productList: any[];
   pageName:string="cart";
   billingForm: UntypedFormGroup;
+  sellerCountries: any []=[] ;
+
 
   constructor(private http: HttpClient, private breakpointObserver: BreakpointObserver, public appService:AppService,public snackBar: MatSnackBar,private regionService:RegionService,
     private authService:AuthenticationService, private carteService:CartService,  public router:Router,public formBuilder: UntypedFormBuilder, private countryService: CountryService
@@ -150,6 +153,7 @@ export class CartComponent implements OnInit {
       this.isCapitalCity = false;
       this.isOtherRegion = false;
       this.isForeignCity = false;
+      this.hasForeignProducts = false;
     });
   }
 
@@ -206,7 +210,9 @@ export class CartComponent implements OnInit {
 
     // Add subscription to city changes
     this.billingForm.get('city')?.valueChanges.subscribe(cityId => {
-      this.checkCityType(cityId);
+     // this.checkCityType(cityId);
+     this.checkCityType(cityId, this.hasForeignProducts);
+
     });
   }
 
@@ -228,7 +234,60 @@ export class CartComponent implements OnInit {
   ///::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   ///::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   ///::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-  getAllArticleInPanier(){
+
+  async getAllArticleInPanier() {
+    const panierString = sessionStorage.getItem('panier');
+    this.productList = panierString ? JSON.parse(panierString) : [];
+  
+    this.grandTotal = 0;
+    this.cartItemCountTotal = 0;
+    this.hasForeignProducts = false;
+  
+    const countryNamesSet: Set<string> = new Set();      // Pour vérifier les noms
+    const sellerCountriesSet: Set<any> = new Set();      // Pour stocker les pays objets
+  
+    if (Array.isArray(this.productList)) {
+      for (const product of this.productList) {
+        const sellerCountry = await this.getSellerCountry(product.contact);
+
+      //  console.log("sellerCountry in getAllArticleInPanier = ",sellerCountry);
+
+        const productCountryName = sellerCountry?.nom;
+  
+        if (productCountryName && !countryNamesSet.has(productCountryName)) {
+          countryNamesSet.add(productCountryName);
+          sellerCountriesSet.add(sellerCountry);
+        }
+  
+        // Calculs
+        const unitPrice = product.pricePromotion
+          ? parseFloat(product.pricePromotion)
+          : parseFloat(product.priceBasic);
+  
+        this.total[product.id] = product.cartCount * unitPrice;
+        this.grandTotal += this.total[product.id];
+        this.cartItemCount[product.id] = product.cartCount;
+        this.cartItemCountTotal += product.cartCount;
+      }
+  
+      // Tous les pays sans doublons (objets complets)
+      this.sellerCountries = Array.from(sellerCountriesSet);
+  
+      // Vérifie si au moins un produit étranger est présent
+      this.hasForeignProducts = Array.from(countryNamesSet).some(
+        name => name !== this.selectedCountry.nom
+      );
+  
+     // console.log("🌍 Pays vendeurs (locaux + étrangers):", this.sellerCountries.map(c => c.nom));
+      //console.log("📦 hasForeignProducts:", this.hasForeignProducts);
+    } else {
+      console.error("Product list is not an array.");
+    }
+  }
+  
+  
+  
+  /* getAllArticleInPanier(){
     // Parse the stringified JSON array
     const panierString = sessionStorage.getItem('panier');
     this.productList = panierString ? JSON.parse(panierString) : [];
@@ -260,18 +319,44 @@ export class CartComponent implements OnInit {
     } else {
       console.error("Product list is not an array.");
     }
+
+    
   }
 
+  */
+  
+
   // Nouvelle méthode pour récupérer le pays du vendeur
-  getSellerCountry(sellerId: string) {
+  getSellerCountry(sellerId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.authService.getUserByPhone(sellerId).subscribe(
+        (seller) => {
+          if (seller && seller.countries && seller.countries.id) {
+            resolve(seller.countries); // ✅ retourne seulement le pays
+          } else {
+            resolve(null);
+          }
+        },
+        (error) => {
+          console.error("Erreur lors de la récupération des informations du vendeur:", error);
+          reject(error);
+        }
+      );
+    });
+  }
+  
+  /*getSellerCountry(sellerId: string) {
     this.authService.getUserByPhone(sellerId).subscribe(
       (seller) => {
 
+        
         if (seller && seller.countries) { 
           this.sellerCountry = seller.countries.id ? seller.countries : null;
           if (this.sellerCountry) {
             // Vérifier si le pays du vendeur est défini
             this.selectedCountry = this.sellerCountry;
+            console.log("selectedCountry hh Country: ", this.selectedCountry);
+            return this.selectedCountry;
             // this.getCityByCountry(this.sellerCountry.id);
           }
         }
@@ -280,10 +365,146 @@ export class CartComponent implements OnInit {
         console.error("Erreur lors de la récupération des informations du vendeur:", error);
       }
     );
-  }
+  }*/
+  
 
+    checkCityType(city: any, hasForeignProducts: boolean = false) {
+      if (!city || !this.selectedCountry || !this.sellerCountries) return;
+    
+      const isCapital = city?.capitale === true;
+      const localSellersExist = this.sellerCountries.some(
+        (c: any) => c.nom === this.selectedCountry.nom
+      );
+    
+      const foreignSellersExist = this.sellerCountries.some(
+        (c: any) => c.nom !== this.selectedCountry.nom
+      );
+    
+      // Cas 3 : tous les produits étrangers
+      if (!localSellersExist && foreignSellersExist) {
+        this.isForeignCity = true;
+        this.isCapitalCity = false;
+        this.isOtherRegion = false;
+    
+        this.transportFee = 12000;
+        this.deliveryDelay = '5 à 7 jours';
+        return;
+      }
+    
+      // Cas 1 et 2 : que des produits locaux
+      if (localSellersExist && !foreignSellersExist) {
+        this.isForeignCity = false;
+    
+        if (isCapital) {
+          // Cas 1
+          this.isCapitalCity = true;
+          this.isOtherRegion = false;
+          this.transportFee = 1500;
+          this.deliveryDelay = '48h';
+        } else {
+          // Cas 2
+          this.isCapitalCity = false;
+          this.isOtherRegion = true;
+          this.transportFee = 2500;
+          this.deliveryDelay = '3 à 4 jours';
+        }
+        return;
+      }
+    
+      // Cas 4 et 5 : produits locaux + étrangers
+      if (localSellersExist && foreignSellersExist) {
+        this.isForeignCity = false;
+    
+        if (isCapital) {
+          // Cas 4
+          this.isCapitalCity = true;
+          this.isOtherRegion = false;
+          this.transportFee = 1500 + 12000;
+        } else {
+          // Cas 5
+          this.isCapitalCity = false;
+          this.isOtherRegion = true;
+          this.transportFee = 2500 + 12000;
+        }
+        this.deliveryDelay = '5 à 7 jours';
+        return;
+      }
+    }
+    
+    
+/* récente méthode pour vérifier le type de ville 
+  checkCityType(city: any, hasForeignProducts: boolean = false) {
+
+    const isSameCountry = this.selectedCountry?.nom === this.sellerCountry?.nom;
+    const isCapital = city?.capitale === true;
+//    console.log("CASE 00 : ", hasForeignProducts);
+
+    if (!city || !this.selectedCountry || !this.sellerCountry) return;
+    console.log("CASE 0 : ", hasForeignProducts);
+  
+    // Cas 3 : Client et vendeur ne sont pas dans le même pays
+    if (!isSameCountry) {
+    
+      console.log("CASE 1 : ", hasForeignProducts);
+
+      this.isForeignCity = true;
+      this.isCapitalCity = false;
+      this.isOtherRegion = false;
+  
+      this.transportFee = 12000;
+      this.deliveryDelay = '5 à 7 jours';
+      return;
+    }
+  
+    // Cas 1 ou 2 : Même pays
+    if (isCapital && !hasForeignProducts) {
+      console.log("CASE 2 : ",isCapital," - ",hasForeignProducts);
+
+      // Cas 1 : même pays et capitale
+      this.isCapitalCity = true;
+      this.isOtherRegion = false;
+      this.isForeignCity = false;
+  
+      this.transportFee = 1500;
+      this.deliveryDelay = '48h';
+    } else if (!isCapital && !hasForeignProducts) {
+      console.log("CASE 3 : ",isCapital," - ",hasForeignProducts);
+
+      // Cas 2 : même pays mais autre région
+      this.isCapitalCity = false;
+      this.isOtherRegion = true;
+      this.isForeignCity = false;
+  
+      this.transportFee = 2500;
+      this.deliveryDelay = '3 à 4 jours';
+    } else if (isCapital && hasForeignProducts) {
+      console.log("CASE 4 : ",isCapital," - ",hasForeignProducts);
+
+      // Cas 4 : capitale + produits étrangers
+      this.isCapitalCity = true;
+      this.isOtherRegion = false;
+      this.isForeignCity = false;
+  
+      this.transportFee = 1500 + 12000;
+      this.deliveryDelay = '5 à 7 jours';
+    } else if (!isCapital && hasForeignProducts) {
+      console.log("CASE 5 : ", hasForeignProducts);
+
+      // Cas 5 : région + produits étrangers
+      this.isCapitalCity = false;
+      this.isOtherRegion = true;
+      this.isForeignCity = false;
+  
+      this.transportFee = 2500 + 12000;
+      this.deliveryDelay = '5 à 7 jours';
+    }
+
+    console.log("City Type Check: ",);
+  }
+  */
+  
   // Modifier la méthode checkCityType pour utiliser le pays du vendeur
-  checkCityType(cityId: any) {
+  /*checkCityType(cityId: any) {
 
     if(this.selectedCountry.nom != this.sellerCountry.nom){
       this.isForeignCity = true;
@@ -309,7 +530,7 @@ export class CartComponent implements OnInit {
       }
 
     }
-  }
+  }*/
 
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
 monPanierContient(){
@@ -451,8 +672,6 @@ onlyCartItemCount:any = 0
 
   }
 
-
-
     onCountryChange(country: string): void {
       if (country === 'mali') {
         // Mali
@@ -492,8 +711,10 @@ onlyCartItemCount:any = 0
         mask: '0'.repeat(this.getPhoneLength(country.nom)),
         indicatif: `+${country.indicatif}`,
       }));
-    //  this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
-    //  this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
+     this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
+      this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
+      this.getAllRegionsByCountry(this.selectedCountry.id);
+      
     })
   }
 

@@ -26,11 +26,11 @@
 
 <div class="title-container">
   <h3>Mes commandes recentes</h3>
-  <p (click)="toggleShowMore()">
+  <p *ngIf="taillesOrders > 3" (click)="toggleShowMore()">
     {{ showMoreOrders ? 'Voir moins' : 'Voir plus' }}
   </p>
 </div>
-<hr class="section-separator">
+<!--<hr class="section-separator">-->
 
 <div class="not-favoris" *ngIf="taillesOrders === 0">
   Tu n’as pas encore commander.
@@ -121,7 +121,7 @@
       </p>
       
     </div>
-    <hr class="section-separator">
+<!--<hr class="section-separator">-->
     
     <div class="favoris">
       <div class="not-favoris" *ngIf="tailles === 0">

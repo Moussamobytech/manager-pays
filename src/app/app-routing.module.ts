@@ -25,6 +25,7 @@ const routes: Routes = [
           // { path: 'brands', loadChildren: () => import('./pages/brands/brands.module').then(m => m.BrandsModule), data: { breadcrumb: 'Brands' } },
           { path: 'products', loadChildren: () => import('./pages/products/products.module').then(m => m.ProductsModule), data: { breadcrumb: 'Produits' } },
           { path: 'sellers', loadChildren: () => import('./pages/seller/seller.module').then(m => m.SellerModule), data: { breadcrumb: 'Boutiques' } },
+          { path: 'sellers/:username', loadChildren: () => import('./pages/seller/seller.module').then(m => m.SellerModule), data: { breadcrumb: 'Boutiques' } },
           { path: 'faq', loadChildren: () => import('./theme/faq/faq.module').then(m => m.FaqModule), data: { breadcrumb: 'FAQ' } },
           { path: 'search-results', component: SearchResultsComponent },
           { path: 'categories', loadChildren: () => import('./pages/categories/categories.module').then(m => m.CategoriesModule), data: { breadcrumb: 'Catégories' } },

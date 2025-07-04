@@ -20,6 +20,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { BannersService } from 'src/app/services/banners.service';
 import { User } from 'src/app/app.models';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { log } from 'console';
 
 @Component({
   selector: 'app-seller',
@@ -86,6 +87,8 @@ export class SellerComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       const code = params['code'];
       this.senderUsername = params['currentUser'];
+
+      console.log("Code de parrainage: ", this.senderUsername);
   
       if (code?.length === 10) {
         sessionStorage.setItem('referralCode', code);
@@ -99,6 +102,9 @@ export class SellerComponent implements OnInit {
   
   private initCurrentUserFlow() {
     this.currentUser = this.auth.currentUser();
+
+    console.log("Current User: ", this.currentUser);
+
     this.sellerId = this.currentUser.username;
   
     if (this.currentUser.profiles[0].name === 'ROLE_BOUTIQUE') {

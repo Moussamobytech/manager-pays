@@ -97,6 +97,9 @@ export class DashboardComponent implements OnInit {
     this.getUserById();
 
     this.getProductViewCount(this.currentUser.username);
+
+    console.log("Current User :::::::::: = ", this.currentUser.username);
+
     this.getCommandes(this.currentUser.username);
   }
 
@@ -255,7 +258,7 @@ export class DashboardComponent implements OnInit {
   public async getCommandes(id) {
     // Show the spinner before starting the request.
     this.ngxSpinnerService.show();
-    await this.commandeService.getAllCommandeByFournisseur(id).pipe(
+    await this.commandeService.getAllCommandeByUsername(id).pipe(
       map((commande: any) => commande),
       catchError((error: any) => {
         console.error("Erreur lors de la récupération des commandes : ", error);
@@ -266,6 +269,7 @@ export class DashboardComponent implements OnInit {
         this.ngxSpinnerService.hide();// Masquez le spinner une fois la requête terminée (succès ou erreur)
       })
     ).subscribe((data: any) => {
+
       // Filtrer les données pour ne garder que les commandes avec le statut "PENDING"
       const pendingData = data.filter((commande: any) => commande.statutCommande.name === 'PENDING');
       this.commandePending = pendingData;

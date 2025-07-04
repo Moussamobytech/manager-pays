@@ -38,7 +38,7 @@ export class SearchResultsComponent implements OnInit {
           if (products.length === 0 && this.isSearchTermValid(searchTerm)) {
             console.log("🔍 Terme valide mais aucun produit trouvé :", searchTerm);
             this.AppService.searchNotFoundTerme(searchTerm).subscribe(datas => {
-              console.log("💾 Terme enregistré :", datas);
+             // console.log("💾 Terme enregistré :", datas);
             });
           }
         });

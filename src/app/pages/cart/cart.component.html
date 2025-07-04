@@ -142,15 +142,23 @@
 
     <div fxFlex="100">
       <!-- Informations de livraison conditionnelles -->
-    <div *ngIf="transportFee && deliveryDelay" class="m-3" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="transportFee && deliveryDelay" class="m-5 section-livraison" fxLayout="column">
+      <p>📦 Expédition depuis: 
+        <span *ngFor="let country of sellerCountries">
+          {{country.nom}},
+        </span>
+      </p>
       <p> 🚚 Délai de livraison estimée: <strong>{{ deliveryDelay }}</strong></p>
       <p *ngIf="customerPhone">📲 Le livreur te contactera au: <strong>{{ customerPhone }}</strong></p>
-      <div *ngIf="isForeignCity">
-        <p>📦 Expédition depuis: {{sellerCountry.nom}}</p>
-        <p> 💰 Frais de livraison valables jusqu’à 2 kg.</p>
+      <div *ngIf="isForeignCity" class="section-div">
+        <p> 💰 Frais de livraison valables jusqu'à 2 kg.</p>
         <p>Au-delà, on te contacte avant envoi</p>
-        <p> 🙋‍♀️ Besoin d’aide ? Contacte-nous sur <strong (click)="openWhatsapp()">WhatsApp</strong> </p>
-
+        <p class="whatsapp-help">
+          🙋‍♀️ Besoin d'aide ? Contacte-nous
+          <span class="whatsapp-icon" (click)="openWhatsapp()">
+            <img src="assets/icons/whatsapp_PNG95159.png" width="40" height="40" alt="whatsApp">
+          </span>
+        </p>
       </div>
     </div>
 
