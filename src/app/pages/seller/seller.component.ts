@@ -20,7 +20,6 @@ import { CommonService } from 'src/app/services/common.service';
 import { BannersService } from 'src/app/services/banners.service';
 import { User } from 'src/app/app.models';
 import { CampagneService } from 'src/app/services/campagne.service';
-import { log } from 'console';
 
 @Component({
   selector: 'app-seller',
@@ -61,7 +60,7 @@ export class SellerComponent implements OnInit {
   currentUser: any;
   bannersInfo: any;
 
-  senderUsername:string;
+  //senderUsername:string;
 
 
   constructor(
@@ -81,9 +80,17 @@ export class SellerComponent implements OnInit {
   }
 
   async ngOnInit() {
+//    this.sellerId = this.auth.currentUser()?.username;
+const username = this.activatedRoute.snapshot.paramMap.get('name');
+this.sellerId = username;
+   
+    
     this.sortProducts();
     this.onWindowResize();
-  
+    this.getDataFromBackend();
+
+
+  /*
     this.activatedRoute.params.subscribe((params) => {
       const code = params['code'];
       this.senderUsername = params['currentUser'];
@@ -97,10 +104,10 @@ export class SellerComponent implements OnInit {
       } else {
         this.initCurrentUserFlow();
       }
-    });
+    });*/
   }
   
-  private initCurrentUserFlow() {
+  /*private initCurrentUserFlow() {
     this.currentUser = this.auth.currentUser();
 
     console.log("Current User: ", this.currentUser);
@@ -110,9 +117,9 @@ export class SellerComponent implements OnInit {
     if (this.currentUser.profiles[0].name === 'ROLE_BOUTIQUE') {
       this.getDataFromBackend();
     }
-  }
+  }*/
   
-  private getSellerFromCode(code: string) {
+  /*private getSellerFromCode(code: string) {
     this.campagneService.getCampagneByCode(code).subscribe({
       next: (data) => {
         this.sellerId = data.user.username;
@@ -130,7 +137,7 @@ export class SellerComponent implements OnInit {
       }
     });
   }
-  
+  */
   private async getDataFromBackend() {
     try {
       this.getSeller();
@@ -260,7 +267,7 @@ export class SellerComponent implements OnInit {
   }
 
   public filterProductsByPrice() {
-    console.log(this.priceFrom,this.priceTo);
+   // console.log(this.priceFrom,this.priceTo);
     this.sellerProducts = this.unchangedSellerProducts.filter((product) => {
       const price = Number(product.pricePromotion) || Number(product.priceBasic);
       return (price >= Math.min(this.priceFrom, this.priceTo) && price <= Math.max(this.priceFrom, this.priceTo));
@@ -285,7 +292,7 @@ export class SellerComponent implements OnInit {
           }
           return a.nom.localeCompare(b.nom);
         });
-        console.log(this.sellerProducts)
+       // console.log(this.sellerProducts)
         break;
       case 'SORTINGS.MOST_RECENT':
       default:

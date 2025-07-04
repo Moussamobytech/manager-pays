@@ -26,7 +26,7 @@
 
 <div class="title-container">
   <h3>Mes commandes recentes</h3>
-  <p *ngIf="taillesOrders > 3" (click)="toggleShowMore()">
+  <p *ngIf="taillesOrders > 5" (click)="toggleShowMore()">
     {{ showMoreOrders ? 'Voir moins' : 'Voir plus' }}
   </p>
 </div>
@@ -116,7 +116,7 @@
    
      <div class="title-container">
       <h3>Mes favoris</h3>
-      <p *ngIf="favorisProducts.length > 2" (click)="toggleShowMoreProduct()">
+      <p *ngIf="favorisProducts.length > 5" (click)="toggleShowMoreProduct()">
         {{ showMoreProduct ? 'Voir moins' : 'Voir plus' }}
       </p>
       

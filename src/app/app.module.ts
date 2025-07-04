@@ -11,6 +11,10 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { environment } from 'src/environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+import { APP_BASE_HREF } from '@angular/common';
+
+
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, environment.url +'/assets/i18n/', '.json');
 }
@@ -116,6 +120,8 @@ import { HeaderComponent } from './shared/header/header.component';
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: MAT_MENU_SCROLL_STRATEGY, useFactory: menuScrollStrategy, deps: [Overlay] },
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+    { provide: APP_BASE_HREF, useValue: environment.baseHref }
+
   ],
   bootstrap: [AppComponent]
 })

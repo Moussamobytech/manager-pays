@@ -12,6 +12,7 @@ import { CommandeService } from 'src/app/services/commande.service';
 import { CommonMessageService } from 'src/app/services/common-message.service';
 import { CommandeSearchPipe } from 'src/app/theme/pipes/commandeSearche.pipe';
 import { CommonService } from 'src/app/services/common.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,7 @@ export class DashboardComponent implements OnInit {
   // };
   isCopied: boolean = false;
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
-  shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
+  shopLink: string = window.location.origin + environment.baseHref + '/#/sellers/' + this.sellerInfo.username;
   commandes: any;
   commandePending: any = 0;
   commandeTotal: any = 0;
