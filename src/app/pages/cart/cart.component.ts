@@ -248,6 +248,7 @@ export class CartComponent implements OnInit {
   
     if (Array.isArray(this.productList)) {
       for (const product of this.productList) {
+     //   console.log("Je vais affiché le produit là = ",product)
         const sellerCountry = await this.getSellerCountry(product.contact);
 
       //  console.log("sellerCountry in getAllArticleInPanier = ",sellerCountry);
@@ -324,15 +325,37 @@ export class CartComponent implements OnInit {
   }
 
   */
-  
 
   // Nouvelle méthode pour récupérer le pays du vendeur
   getSellerCountry(sellerId: string): Promise<any> {
+   // console.log("Seller country retrieved: ONE ", sellerId);
+  
     return new Promise((resolve, reject) => {
       this.authService.getUserByPhone(sellerId).subscribe(
         (seller) => {
-          if (seller && seller.countries && seller.countries.id) {
-            resolve(seller.countries); // ✅ retourne seulement le pays
+          //console.log("Seller country retrieved: ONE ", seller);
+          const country = seller?.countries;
+  
+          if (country && country.id) {
+            //console.log("Seller country OK: ONE ", country);
+
+            resolve(country); // ✅ le pays est présent
+          } else if (seller?.username) {
+            // Extraire l'indicatif du numéro (ex: 223 pour le Mali)
+            const phone = seller.username;
+            const indicatif = phone.length >= 3 ? phone.substring(0, 3) : null;
+  
+            // Trouver le pays correspondant dans ta liste locale
+            const foundCountry = this.countries?.find(
+              (c: any) => c.indicatif === `+${indicatif}`
+            );
+  
+            if (foundCountry) {
+            //  console.log("Seller country found by indicatif: ONE ", foundCountry);
+              resolve(foundCountry); // ✅ pays trouvé par l'indicatif
+            } else {
+              resolve(null); // ❌ pays non trouvé
+            }
           } else {
             resolve(null);
           }
@@ -344,6 +367,7 @@ export class CartComponent implements OnInit {
       );
     });
   }
+  
   
   /*getSellerCountry(sellerId: string) {
     this.authService.getUserByPhone(sellerId).subscribe(
@@ -656,6 +680,9 @@ onlyCartItemCount:any = 0
         if(datas != null){
                 this.populateBillingForm(datas);
                 this.user = datas;
+
+                console.log("User loaded by phone:", this.user);  
+
              //   sessionStorage.setItem('currentUser', JSON.stringify(this.user));
         }
 
@@ -711,9 +738,9 @@ onlyCartItemCount:any = 0
         mask: '0'.repeat(this.getPhoneLength(country.nom)),
         indicatif: `+${country.indicatif}`,
       }));
-     this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
-      this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
-      this.getAllRegionsByCountry(this.selectedCountry.id);
+     //this.selectedCountry = this.countries.find(c => c.nom === 'Mali');
+     // this.billingForm.controls['country'].setValue(this.selectedCountry?.id);
+     // this.getAllRegionsByCountry(this.selectedCountry.id);
       
     })
   }
@@ -771,6 +798,9 @@ onlyCartItemCount:any = 0
 
     // Cas 1 : Utilisateur déjà connecté
     if (user != null) {
+
+      console.log("1 LES REDUCTS APPLIQUEE: ", productsWithReduction);
+
       this.appService.addCommande(
         user.id,
         this.senderUsername,
@@ -848,6 +878,10 @@ onlyCartItemCount:any = 0
             // Ajout de la commande
             const phone = formData.get('phoneNumber') as string;
             const myUser = await this.authService.getUserByPhone(phone).toPromise();
+
+            console.log("2 LES REDUCTS APPLIQUEE: ", productsWithReduction);
+
+
             await this.appService.addCommande(
               myUser.id,
               this.senderUsername,

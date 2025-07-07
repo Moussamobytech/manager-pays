@@ -9,7 +9,7 @@
       </div>
       <div *ngIf="currentUser.name" class="shopname-section">
         <p>{{currentUser.name}}</p>
-        <button mat-icon-button class="text-muted" (click)="shareLink()">
+        <button *ngIf="produitsLength" mat-icon-button class="text-muted" (click)="shareLink()">
           <mat-icon *ngIf="!isCopied">share</mat-icon>
         <mat-icon *ngIf="isCopied">check</mat-icon>
         </button>

@@ -49,18 +49,24 @@ export class OrdersComponent implements OnInit {
   }
 
   getAllCommande() {
-    this.commandeService.getAllCommandeByUsername(this.user.username).subscribe(
+    this.commandeService.getAllCommandeByFournisseur(this.user.username).subscribe(
       orders => {
-        this.unchangedOrders = [...orders.filter(order => order.dateCommande
-          <= new Date().toISOString() && order.statutCommande?.name !== "VALIDE")];
+      //  console.log("Orders fetched:", orders);
+  
+        // Ne filtre plus par statutCommande
+        this.unchangedOrders = [...orders.filter(order =>
+          order.dateCommande <= new Date().toISOString()
+        )];
+  
         this.applyFilters();
       },
       error => {
-        this.cm.openFailureSnackBar('Une erreur lors de la récupération des commandes, merci de réessayer !')
+        this.cm.openFailureSnackBar('Une erreur lors de la récupération des commandes, merci de réessayer !');
         console.error('Error fetching orders:', error);
       }
     );
   }
+  
 
   phoneCall(phoneNumber: string): void {
     const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/;
@@ -121,6 +127,8 @@ export class OrdersComponent implements OnInit {
           return status === 'DELIVERED';
         else if (this.selectedStatusFilter === 'annule')
           return status === 'CANCEL';
+        else if (this.selectedStatusFilter === 'valide')
+          return status === 'VALIDE';
         return true;
       });
     }
@@ -275,6 +283,10 @@ export class OrdersComponent implements OnInit {
     } else if (status === 'annule') {
       return this.unchangedOrders.filter(order =>
         order.statutCommande?.name === 'CANCEL'
+      ).length;
+    } else if (status === 'valide') {
+      return this.unchangedOrders.filter(order =>
+        order.statutCommande?.name === 'VALIDE'
       ).length;
     } else if (status === 'tout') {
       return this.unchangedOrders.length;

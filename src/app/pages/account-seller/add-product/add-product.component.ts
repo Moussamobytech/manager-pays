@@ -55,7 +55,8 @@ export class AddProductComponent implements OnInit {
       "parent": [Validators.required ],
       "categorie": [Validators.required ],
       "colors":[],
-      "tailles":[]
+      "tailles":[],
+      "quantite":null
     });
     await this.getCategories();
     console.log("categories :::: ",this.categories.length);
@@ -175,6 +176,7 @@ export class AddProductComponent implements OnInit {
         data.append('weight', this.form.value.weight);
         data.append('colors', this.form.value.colors);
         data.append('tailles', this.form.value.tailles);
+        data.append('quantite', this.form.value.quantite);
         // console.log("images ::: ",this.form.value.images)
         console.log("data ::: ",data)
         let res = await this.productService.add(data);
@@ -232,6 +234,7 @@ export class AddProductComponent implements OnInit {
         data.append('colors',  this.form.value.colors);
         data.append('categorie', this.form.value.categorie);
         data.append('tailles', this.form.value.tailles);
+        data.append('quantite', this.form.value.quantite);
 
 
         // data.append('weight', "5");

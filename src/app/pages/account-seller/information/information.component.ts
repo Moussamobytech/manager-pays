@@ -10,6 +10,7 @@ import { CountryService } from 'src/app/services/country.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BannersService } from 'src/app/services/banners.service';
 import { CampagneService } from 'src/app/services/campagne.service';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-information',
@@ -35,7 +36,7 @@ export class InformationComponent implements OnInit {
     { value: 'appearance', label: 'Apparence de ma boutique', sublabel: 'Logo, couleurs, bannière', icon: 'palette' },
     // { value: 'shipping', label: 'Gestion de la livraison', sublabel: 'Zones, tarifs, délais', icon: 'truck' },
     // { value: 'payments', label: 'Paiments', sublabel: 'Méthodes, commissions', icon: 'credit-card' },
-    { value: 'notifications', label: 'Notifications', sublabel: 'Email, SMS, WhatsApp', icon: 'bell' },
+    //{ value: 'notifications', label: 'Notifications', sublabel: 'Email, SMS, WhatsApp', icon: 'bell' },
     { value: 'help', label: 'Besoin d\'aide', sublabel: 'Contacter l\'équipe Fidelity', icon: 'circle-info' }
   ];
 
@@ -51,6 +52,8 @@ export class InformationComponent implements OnInit {
 
   sellerId: string;
   shopLink: string;
+  logoExiste: any;
+  produitsLength: any = 0;
 
   constructor(public formBuilder: UntypedFormBuilder,
     private auth: AuthenticationService,
@@ -61,12 +64,15 @@ export class InformationComponent implements OnInit {
     private router: Router,
     private countryService: CountryService,
     private activatedRoute: ActivatedRoute,
-    private campagneService: CampagneService
+    private campagneService: CampagneService,
+    private productService: ProductService,
   ) { }
   async ngOnInit() {
     this.loadCountries();
     this.currentUser = this.auth.currentUser();
     let cur = this.currentUser;
+    this.stats(this.currentUser.username);
+
 
     this.activatedRoute.params.subscribe((params) => {
       this.sellerId = params['sellerId'];
@@ -98,11 +104,17 @@ export class InformationComponent implements OnInit {
 
     // Récupération des bannières serveur
     this.bannersService.getBannersByUsername(cur.username).subscribe(datas => {
+
+    //  console.log("Bannières récupérées du serveur:", datas);
+
       const serverBanners = [datas?.image1, datas?.image2, datas?.image3]
         .filter(img => img)
         .map(img => ({ preview: img }));
 
       this.bannieres = serverBanners.length > 0 ? serverBanners : curBanners;
+
+    //  console.log("Bannières fusionnées:", this.bannieres);
+
       const mergedBanners = [0, 1, 2].map(i => {
         const serverImg = serverBanners[i]?.preview;
         const localImg = curBanners[i]?.preview;
@@ -116,7 +128,8 @@ export class InformationComponent implements OnInit {
       
     );
 
-    const logo = [{ preview: this.imgLink + cur.logo }]
+    const logo = [{ preview: this.imgLink + cur.logo }];
+    this.logoExiste = cur.logo; // Vérifie si le logo existe
     const description = cur.description || "";
     this.wordCount = description.trim() ? description.trim().split(/\s+/).length : 0;
 
@@ -436,6 +449,15 @@ export class InformationComponent implements OnInit {
       } else {
         this.shopLink = window.location.origin + "/#/sellers/" + this.sellerId + "/" + code;
       }
+    });
+  }
+
+
+  public stats(id) {
+    this.productService.stats(id).then((data: any) => {
+      console.log("Statistiques des produits:", data);
+      this.produitsLength =  data.actif;
+      console.log("Nombre de produits:", data.actif);
     });
   }
 

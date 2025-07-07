@@ -135,10 +135,13 @@
         En attente ({{getOrderCountByStatus('en-attente')}})
       </button>
       <button mat-button [class.active]="selectedStatusFilter === 'livre'" (click)="filterByStatus('livre')">
-        Livré ({{getOrderCountByStatus('livre')}})
+        Livrée ({{getOrderCountByStatus('livre')}})
+      </button>
+      <button mat-button [class.active]="selectedStatusFilter === 'valide'" (click)="filterByStatus('valide')">
+        Validée ({{getOrderCountByStatus('valide')}})
       </button>
       <button mat-button [class.active]="selectedStatusFilter === 'annule'" (click)="filterByStatus('annule')">
-        Annulé ({{getOrderCountByStatus('annule')}})
+        Annulée ({{getOrderCountByStatus('annule')}})
       </button>
     </div>
     

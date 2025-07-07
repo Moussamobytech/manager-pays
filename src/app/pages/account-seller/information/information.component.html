@@ -142,16 +142,17 @@
         <!-- <mat-hint>Ajouter un logo pour plus de visibilité</mat-hint> -->
       </div>
 
-      <div fxFlex="100">
+      <!-- <div fxFlex="100">
         <label>Ajouter jusqu'à 3 bannières :</label>
         <div fxLayoutGap="10px">
           <input-file containerFlex="32" formControlName="banners" [fileLimit]="3" fileAccept="image/*"></input-file>
         </div>
-        <!-- <mat-hint>Max 2 Mo par image</mat-hint> -->
+        //<mat-hint>Max 2 Mo par image</mat-hint> -
       </div>
+    -->
 
       <div class="button-container double-btn" fxFlex="100">
-        <button mat-raised-button class="other-btn" type="button" [routerLink]="'/sellers/'+currentUser.username"><mat-icon>remove_red_eye</mat-icon> Voir l'affichage</button>
+        <button *ngIf="produitsLength > 0" mat-raised-button class="other-btn" type="button" [routerLink]="'/sellers/'+currentUser.username"><mat-icon>remove_red_eye</mat-icon> Voir l'affichage</button>
         <button mat-raised-button class="submit-btn" type="submit">Enregistrer <mat-icon>arrow_forward</mat-icon></button>
       </div>
     </div>

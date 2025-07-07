@@ -180,7 +180,7 @@ this.sellerId = username;
       map((p)=>p.filter((p)=>p.etat=="ACTIF")),
       tap((products) => {
 
-
+        console.log("Nombre de produits récupérés: ", products.length);
 
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
         this.unchangedSellerProducts = products;

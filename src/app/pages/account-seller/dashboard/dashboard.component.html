@@ -7,7 +7,7 @@
   <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="bleu" matTooltip="Ajouter un produit" routerLink="/account-seller/products-seller/add-product">
     <i class="fa-solid fa-plus"></i> {{"ADMIN_NAV.ADD_PRODUCT" | translate}}
   </button>
-  <button fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Lien de votre boutique" (click)="shareLink(el)">
+  <button  *ngIf="produitsLength" fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" mat-raised-button class="amber" matTooltip="Lien de votre boutique" (click)="shareLink(el)">
     <span #el>
       <i class="fa-solid fa-share" *ngIf="!isCopied"></i>
       <i class="fa-solid fa-check" *ngIf="isCopied"></i>
@@ -143,7 +143,7 @@
   </div>
 </div>
 
-<mat-card>
+<mat-card *ngIf="deviveredLength > 0" class="p-2">
   <div fxFlex="100" fxFlex.gt-sm="100" class="p-2">
     <app-analytics></app-analytics>
   </div>

@@ -8,6 +8,7 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ImageCompressService } from 'src/app/services/image-compress.servive';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-account',
@@ -16,8 +17,12 @@ import { ImageCompressService } from 'src/app/services/image-compress.servive';
 })
 export class AccountComponent implements OnInit {
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
-  shopLink: string = window.location.origin+'/#/sellers/' + this.sellerInfo.username;
+ // shopLink: string = window.location.origin+'/#/sellers/' + this.sellerInfo.username;
+  shopLink: string = window.location.origin + window.location.pathname + '#/sellers/' + this.sellerInfo.username;
+
   isCopied = false;
+  produitsLength: any = 0;
+
 
   constructor(
     public router: Router,
@@ -27,7 +32,8 @@ export class AccountComponent implements OnInit {
     public dialog: MatDialog,
     private fb: FormBuilder,
     private cm:CommonService,
-    private imgCompressService: ImageCompressService
+    private imgCompressService: ImageCompressService,
+    private productService: ProductService,
   ) {}
 
   @ViewChild('sidenav', { static: true }) sidenav: any;
@@ -51,6 +57,9 @@ export class AccountComponent implements OnInit {
   ];
 
   async ngOnInit() {
+    this.currentUser = this.auth.currentUser();
+    this.stats(this.currentUser.username);
+
     if (this.domHandlerService.window?.innerWidth < 960) {
       this.sidenavOpen = false;
     }
@@ -63,6 +72,12 @@ export class AccountComponent implements OnInit {
     // Initialize the logo form
     this.LogoForm = this.fb.group({
       'logo': [null, Validators.required]
+    });
+  }
+
+  public stats(id) {
+    this.productService.stats(id).then((data: any) => {
+      this.produitsLength =  data.actif;
     });
   }
 

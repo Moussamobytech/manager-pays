@@ -151,8 +151,7 @@
       <p> 🚚 Délai de livraison estimée: <strong>{{ deliveryDelay }}</strong></p>
       <p *ngIf="customerPhone">📲 Le livreur te contactera au: <strong>{{ customerPhone }}</strong></p>
       <div *ngIf="isForeignCity" class="section-div">
-        <p> 💰 Frais de livraison valables jusqu'à 2 kg.</p>
-        <p>Au-delà, on te contacte avant envoi</p>
+        <p> 💰 Frais de livraison valables jusqu'à 2 kg.Au-delà, on te contacte avant envoi</p>
         <p class="whatsapp-help">
           🙋‍♀️ Besoin d'aide ? Contacte-nous
           <span class="whatsapp-icon" (click)="openWhatsapp()">

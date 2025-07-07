@@ -4,19 +4,23 @@
   </div>
   <div class="shopname-section">
     <h1 class="shop-name">{{sellerInfo?.name||'Nom du boutique'}}</h1>
-    <button mat-icon-button class="text-muted" (click)="shareLink()"><mat-icon>share</mat-icon></button>
+    <!-- <button mat-icon-button class="text-muted" (click)="shareLink()"><mat-icon>share</mat-icon></button> -->
   </div>
-  <div class="seller-carousel">
+  <!--<div class="seller-carousel">
     <app-seller-caroussel *ngIf="sellerInfo" [sellerBanners]="sellerBanners" [sellerId]="sellerId"></app-seller-caroussel>
   </div>
-
-
+  
   <mat-expansion-panel *ngIf="sellerInfo?.description">
     <mat-expansion-panel-header class="description-head">
         À propos
     </mat-expansion-panel-header>
     <p class="shop-description">{{sellerInfo?.description}}</p>
   </mat-expansion-panel>
+-->
+<div *ngIf="sellerInfo?.description" class="description-container text-center" fxLayout="column" fxLayoutAlign="center center">
+  <p class="shop-description text-center">{{sellerInfo?.description}}</p>
+</div>
+
 </div>
 
 
@@ -80,14 +84,14 @@
               [step]="950" type="number" [(ngModel)]="priceTo" (change)="filterProductsByPrice()" [min]="priceFrom"/>
             </mat-form-field>
           </div>
-          <div *ngIf="domWidth<700">
+          <!--<div *ngIf="domWidth<700">
             <h3>Partager lien boutique</h3>
             <div fxLayout="row" fxLayoutAlign="space-between center" class="copy-container">
               <input matInput type="text" [value]="shopLink" class="copy-input" #linkInput readonly>
               <mat-icon (click)="copyLink(linkInput)" *ngIf="!isCopied">content_copy</mat-icon>
               <mat-icon matSuffix *ngIf="isCopied">check</mat-icon>
             </div>
-          </div>
+          </div> -->
         </mat-expansion-panel>
       </mat-accordion>
       <!-- </ng-scrollbar> -->

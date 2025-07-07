@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit {
   public username: any;
   points: any = 0;
   currentUser: any;
+
+  deviveredLength = 0;
   // statsNumber: any = {
   //   total: 0,
   //   actif: 0,
@@ -37,7 +39,9 @@ export class DashboardComponent implements OnInit {
   // };
   isCopied: boolean = false;
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
-  shopLink: string = window.location.origin + environment.baseHref + '/#/sellers/' + this.sellerInfo.username;
+  //shopLink: string = window.location.origin +  '/#/sellers/' + this.sellerInfo.username;
+  shopLink: string = window.location.origin + window.location.pathname + '#/sellers/' + this.sellerInfo.username;
+
   commandes: any;
   commandePending: any = 0;
   commandeTotal: any = 0;
@@ -47,6 +51,7 @@ export class DashboardComponent implements OnInit {
   pourcentageEvolution: any = 0;
   montantTotalMensuel: any = 0;
   visitTotal: any = 0;
+  produitsLength: any = 0;
 
   // cards = [
   //   { icon: 'fas fa-cart-shopping', title: 'Commandes en attente', content: 'Consulter maintenant', value: null, cardClass: 'amber', routerLink: '/account-seller/orders'},
@@ -99,7 +104,7 @@ export class DashboardComponent implements OnInit {
 
     this.getProductViewCount(this.currentUser.username);
 
-    console.log("Current User :::::::::: = ", this.currentUser.username);
+   // console.log("Current User :::::::::: = ", this.currentUser.username);
 
     this.getCommandes(this.currentUser.username);
   }
@@ -145,6 +150,10 @@ export class DashboardComponent implements OnInit {
    */
   public stats(id) {
     this.productService.stats(id).then((data: any) => {
+      this.produitsLength =  data.actif;
+
+   //   console.log("Product stats data :::::::::: = ", data.length);
+
       // this.statsNumber.total = data.total;
       // this.statsNumber.actif = data.actif;
       this.cards[1].value = data.actif;
@@ -259,7 +268,7 @@ export class DashboardComponent implements OnInit {
   public async getCommandes(id) {
     // Show the spinner before starting the request.
     this.ngxSpinnerService.show();
-    await this.commandeService.getAllCommandeByUsername(id).pipe(
+    await this.commandeService.getAllCommandeByFournisseur(id).pipe(
       map((commande: any) => commande),
       catchError((error: any) => {
         console.error("Erreur lors de la récupération des commandes : ", error);
@@ -279,6 +288,8 @@ export class DashboardComponent implements OnInit {
       // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
       const deliveredData = data.filter((commande: any) => commande.statutCommande.name === 'DELIVERED');
       this.commandes = deliveredData;
+      this.deviveredLength = deliveredData.length;
+     // console.log("Commandes livrées :", this.deviveredLength);
 
       // Obtenir le mois et l'année en cours.
       const currentDate = new Date();

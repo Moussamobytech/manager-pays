@@ -20,7 +20,7 @@
 
       <div fxFlex="100" fxFlex.gt-sm="60" class="px-2">
         <div fxLayout="row wrap">
-          <div fxFlex="100" fxFlex.gt-xs="100" class="px-1">
+          <div fxFlex="50" fxFlex.gt-xs="50" class="px-1">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Nom</mat-label>
               <input matInput formControlName="nom" required>
@@ -28,7 +28,7 @@
               <mat-error *ngIf="form.controls.nom.hasError('minlength')">Prend minimum 4 caractères</mat-error>
             </mat-form-field>
           </div>
-          <div fxFlex="100" fxFlex.gt-xs="50" class="px-1">
+          <div fxFlex="50" fxFlex.gt-xs="50" class="px-1">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Categorie</mat-label>
               <mat-select (ngModelChange)="setSubList()" formControlName="parent" required>
@@ -68,6 +68,13 @@
               <input matInput formControlName="pricePromotion">
               <mat-error *ngIf="form.controls.pricePromotion.errors?.pattern">Le prix de promo doit etre un nombre</mat-error>
               <mat-error *ngIf="form.controls.pricePromotion.errors?.minlength">Le prix de promo minimum est 100FCFA</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="50" fxFlex.gt-xs="50" class="px-1">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Stock</mat-label>
+              <input matInput min="1" formControlName="quantite" type="number">
             </mat-form-field>
           </div>
 
