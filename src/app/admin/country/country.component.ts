@@ -42,6 +42,7 @@ export class CountryComponent implements OnInit {
   sub: any;
   sortedCountries: any[];
   monPays: any;
+  editIndex: number | null = null;
 
   constructor(
     private router: Router,
@@ -373,6 +374,37 @@ export class CountryComponent implements OnInit {
     this.dialog.closeAll();
   }
 
+  editRegion(index: number) {
+    this.editIndex = index;
+  }
+
+  saveRegion(index: number) {
+    const region = this.allRegions[index];
+    console.log("Region to save: ", region);
+    // Call your service to update the region here
+    this.countryService.updateRegion(region.id,region).subscribe(() => {
+      this.editIndex = null;
+      // Optionally refresh the list or handle UI update
+    });
+  }
+
+  deleteRegion(index: number): void {
+    const region = this.allRegions[index];
+    const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette région ?");
+    if (confirmDelete) {
+      this.countryService.deleteR(region.id).subscribe(() => {
+        this.editIndex = null;
+        // Optionally refresh the list or handle UI update
+      });
+      this.allRegions.splice(index, 1);
+    }
+  }
+  
+
+  cancelEdit() {
+    this.editIndex = null;
+    // Optionally reload the region data if needed
+  }
 
 
   sortCountry(keyWord: string) {

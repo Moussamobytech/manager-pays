@@ -162,10 +162,22 @@
       </div>
     
       <div class="listregionForPays">
-        <div *ngFor="let region of allRegions let i = index">
-          {{i + 1}} - <strong>{{region.nom}}</strong> {{region.capitale ? 'Capitale' : ''}}
+        <div *ngFor="let region of allRegions; let i = index">
+          <ng-container *ngIf="editIndex !== i; else editForm">
+            {{i + 1}} - <strong>{{region.nom}}</strong> {{region.capitale ? 'Capitale' : ''}}
+            <button mat-button color="primary" (click)="editRegion(i)">Modifier</button>
+            <button mat-button color="warn" (click)="deleteRegion(i)">Supprimer</button>
+          </ng-container>
+      
+          <ng-template #editForm>
+            <input [(ngModel)]="region.nom" placeholder="Nom de la région" />
+            <mat-checkbox [(ngModel)]="region.capitale">Capitale</mat-checkbox>
+            <button mat-button color="primary" (click)="saveRegion(i)">Enregistrer</button>
+            <button mat-button color="warn" (click)="cancelEdit()">Annuler</button>
+          </ng-template>
         </div>
       </div>
+      
 
     </div>
   </ng-template>

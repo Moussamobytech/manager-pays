@@ -26,6 +26,10 @@ export class CountryService {
     return this.api.get(`/region/getAllByCountrieName/${name}`);
       }
 
+  updateRegion(id:any,region: any): Observable<any> {
+    return this.api.put(`/region/update/${region.id}`, region);
+  }
+
   constructor(private api: ApiService,) { }
 
   addCountries(datas: any): any {
@@ -52,6 +56,9 @@ export class CountryService {
 
   public delete(id: any) {
     return this.api.delete(`/country/delete/${id}`)
+  }
+  public deleteR(id: any) {
+    return this.api.delete(`/region/delete/${id}`)
   }
   public getById(id: any): Observable<any> {
     return this.api.get(`/country/get/${id}`)
