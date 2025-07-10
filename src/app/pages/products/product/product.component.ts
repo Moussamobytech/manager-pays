@@ -10,6 +10,8 @@ import { DomHandlerService } from 'src/app/dom-handler.service';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/models/product.models';
 import { CommonService } from 'src/app/services/common.service';
+import { get } from 'node:http';
+import { AuthenticationService } from 'src/app/services/auth.service';
 // import { Product } from 'src/app/app.models';
 
 @Component({
@@ -30,49 +32,59 @@ export class ProductComponent implements OnInit {
   public relatedProducts: Array<Product>;
   public views: any;
   shopLink: string;
+  user:any;
   isCopied:boolean= false;
 
-  constructor(public appService:AppService,
+  constructor(
+    public appService: AppService,
+    public aurhService:AuthenticationService,
     private productService : ProductService,
               private activatedRoute: ActivatedRoute,
               public dialog: MatDialog,
               public formBuilder: UntypedFormBuilder,
               public domHandlerService: DomHandlerService,
               private cm:CommonService,) {  }
-
-  ngOnInit() {
+              
+              ngOnInit() {
     // this.path = window.location.href
     this.sub = this.activatedRoute.params.subscribe(params => {
       this.getProductById(params['id']);
     });
     // this.getRelatedProducts();
   }
-
+  
   // ngAfterViewInit(){
-  //   this.config = {
-  //     observer: false,
-  //     slidesPerView: 4,
-  //     spaceBetween: 8,
-  //     keyboard: true,
-  //     navigation: true,
-  //     pagination: false,
-  //     loop: false,
-  //     preloadImages: false,
-  //     lazy: true,
-  //     // breakpoints: {
-  //     //   // 480: {
-  //     //   //   slidesPerView: 4
-  //     //   // },
-  //     //   600: {
-  //     //     slidesPerView:6 ,
-  //     //   }
+    //   this.config = {
+      //     observer: false,
+      //     slidesPerView: 4,
+      //     spaceBetween: 8,
+      //     keyboard: true,
+      //     navigation: true,
+      //     pagination: false,
+      //     loop: false,
+      //     preloadImages: false,
+      //     lazy: true,
+      //     // breakpoints: {
+        //     //   // 480: {
+          //     //   //   slidesPerView: 4
+          //     //   // },
+          //     //   600: {
+            //     //     slidesPerView:6 ,
+            //     //   }
   //     // }
   //   }
   // }
-
+  openSellerShop(username: any) {
+    const link = window.location.origin + window.location.pathname + '#/sellers/' + username;
+    window.location.href = link;
+  }
+  
+  
   public getProductById(id:any){
     this.appService.getProductById(id).subscribe((data:any)=>{
       let product = data;
+      this.getSellerInfo(product?.userNom); // Fetch seller info
+
       this.selectedImage = data.image1;
       let nom = (product.nom).toLowerCase();
       this.product = {
@@ -81,13 +93,26 @@ export class ProductComponent implements OnInit {
         pricePromotion: this.parsePrice(product.pricePromotion),
         priceBasic: this.parsePrice(product.priceBasic),
       };
-      this.shopLink = window.location.origin+"/#/sellers/"+this.product.user
       this.zoomImage = data.image1;
       // setTimeout(() => {
       //   this.config.observer = true;
         // this.getRelatedProducts();
        // this.directiveRef.setIndex(0);
       // });
+    });
+
+   
+  }
+
+  getSellerInfo(sellerId: string) {
+    this.aurhService.getUserInfo(sellerId).subscribe((data: any) => {  
+      if (data) {
+        this.user = data;
+      } else {
+        this.views = 0; // Default value if no user found
+      }
+    }, (error) => {
+      console.error('Error fetching user by username:', error);
     });
   }
 

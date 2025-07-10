@@ -57,6 +57,7 @@ export class CartComponent implements OnInit {
   isCapitalCity: boolean = false;
   isOtherRegion: boolean = false;
   isForeignCity: boolean = false;
+  indicatif: string = '';
 
   transportFee: number = 0;
   deliveryDelay: string = '';
@@ -68,6 +69,7 @@ export class CartComponent implements OnInit {
   customerPhone: string = '';
 
   hasForeignProducts: boolean = false;
+  localSellersExistSee: boolean = false; // Pour vérifier si des vendeurs locaux existent
 
 
   
@@ -87,6 +89,7 @@ export class CartComponent implements OnInit {
     this.initializeBillingForm();
 
     // Récupérer le code de parrainage depuis le sessionStorage
+    this.getAllArticleInPanier();
     const referralCode = sessionStorage.getItem('referralCode');
     const senderUsername = sessionStorage.getItem('senderUsername');
     if (referralCode && referralCode.length === 10 && senderUsername) {
@@ -99,7 +102,6 @@ export class CartComponent implements OnInit {
     .subscribe(result => {
       this.isSmallScreen = result.matches;
     });
-    this.getAllArticleInPanier();
     setTimeout(() => {
       this.onResize();
     });
@@ -140,6 +142,7 @@ export class CartComponent implements OnInit {
     this.countryService.getById(event.value).subscribe(datas => {
       this.selectedCountry = datas;
       const id = this.selectedCountry.id;
+      this.indicatif = this.selectedCountry.indicatif; // Mettre à jour l'indicatif
       this.deliveryCountry = this.selectedCountry.nom; // Mettre à jour le pays de livraison
 //      this.getCityByCountry(datas.nom);
       this.getAllRegionsByCountry(id);
@@ -276,8 +279,9 @@ export class CartComponent implements OnInit {
   
       // Vérifie si au moins un produit étranger est présent
       this.hasForeignProducts = Array.from(countryNamesSet).some(
-        name => name !== this.selectedCountry.nom
+        name => name !== this.selectedCountry.nom!
       );
+    //  this.localSellersExistSee = this.hasForeignProducts;
   
      // console.log("🌍 Pays vendeurs (locaux + étrangers):", this.sellerCountries.map(c => c.nom));
       //console.log("📦 hasForeignProducts:", this.hasForeignProducts);
@@ -399,6 +403,7 @@ export class CartComponent implements OnInit {
       const localSellersExist = this.sellerCountries.some(
         (c: any) => c.nom === this.selectedCountry.nom
       );
+      this.localSellersExistSee = localSellersExist
     
       const foreignSellersExist = this.sellerCountries.some(
         (c: any) => c.nom !== this.selectedCountry.nom
@@ -417,6 +422,7 @@ export class CartComponent implements OnInit {
     
       // Cas 1 et 2 : que des produits locaux
       if (localSellersExist && !foreignSellersExist) {
+       // this.hasForeignProducts = hasForeignProducts;
         this.isForeignCity = false;
     
         if (isCapital) {
@@ -438,6 +444,7 @@ export class CartComponent implements OnInit {
       // Cas 4 et 5 : produits locaux + étrangers
       if (localSellersExist && foreignSellersExist) {
         this.isForeignCity = false;
+        this.hasForeignProducts = foreignSellersExist; // Mettre à jour l'état des produits étrangers
     
         if (isCapital) {
           // Cas 4

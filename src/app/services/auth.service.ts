@@ -7,6 +7,7 @@ import { ApiService } from './api.service';
 import { CommonMessageService } from './common-message.service';
 import { TokenStorageService } from './token-storage.service';
 import { User } from '../models/user.models';
+import { log } from 'console';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -19,9 +20,9 @@ export class AuthenticationService {
 
     public async updateUserInfo(id : any, data : any){
         try {
-          console.log("data updateUserInfo :::: ",data);
+          //console.log("data updateUserInfo :::: ",data);
             let res : any = await this.api.putFile('/users/update-user?id='+id,data).toPromise()
-             console.log("res updateUserInfo :::: ",res);
+           //  console.log("res updateUserInfo :::: ",res);
             if (res) {
                 sessionStorage.setItem('currentUser', JSON.stringify(res));
             }
@@ -107,7 +108,6 @@ resetPassword(username: string, newpassword: string): Observable<any> {
 
 
      getUserInfo(username: string): Observable<any>{
-   
        return this.api.get(`/users/info-user-by-username?username=`+username);
      
     }
@@ -166,7 +166,7 @@ resetPassword(username: string, newpassword: string): Observable<any> {
      * @param countries le pays d'utilisateur
      */
     signup(formData: any): any {
-        console.log("::::::::::::::: FORM DATA = ",formData.get("countries"));
+       // console.log("::::::::::::::: FORM DATA = ",formData.get("countries"));
         return this.api.postFile(`/users/register`, formData);
     }
 

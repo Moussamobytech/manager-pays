@@ -149,16 +149,23 @@
         </span>
       </p>
       <p> 🚚 Délai de livraison estimée: <strong>{{ deliveryDelay }}</strong></p>
-      <p *ngIf="customerPhone">📲 Le livreur te contactera au: <strong>{{ customerPhone }}</strong></p>
-      <div *ngIf="isForeignCity" class="section-div">
-        <p> 💰 Frais de livraison valables jusqu'à 2 kg.Au-delà, on te contacte avant envoi</p>
-        <p class="whatsapp-help">
+      <p *ngIf="customerPhone">📲 Le livreur te contactera au: <strong>+{{indicatif}}{{ customerPhone }}</strong></p>
+     
+      <!-- ✅ Condition d'affichage modifiée ici -->
+  <div class="section-div" *ngIf="isForeignCity || hasForeignProducts">
+    <p>
+      <span>💰0 Frais de livraison valables jusqu'à 2 kg.</span>
+      <span style="margin-left: 10px;">Au-delà, on te contacte avant envoi.</span>
+    </p>
+    
+  </div>
+
+       <p class="whatsapp-help">
           🙋‍♀️ Besoin d'aide ? Contacte-nous
           <span class="whatsapp-icon" (click)="openWhatsapp()">
             <img src="assets/icons/whatsapp_PNG95159.png" width="40" height="40" alt="whatsApp">
           </span>
         </p>
-      </div>
     </div>
 
 

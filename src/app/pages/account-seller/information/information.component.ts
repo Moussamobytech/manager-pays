@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { matchingPasswords } from '../../../theme/utils/app-validators';
@@ -11,6 +11,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BannersService } from 'src/app/services/banners.service';
 import { CampagneService } from 'src/app/services/campagne.service';
 import { ProductService } from 'src/app/services/product.service';
+import { log } from 'console';
+
+
 
 @Component({
   selector: 'app-information',
@@ -18,6 +21,19 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./information.component.scss']
 })
 export class InformationComponent implements OnInit {
+
+
+  @Input() fileAccept: string = 'image/*';
+  @Input() isDisabled: boolean = false;
+
+  @Output() fileSelected = new EventEmitter<File>();
+  onNativeInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.fileSelected.emit(input.files[0]);
+    }
+  }
+  
   infoForm: UntypedFormGroup;
   passwordForm: UntypedFormGroup;
   currentUser: any
@@ -54,6 +70,14 @@ export class InformationComponent implements OnInit {
   shopLink: string;
   logoExiste: any;
   produitsLength: any = 0;
+
+
+  public LogoForm: UntypedFormGroup;
+  defaultLogo = 'assets/images/icons/shop_icon.png';
+  selectedLogo: File | null = null;
+ 
+  uploadingLogo: boolean = false;
+
 
   constructor(public formBuilder: UntypedFormBuilder,
     private auth: AuthenticationService,
@@ -142,7 +166,8 @@ export class InformationComponent implements OnInit {
       adresse: [cur.adresse || null],
       // ////////////////////////////////////////////////
       email: [(cur.email || null), Validators.pattern(/^[a-zA-Z]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
-      description: [cur.description || null],
+     // description: [cur.description || null],
+      description: [cur.description || null, [Validators.maxLength(70)]],
       logo: [logo || null],
       banners: [curBanners || null],
       country: [cur.countries?.id || null],
@@ -245,16 +270,116 @@ export class InformationComponent implements OnInit {
 
   public async onInfoFormSubmit(values: any): Promise<void> {
     if (!this.infoForm.valid) return;
+  
+    if (this.wordCount === this.maxWords) {
+      this.cm.openFailureSnackBar("La description ne doit pas dépasser 70 mots.");
+      return;
+    }
+  
+  
+    const data: {
+      firstname: any;
+      lastname: any;
+      phoneNumber: any;
+      email: any;
+      adresse: any;
+      name: any;
+      description: any;
+      type: string;
+      idCountry: any;
+      bg1?: File;
+      bg2?: File;
+      bg3?: File;
+      logo?: any;
+    } = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      phoneNumber: values.phoneNumber,
+      email: values.email,
+      adresse: values.adresse,
+      name: values.boutiqueName,
+      description: values.description,
+      type: this.currentProfile(values.profiles),
+      idCountry: values.country,
+      logo: values.logo
+    };
+  
+  
+    // 🧠 Récupérer le vrai fichier depuis l'objet InputFile
+    let logoFile: File | null = null;
+    if (Array.isArray(data.logo) && data.logo.length > 0) {
+      const logoInput = data.logo[0];
+      if (logoInput?.file instanceof File) {
+        logoFile = logoInput.file;
+      }
+    }
+  
+    // 🗜️ Compression et upload du logo si présent
+    if (logoFile) {
+      try {
+        const compressed = await this.imgCompressService.compressImage(logoFile, 1200, 800, 70);
+        const renamed = new File([compressed], `logo-${Date.now()}.jpeg`, { type: compressed.type });
+        await this.auth.uploadImange(this.currentUser.username, renamed).toPromise();
+      } catch (err) {
+        console.error("Erreur lors de la compression du logo :", err);
+      }
+    }
+  
+    // 📤 Mise à jour des infos texte
+    const res = await this.auth.updateUserInfo(this.currentUser.id, data);
+  
+    if (res === "OK") {
+      this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', {
+        panelClass: 'success',
+        verticalPosition: 'top',
+        duration: 3000,
+      });
+  
+      this.currentUser = await this.auth.info(this.currentUser.username);
+  
+      // 📦 Compression des bannières
+      const banners: { bg1: File | null; bg2: File | null; bg3: File | null } = { bg1: null, bg2: null, bg3: null };
+      const compressedFiles = await this.compressAndPrepareImages();
+  
+      compressedFiles.forEach((file, i) => {
+        banners[`bg${i + 1}` as keyof typeof banners] = file;
+      });
+  
+      if (banners.bg1 || banners.bg2 || banners.bg3) {
+        const formData = new FormData();
+        formData.append('userId', this.currentUser.id);
+        if (banners.bg1) formData.append('image1', banners.bg1);
+        if (banners.bg2) formData.append('image2', banners.bg2);
+        if (banners.bg3) formData.append('image3', banners.bg3);
+        await this.bannersService.addBanners(formData).toPromise();
+      }
+  
+      this.router.navigate(['/account-seller/settings']);
+    } else {
+      this.snackBar.open('Une erreur est intervenue lors de la mise à jour de vos informations !', '×', {
+        panelClass: 'error',
+        verticalPosition: 'top',
+        duration: 3000,
+      });
+    }
+  }
+  
+  
+  
+ /* public async onInfoFormSubmit(values: any): Promise<void> {
+    if (!this.infoForm.valid) return;
 
     if (this.wordCount == this.maxWords) {
       this.cm.openFailureSnackBar("La description ne doit pas dépasser 70 mots.");
       return;
     }
 
+    console.log("1 ::::: Form data to be submitted:", this.infoForm.value);
+
     // Déclaration du type
     const data: { firstname: any; lastname: any; phoneNumber: any;
       email: any; adresse: any;name: any;description: any;
-      type: string; idCountry: any;bg1?: File;bg2?: File;bg3?: File; }
+      type: string; idCountry: any;bg1?: File;bg2?: File;bg3?: File; logo?: File }
       = {
       firstname: values.firstname,
       lastname: values.lastname,
@@ -265,11 +390,16 @@ export class InformationComponent implements OnInit {
       description: values.description,
       type: this.currentProfile(values.profiles),
       idCountry: values.country,
+      logo: values.logo // Initialisé à null, sera mis à jour si un logo est sélectionné
     };
 
 
+    console.log("2 Logo ::::: Form data to be submitted:", data.logo);
 
     const res = await this.auth.updateUserInfo(this.currentUser.id, data);
+
+   // console.log("::::: RES Form data to be submitted:", res);
+
 
     if (res === "OK") {
       this.snackBar.open('Les informations de votre compte ont été mises à jour avec succès !', '×', {
@@ -307,6 +437,7 @@ export class InformationComponent implements OnInit {
         });
       }
     }
+    */
 
 
   public async onPasswordFormSubmit(values: Object): Promise<void> {
@@ -455,11 +586,30 @@ export class InformationComponent implements OnInit {
 
   public stats(id) {
     this.productService.stats(id).then((data: any) => {
-      console.log("Statistiques des produits:", data);
       this.produitsLength =  data.actif;
-      console.log("Nombre de produits:", data.actif);
     });
   }
 
+
+
+  
+  onLogoAccepted(inputFile: { file?: File, preview?: string | ArrayBuffer, link?: string }) {
+    console.log('✅ Logo accepté :', inputFile);
+  
+    if (inputFile.file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.infoForm.patchValue({
+          logo: [{ file: inputFile.file, preview: reader.result as string }] // <-- cast here
+        });
+      };
+      reader.readAsDataURL(inputFile.file);
+    }
+  }
+  
+  
+
+  
+  
 }
 

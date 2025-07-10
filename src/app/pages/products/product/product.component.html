@@ -57,8 +57,14 @@
       </div>
 
       <div class="controls-container">
-        <div class="user-section"><i class="fa-solid fa-shop"></i> Vendue par <span>{{product?.userNom}}</span></div>
-        <!-- <div class="referals">
+        <div class="user-section">
+    
+            <i class="fa-solid fa-shop"></i>
+            Vendue par
+            <span class="seller-link" style="cursor: pointer; color: rgb(5, 5, 159);" (click)="openSellerShop(user?.username)">
+              {{ user?.firstname }} {{ user?.lastname }}
+            </span>
+                  <!-- <div class="referals">
           <div class="referal-btn">
             <div><span>P</span></div>
             <div>

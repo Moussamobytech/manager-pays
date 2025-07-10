@@ -18,7 +18,9 @@
   </mat-expansion-panel>
 -->
 <div *ngIf="sellerInfo?.description" class="description-container text-center" fxLayout="column" fxLayoutAlign="center center">
-  <p class="shop-description text-center">{{sellerInfo?.description}}</p>
+  <p class="shop-description text-center" style="text-align: center;font-size: 15px;">
+    {{limitDescription(sellerInfo?.description, 70)}}
+  </p>
 </div>
 
 </div>
@@ -97,7 +99,7 @@
       <!-- </ng-scrollbar> -->
     </mat-sidenav>
     <mat-sidenav-content class="all-products" ngClass.gt-sm="p-left">
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center" class="filter-row">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center mb-5" class="filter-row">
         <div fxLayout="row" fxLayoutAlign="start center">
           <button *ngIf="!sidenavOpen" mat-icon-button (click)="sidenav.toggle()" class="toggle-button">
             <mat-icon class="icon-menu">menu</mat-icon>
@@ -133,7 +135,7 @@
         </div> -->
       </div>
 
-      <div class="search-container">
+     <!-- <div class="search-container">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="shop-search">
           <input matInput [placeholder]="(sidenavOpen)?'Cherchez un produit, categorie...':'Produit, Categorie...'" autocomplete="off" class="search-input" [(ngModel)]="searchTerm"
           (input)="onSearchChange()" />
@@ -152,9 +154,9 @@
           </div>
         </div>
       </div>
+    -->
 
-
-      <div class="onLarge-screen" *ngIf="usePagination">
+      <div class="onLarge-screen mt-3" *ngIf="usePagination">
         <div fxLayout="row wrap" class="products-wrapper">
           <div *ngFor="let product of sellerProducts | paginate: { itemsPerPage: viewCount, currentPage: page }"
           [fxFlex]="(viewCol==25&&domWidth>360)?50:100" [fxFlex.gt-xs]="viewCol" class="col">
@@ -172,7 +174,7 @@
         </div>
       </div>
 
-      <div class="onSmall-screen" *ngIf="!usePagination">
+      <div class="onSmall-screen mt-3" *ngIf="!usePagination">
         <div fxLayout="row wrap" class="products-wrapper">
           <div *ngFor="let product of sellerProducts"
                [fxFlex]="(viewCol==25&&domWidth>360)?50:100"

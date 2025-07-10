@@ -141,7 +141,7 @@ $fid_green: #548580;
   @media screen and (max-width: 600px) {
     width: 100%;
 
-    button{
+    button {
       font-size: .8rem;
       padding: auto;
     }
@@ -152,7 +152,7 @@ $fid_green: #548580;
     border: 1px solid #e0e0e0;
     padding: 0 16px;
     white-space: nowrap;
-    
+
     &.active {
       background-color: #eeeeee;
       font-weight: 500;
@@ -182,7 +182,7 @@ $fid_green: #548580;
   transition: box-shadow 0.3s;
 
   &:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -198,7 +198,7 @@ $fid_green: #548580;
   overflow: hidden;
   border-radius: 4px;
   margin-right: 14px;
-  
+
   img {
     width: 100%;
     height: 100%;
@@ -221,9 +221,9 @@ $fid_green: #548580;
   border-radius: 16px;
   font-size: 12px;
   margin-bottom: 4px;
-  
+
   // Base styling for .dot
-  + .order-info .dot {
+  +.order-info .dot {
     font-size: 3rem;
     vertical-align: middle;
     line-height: 15px;
@@ -236,18 +236,18 @@ $fid_green: #548580;
     cancelled: $warn
   );
 
-  // Loop over statuses
-  @each $status, $color in $statuses {
-    &.#{$status} {
-      background-color: $color;
-      color: white;
+// Loop over statuses
+@each $status, $color in $statuses {
+  &.#{$status} {
+    background-color: $color;
+    color: white;
 
-      + .order-info .dot,
-      + .order-info + .order-location mat-icon {
-        color: $color;
-      }
+    +.order-info .dot,
+    +.order-info+.order-location mat-icon {
+      color: $color;
     }
   }
+}
 }
 
 .order-info {
@@ -261,7 +261,7 @@ $fid_green: #548580;
   align-items: center;
   color: #757575;
   font-size: 14px;
-  
+
   mat-icon {
     font-size: 16px;
     height: 16px;
@@ -272,10 +272,10 @@ $fid_green: #548580;
 
 .order-action {
   margin-left: 16px;
-  
+
   mat-icon {
     transition: transform 0.3s;
-    
+
     &.rotated {
       transform: rotate(180deg);
     }
@@ -284,10 +284,10 @@ $fid_green: #548580;
 
 .expanded-details {
   padding: 0 16px 16px;
-  
+
   .expanded-content {
     padding-top: 16px;
-    
+
     p {
       margin: 8px 0;
       font-size: 14px;
@@ -305,9 +305,35 @@ $fid_green: #548580;
   border: 1px solid #e0e0e0;
   border-radius: 24px;
   padding: 0 24px;
-  
+
   span {
     margin-right: 8px;
   }
 }
 
+/* Cacher la version mobile sur les grands écrans */
+.mobile-only {
+  display: none;
+}
+
+/* Afficher la version desktop par défaut */
+.desktop-only {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Sur les petits écrans (< 768px par exemple), on inverse */
+@media screen and (max-width: 600px) {
+  .search-box {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+}

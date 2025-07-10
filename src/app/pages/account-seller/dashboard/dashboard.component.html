@@ -130,7 +130,7 @@
   </div>
 </div> -->
 
-<div fxLayout="row wrap" class="card-container">
+<div fxLayout="row wrap" class="card-container mb-5" >
   <div *ngFor="let card of cards" fxFlex="47.8" fxFlex.gt-xs="32" fxFlex.gt-sm="24" [routerLink]="card.routerLink">
     <div class="card" [ngClass]="card.cardClass">
       <div class="card-header">

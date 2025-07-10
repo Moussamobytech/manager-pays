@@ -115,7 +115,7 @@
   <div class="orders-header">
     <h1>Mes commandes</h1>
     <div class="search-add-container">
-      <div class="search-box" fxFlex="70">
+      <div class="search-box" fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="40">
         <mat-icon>search</mat-icon>
         <input type="text" placeholder="Rechercher" [(ngModel)]="searchTerm" (input)="filterOrders()">
       </div>
@@ -127,23 +127,38 @@
   
   <!-- Filters -->
   <div class="filters-container">
-    <div class="status-filters">
+    <div class="status-filters desktop-only">
       <button mat-button [class.active]="selectedStatusFilter === ''" (click)="filterByStatus('')">
-        Tous ({{getOrderCountByStatus('tout')}})
+        Tous <span class="nbre">({{getOrderCountByStatus('tout')}})</span>
       </button>
       <button mat-button [class.active]="selectedStatusFilter === 'en-attente'" (click)="filterByStatus('en-attente')">
-        En attente ({{getOrderCountByStatus('en-attente')}})
+        En attente <span class="nbre">({{getOrderCountByStatus('en-attente')}})</span>
       </button>
       <button mat-button [class.active]="selectedStatusFilter === 'livre'" (click)="filterByStatus('livre')">
-        Livrée ({{getOrderCountByStatus('livre')}})
+        Livrée <span class="nbre">({{getOrderCountByStatus('livre')}})</span>
       </button>
       <button mat-button [class.active]="selectedStatusFilter === 'valide'" (click)="filterByStatus('valide')">
-        Validée ({{getOrderCountByStatus('valide')}})
+        Validée <span class="nbre">({{getOrderCountByStatus('valide')}})</span>
       </button>
       <button mat-button [class.active]="selectedStatusFilter === 'annule'" (click)="filterByStatus('annule')">
-        Annulée ({{getOrderCountByStatus('annule')}})
+        Annulée <span class="nbre">({{getOrderCountByStatus('annule')}})</span>
       </button>
     </div>
+
+<!-- Affiché uniquement sur petits écrans -->
+<div class="mobile-only">
+  <mat-form-field appearance="outline" style="width: 100%;">
+    <mat-label>Filtrer par statut</mat-label>
+    <mat-select [(value)]="selectedStatusFilter" (selectionChange)="filterByStatus($event.value,true)">
+      <mat-option value="">Tous ({{getOrderCountByStatus('tout')}})</mat-option>
+      <mat-option value="en-attente">En attente ({{getOrderCountByStatus('en-attente')}})</mat-option>
+      <mat-option value="livre">Livrée ({{getOrderCountByStatus('livre')}})</mat-option>
+      <mat-option value="valide">Validée ({{getOrderCountByStatus('valide')}})</mat-option>
+      <mat-option value="annule">Annulée ({{getOrderCountByStatus('annule')}})</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
     
     <mat-form-field appearance="outline" class="time-filter">
       <mat-select [(value)]="selectedTimeFilter" (selectionChange)="filterByTime()">

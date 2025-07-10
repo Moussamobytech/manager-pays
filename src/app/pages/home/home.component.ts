@@ -7,6 +7,7 @@ import { SwiperConfigInterface } from 'src/app/theme/components/swiper/swiper.mo
 import { AuthenticationService } from 'src/app/services/auth.service';
 import { combineLatest, forkJoin, from, map, Observable, of } from 'rxjs';
 import { Category } from 'src/app/models/category.models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +43,8 @@ export class HomeComponent implements OnInit {
     public appService: AppService,
     public produitService: ProductService,
     public campagneService: CampagneService,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -119,6 +121,7 @@ export class HomeComponent implements OnInit {
 
   onSubCategoryClick(subCategory:any): void {
     this.selectedSubCategory = subCategory;
+    this.router.navigate(['/categories', subCategory.id]);
   }
 
 

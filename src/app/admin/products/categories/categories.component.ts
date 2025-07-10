@@ -48,7 +48,6 @@ export class CategoriesComponent implements OnInit {
 
   public getCategoriesAll(){
     this.appService.getCategories().subscribe(data => {
-      console.log(data)
       this.all = data;
     });
   }

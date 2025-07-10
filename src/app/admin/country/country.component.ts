@@ -450,4 +450,15 @@ export class CountryComponent implements OnInit {
         return '';
     }
   }
+
+  limitDescription(description: string, limit: number): string {
+    if (!description) return '';
+    if (description.length <= limit) return description;
+    return description.substring(0, limit) + '...';
+  }
+  limitIndicatif(indicatif: string, limit: number = 10): string {
+    if (!indicatif) return '';
+    if (indicatif.length <= limit) return indicatif;
+    return indicatif.substring(0, limit) + '...';
+}
 }

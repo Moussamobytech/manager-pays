@@ -180,8 +180,6 @@ this.sellerId = username;
       map((p)=>p.filter((p)=>p.etat=="ACTIF")),
       tap((products) => {
 
-        console.log("Nombre de produits récupérés: ", products.length);
-
         this.sellerProducts = products.slice(0, !this.usePagination ? this.viewCount : undefined);
         this.unchangedSellerProducts = products;
         this.loadedProductCount = this.viewCount;
@@ -412,5 +410,10 @@ this.sellerId = username;
     if (clipboardData && !/^\d+$/.test(clipboardData)) {
       event.preventDefault();
     }
+  }
+
+  limitDescription(description: string, limit: number = 100): string {
+    if (!description) return '';
+    return description.length > limit ? description.slice(0, limit) + '...' : description;
   }
 }

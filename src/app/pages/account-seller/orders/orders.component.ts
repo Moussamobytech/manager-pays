@@ -46,6 +46,8 @@ export class OrdersComponent implements OnInit {
     } else {
       this.router.navigate(['/']);
     }
+    ;
+    this.filterByStatus('en-attente');
   }
 
   getAllCommande() {
@@ -95,11 +97,17 @@ export class OrdersComponent implements OnInit {
     this.applyFilters();
   }
 
-  filterByStatus(status: string) {
-    this.selectedStatusFilter = this.selectedStatusFilter === status ? '' : status;
-    this.loadedPageCount = this.pageSize; // Reset pagination when changing filter
+  filterByStatus(status: string, force: boolean = false) {
+    if (force) {
+      this.selectedStatusFilter = status;
+    } else {
+      this.selectedStatusFilter = this.selectedStatusFilter === status ? '' : status;
+    }
+    
+    this.loadedPageCount = this.pageSize;
     this.applyFilters();
   }
+  
 
   filterByTime() {
     this.loadedPageCount = this.pageSize; // Reset pagination when changing time filter
