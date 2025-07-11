@@ -819,12 +819,13 @@ onlyCartItemCount:any = 0
       ).subscribe(
         () => {
           // Paiement Kkiapay (si besoin)
-          openKkiapayWidget({
+         /* openKkiapayWidget({
             amount: (this.grandTotal + this.transportFee) - this.getTotalReduction(),
             api_key: "ed32fbf020e011f08a81bdf26ae54af2",
             sandbox: true,
             phone: "97000000",
           });
+          */
           this.snackBar.open('Commande initialisée avec succès', '×', {
             panelClass: 'success',
             verticalPosition: 'top',
@@ -900,12 +901,12 @@ onlyCartItemCount:any = 0
             ).subscribe(
               () => {
                 // Paiement Kkiapay (si besoin)
-                openKkiapayWidget({
+              /*  openKkiapayWidget({
                   amount: (this.grandTotal + this.transportFee) - this.getTotalReduction(),
                   api_key: "ed32fbf020e011f08a81bdf26ae54af2",
                   sandbox: true,
                   phone: "97000000",
-                });
+                });*/
                 this.snackBar.open('Commande initialisée avec succès', '×', {
                   panelClass: 'success',
                   verticalPosition: 'top',

@@ -53,7 +53,7 @@
     </mat-toolbar>
     <!-- <app-menu fxShow="false" fxShow.gt-sm></app-menu> -->
     <mat-toolbar fxShow="false" fxShow.gt-sm id="menu-toolbar" class="top-navbar mat-elevation-z2" fxLayoutAlign="center center">
-      <a *ngFor="let category of navCategories" mat-button [routerLink]="['/categories', category.cle]" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ category.nom }}</a>
+      <a *ngFor="let category of navCategories" mat-button [routerLink]="['/categories', category.id]" routerLinkActive="horizontal-active-link" [routerLinkActiveOptions]="{exact:true}">{{ category.nom }}</a>
     </mat-toolbar>
   </div>
 
