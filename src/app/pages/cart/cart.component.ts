@@ -290,45 +290,6 @@ export class CartComponent implements OnInit {
     }
   }
   
-  
-  
-  /* getAllArticleInPanier(){
-    // Parse the stringified JSON array
-    const panierString = sessionStorage.getItem('panier');
-    this.productList = panierString ? JSON.parse(panierString) : [];
-
-
-   // console.log("::::::::::::::: PRODUCT LIST = ",this.productList[0]);
-
-    // Check if the productList is an array
-    if (Array.isArray(this.productList)) {
-      // Récupérer le pays du vendeur du premier produit
-      if (this.productList.length > 0 && this.productList[0].user) {
-        this.userContact = this.productList[0].contact;
-        this.getSellerCountry(this.productList[0].contact);
-      }
-
-      this.productList.forEach(product => {
-        this.total[product.id] = product.cartCount * parseFloat(product.priceBasic);
-        if(product.pricePromotion){
-          this.grandTotal += product.cartCount * parseFloat(product.pricePromotion);
-        }
-        else{
-          this.grandTotal += product.cartCount * parseFloat(product.priceBasic);
-        }
-
-        this.cartItemCount[product.id] = product.cartCount;
-        this.cartItemCountTotal += product.cartCount;
-        this.product = product;
-      });
-    } else {
-      console.error("Product list is not an array.");
-    }
-
-    
-  }
-
-  */
 
   // Nouvelle méthode pour récupérer le pays du vendeur
   getSellerCountry(sellerId: string): Promise<any> {
@@ -372,28 +333,7 @@ export class CartComponent implements OnInit {
     });
   }
   
-  
-  /*getSellerCountry(sellerId: string) {
-    this.authService.getUserByPhone(sellerId).subscribe(
-      (seller) => {
 
-        
-        if (seller && seller.countries) { 
-          this.sellerCountry = seller.countries.id ? seller.countries : null;
-          if (this.sellerCountry) {
-            // Vérifier si le pays du vendeur est défini
-            this.selectedCountry = this.sellerCountry;
-            console.log("selectedCountry hh Country: ", this.selectedCountry);
-            return this.selectedCountry;
-            // this.getCityByCountry(this.sellerCountry.id);
-          }
-        }
-      },
-      (error) => {
-        console.error("Erreur lors de la récupération des informations du vendeur:", error);
-      }
-    );
-  }*/
   
 
     checkCityType(city: any, hasForeignProducts: boolean = false) {
@@ -461,107 +401,9 @@ export class CartComponent implements OnInit {
         return;
       }
     }
-    
-    
-/* récente méthode pour vérifier le type de ville 
-  checkCityType(city: any, hasForeignProducts: boolean = false) {
-
-    const isSameCountry = this.selectedCountry?.nom === this.sellerCountry?.nom;
-    const isCapital = city?.capitale === true;
-//    console.log("CASE 00 : ", hasForeignProducts);
-
-    if (!city || !this.selectedCountry || !this.sellerCountry) return;
-    console.log("CASE 0 : ", hasForeignProducts);
   
-    // Cas 3 : Client et vendeur ne sont pas dans le même pays
-    if (!isSameCountry) {
-    
-      console.log("CASE 1 : ", hasForeignProducts);
-
-      this.isForeignCity = true;
-      this.isCapitalCity = false;
-      this.isOtherRegion = false;
   
-      this.transportFee = 12000;
-      this.deliveryDelay = '5 à 7 jours';
-      return;
-    }
-  
-    // Cas 1 ou 2 : Même pays
-    if (isCapital && !hasForeignProducts) {
-      console.log("CASE 2 : ",isCapital," - ",hasForeignProducts);
-
-      // Cas 1 : même pays et capitale
-      this.isCapitalCity = true;
-      this.isOtherRegion = false;
-      this.isForeignCity = false;
-  
-      this.transportFee = 1500;
-      this.deliveryDelay = '48h';
-    } else if (!isCapital && !hasForeignProducts) {
-      console.log("CASE 3 : ",isCapital," - ",hasForeignProducts);
-
-      // Cas 2 : même pays mais autre région
-      this.isCapitalCity = false;
-      this.isOtherRegion = true;
-      this.isForeignCity = false;
-  
-      this.transportFee = 2500;
-      this.deliveryDelay = '3 à 4 jours';
-    } else if (isCapital && hasForeignProducts) {
-      console.log("CASE 4 : ",isCapital," - ",hasForeignProducts);
-
-      // Cas 4 : capitale + produits étrangers
-      this.isCapitalCity = true;
-      this.isOtherRegion = false;
-      this.isForeignCity = false;
-  
-      this.transportFee = 1500 + 12000;
-      this.deliveryDelay = '5 à 7 jours';
-    } else if (!isCapital && hasForeignProducts) {
-      console.log("CASE 5 : ", hasForeignProducts);
-
-      // Cas 5 : région + produits étrangers
-      this.isCapitalCity = false;
-      this.isOtherRegion = true;
-      this.isForeignCity = false;
-  
-      this.transportFee = 2500 + 12000;
-      this.deliveryDelay = '5 à 7 jours';
-    }
-
-    console.log("City Type Check: ",);
-  }
-  */
-  
-  // Modifier la méthode checkCityType pour utiliser le pays du vendeur
-  /*checkCityType(cityId: any) {
-
-    if(this.selectedCountry.nom != this.sellerCountry.nom){
-      this.isForeignCity = true;
-      this.isCapitalCity = false;
-      this.isOtherRegion = false;
-      this.transportFee = 12000; // Frais de transport pour une ville étrangère
-      this.deliveryDelay = '5 à 7 jours';
-    }
-    if(this.selectedCountry.nom == this.sellerCountry.nom){
-
-      if(cityId.capitale){
-        this.isCapitalCity = true;
-        this.isOtherRegion = false;
-        this.isForeignCity = false;
-        this.transportFee = 1500; // Frais de transport pour la capitale
-        this.deliveryDelay = '48h';
-      }else{
-        this.isCapitalCity = false;
-        this.isOtherRegion = true;
-        this.isForeignCity = false;
-        this.transportFee = 2500; // Frais de transport pour une autre région
-        this.deliveryDelay = '3 à 4 jours';
-      }
-
-    }
-  }*/
+ 
 
 //:::::::::::::::::::::::::PANIER:::::::::::::::::::::::::::::::::::::::::::
 monPanierContient(){
@@ -688,7 +530,7 @@ onlyCartItemCount:any = 0
                 this.populateBillingForm(datas);
                 this.user = datas;
 
-                console.log("User loaded by phone:", this.user);  
+              //  console.log("User loaded by phone:", this.user);  
 
              //   sessionStorage.setItem('currentUser', JSON.stringify(this.user));
         }
@@ -806,7 +648,7 @@ onlyCartItemCount:any = 0
     // Cas 1 : Utilisateur déjà connecté
     if (user != null) {
 
-      console.log("1 LES REDUCTS APPLIQUEE: ", productsWithReduction);
+     // console.log("1 LES REDUCTS APPLIQUEE: ", productsWithReduction);
 
       this.appService.addCommande(
         user.id,
@@ -819,13 +661,13 @@ onlyCartItemCount:any = 0
       ).subscribe(
         () => {
           // Paiement Kkiapay (si besoin)
-         /* openKkiapayWidget({
+          openKkiapayWidget({
             amount: (this.grandTotal + this.transportFee) - this.getTotalReduction(),
             api_key: "ed32fbf020e011f08a81bdf26ae54af2",
             sandbox: true,
             phone: "97000000",
           });
-          */
+          
           this.snackBar.open('Commande initialisée avec succès', '×', {
             panelClass: 'success',
             verticalPosition: 'top',
@@ -887,7 +729,7 @@ onlyCartItemCount:any = 0
             const phone = formData.get('phoneNumber') as string;
             const myUser = await this.authService.getUserByPhone(phone).toPromise();
 
-            console.log("2 LES REDUCTS APPLIQUEE: ", productsWithReduction);
+         //   console.log("2 LES REDUCTS APPLIQUEE: ", productsWithReduction);
 
 
             await this.appService.addCommande(
@@ -901,12 +743,12 @@ onlyCartItemCount:any = 0
             ).subscribe(
               () => {
                 // Paiement Kkiapay (si besoin)
-              /*  openKkiapayWidget({
+                openKkiapayWidget({
                   amount: (this.grandTotal + this.transportFee) - this.getTotalReduction(),
                   api_key: "ed32fbf020e011f08a81bdf26ae54af2",
                   sandbox: true,
                   phone: "97000000",
-                });*/
+                });
                 this.snackBar.open('Commande initialisée avec succès', '×', {
                   panelClass: 'success',
                   verticalPosition: 'top',
