@@ -1,0 +1,20 @@
+<p>vendeur-select-dialog-component works!</p>
+<h1 mat-dialog-title>Sélectionner un vendeur</h1>
+
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Vendeur</mat-label>
+    <mat-select [(value)]="selectedUsername">
+      <mat-option *ngFor="let vendeur of vendeurs" [value]="vendeur.username">
+        {{ vendeur.firstname }}  {{ vendeur.lastname || vendeur.username }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Annuler</button>
+  <button mat-button color="primary" [mat-dialog-close]="selectedUsername" [disabled]="!selectedUsername">
+    Confirmer
+  </button>
+</div>

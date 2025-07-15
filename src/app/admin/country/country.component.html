@@ -27,7 +27,7 @@
             <div *ngFor="let country of ( sortedCountries || allCountries) | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
               <div class="mat-mdc-cell" >{{country.nom}}</div>
                 <div class="mat-mdc-cell" >{{country.indicatif}}</div>
-                <div class="mat-mdc-cell">{{ limitDescription(country.description,50) }}</div>
+                <div class="mat-mdc-cell"  >{{ limitDescription(country.description,50) }}</div>
                 <div class="mat-mdc-cell">{{ country.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</div>
   
   

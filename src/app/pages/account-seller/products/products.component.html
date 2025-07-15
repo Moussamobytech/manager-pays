@@ -61,8 +61,8 @@
     <div class="header-contents">
       <div class="search-container">
         <div fxLayout="row" fxLayoutAlign="space-between center" class="shop-search">
-          <input matInput placeholder="Cherchez un produit" autocomplete="off"
-          class="search-input" [formControl]="searchTerm"/>
+          <input matInput placeholder="Cherchez un produit" autocomplete="off" class="search-input"
+            [formControl]="searchTerm" />
           <button class="search-btn" mat-icon-button matSuffix disabled>
             <mat-icon class="search-icon">search</mat-icon>
           </button>
@@ -92,7 +92,8 @@
               <span class="product-name">{{ product.nom }}</span>
             </div>
             <div class="product-status">
-              <span class="status-badge" [ngClass]="{ 'active': product.etat === 'ACTIF', 'inactive': product.etat === 'INACTIF' }">
+              <span class="status-badge"
+                [ngClass]="{ 'active': product.etat === 'ACTIF', 'inactive': product.etat === 'INACTIF' }">
                 {{ formatedEtat(product.etat) }}
               </span>
               <span *ngIf="product.gain" class="gain-badge">
@@ -103,7 +104,8 @@
               <p *ngIf="!product.pricePromotion||product.pricePromotion==product.priceBasic" class="price-basic">
                 Prix : {{ product.priceBasic | number : '1.0-2' }} F
               </p>
-              <p *ngIf="product.pricePromotion!='null'&&product.pricePromotion!=product.priceBasic" class="price-promotion text-truncate">
+              <p *ngIf="product.pricePromotion!='null'&&product.pricePromotion!=product.priceBasic"
+                class="price-promotion text-truncate">
                 Prix : {{ product.pricePromotion | number : '1.0-2' }} F
                 <span class="original-price">
                   {{ product.priceBasic | number : '1.0-2' }} F
@@ -112,10 +114,24 @@
             </div>
 
             <div class="product-controls">
-              <label class="campaignswitch">
+              <!--<label class="campaignswitch">
                 <input type="checkbox" [checked]="product.etat === 'ACTIF'" (change)="setStatus(product)" />
                 <span class="campaignslider" [ngClass]="{ 'active': product.etat === 'ACTIF', 'inactive': product.etat === 'INACTIF' }"></span>
+              </label> -->
+
+              <label class="campaignswitch"
+                [matTooltip]="product.globallyDeactivated ? 'Produit désactivé par un administrateur' : ''">
+                <input type="checkbox" [checked]="product.etat === 'ACTIF'" [disabled]="product.globallyDeactivated"
+                  (change)="setStatus(product)" />
+                <span class="campaignslider" [ngClass]="{ 
+      'active': product.etat === 'ACTIF', 
+      'inactive': product.etat === 'INACTIF', 
+      'disabled-toggle': product.globallyDeactivated 
+    }">
+                </span>
               </label>
+
+
               <button class="edit-btn" (click)="edit(product.id)">
                 <mat-icon>edit</mat-icon>
               </button>
@@ -132,10 +148,11 @@
           </div>
         </div>
 
-        <div class="expanded-details" *ngIf="isProductExpanded(product.id)" >
+        <div class="expanded-details" *ngIf="isProductExpanded(product.id)">
           <mat-divider></mat-divider>
           <div class="expanded-content">
-            <p *ngIf="product.description"><strong>Description:</strong> {{product.description | roundName: 50:true}}</p>
+            <p *ngIf="product.description"><strong>Description:</strong> {{product.description | roundName: 50:true}}
+            </p>
           </div>
         </div>
       </mat-card>

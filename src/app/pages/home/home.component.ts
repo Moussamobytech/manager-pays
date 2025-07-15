@@ -237,6 +237,7 @@ export class HomeComponent implements OnInit {
         ),
       ).subscribe(list => {
         this.topRateProducts = list;
+        console.log("Top Rated Products: ", this.topRateProducts);
       });
   }
 

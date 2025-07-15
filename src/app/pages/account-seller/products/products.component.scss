@@ -335,6 +335,11 @@ $shadow: 0 2px 12px rgba(0,0,0,0.06);
     align-items: center;
   }
 }
+.campaignslider.disabled-toggle {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 
 // .floating-plus {
 //   // position: relative;

@@ -41,7 +41,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.auth.currentUser()
-   // console.log("currentUser :::::::: ",this.currentUser)
 
     this.loadData()
     this.initializeSearch();
@@ -239,22 +238,36 @@ export class ProductsComponent implements OnInit {
   }
 
   // to update the edited product
-  public updateState(id, state) {
-    this.productService.updateState(id, state).then((data: any) => {
-      // Update local data after successful API call
-    });
+  public updateState(id, username, state) {
+    return this.productService.updateState(id,this.currentUser.username, state).then((data: any) => {    
+      if (data.error) {
+        this.cm.openFailureSnackBar(data.message || "Erreur lors de la mise à jour de l'état du produit.");
+        return;
+      }    });
   }
 
   // to update the edited product
   setStatus(product: Product) {
     const currentState = (product.etat == 'ACTIF') ? true : false;
-    this.updateState(product.id, !currentState ? 'ok' : 'nok');
-
-    // Update product status in all arrays
-    this.updateProductStatusInArrays(product.id, currentState ? "INACTIF" : "ACTIF");
-
-    // Reapply filter with updated data
-    this.setFilter(this.filterType);
+    
+    this.updateState(product.id, this.currentUser.username, !currentState ? 'ok' : 'nok')
+     .then((data: any) => {
+      // Cas normal (réponse OK du backend)
+      this.cm.openSuccessSnackBar("État du produit mis à jour avec succès.");
+      this.updateProductStatusInArrays(product.id, currentState ? "INACTIF" : "ACTIF");
+      this.setFilter(this.filterType);
+    })
+    .catch((error: any) => {
+      //console.error("ERROR", error);
+      this.cm.openFailureSnackBar(
+        error?.message || error?.error?.message || "Erreur lors de la mise à jour du produit."
+      );
+  
+      this.updateProductStatusInArrays(product.id, currentState ? "INACTIF" : "ACTIF");
+      this.setFilter(this.filterType);
+    })
+  ;
+  
   }
 
   // Helper method to update a product's status in all arrays

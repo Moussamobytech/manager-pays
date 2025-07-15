@@ -28,10 +28,22 @@
 
 <div class="p-2">
     <mat-card>
-      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-        <h2>{{"PRODUCTS.PAGE_TITLE"|translate}}</h2>
-      </div>
-      <mat-divider></mat-divider>
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+            <h2>{{"PRODUCTS.PAGE_TITLE" | translate}}</h2>
+
+            <button mat-raised-button color="warn" (click)="openVendeurSelectDialog()">
+                Désactiver les produits d’un vendeur
+            </button>
+
+
+            <button mat-raised-button color="warn" (click)="openToggleAllDialog()">
+                <mat-icon>power_settings_new</mat-icon>
+                {{ allProductsDeactivated ? 'Activer tous' : 'Désactiver tous' }}
+            </button>
+
+        </div>
+
+        <mat-divider></mat-divider>
         <mat-divider></mat-divider>
         <div class="mat-mdc-table admin-table">
             <div class="mat-mdc-header-row mat-toolbar mat-primary">
@@ -45,23 +57,29 @@
 
                 <div class="mat-mdc-header-cell"></div>
             </div>
-            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }"
+                class="mat-mdc-row">
                 <div class="mat-mdc-cell image">
                     <img [src]="product.image1" alt="" width="50">
                 </div>
                 <div class="mat-mdc-cell">{{product.nom}}</div>
-                <div class="mat-mdc-cell">{{product.categorie}}</div>
+                <div class="mat-mdc-cell">{{product.categorieNom}}</div>
                 <div class="mat-mdc-cell">{{product.priceBasic}}</div>
-                <div class="mat-mdc-cell">{{product.user}}</div>
+                <div class="mat-mdc-cell">{{product.userNom}}</div>
                 <div class="mat-mdc-cell">{{product.createdAt | date}}</div>
                 <div class="mat-mdc-cell">{{etat(product.etat)}}</div>
                 <div class="mat-mdc-cell">
                     <div class="icons">
-                        <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent" matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
-                        <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent" matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
-                        <button mat-mini-fab color="warn" matTooltip="Remove" (click)="remove(product)"><mat-icon>delete</mat-icon></button>
-                        
-                    <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'primary' : 'warn'" [checked]="product.etat == 'ACTIF'" (change)="setStatus(product.id, $event)"> </mat-slide-toggle>
+                        <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent"
+                            matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
+                        <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent"
+                            matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
+                        <button mat-mini-fab color="warn" matTooltip="Remove"
+                            (click)="remove(product)"><mat-icon>delete</mat-icon></button>
+
+                        <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'primary' : 'warn'"
+                            [checked]="product.etat == 'ACTIF'" (change)="setStatus(product.id,username, $event)">
+                        </mat-slide-toggle>
                     </div>
 
                     <!-- <div class="p-2 actions">
@@ -84,7 +102,8 @@
     <div *ngIf="products.length > 0" fxLayout="row wrap">
         <div fxFlex="100">
             <mat-card class="text-center">
-                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5"
+                    (pageChange)="onPageChanged($event)"></pagination-controls>
             </mat-card>
         </div>
     </div>

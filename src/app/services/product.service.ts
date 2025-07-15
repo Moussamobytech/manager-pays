@@ -98,11 +98,23 @@ getTotalViewsYear(): Observable<any> {
     return this.api.get(`/produit/stats-seller-actifs`).toPromise();
   }
 
-  updateState(id: any, status) {
+  updateState(id: any,username:string, status) {
     return this.api
-      .get(`/produit/update-state?id=${id}&status=${status}`)
+      .get(`/produit/update-state?id=${id}&username=${username}&status=${status}`)
       .toPromise();
   }
+
+  adminDeactivateAll(username: string, state: 'ok' | 'nok'):Observable<any> {
+    return this.api
+    .put(`/produit/admin/deactivate-all?username=${username}&state=${state}`, null);
+  }
+
+  deactivateByVendeur(adminUsername: string, vendeurUsername: string):Observable<any> {
+    return this.api
+    .put(`/produit/admin/deactivate-by-vendeur?adminUsername=${adminUsername}&vendeurUsername=${vendeurUsername}`,
+    null,);
+  }
+
 
   supprimer(id: string): Observable<any> {
     return this.api.delete(`/produit/supprimer/${id}`);

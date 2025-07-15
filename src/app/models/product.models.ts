@@ -38,5 +38,8 @@ export class Product {
                 public campagne:Campagne,
                 public yearlyVisits: number,
                 public gain?: number,
-                public isFavorite: boolean = false ){ }
+                public isFavorite: boolean = false ,
+                public globallyDeactivated: boolean = false,
+                 
+            ){ }
   }
