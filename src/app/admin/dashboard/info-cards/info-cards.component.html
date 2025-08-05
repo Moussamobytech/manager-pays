@@ -3,7 +3,7 @@
     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-teal">
             <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Total des commandes</p>
+                <p>Commandes en attente</p>
                 <div fxLayoutAlign="center center">
                     <mat-icon class="icon-sm px-1">trending_up</mat-icon>
                     <strong>{{totalOrders}}</strong>
@@ -31,7 +31,7 @@
     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-purple">
             <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Commande du mois</p>
+                <p>Commandes validées</p>
                 <div fxLayoutAlign="center center">
                     <mat-icon class="icon-sm px-1">trending_up</mat-icon>
                     <span>{{totalOrdersMensuelles || '0'}}</span>
@@ -59,7 +59,7 @@
     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-indigo">
             <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Total des ventes</p>
+                <p>Commandes livrées</p>
                 <div fxLayoutAlign="center center">
                     <mat-icon class="icon-sm px-1">trending_up</mat-icon>
                     <span>{{venteTotal || '0'}}</span>
@@ -70,19 +70,38 @@
                 <div fxLayoutAlign="center center">
                     <span>{{montantVenteTotal || '0'}} Fcfa</span>
                 </div>
-            </div>             
-          <!--  <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="products"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                     
-            </div> -->
+            </div>
         </mat-card>
     </div>    
 
 
     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
+        <mat-card class="p-0 gradient-amber">
+            <div class="p-2" fxLayoutAlign="space-between center">
+                <p>Commandes annulées</p>
+                <div fxLayoutAlign="center center">
+                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
+                    <span>{{venteTotalMensuel || '0'}}</span>
+                </div>
+            </div>  
+            
+            <div class="p-2" fxLayoutAlign="space-between center">
+                <p>Montant</p>
+                <div fxLayoutAlign="center center">
+                    <span>{{montantTotalMensuel || '0'}} Fcfa</span>
+                </div>
+            </div>  
+
+          <!--  <div class="w-100 h-100p">
+                <ngx-charts-bar-vertical
+                    [scheme]="colorScheme"
+                    [results]="productsMensuel"                      
+                    (select)="onSelect($event)">
+                </ngx-charts-bar-vertical>                     
+            </div> -->
+        </mat-card>
+    </div>
+     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-amber">
             <div class="p-2" fxLayoutAlign="space-between center">
                 <p>Ventes du mois</p>
@@ -107,89 +126,30 @@
                 </ngx-charts-bar-vertical>                     
             </div> -->
         </mat-card>
-    </div>    
-</div>
-
-
-
-<!-- 
-
-
-<div fxLayout="row wrap" #resizedDiv>
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-purple">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Products profit</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>38%</span>
-                </div>
-            </div>         
-            <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="products"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                   
-            </div>
-        </mat-card>
     </div>
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-teal">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Total orders</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>16%</span>
-                </div>
-            </div>          
-            <div class="w-100 h-100p">
-                <ngx-charts-line-chart
-                    [scheme]="colorScheme"
-                    [results]="orders"                      
-                    [autoScale]="autoScale"
-                    (select)="onSelect($event)">
-                </ngx-charts-line-chart>                  
-            </div>
-        </mat-card>
-    </div>
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-indigo">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Refunds</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_down</mat-icon>
-                    <span>-11%</span>
-                </div>
-            </div>          
-            <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="refunds"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                     
-            </div>
-        </mat-card>
-    </div>    
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
+     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
         <mat-card class="p-0 gradient-amber">
             <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Customers</p>
+                <p>Ventes totales</p>
                 <div fxLayoutAlign="center center">
                     <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>17%</span>
+                    <span>{{venteTotalMensuel || '0'}}</span>
                 </div>
-            </div>         
-            <div class="w-100 h-100p">
-                <ngx-charts-line-chart
-                    [scheme]="colorScheme"
-                    [results]="customers"                      
-                    [autoScale]="autoScale"
-                    (select)="onSelect($event)">
-                </ngx-charts-line-chart>                    
             </div>
-        </mat-card>
-    </div>    
-</div>
+            <div class="p-2" fxLayoutAlign="space-between center">
+                <p>Montant</p>
+                <div fxLayoutAlign="center center">
+                    <span>{{montantTotalMensuel || '0'}} Fcfa</span>
+                </div>
+            </div>
 
--->
+          <!--  <div class="w-100 h-100p">
+                <ngx-charts-bar-vertical
+                    [scheme]="colorScheme"
+                    [results]="productsMensuel"                      
+                    (select)="onSelect($event)">
+                </ngx-charts-bar-vertical>
+            </div> -->
+        </mat-card>
+    </div>
+</div>

@@ -1,140 +1,104 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
-    <div fxLayout="row">
-        <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
-            <mat-button-toggle value="search" [title]="'BTN.SEARCH'|translate">
-                <mat-icon>search</mat-icon>
-            </mat-button-toggle>
-        </mat-button-toggle-group>
-    </div>
-    <form class="user-search"    [class.show]="controls.value == 'search'">
-        <mat-form-field class="user-search-input">
-            <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" (keyup)="search()" name="search">
-        </mat-form-field>
-    </form>
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-        <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy" value="table">
+<div class="order-manager-container">
+  <div class="filters-section">
+    <!-- Barre de recherche -->
+    <mat-form-field appearance="outline">
+      <mat-label>Recherche rapide</mat-label>
+      <input 
+        matInput 
+        (keyup)="applySearchFilter($event)" 
+        placeholder="Client, Commande, Client ID..."
+      >
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 
-            <mat-button-toggle *ngIf="isAboveSmSize$|async" value="table">
-                <mat-icon>view_headline</mat-icon>
-            </mat-button-toggle>
-        </mat-button-toggle-group>
-    </div>
-</div>
+    <div class="filter-row">
+      <!-- Filtre Statut -->
+      <mat-form-field appearance="outline">
+        <mat-label>Statut</mat-label>
+        <mat-select [formControl]="statusFilter">
+          <mat-option *ngFor="let status of statusOptions" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-<div class="users-list">
+      <!-- Filtre Ville -->
+      <mat-form-field appearance="outline">
+        <mat-label>Ville</mat-label>
+        <mat-select [formControl]="cityFilter">
+          <mat-option value="">Toutes</mat-option>
+          <mat-option *ngFor="let city of cities" [value]="city">
+            {{ city }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-
-
-  <div class="table-list" *ngIf="isAboveSmSize$ | async">
-    <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
-      <div fxFlex="100" class="p-2">
-        <div class="table-scroll-wrapper">
-          <div class="admin-table">
-            <!-- Header Row -->
-            <div class="header-row">
-              <div class="header-cell filter-cell fixed-width">
-                {{ "Code commande" | translate }}
-                <a (click)="sortCommandes('codeCommande')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              <div class="header-cell filter-cell fixed-width">
-                {{ "Quantité" | translate }}
-                <a (click)="sortCommandes('quantite')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              
-              <div class="header-cell filter-cell fixed-width">
-                Pays livraison
-                <a (click)="sortCommandes('deliveryCountry')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              <div class="header-cell filter-cell fixed-width">
-                Prix livraison
-                <a (click)="sortCommandes('deliveryPrice')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              <div class="header-cell filter-cell fixed-width">
-                Delai livraison
-                <a (click)="sortCommandes('deliveryDelay')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-
-
-
-              <div class="header-cell filter-cell fixed-width">
-                Montant
-                <a (click)="sortCommandes('montant')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              <div class="header-cell filter-cell fixed-width">
-                Client
-                <a (click)="sortCommandes('clientUsername')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              <div class="header-cell filter-cell fixed-width">
-                Status
-                <a (click)="sortCommandes('statutCommande')"><mat-icon>swap_vert</mat-icon></a>
-            </div>
-              <div class="header-cell filter-cell fixed-width">
-                {{ "Date commande" | translate }}
-                <a (click)="sortCommandes('dateCommande')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-              <div class="header-cell filter-cell fixed-width text-center">
-                {{ "USER.ACTION" | translate }}
-              </div>
-            
-            </div>
-
-            <!-- Data Rows -->
-            <div *ngFor="let commande of (sortedCommandes || commandes) | CommandeSearchPipe: searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="data-row">
-              <div class="data-cell fixed-width"> {{ commande.codeCommande | capitalCase }} </div>
-              <div class="data-cell fixed-width"> {{ commande.quantite }} </div>
-
-              <div class="data-cell fixed-width"> {{ commande.deliveryCountry || 'N/A'}} </div>
-              <div class="data-cell fixed-width"> {{ commande.deliveryPrice || 'N/A'}} </div>
-              <div class="data-cell fixed-width"> {{ commande.deliveryDelay || 'N/A'}} </div>
-
-
-              <div class="data-cell fixed-width" > {{ commande.montant }} </div>
-              <div class="data-cell fixed-width" > {{ commande.clientPhone }} </div>
-
-                  <!--   <div class="data-cell fixed-width"> {{Status(order.statutCommande.name)}}</div>-->
-                  <div class="  {{commande.statutCommande.name}}" [ngClass]="commande.statutCommande.name"> 
-                    <mat-select [value]="commande.statutCommande.id">
-                      @for (st of status; track status) {
-                        <mat-option [value]="st.id" (onSelectionChange)="setStatusT(commande.id,st.id,commande)">{{Status(st.name)}}</mat-option>
-                      }
-                    </mat-select>
-                </div>
-
-              <div class="data-cell fixed-width"> {{ commande.dateCommande | date: "dd-MM-yyyy à HH:mm" }} </div>
-              <div class="data-cell fixed-width center">
-                <div class="actions">
-                  <button 
-                  [routerLink]="['/admin/commande/commande-details', commande.id, commande.codeCommande]" 
-                  mat-mini-fab 
-                  color="accent" 
-                  [matTooltip]="'BTN.VIEW' | translate">
-                  <mat-icon>remove_red_eye</mat-icon>
-                </button>
-                
-                  <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate" (click)="remove(commande)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                 <!-- <mat-slide-toggle [color]="commande.enabled ? 'primary' : 'warn'" [checked]="commande.enabled" >
-                  </mat-slide-toggle> -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Filtre Date -->
+      <mat-form-field appearance="outline">
+        <mat-label>Période</mat-label>
+        <mat-select [formControl]="dateFilter">
+          <mat-option value="">Toutes périodes</mat-option>
+          <mat-option *ngFor="let period of dateOptions" [value]="period.value">
+            {{ period.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
 
+  <!-- Tableau des commandes -->
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- ID Colonne -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Commande</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
 
-<div *ngIf="commandes" fxLayout="row wrap">
-    <div fxFlex="100" class="p-2">
-        <mat-card class="text-center">
-            <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
-        </mat-card>
-    </div>
+      <!-- Date Colonne -->
+      <ng-container matColumnDef="orderDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.orderDate | date:'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <!-- Client Colonne -->
+      <ng-container matColumnDef="clientName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
+        <td mat-cell *matCellDef="let element">{{ element.clientName }}</td>
+      </ng-container>
+
+      <!-- Client ID Colonne -->
+      <ng-container matColumnDef="clientId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID Client</th>
+        <td mat-cell *matCellDef="let element">{{ element.clientId }}</td>
+      </ng-container>
+
+      <!-- Ville Colonne -->
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ville</th>
+        <td mat-cell *matCellDef="let element">{{ element.city }}</td>
+      </ng-container>
+
+      <!-- Statut Colonne -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
+        <td mat-cell *matCellDef="let element">
+          <span [class]="'status-badge ' + element.status">
+            {{ getStatusText(element.status) }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Vendeur Colonne -->
+      <ng-container matColumnDef="vendor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendeur</th>
+        <td mat-cell *matCellDef="let element">{{ element.vendor }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+   
+  </div>
 </div>
-
-<div *ngIf="!commandes" fxLayout="column" fxLayoutAlign="center center" class="user-spinner">
-    <mat-spinner color="primary"></mat-spinner>
-</div>
-

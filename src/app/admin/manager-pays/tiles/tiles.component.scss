@@ -1,0 +1,25 @@
+.tiles-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+.tile {
+  background-color: #f4f6fa;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1976d2;
+  }
+}

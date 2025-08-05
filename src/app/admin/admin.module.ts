@@ -1,3 +1,4 @@
+import { ManagerComponent } from './manager-pays/manager.compnent';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -44,7 +45,13 @@ export const routes = [
       { path: 'information', loadChildren: () => import('./information/information.module').then(m => m.InformationModule), data: { breadcrumb: 'Information' } },
       { path: 'commande', loadChildren: () => import('./commande/commande.module').then(m => m.CommandeModule), data: { breadcrumb: 'Commande' } },
       { path: 'country', loadChildren: () => import('./country/county.module').then(m => m.CountryModule), data: { breadcrumb: 'Pays' } },
-      { path: 'search-terme', loadChildren: () => import('./search-terme/search-terme.module').then(m => m.SearchTermeModule), data: { breadcrumb: 'Termes de recherche' } }
+      { path: 'search-terme', loadChildren: () => import('./search-terme/search-terme.module').then(m => m.SearchTermeModule), data: { breadcrumb: 'Termes de recherche' } },
+      { 
+  path: 'manager-pays', 
+  loadChildren: () => import('./manager-pays/manager.module').then(m => m.ManagerModule), 
+  data: { breadcrumb: 'Manager Pays' } 
+}
+
 
     ]
   }

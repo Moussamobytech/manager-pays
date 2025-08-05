@@ -7,6 +7,9 @@ import { Commande } from '../models/commande.models';
   providedIn: 'root'
 })
 export class CommandeService {
+  getStatistiquesCommandes() {
+    throw new Error('Method not implemented.');
+  }
 
   constructor(private api: ApiService,) { }
 
