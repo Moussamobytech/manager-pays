@@ -1,8 +1,29 @@
 .user-form{
     .form-field-outer{
-        width: 280px;
+        width: 200px;
     }
     .mat-mdc-radio-button{
-        margin-right: 12px;
+        margin-right: 20px;
     }
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+
+  .country-select {
+    width: 180px;
+  }
+
+  .search-input {
+    width: 220px;
+  }
+}
+.ajout{
+  background-color: #241f48 !important;
+  color: #fff !important;
+}
+.annul{
+  background: #f1f3f4;
+  color: #222;
 }

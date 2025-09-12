@@ -1,0 +1,50 @@
+/* spacing and responsive layout for vendor add product dialog */
+:host {
+  display: block;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.two-cols .w-50 {
+  flex: 1 1 calc(50% - 12px);
+}
+
+.three-cols .w-33 {
+  flex: 1 1 calc(33.333% - 12px);
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-50, .w-33 { 
+  min-width: 160px;
+}
+.btn-custom {
+  background-color: #241f48 !important;
+  color: #fff !important;
+}
+
+.btn-cancel {
+  border-color: #241f48 !important;
+  color: #241f48 !important;
+}
+
+.mt-2 {
+  margin-bottom: 12px;
+}
+
+.input-file {
+  margin-top: 6px;
+}
+
+@media (max-width: 700px) {
+  .two-cols .w-50, .three-cols .w-33 {
+    flex: 1 1 100%;
+  }
+}

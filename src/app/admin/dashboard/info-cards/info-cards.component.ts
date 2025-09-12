@@ -1,23 +1,22 @@
 import { orders, products, refunds } from '../dashboard.data';
-import { ElementRef, ViewChild, Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
+import { ElementRef, ViewChild, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from 'src/app/services/auth.service';
-import { ConnectableObservable, Observable, catchError, first, lastValueFrom, map } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonMessageService } from 'src/app/services/common-message.service';
 import { AppSettings } from 'src/app/app.settings';
-import { UsersService } from '../../users/users.service';
 import { CommandeService } from 'src/app/services/commande.service';
-import { finalize } from 'rxjs/operators';
-import { of } from 'rxjs'; // Ajoutez cette importation
+import { Router } from '@angular/router';
+import { MatIconModule } from "@angular/material/icon";
 
-
+type OrderStatus = 'pending' | 'validated' | 'delivered' | 'cancelled';
 
 @Component({
   selector: 'app-info-cards',
   templateUrl: './info-cards.component.html',
-  styleUrls: ['./info-cards.component.scss']
+  styleUrls: ['./info-cards.component.scss'],
+
 })
 export class InfoCardsComponent implements OnInit {
   public orders: any[];
@@ -31,6 +30,8 @@ export class InfoCardsComponent implements OnInit {
   public autoScale = true;
   @ViewChild('resizedDiv') resizedDiv: ElementRef;
   public previousWidthOfResizedDiv: number = 0;
+
+  // Commandes & ventes
   totalOrders: any = 0;
   totalMontantOrders: any = 0;
   totalOrdersMensuelles: any;
@@ -40,27 +41,61 @@ export class InfoCardsComponent implements OnInit {
   paniers: any;
   venteTotalMensuel: number;
   montantTotalMensuel: any;
-  productsMensuel: { name: string; series: any; }[];
+  productsMensuel: { name: string; value: number; }[];
 
+  // Produits
+  produitsTotal: number = 0;
+  produitsActifs: number = 0;
+
+  // Visites
+  visitesMois: number = 0;
+
+  // Données locales mockées Commandes
+  private mockCommandes = [
+    { codeCommande: 'CMD001', dateCommande: '2025-09-01T10:30:00', montant: 25000, statutCommande: { name: 'PENDING' } },
+    { codeCommande: 'CMD002', dateCommande: '2025-09-01T14:20:00', montant: 35000, statutCommande: { name: 'VALIDATED' } },
+    { codeCommande: 'CMD003', dateCommande: '2025-09-01T09:15:00', montant: 18000, statutCommande: { name: 'DELIVERED' } },
+    { codeCommande: 'CMD004', dateCommande: '2025-08-20T16:45:00', montant: 42000, statutCommande: { name: 'DELIVERED' } },
+    { codeCommande: 'CMD005', dateCommande: '2025-09-01T11:30:00', montant: 28000, statutCommande: { name: 'CANCELLED' } }
+  ];
+
+  // Données locales mockées Produits
+  private mockProduits = [
+    { id: 1, nom: 'Produit A', actif: true },
+    { id: 2, nom: 'Produit B', actif: true },
+    { id: 3, nom: 'Produit C', actif: false },
+    { id: 4, nom: 'Produit D', actif: true },
+    { id: 5, nom: 'Produit E', actif: true }
+  ];
+
+  // Données locales mockées Visites
+  private mockVisites = [
+    { date: '2025-09-01', nbVisites: 50 },
+    { date: '2025-09-02', nbVisites: 120 },
+    { date: '2025-09-03', nbVisites: 75 },
+    { date: '2025-09-04', nbVisites: 90 }
+  ];
 
   constructor(
     public appSettings: AppSettings,
-    public dialog: MatDialog, private commonService: CommonMessageService,
+    public dialog: MatDialog,
+    private commonService: CommonMessageService,
     private ngxSpinnerService: NgxSpinnerService,
     private auth: AuthenticationService,
-    private commandeService: CommandeService
-  ) {
-  }
+    private commandeService: CommandeService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    //  this.orders = orders;
-    //this.products = products;
-    // this.customers = customers;
-   // this.refunds = refunds;
-    // this.orders = this.addRandomValue('orders');     
-    //this.customers = this.addRandomValue('customers');
-    this.getCommandes()
+    this.getCommandes();
     this.getAllPaniers();
+    this.getProduits();
+    this.getVisitesMois();
+  }
+
+  // ✅ Correction ici : on ajoute "validated"
+  goToOrders(statusCode: OrderStatus) {
+    this.router.navigate(['/admin/commande'], { queryParams: { status: statusCode } });
   }
 
   public onSelect(event) {
@@ -86,194 +121,157 @@ export class InfoCardsComponent implements OnInit {
 
   ngOnDestroy() {
     this.orders[0].series.length = 0;
-   // this.customers[0].series.length = 0;
   }
 
   ngAfterViewChecked() {
     if (this.previousWidthOfResizedDiv != this.resizedDiv.nativeElement.clientWidth) {
       setTimeout(() => this.orders = [...orders]);
       setTimeout(() => this.products = [...products]);
-      // setTimeout(() => this.customers = [...customers] ); 
       setTimeout(() => this.refunds = [...refunds]);
     }
     this.previousWidthOfResizedDiv = this.resizedDiv.nativeElement.clientWidth;
   }
 
-  public async getCommandes() {
-    this.ngxSpinnerService.show(); // Afficher le spinner avant la requête
+  // ------------------------------
+  // Commandes & ventes
+  // ------------------------------
+  public getCommandes() {
+    const commandes = this.mockCommandes;
 
-    await this.commandeService.getAllCommande().pipe(
-      map((commandes: any[]) => {
-        // Obtenir le mois et l'année en cours
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // Mois en cours (0 = Janvier)
-        const currentYear = currentDate.getFullYear(); // Année en cours
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
 
-        // Filtrer les commandes pour le mois en cours
-        const commandesMensuelles = commandes.filter((commande: any) => {
-          const dateCommande = new Date(commande.dateCommande); // Utiliser `dateCommande` au lieu de `codeCommande`
-          return (
-            dateCommande.getMonth() === currentMonth &&
-            dateCommande.getFullYear() === currentYear
-          );
-        });
+    const commandesMensuelles = commandes.filter((commande: any) => {
+      const dateCommande = new Date(commande.dateCommande);
+      return (
+        dateCommande.getMonth() === currentMonth &&
+        dateCommande.getFullYear() === currentYear
+      );
+    });
 
-
-        // Transformer les données pour les adapter à la structure de `orders`
-        const transformedOrders = [
-          {
-            name: 'Commande',
-            series: commandes.map(commande => ({
-              name: commande.dateCommande.split('T')[0], // Utiliser la date comme nom
-              value: commande.montant // Utiliser le montant comme valeur
-            }))
-          }
-        ];
-        //:::::::::::::::::::::::::::::: TRANSFORME ORDER MENSUEL ::::::::::::::::: 
-        const transformedOrdersMensuel = [
-          {
-            name: 'Commande',
-            series: commandesMensuelles.map(commande => ({
-              name: commande.dateCommande.split('T')[0], // Utiliser la date comme nom
-              value: commande.montant // Utiliser le montant comme valeur
-            }))
-          }
-        ];
-
-        // Calculer le total des commandes mensuelles
-        const totalMontantMensuelles = commandesMensuelles.reduce((total: number, commande: any) => {
-          return total + commande.montant;
-        }, 0);
-
-        // Retourner les données transformées et les totaux mensuels
-        return {
-          transformedOrders,
-          transformedOrdersMensuel,
-          totalOrdersMensuelles: commandesMensuelles.length,
-          totalMontantMensuelles
-        };
-      }),
-      catchError((error: any) => {
-        console.error("Erreur lors de la récupération des commandes : ", error);
-        this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
-
-        // Retourner un Observable avec des valeurs par défaut
-        return of({
-          transformedOrders: [],
-          transformedOrdersMensuel: [],
-          totalOrdersMensuelles: 0,
-          totalMontantMensuelles: 0
-        });
-      }),
-      finalize(() => {
-        this.ngxSpinnerService.hide(); // Masquer le spinner une fois la requête terminée
-      })
-    ).subscribe(
-      (result: any) => {
-        const { transformedOrders, transformedOrdersMensuel, totalOrdersMensuelles, totalMontantMensuelles } = result;
-
-        // Mettre à jour les variables du composant
-        this.orders = transformedOrders;
-        this.ordersMensuel = transformedOrdersMensuel;
-        this.totalOrders = this.orders[0].series.length;
-        this.totalMontantOrders = this.orders[0].series.reduce((total: number, serie: any) => {
-          return total + serie.value;
-        }, 0);
-
-        // Mettre à jour les totaux mensuels
-        this.totalOrdersMensuelles = totalOrdersMensuelles;
-        this.totalMontantMensuelles = totalMontantMensuelles;
+    const transformedOrders = [
+      {
+        name: 'Commande',
+        series: commandes.map(commande => ({
+          name: commande.dateCommande.split('T')[0],
+          value: commande.montant
+        }))
       }
-    );
+    ];
+
+    const transformedOrdersMensuel = [
+      {
+        name: 'Commande',
+        series: commandesMensuelles.map(commande => ({
+          name: commande.dateCommande.split('T')[0],
+          value: commande.montant
+        }))
+      }
+    ];
+
+    const totalMontantMensuelles = commandesMensuelles.reduce((total: number, commande: any) => {
+      return total + commande.montant;
+    }, 0);
+
+    this.orders = transformedOrders;
+    this.ordersMensuel = transformedOrdersMensuel;
+    this.totalOrders = this.orders[0].series.length;
+    this.totalMontantOrders = this.orders[0].series.reduce((total: number, serie: any) => {
+      return total + serie.value;
+    }, 0);
+
+    this.totalOrdersMensuelles = commandesMensuelles.length;
+    this.totalMontantMensuelles = totalMontantMensuelles;
   }
 
+  public getAllPaniers() {
+    const data = this.mockCommandes;
 
-  public async getAllPaniers() {
-    this.ngxSpinnerService.show(); // Afficher le spinner avant la requête
+    const deliveredData = data.filter((commande: any) => {
+      return commande.statutCommande.name === 'DELIVERED';
+    });
 
-    await this.commandeService.getAllPanier().pipe(
-      map((data: any) => {
-        // Filtrer les données pour ne garder que les commandes avec le statut "DELIVERED"
-        const deliveredData = data.filter((commande: any) => {
-          return commande.statutCommande.name === 'DELIVERED';
-        });
+    const transformedProducts = deliveredData.map(product => ({
+      name: product.dateCommande.split('T')[0],
+      value: product.montant
+    }));
+    this.products = transformedProducts;
 
-        // Transformer les données pour les adapter à la structure de `Products`
-        const transformedProducts = deliveredData.map(product => ({
-          name: product.dateCommande.split('T')[0], // Utiliser la date comme nom
-          value: product.montant // Utiliser le montant comme valeur
-        }));
-        this.products = transformedProducts;
+    this.paniers = deliveredData;
 
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
 
-        return deliveredData; // Retourner les données filtrées
-      }),
-      catchError((error: any) => {
-        console.error("Erreur lors de la récupération des commandes : ", error);
-        this.commonService.errorToast("Une erreur est survenue lors de la récupération des commandes.");
-        return of([]); // Retourne une liste vide en cas d'erreur
-      }),
-      finalize(() => {
-        this.ngxSpinnerService.hide(); // Masquer le spinner une fois la requête terminée
-      })
-    ).subscribe(
-      (filteredData: any) => {
-        this.paniers = filteredData;
+    const commandesMensuelles = deliveredData.filter((commande: any) => {
+      const dateCommande = new Date(commande.dateCommande);
+      return (
+        dateCommande.getMonth() === currentMonth &&
+        dateCommande.getFullYear() === currentYear
+      );
+    });
 
-        // Obtenir le mois et l'année en cours
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth(); // Mois en cours (0 = Janvier)
-        const currentYear = currentDate.getFullYear(); // Année en cours
+    const transformedProductsMensuel = commandesMensuelles.map(product => ({
+      name: product.dateCommande.split('T')[0],
+      value: product.montant
+    }));
 
-        // Filtrer les commandes pour le mois en cours
-        const commandesMensuelles = filteredData.filter((commande: any) => {
-          const dateCommande = new Date(commande.dateCommande);
-          return (
-            dateCommande.getMonth() === currentMonth &&
-            dateCommande.getFullYear() === currentYear
-          );
-        });
+    this.productsMensuel = transformedProductsMensuel;
 
-        //:::::::::::::::::::::::::::::: TRANSFORME ORDER MENSUEL ::::::::::::::::: 
-        const transformedProductsMensuel = commandesMensuelles.map(product => ({
-          name: product.dateCommande.split('T')[0], // Utiliser la date comme nom
-          value: product.montant // Utiliser le montant comme valeur
-        }));
-
-        console.log(transformedProductsMensuel);
-
-        this.productsMensuel = transformedProductsMensuel;
-
-        // Calculer les totaux pour toutes les commandes (DELIVERED uniquement)
-        const commandeParCode = filteredData.reduce(
-          (acc: any, commande: any) => {
-            acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
-            acc.montantTotal += commande.montant;
-            return acc;
-          },
-          { codes: {}, montantTotal: 0 }
-        );
-
-        // Calculer les totaux pour les commandes mensuelles (DELIVERED uniquement)
-        const commandeParCodeMensuel = commandesMensuelles.reduce(
-          (acc: any, commande: any) => {
-            acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
-            acc.montantTotal += commande.montant;
-            return acc;
-          },
-          { codes: {}, montantTotal: 0 }
-        );
-
-        this.venteTotal = filteredData.length; // Total des commandes DELIVERED
-        this.montantVenteTotal = commandeParCode.montantTotal; // Montant total des commandes DELIVERED
-
-        // Valeurs mensuelles
-        this.venteTotalMensuel = commandesMensuelles.length; // Nombre de commandes uniques pour le mois en cours
-        this.montantTotalMensuel = commandeParCodeMensuel.montantTotal; // Montant total des commandes pour le mois en cours
-
-      }
+    const commandeParCode = deliveredData.reduce(
+      (acc: any, commande: any) => {
+        acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
+        acc.montantTotal += commande.montant;
+        return acc;
+      },
+      { codes: {}, montantTotal: 0 }
     );
+
+    const commandeParCodeMensuel = commandesMensuelles.reduce(
+      (acc: any, commande: any) => {
+        acc.codes[commande.codeCommande] = (acc.codes[commande.codeCommande] || 0) + 1;
+        acc.montantTotal += commande.montant;
+        return acc;
+      },
+      { codes: {}, montantTotal: 0 }
+    );
+
+    this.venteTotal = deliveredData.length;
+    this.montantVenteTotal = commandeParCode.montantTotal;
+
+    this.venteTotalMensuel = commandesMensuelles.length;
+    this.montantTotalMensuel = commandeParCodeMensuel.montantTotal;
   }
 
+  // ------------------------------
+  // Produits
+  // ------------------------------
+  public getProduits() {
+    const produits = this.mockProduits;
 
+    this.produitsTotal = produits.length;
+    this.produitsActifs = produits.filter(p => p.actif).length;
+  }
+
+  // ------------------------------
+  // Visites
+  // ------------------------------
+  public getVisitesMois() {
+    const visites = this.mockVisites;
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+
+    const visitesMensuelles = visites.filter((v: any) => {
+      const date = new Date(v.date);
+      return (
+        date.getMonth() + 1 === currentMonth &&
+        date.getFullYear() === currentYear
+      );
+    });
+
+    this.visitesMois = visitesMensuelles.reduce((total, v) => total + v.nbVisites, 0);
+  }
 }

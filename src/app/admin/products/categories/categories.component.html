@@ -3,7 +3,7 @@
 
         <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
             <h2>{{"CATEGORY.PAGE_TITLE"|translate}}</h2>
-            <button mat-raised-button color="warn" (click)="openCategoryDialog(null)">{{"CATEGORY.ADD_BTN"|translate}}</button>
+            <button mat-raised-button class="warn" (click)="openCategoryDialog(null)">{{"CATEGORY.ADD_BTN"|translate}}</button>
         </div>
         <mat-divider></mat-divider>
         <div class="mat-mdc-table admin-table">
@@ -37,7 +37,7 @@
                         <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(cat)">
+                        <button mat-mini-fab class="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(cat)">
                             <mat-icon>delete</mat-icon>
                         </button>
                         <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="accent" [matTooltip]="'BTN.VIEW'|translate" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>

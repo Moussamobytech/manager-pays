@@ -1,9 +1,58 @@
-.mat-mdc-chip.info-chip{
-    padding: 4px 8px;
-    .mat-icon{
-        margin-right: 4px;
-    }
+.card {
+  border-radius: 12px;
+  padding: 16px;
+  color: #fff;
+  min-height: 120px;
 }
-.h-100p{
-    height: 100px;
+
+.orange-card {
+  background-color:#fbb03b ; /* orange clair */
+  color: #222;
+}
+
+.dark-card {
+  background-color: #241f48; /* violet foncé */
+  color: #fff;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-circle {
+  background-color: #2d2556;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.white-bg {
+  background-color: #fff;
+  color: #2d2556;
+}
+
+.card-count {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.card-body h3 {
+  margin: 8px 0 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.card-body p {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.clickable {
+  cursor: pointer;
 }

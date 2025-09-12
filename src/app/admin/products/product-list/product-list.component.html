@@ -31,12 +31,12 @@
         <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
             <h2>{{"PRODUCTS.PAGE_TITLE" | translate}}</h2>
 
-            <button mat-raised-button color="warn" (click)="openVendeurSelectDialog()">
+            <button mat-raised-button class="warn" (click)="openVendeurSelectDialog()">
                 Désactiver les produits d’un vendeur
             </button>
 
 
-            <button mat-raised-button color="warn" (click)="openToggleAllDialog()">
+            <button mat-raised-button class="warn" (click)="openToggleAllDialog()">
                 <mat-icon>power_settings_new</mat-icon>
                 {{ allProductsDeactivated ? 'Activer tous' : 'Désactiver tous' }}
             </button>
@@ -74,10 +74,10 @@
                             matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
                         <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent"
                             matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
-                        <button mat-mini-fab color="warn" matTooltip="Remove"
+                        <button mat-mini-fab class="warn" matTooltip="'BTN.REMOVE'|translate" class="mx-1"
                             (click)="remove(product)"><mat-icon>delete</mat-icon></button>
 
-                        <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'primary' : 'warn'"
+                        <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'green' : 'red'"
                             [checked]="product.etat == 'ACTIF'" (change)="setStatus(product.id,username, $event)">
                         </mat-slide-toggle>
                     </div>

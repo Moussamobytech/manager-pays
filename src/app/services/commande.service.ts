@@ -7,9 +7,6 @@ import { Commande } from '../models/commande.models';
   providedIn: 'root'
 })
 export class CommandeService {
-  getStatistiquesCommandes() {
-    throw new Error('Method not implemented.');
-  }
 
   constructor(private api: ApiService,) { }
 
@@ -18,6 +15,15 @@ export class CommandeService {
   getAllCommande():Observable<Commande[]> {
         try{
           let  commande :Observable<Commande[]> = this.api.get("commande/get-all");
+          return commande;
+        }catch(error){
+          return null;
+        }
+      }
+
+      getById(id):Observable<Commande> {
+        try{
+          let  commande :Observable<Commande> = this.api.get(`commande/get/${id}`);
           return commande;
         }catch(error){
           return null;

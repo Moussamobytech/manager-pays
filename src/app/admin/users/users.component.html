@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2 toolbar">
   <div fxLayout="row">
       <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
           <mat-button-toggle value="add" (click)="openUserDialog(null,'add')" [title]="'BTN.ADD'|translate">
@@ -9,11 +9,22 @@
           </mat-button-toggle>
       </mat-button-toggle-group>
   </div>
+
   <form class="user-search" [class.show]="controls.value == 'search'">
       <mat-form-field class="user-search-input">
           <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" name="search" autocomplete="off">
       </mat-form-field>
   </form>
+
+  <!-- Filtre par pays -->
+  <!-- <mat-form-field appearance="outline" class="fixed-width country-filter">
+    <mat-label>Pays</mat-label>
+    <mat-select [(ngModel)]="selectedCountry" (selectionChange)="filterByCountry()">
+      <mat-option value="">Tous</mat-option>
+      <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
   <div fxLayout="row" fxLayoutAlign="space-between center">
       <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy" [value]="(isAboveSmSize$|async)?'table':'grid'">
           <mat-button-toggle value="grid">
@@ -30,58 +41,50 @@
 </div>
 
 <div class="users-list">
-
-<div class="grid-list">
-  <div *ngIf="viewType.value == 'grid'" fxLayout="row wrap">
-      <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" fxFlex.md="50" fxFlex.gt-md="33.3"  class="p-2">
-          <mat-card fxFlex="100">
+  <!-- Grid View -->
+  <div class="grid-list" *ngIf="viewType.value == 'grid'">
+      <div *ngFor="let user of users | UserSearchPipe:searchText | paginate:{itemsPerPage:6,currentPage:page}" fxFlex="100" fxFlex.md="50" fxFlex.gt-md="33.3" class="p-2">
+          <mat-card>
               <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
-                  <h3 *ngIf="user.enabled" class="user-name">{{user.firstname+' '+user.lastname|capitalCase|roundName:null:(isAboveMdSize$|async)}}</h3>
+                  <h3 *ngIf="user.enabled" class="user-name">{{user.firstname+' '+user.lastname|capitalCase}}</h3>
                   <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
                   <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
                       <mat-icon>more_vert</mat-icon>
                   </button>
-                </div>
+              </div>
               <mat-menu #menu="matMenu" xPosition="before" overlapTrigger="true">
-                  <span (mouseleave)="menuTrigger.closeMenu()">
-                      <button mat-menu-item (click)="openUserDialog(user,'update')">
-                          <mat-icon>mode_edit</mat-icon>
-                          <span>{{'BTN.EDIT'|translate}}</span>
-                      </button>
-                      <button mat-menu-item (click)="deleteUser(user.id)">
-                          <mat-icon>delete</mat-icon>
-                          <span>{{'BTN.REMOVE'|translate}}</span>
-                      </button>
-                  </span>
+                  <button mat-menu-item (click)="openUserDialog(user,'update')">
+                      <mat-icon>mode_edit</mat-icon>
+                      <span>{{'BTN.EDIT'|translate}}</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteUser(user.id)">
+                      <mat-icon>delete</mat-icon>
+                      <span>{{'BTN.REMOVE'|translate}}</span>
+                  </button>
               </mat-menu>
               <div class="user-content" fxLayout="row" fxLayoutAlign="space-around center">
                   <div fxFlex="30" fxLayout="column" fxLayoutAlign="center center">
                       <div class="user-img">
-                          <!-- <img *ngIf="user.profile.image" [src]="user.profile.image" class="transition-2" [class.blocked]="user.settings.isDeleted"> -->
-                          <img  src="assets/images/profile/default-user.jpeg" class="transition-2" [class.blocked]="user.enabled">
+                          <img src="assets/images/profile/default-user.jpeg" class="transition-2" [class.blocked]="!user.enabled">
                           <mat-icon *ngIf="!user.enabled" color="warn">block</mat-icon>
                       </div>
-                      <div class="user-social">
-                          <!-- <mat-slide-toggle color="primary" [checked]="!user.enabled" (change)="user.enabled = !user.enabled"></mat-slide-toggle> -->
-                          <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)"></mat-slide-toggle>
-
-                      </div>
+                      <mat-slide-toggle [color]="user.enabled?'primary':'warn'" [checked]="user.enabled" (change)="setStatus(user.id,$event)"></mat-slide-toggle>
                   </div>
-                  <div fxFlex="70" fxLayout="column" class="user-details transition-2" [class.blocked]="!user.enabled">
+                  <div fxFlex="70" fxLayout="column" class="user-details" [class.blocked]="!user.enabled">
                       <p fxLayout="row" *ngIf="user.email" fxLayoutAlign="start center">
-                          <mat-icon class="text-muted mt-size">mail_outline</mat-icon>
+                          <mat-icon class="text-muted">mail_outline</mat-icon>
                           <span>{{user.email}}</span>
                       </p>
                       <p fxLayout="row" *ngIf="user.phoneNumber" fxLayoutAlign="start center">
-                          <mat-icon class="text-muted mt-size">call</mat-icon>
+                          <mat-icon class="text-muted">call</mat-icon>
                           <span>{{user.phoneNumber}}</span>
                       </p>
                       <p fxLayout="row" *ngIf="user.adresse" fxLayoutAlign="start center">
-                          <mat-icon class="text-muted mt-size">location_on</mat-icon>
+                          <mat-icon class="text-muted">location_on</mat-icon>
                           <span>{{user.adresse}}</span>
                       </p>
                       <p fxLayout="row" fxLayoutAlign="start center">
-                          <mat-icon class="text-muted mt-size">date_range</mat-icon>
+                          <mat-icon class="text-muted">date_range</mat-icon>
                           <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:'yyyy-MM-dd'}}</span>
                       </p>
                   </div>
@@ -90,143 +93,40 @@
       </div>
   </div>
 
-</div>
+  <!-- Table View -->
+  <div class="table-list" *ngIf="viewType.value=='table' && isAboveSmSize$|async">
+    <div class="table-scroll-wrapper">
+      <div class="admin-table">
+        <div class="header-row">
+          <div class="header-cell fixed-width">Prénom <a (click)="sortUsers('firstname')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Nom <a (click)="sortUsers('lastname')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Nom utilisateur</div>
+          <div class="header-cell fixed-width">Type <a (click)="sortUsers('type')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Ville <a (click)="sortUsers('ville')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Pays <a (click)="sortUsers('pays')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Téléphone <a (click)="sortUsers('téléphone')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Adresse <a (click)="sortUsers('adress')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width">Membre depuis <a (click)="sortUsers('member_since')"><mat-icon>swap_vert</mat-icon></a></div>
+          <div class="header-cell fixed-width text-center">Actions</div>
+        </div>
 
-<div *ngIf="viewType.value == 'list'" fxLayout="row wrap">
-    <div *ngFor="let user of users | UserSearchPipe : searchText | paginate: { itemsPerPage: 6, currentPage: page }" fxFlex="100" class="p-2">
-        <mat-card>
-            <div class="bg-primary mat-primary" fxLayout="row" fxLayoutAlign="space-between center">
-                <h3 *ngIf="user.enabled" class="user-name">{{user.firstname|capitalCase}} {{user.lastname|capitalCase}}</h3>
-                <h3 *ngIf="!user.enabled" class="user-name">Utilisateur Inactif</h3>
-                <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
-                    <mat-icon>more_vert</mat-icon>
-                </button>
+        <div *ngFor="let user of (sortedUsers||users) | UserSearchPipe:searchText | paginate:{itemsPerPage:8,currentPage:page}" class="data-row">
+          <div class="data-cell fixed-width">{{user.firstname}}</div>
+          <div class="data-cell fixed-width">{{user.lastname}}</div>
+          <div class="data-cell fixed-width">{{user.username}}</div>
+          <div class="data-cell fixed-width" *ngFor="let profile of user.profiles">{{profile.name}}</div>
+          <div class="data-cell fixed-width">{{user.ville}}</div>
+          <div class="data-cell fixed-width">{{user.pays}}</div>
+          <div class="data-cell fixed-width">{{user.phoneNumber}}</div>
+          <div class="data-cell fixed-width">{{user.adresse}}</div>
+          <div class="data-cell fixed-width">{{user.createdAt | date:'dd-MM-yyyy'}}</div>
+          <div class="data-cell fixed-width">
+            <div class="actions">
+              <button mat-mini-fab color="success" (click)="reset(user.username)"><mat-icon>refresh</mat-icon></button>
+              <button mat-mini-fab color="accent" (click)="openUserDialog(user,'update')"><mat-icon>edit</mat-icon></button>
+              <button mat-mini-fab color="warn" (click)="remove(user)"><mat-icon>delete</mat-icon></button>
+              <mat-slide-toggle [color]="user.enabled?'primary':'warn'" [checked]="user.enabled" (change)="setStatus(user.id,$event)"></mat-slide-toggle>
             </div>
-            <mat-menu #menu="matMenu" xPosition="before"  overlapTrigger="true">
-                <span (mouseleave)="menuTrigger.closeMenu()">
-                    <button mat-menu-item (click)="openUserDialog(user,'update')">
-                        <mat-icon>mode_edit</mat-icon>
-                        <span>{{"BTN.EDIT" |translate}}</span>
-                    </button>
-                    <button mat-menu-item (click)="deleteUser(user.id)">
-                        <mat-icon>delete</mat-icon>
-                        <span>{{"BTN.DELETE" |translate}}</span>
-                    </button>
-                    <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">
-                      {{user.enabled ? 'Activée' : 'Désactivée' }}
-                  </mat-slide-toggle>
-                </span>
-            </mat-menu>
-            <div class="user-content" fxLayout="row" fxLayoutAlign="space-around center">
-                <div fxFlex="20" fxFlex.xs="30" fxLayout="column" fxLayoutAlign="center center">
-                    <div class="user-img">
-                        <!-- <img *ngIf="user.profile.image" [src]="user.profile.image" class="transition-2" [class.blocked]="user.enabled"> -->
-                        <img src="assets/images/profile/default-user.jpeg" class="transition-2" [class.blocked]="!user.enabled">
-                        <mat-icon *ngIf="!user.enabled" color="warn">block</mat-icon>
-                    </div>
-                    <div class="user-social">
-                        <!-- <mat-slide-toggle color="primary" [checked]="!user.enabled" (change)="user.enabled = !user.enabled">
-
-                        </mat-slide-toggle> -->
-                        <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)"></mat-slide-toggle>
-
-                    </div>
-                </div>
-                <div fxFlex="80" fxFlex.xs="70" fxLayout="row" fxLayout.xs="column" class="user-details transition-2" [class.blocked]="!user.enabled">
-                    <div fxFlex="27" *ngIf="user.email" fxFlex.xs="100" fxLayout="column">
-                        <p fxLayout="row" fxLayoutAlign="start center">
-                            <mat-icon class="text-muted">mail_outline</mat-icon>
-                            <span>{{user.email}}</span>
-                        </p>
-                        <p fxLayout="row" *ngIf="user.phoneNumber" fxLayoutAlign="start center">
-                            <mat-icon class="text-muted">call</mat-icon>
-                            <span>{{user.phoneNumber}}</span>
-                        </p>
-                    </div>
-                    <div fxFlex="27" fxFlex.xs="100" fxLayout="column">
-                        <p fxLayout="row" *ngIf="user.adresse" fxLayoutAlign="start center">
-                          <mat-icon class="text-muted">location_on</mat-icon>
-                          <span>{{user.adresse}}</span>
-                        </p>
-                        <p fxLayout="row" fxLayoutAlign="start center">
-                            <mat-icon class="text-muted">event_available</mat-icon>
-                            <span>{{"USER.MEMBER_SINCE"|translate}} {{user.createdAt | date:'yyyy-MM-dd'}}</span>
-                        </p>
-                    </div>
-                    <div fxFlex="26" fxFlex.xs="100" fxLayout="column" fxLayoutAlign=" center">
-                      <p fxLayout="row" fxLayoutAlign="start center">
-                        <mat-icon *ngIf="user.enabled" class="text-muted">person_outline</mat-icon>
-                        <mat-icon *ngIf="!user.enabled" class="text-muted">person</mat-icon>
-                        <span>{{ (!user.enabled) ? 'Inactive' : 'Active' }}</span>
-                      </p>
-                    </div>
-                </div>
-            </div>
-        </mat-card>
-    </div>
-</div>
-
-<div class="table-list" *ngIf="isAboveSmSize$ | async">
-  <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
-    <div fxFlex="100" class="p-2">
-      <div class="table-scroll-wrapper">
-        <div class="admin-table">
-          <!-- Header Row -->
-          <div class="header-row">
-            <div class="header-cell filter-cell fixed-width">
-              {{ "FIELD.FIRSTNAME" | translate }}
-              <a (click)="sortUsers('firstname')"><mat-icon>swap_vert</mat-icon></a>
-            </div>
-            <div class="header-cell filter-cell fixed-width">
-              {{ "FIELD.LASTNAME" | translate }}
-              <a (click)="sortUsers('lastname')"><mat-icon>swap_vert</mat-icon></a>
-            </div>
-            <div class="header-cell filter-cell fixed-width">
-              {{ "FIELD.USERNAME" | translate }}
-            </div>
-            <div class="header-cell filter-cell fixed-width">
-              Type
-              <a (click)="sortUsers('type')"><mat-icon>swap_vert</mat-icon></a>
-            </div>
-            <div class="header-cell filter-cell fixed-width">
-              {{ "USER.MEMBER_SINCE" | translate }}
-              <a (click)="sortUsers('member_since')"><mat-icon>swap_vert</mat-icon></a>
-            </div>
-            <div class="header-cell filter-cell fixed-width text-center">
-              {{ "USER.ACTION" | translate }}
-            </div>
-            <!-- <div class="header-cell filter-cell fixed-width">
-              Produits
-            </div>
-            <div class="header-cell filter-cell fixed-width">
-              Dernière Publication
-            </div> -->
-          </div>
-
-          <!-- Data Rows -->
-          <div *ngFor="let user of (sortedUsers || users) | UserSearchPipe: searchText | paginate: { itemsPerPage: 8, currentPage: page }" class="data-row">
-            <div class="data-cell fixed-width"> {{ user.firstname | capitalCase }} </div>
-            <div class="data-cell fixed-width"> {{ user.lastname | capitalCase }} </div>
-            <div class="data-cell fixed-width"> {{ user.username }} </div>
-            <div class="data-cell fixed-width" *ngFor="let profile of user.profiles"> {{ profile.name | userType }} </div>
-            <div class="data-cell fixed-width"> {{ user.createdAt | date: "dd-MM-yyyy" }} </div>
-            <div class="data-cell fixed-width">
-              <div class="actions">
-                <button mat-mini-fab color="success" [matTooltip]="'BTN.RESET' | translate" (click)="reset(user.username)">
-                  <mat-icon>refresh</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT' | translate" (click)="openUserDialog(user, 'update')">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE' | translate" (click)="remove(user)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-                <mat-slide-toggle [color]="user.enabled ? 'primary' : 'warn'" [checked]="user.enabled" (change)="setStatus(user.id, $event)">
-                </mat-slide-toggle>
-              </div>
-            </div>
-            <!-- <div class="data-cell fixed-width"> {{ 'Product count' }} </div>
-            <div class="data-cell fixed-width"> {{ 'Derniere publication' }} </div> -->
           </div>
         </div>
       </div>
@@ -234,16 +134,16 @@
   </div>
 </div>
 
-
+<!-- Pagination -->
 <div *ngIf="users" fxLayout="row wrap">
   <div fxFlex="100" class="p-2">
       <mat-card class="text-center">
-          <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+          <pagination-controls [autoHide]="true" [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
       </mat-card>
   </div>
 </div>
 
+<!-- Loader -->
 <div *ngIf="!users" fxLayout="column" fxLayoutAlign="center center" class="user-spinner">
   <mat-spinner color="primary"></mat-spinner>
 </div>
-

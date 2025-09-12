@@ -1,0 +1,107 @@
+.vendors-card {
+  padding: 16px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 260px;
+    max-width: 480px;
+  }
+.btn-custom {
+  background-color: #241f48;
+  color: #fff;
+}
+
+  .spacer {
+    flex: 1;
+  }
+}
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+
+  mat-form-field {
+    min-width: 200px;
+  }
+
+  .country-filter {
+    max-width: 220px;
+  }
+
+  .btn-custom {
+    background-color: #241f48;
+    color: #fff;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+}
+
+.table-wrapper {
+  overflow: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+
+  table {
+    width: 100%;
+    border-spacing: 0;
+
+    th {
+      background-color: #fbb03b !important;
+      font-weight: 600;
+      color: #000;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    tr:hover {
+      background-color: #fafafa;
+    }
+  }
+}
+
+/* Pagination centrée comme la page commandes */
+.product-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+
+  ::ng-deep .ngx-pagination {
+    display: flex;
+    gap: 6px;
+
+    li {
+      border-radius: 6px;
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      cursor: pointer;
+
+      &.current {
+        background-color: #FFB930;
+        border-color: #FFB930;
+        color: #fff;
+        font-weight: 600;
+      }
+
+      &:hover:not(.current) {
+        background-color: #f9f9f9;
+      }
+    }
+  }
+}

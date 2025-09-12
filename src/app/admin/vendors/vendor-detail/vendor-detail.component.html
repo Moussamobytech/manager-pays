@@ -1,0 +1,73 @@
+<mat-card class="vendor-card">
+  <div class="vendor-header">
+    <h2>{{ shopName }}</h2>
+    <div class="counters">{{ activeCount }} produits actifs / {{ products.length }} produits</div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="vendor-tools">
+    <mat-form-field appearance="outline">
+      <mat-label>Rechercher un produit</mat-label>
+      <input matInput [(ngModel)]="query" (ngModelChange)="applyFilters()" placeholder="Nom du produit" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <div class="quick-filters">
+      <button mat-stroked-button [color]="filterStatus==='all' ? 'primary' : ''" (click)="setStatus('all')">Tout</button>
+      <button mat-stroked-button [color]="filterStatus==='active' ? 'primary' : ''" (click)="setStatus('active')">Actifs</button>
+      <button mat-stroked-button [color]="filterStatus==='inactive' ? 'primary' : ''" (click)="setStatus('inactive')">Inactifs</button>
+    </div>
+    <button mat-fab color="accent" class="add-btn" (click)="addProduct()"><mat-icon>add</mat-icon></button>
+  </div>
+  <div class="products-list">
+    <div class="product-card" *ngFor="let p of filtered | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+      <div class="image">
+        <img [src]="p.image || 'assets/images/others/placeholder-image.png'" alt="" />
+      </div>
+      <div class="info">
+        <div class="title">{{ p.name }}</div>
+        <div class="status" [ngClass]="p.active ? 'active' : 'inactive'">{{ p.active ? 'Actif' : 'Inactif' }}</div>
+        <div class="prices">
+          <span class="price">Prix: {{ p.price | number:'1.0-0' }} Fcfa</span>
+          <span class="old" *ngIf="p.oldPrice">{{ p.oldPrice | number:'1.0-0' }} Fcfa</span>
+        </div>
+        <div class="stock">Stock: {{ p.stock }}</div>
+<div class="actions">
+  <div class="toggle-switch"
+       [class.active]="p.active"
+       [class.inactive]="!p.active"
+       (click)="toggleActive(p)">
+    <div class="toggle-thumb"></div>
+  </div>
+
+  <button mat-icon-button color="primary" (click)="editProduct(p)" matTooltip="Éditer">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="shareProduct(p)" matTooltip="Partager">
+    <mat-icon>share</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="advanced(p)" matTooltip="Plus">
+    <mat-icon>{{ expandedId === p.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+  </button>
+</div>
+
+
+        <div class="expanded" *ngIf="expandedId === p.id">
+          <div class="description" *ngIf="p.description">{{ p.description }}</div>
+          <div class="stock-row" *ngFor="let s of p.otherStocks">
+            <span class="loc">{{ s.location }}</span>
+            <span class="qty">{{ s.qty }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="product-pagination">
+    <pagination-controls
+      [previousLabel]="'Précédent'"
+      [nextLabel]="'Suivant'"
+      [autoHide]="true"
+      (pageChange)="currentPage = $event">
+    </pagination-controls>
+  </div>
+</mat-card>

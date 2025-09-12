@@ -1,0 +1,69 @@
+<div class="p-2">
+    <mat-card>
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+            <h2>{{"CATEGORY.PAGE_TITLE"|translate}}</h2>
+            <button mat-raised-button color="warn" (click)="openCategoryDialog(null)">{{"CATEGORY.ADD_BTN"|translate}}</button>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-mdc-table admin-table">
+            <div class="mat-mdc-header-row mat-toolbar mat-primary">
+                <div class="mat-mdc-header-cell">{{"CATEGORY.NAME"|translate}}</div>
+                <!-- <div class="mat-mdc-header-cell">Has SubCategory</div>
+                <div class="mat-mdc-header-cell">Parent Category</div> -->
+                  <div class="mat-mdc-header-cell">{{"CATEGORY.IMAGE"|translate}}</div>
+                  <div class="mat-mdc-header-cell">{{"CATEGORY.SIZE"|translate}}</div>
+                  <div class="mat-mdc-header-cell"></div>
+              </div>
+              <div *ngFor="let cat of categories | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+                <div class="mat-mdc-cell">{{cat.nom}}</div>
+                  <!-- <div class="mat-mdc-cell">
+                      <mat-icon class="text-muted">{{ (cat.hasSubCategory) ? 'check_box' : 'check_box_outline_blank'}}</mat-icon>
+                  </div>
+                  <div class="mat-mdc-cell">
+                      {{ ( categories | filterById : cat.parentId )?.nom }}
+                  </div> -->
+                  <div class="mat-mdc-cell">
+                    <a [routerLink]="['/admin/products/categorie-detail', cat.id]" class="title text-truncate">
+                      <img [src]="cat.image" alt="{{cat.nom}}" style="max-width: 100px; max-height: 100px;">
+                    </a>
+
+                  </div>
+                <div class="mat-mdc-cell">{{cat.poids}}</div>
+
+                  <div class="mat-mdc-cell">
+                      <div class="p-2 actions">
+                        <a [routerLink]="['/admin/products/categories/'+cat.id]" mat-mini-fab color="accent" [matTooltip]="'BTN.VIEW'|translate" class="mx-2 view"><mat-icon>subdirectory_arrow_right</mat-icon></a>
+                        <button mat-mini-fab color="accent" [matTooltip]="'BTN.EDIT'|translate" (click)="openCategoryDialog(cat)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-mini-fab color="warn" [matTooltip]="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(cat)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <a [routerLink]="['/admin/products/categorie-detail', cat.id]" mat-mini-fab color="accent" [matTooltip]="'BTN.VIEW'|translate" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
+                        <!-- <mat-slide-toggle [color]="cat.status ? 'primary' : 'warn'" [checked]="cat.status" (change)="setStatus(cat.id, $event)">
+                          {{ cat.status ? 'Actif' : 'Inactif' }}
+                      </mat-slide-toggle> -->
+                        <button mat-mini-fab [color]="cat.status === 'INACTIF' ? 'primary' : 'accent'" [matTooltip]="cat.status === 'INACTIF' ? 'Activer' : 'Désactiver'" class="mx-1"  (click)="setStatus(cat.id, cat.status==='INACTIF'? 'actif': 'inactif')" >
+                          <mat-icon>{{ cat.status === 'INACTIF' ? 'check_circle' : 'block' }}</mat-icon>
+
+                        </button>
+                      <!-- <button mat-mini-fab [color]="cat.status ? 'primary' : 'warn'" matTooltip="{{ cat.status ? 'Activater' : 'Desactivater' }}" class="mx-1" (click)="setStatus(cat.id, 'inactif')">
+                        <mat-icon>{{cat.status  === 'inactif' ? 'check_circle' : 'cancel' }}</mat-icon>
+                    </button> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+
+    <div *ngIf="categories.length > 0" fxLayout="row wrap">
+        <div fxFlex="100">
+            <mat-card class="p-0 text-center">
+                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="15" (pageChange)="onPageChanged($event)"></pagination-controls>
+            </mat-card>
+        </div>
+    </div>
+</div>
+

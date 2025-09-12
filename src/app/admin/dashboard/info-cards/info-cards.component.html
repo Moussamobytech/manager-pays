@@ -1,155 +1,144 @@
-<div fxLayout="row wrap" #resizedDiv>
+<div fxLayout="row wrap" fxLayoutGap="16px grid">
 
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-teal">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Commandes en attente</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <strong>{{totalOrders}}</strong>
-                </div>
-            </div>      
-            
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Montant</p>
-                <div fxLayoutAlign="center center">
-                    <span>{{totalMontantOrders || '0'}} Fcfa</span>
-                </div>
-            </div>      
+  <!-- Commandes en attente -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card orange-card clickable" (click)="goToOrders('pending')">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>shopping_cart</mat-icon>
+        </div>
+        <div class="card-count">{{ totalOrders || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Commandes en attente</h3>
+        <p>Montant: {{ totalMontantOrders || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
 
-            <!--<div class="w-100 h-100p">
-                <ngx-charts-line-chart
-                    [scheme]="colorScheme"
-                    [results]="orders"                      
-                    [autoScale]="autoScale"
-                    (select)="onSelect($event)">
-                </ngx-charts-line-chart>                  
-            </div> -->
-        </mat-card>
-    </div>
+  <!-- Commandes validées -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card dark-card clickable" (click)="goToOrders('delivered')">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="card-count">{{ totalOrdersMensuelles || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Commandes validées</h3>
+        <p>Montant: {{ totalMontantMensuelles || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
 
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-purple">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Commandes validées</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>{{totalOrdersMensuelles || '0'}}</span>
-                </div>
-            </div>
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Montant</p>
-                <div fxLayoutAlign="center center">
-                    <span>{{totalMontantMensuelles || '0'}} Fcfa</span>
-                </div>
-            </div>           
-           <!-- <div class="w-100 h-100p">
-                <ngx-charts-line-chart
-                    [scheme]="colorScheme"
-                    [results]="ordersMensuel"                      
-                    [autoScale]="autoScale"
-                    (select)="onSelect($event)">
-                </ngx-charts-line-chart>                  
-            </div> -->
-        </mat-card>
-    </div>
+  <!-- Commandes livrées -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card orange-card clickable" (click)="goToOrders('delivered')">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>local_shipping</mat-icon>
+        </div>
+        <div class="card-count">{{ venteTotal || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Commandes livrées</h3>
+        <p>Montant: {{ montantVenteTotal || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
 
+  <!-- Commandes annulées -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card dark-card clickable" (click)="goToOrders('cancelled')">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="card-count">{{ venteTotalMensuel || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Commandes annulées</h3>
+        <p>Montant: {{ montantTotalMensuel || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
 
+  <!-- Ventes du mois -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card orange-card">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>show_chart</mat-icon>
+        </div>
+        <div class="card-count">{{ venteTotalMensuel || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Ventes du mois</h3>
+        <p>Montant: {{ montantTotalMensuel || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
 
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-indigo">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Commandes livrées</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>{{venteTotal || '0'}}</span>
-                </div>
-            </div>
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Montant</p>
-                <div fxLayoutAlign="center center">
-                    <span>{{montantVenteTotal || '0'}} Fcfa</span>
-                </div>
-            </div>
-        </mat-card>
-    </div>    
-
-
-    <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-amber">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Commandes annulées</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>{{venteTotalMensuel || '0'}}</span>
-                </div>
-            </div>  
-            
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Montant</p>
-                <div fxLayoutAlign="center center">
-                    <span>{{montantTotalMensuel || '0'}} Fcfa</span>
-                </div>
-            </div>  
-
-          <!--  <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="productsMensuel"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                     
-            </div> -->
-        </mat-card>
-    </div>
-     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-amber">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Ventes du mois</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>{{venteTotalMensuel || '0'}}</span>
-                </div>
-            </div>  
-            
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Montant</p>
-                <div fxLayoutAlign="center center">
-                    <span>{{montantTotalMensuel || '0'}} Fcfa</span>
-                </div>
-            </div>  
-
-          <!--  <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="productsMensuel"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>                     
-            </div> -->
-        </mat-card>
-    </div>
-     <div fxFlex="100" fxFlex.gt-sm="25" fxFlex.sm="50" class="p-2"> 
-        <mat-card class="p-0 gradient-amber">
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Ventes totales</p>
-                <div fxLayoutAlign="center center">
-                    <mat-icon class="icon-sm px-1">trending_up</mat-icon>
-                    <span>{{venteTotalMensuel || '0'}}</span>
-                </div>
-            </div>
-            <div class="p-2" fxLayoutAlign="space-between center">
-                <p>Montant</p>
-                <div fxLayoutAlign="center center">
-                    <span>{{montantTotalMensuel || '0'}} Fcfa</span>
-                </div>
-            </div>
-
-          <!--  <div class="w-100 h-100p">
-                <ngx-charts-bar-vertical
-                    [scheme]="colorScheme"
-                    [results]="productsMensuel"                      
-                    (select)="onSelect($event)">
-                </ngx-charts-bar-vertical>
-            </div> -->
-        </mat-card>
-    </div>
+  <!-- Ventes totales -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card dark-card">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>equalizer</mat-icon>
+        </div>
+        <div class="card-count">{{ venteTotalMensuel || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Ventes totales</h3>
+        <p>Montant: {{ montantTotalMensuel || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
+  <!-- PRODUITS totaux -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card orange-card ">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>inventory</mat-icon>
+        </div>
+        <div class="card-count">{{ venteTotalMensuel || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Produits totaux</h3>
+        <p>Montant: {{ montantTotalMensuel || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
+    <!-- Produit actifs -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card dark-card">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+          <mat-icon>power_settings_new</mat-icon>
+        </div>
+        <div class="card-count">{{ venteTotalMensuel || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Produits Actifs</h3>
+        <p>Montant: {{ montantTotalMensuel || '0' }} Fcfa</p>
+      </div>
+    </mat-card>
+  </div>
+    <!-- Visite du mois -->
+  <div fxFlex="1 1 calc(33.33% - 16px)">
+    <mat-card class="card orange-card">
+      <div class="card-header">
+        <div class="icon-circle white-bg">
+        <mat-icon>search</mat-icon>
+        </div>
+        <div class="card-count">{{ visitesMois || '0' }}</div>
+      </div>
+      <div class="card-body">
+        <h3>Visites du mois</h3>
+        <p>Total des visites ce mois-ci</p>
+      </div>
+    </mat-card>
+  </div>
 </div>
+<div fxLayout="row wrap" #resizedDiv></div>

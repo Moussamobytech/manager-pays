@@ -1,0 +1,68 @@
+.vendor-form-card{
+  padding: 20px;
+  max-width: 520px;
+  margin: 24px auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+}
+
+.form-row { margin-bottom: 14px; }
+.full-width { width: 100%; }
+
+/* Two-column layout for country + phone */
+.two-columns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.two-columns .country-col { flex: 0 0 36%; max-width: 36%; }
+.two-columns .phone-col { flex: 1 1 auto; }
+
+/* Material form-field tweaks */
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 8px;
+}
+:host ::ng-deep .mat-form-field { width: 100%; }
+:host ::ng-deep .mat-form-field-infix { padding: 12px 10px !important; }
+:host ::ng-deep .mat-input-element { padding: 6px 0; }
+
+/* Password eye button - smaller and aligned */
+:host ::ng-deep button[mat-icon-button][matSuffix] {
+  width: 36px;
+  height: 36px;
+  margin-right: -8px;
+}
+
+/* Actions buttons */
+.form-actions {
+  margin-top: 18px;
+}
+.form-actions button {
+  min-width: 120px;
+}
+.form-actions button:first-child {
+  background: #f1f3f4;
+  color: #222;
+}
+.form-actions button:last-child {
+  background: #FFB930;
+  color: #1f1f1f;
+}
+.btn-custom {
+  background-color: #241f48 !important;
+  color: #fff !important;
+}
+
+/* Make fields visually consistent */
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .vendor-form-card { padding: 16px; margin: 12px; }
+  .two-columns { flex-direction: column; }
+  .two-columns .country-col, .two-columns .phone-col { max-width: 100%; flex: 1 1 auto; }
+  .form-actions { display: flex; gap: 8px; justify-content: space-between; }
+}

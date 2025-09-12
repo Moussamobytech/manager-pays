@@ -6,7 +6,7 @@
             <button mat-raised-button class="bleu mr-2" matTooltip="Générer un code" (click)="openDialog()">
               Générer un code
             </button>
-          <button mat-raised-button color="warn" (click)="addCampagne()">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
+          <button mat-raised-button class="warn" (click)="addCampagne()">{{"ADMIN_NAV.ADD_CAMPAGNE" | translate}}</button>
       </div>
       <mat-divider></mat-divider>
       <div class="mat-mdc-table admin-table">
@@ -43,7 +43,7 @@
                       <button mat-mini-fab class="bleu" matTooltip="Détail" (click)="openCampagneDetail(item)">
                         <mat-icon>remove_red_eye</mat-icon>
                       </button>                      
-                      <mat-slide-toggle [color]="item.active == true ? 'primary' : 'warn'" [checked]="item.active == true"
+                      <mat-slide-toggle [color]="item.active == true ? 'green' : 'red'" [checked]="item.active == true"
                       (change)="setStatus(item.id, $event)">
                     </mat-slide-toggle>
                   </div>

@@ -2,8 +2,10 @@
     <mat-card>
         <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
             <h2>Liste des pays</h2>
-            <button mat-raised-button color="warn" (click)="openDialog(null)">Ajouter un pays</button>
-            <button mat-raised-button color="warn" (click)="openRegionDialog(null)">Ajouter une région</button>
+             <div fxLayout="row" fxLayoutGap="10px">
+    <button mat-raised-button class="warn" (click)="openDialog(null)">Ajouter un pays</button>
+    <button mat-raised-button class="warn" (click)="openRegionDialog(null)">Ajouter une région</button>
+  </div>
         </div>
         <mat-divider></mat-divider>
         <div class="mat-mdc-table admin-table text-center">
@@ -92,7 +94,7 @@
               <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
                 <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
     
-                <button mat-raised-button color="primary" class="bleu" type="submit">Ajouter</button>
+                <button mat-raised-button class="bleu" type="submit">Ajouter</button>
               </div>
             </div>
           </form>
@@ -145,7 +147,7 @@
               <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
                 <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
     
-                <button mat-raised-button color="primary" class="bleu" type="submit">Ajouter</button>
+                <button mat-raised-button class="bleu" type="submit">Ajouter</button>
               </div>
             </div>
           </form>

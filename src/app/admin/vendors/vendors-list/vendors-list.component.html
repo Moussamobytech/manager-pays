@@ -1,0 +1,92 @@
+<mat-card class="vendors-card">
+  <div class="toolbar">
+<mat-form-field appearance="outline">
+  <mat-label>Pays</mat-label>
+  <mat-select [(value)]="selectedCountry" (selectionChange)="onCountryChange($event.value)">
+    <mat-option value="">Tous</mat-option>
+    <mat-option *ngFor="let c of availableCountries" [value]="c">{{ c }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="outline" *ngIf="availableCities.length > 0">
+  <mat-label>Ville</mat-label>
+  <mat-select [(value)]="selectedCity" (selectionChange)="applyFilters()">
+    <mat-option value="">Toutes</mat-option>
+    <mat-option *ngFor="let city of availableCities" [value]="city">{{ city }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+    <!-- Barre de recherche -->
+    <mat-form-field appearance="outline">
+      <mat-label>Rechercher (nom ou boutique)</mat-label>
+      <input matInput #q (keyup)="applyFilters(q.value)" placeholder="Ex: Ali, Boutique Soleil" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button class="btn-custom" [routerLink]="['/admin/vendors/new']">
+      <mat-icon>add</mat-icon>
+      Nouveau Vendeur
+    </button>
+  </div>
+
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="filteredVendors | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let v">{{ v.firstName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef>Prénom</th>
+        <td mat-cell *matCellDef="let v">{{ v.lastName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="shopName">
+        <th mat-header-cell *matHeaderCellDef>Boutique</th>
+        <td mat-cell *matCellDef="let v">{{ v.shopName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef>Ville</th>
+        <td mat-cell *matCellDef="let v">{{ v.city }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef>Pays</th>
+        <td mat-cell *matCellDef="let v">{{ v.country }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef>Adresse</th>
+        <td mat-cell *matCellDef="let v">{{ v.address }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+        <td mat-cell *matCellDef="let v">{{ v.phone }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let v">
+          <button mat-icon-button [routerLink]="['/admin/vendors', v.id]" matTooltip="Voir"><mat-icon>visibility</mat-icon></button>
+          <button mat-icon-button color="primary" [routerLink]="['/admin/vendors/edit', v.id]" matTooltip="Éditer"><mat-icon>edit</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Pagination -->
+    <div class="product-pagination">
+      <pagination-controls
+        previousLabel="Précédent"
+        nextLabel="Suivant"
+        (pageChange)="currentPage = $event">
+      </pagination-controls>
+    </div>
+  </div>
+</mat-card>
