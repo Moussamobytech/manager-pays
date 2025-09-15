@@ -1,8 +1,19 @@
-.view{
+.view {
   background-color: #c54896;
   color: white;
 }
-.warn{
+
+.warn {
   background-color: #241f48 !important;
   color: #fff !important;
 }
+.lot {
+   background-color: #6b9990; // ON
+}
+
+  .active {
+    background-color: #6b9990; // ON
+  }
+  .inactive {
+    background-color: #d81b60; // ON
+  }
