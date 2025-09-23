@@ -1,4 +1,66 @@
-.view{
+.view {
   background-color: #c54896;
   color: white;
 }
+
+.warn {
+  background-color: #241f48 !important;
+  color: #fff !important;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #B0BEC5; /* Gris clair quand inactif */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  /* Pouce du toggle */
+  .toggle-thumb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #FFFFFF; /* Cercle blanc */
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+  }
+
+  /* État actif (teal) */
+  &.active {
+    background-color: #6b9990; /* Teal quand activé */
+    .toggle-thumb {
+      transform: translateX(20px); /* Déplace le pouce à droite */
+    }
+  }
+
+  /* État inactif */
+  &.inactive {
+    background-color: #d81b60; /* Gris clair quand inactif */
+    .toggle-thumb {
+      transform: translateX(0); /* Pouce à gauche */
+    }
+  }
+}
+
+/* Ajustements responsives */
+@media (max-width: 600px) {
+  .toggle-switch {
+    width: 34px;
+    height: 16px;
+    .toggle-thumb {
+      width: 16px;
+      height: 16px;
+    }
+    &.active .toggle-thumb {
+      transform: translateX(18px); /* Ajustement pour petite taille */
+    }
+  }
+  .mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+    padding: 8px;
+  }
+}
+

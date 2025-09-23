@@ -1,183 +1,160 @@
 <div class="p-2">
-    <mat-card>
-        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-            <h2>Liste des pays</h2>
-            <button mat-raised-button color="warn" (click)="openDialog(null)">Ajouter un pays</button>
-            <button mat-raised-button color="warn" (click)="openRegionDialog(null)">Ajouter une région</button>
+  <mat-card>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+      <h2>Liste des pays</h2>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <button mat-raised-button class="warn" (click)="openDialog(null)">Ajouter un pays</button>
+        <button mat-raised-button class="warn" (click)="openRegionDialog(null)">Ajouter une région</button>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="mat-mdc-table admin-table text-center">
+      <div class="mat-mdc-header-row mat-toolbar mat-primary">
+        <div class="mat-mdc-header-cell">Nom
+          <a (click)="sortCountry('nom')"><mat-icon>swap_vert</mat-icon></a>
         </div>
-        <mat-divider></mat-divider>
-        <div class="mat-mdc-table admin-table text-center">
-            <div class="mat-mdc-header-row mat-toolbar mat-primary">
-              <div class="mat-mdc-header-cell" >Nom
-                <a (click)="sortCountry('nom')"><mat-icon>swap_vert</mat-icon></a>
-              </div>
-                <div class="mat-mdc-header-cell">Indicatif du pays
-                  <a (click)="sortCountry('indicatif')"><mat-icon>swap_vert</mat-icon></a>
+        <div class="mat-mdc-header-cell">Indicatif du pays
+          <a (click)="sortCountry('indicatif')"><mat-icon>swap_vert</mat-icon></a>
+        </div>
+        <div class="mat-mdc-header-cell">Description
+          <a (click)="sortCountry('description')"><mat-icon>swap_vert</mat-icon></a>
+        </div>
+        <div class="mat-mdc-header-cell">Date
+          <a (click)="sortCountry('createdAt')"><mat-icon>swap_vert</mat-icon></a>
+        </div>
+        <div class="mat-mdc-header-cell">Actions</div>
+      </div>
+      <div *ngFor="let country of (sortedCountries || allCountries) | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+        <div class="mat-mdc-cell">{{country.nom}}</div>
+        <div class="mat-mdc-cell">{{country.indicatif}}</div>
+        <div class="mat-mdc-cell">{{ limitDescription(country.description, 50) }}</div>
+        <div class="mat-mdc-cell">{{ country.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+        <div class="mat-mdc-cell">
+          <div class="p-2 actions" style="display: flex; align-items: center;">
+            <button mat-mini-fab color="accent" matTooltip="Détail" (click)="openPaysDetails(country)">
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>
+            <button mat-mini-fab color="accent" matTooltip="Éditer" (click)="openDialog(country.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-mini-fab color=" #241f48" matTooltip="Supprimer" (click)="remove(country)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <div class="toggle-switch"
+                 [class.active]="country.etat"
+                 [class.inactive]="!country.etat"
+                 (click)="toggleStatus(country.id, !country.etat)">
+              <div class="toggle-thumb"></div>
+            </div>
+            <!-- <span>{{ country.etat ? 'Activée' : 'Désactivée' }}</span> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row wrap">
+      <div fxFlex="100">
+        <mat-card class="text-center">
+          <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card>
+</div>
 
-                </div>
-                <div class="mat-mdc-header-cell" >Description
-                  <a (click)="sortCountry('description')"><mat-icon>swap_vert</mat-icon></a>
-                </div>
-                <div class="mat-mdc-header-cell" >Date
-                  <a (click)="sortCountry('createdAt')"><mat-icon>swap_vert</mat-icon></a>
-                </div>
-  
-                <div class="mat-mdc-header-cell " >Actions</div>
-            </div>
-            <div *ngFor="let country of ( sortedCountries || allCountries) | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
-              <div class="mat-mdc-cell" >{{country.nom}}</div>
-                <div class="mat-mdc-cell" >{{country.indicatif}}</div>
-                <div class="mat-mdc-cell"  >{{ limitDescription(country.description,50) }}</div>
-                <div class="mat-mdc-cell">{{ country.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</div>
-  
-  
-                <div class="mat-mdc-cell" >
-                    <div class="p-2 actions" style="display: flex; align-items: center;">
-                      <button mat-mini-fab color="accent" matTooltip="Detail" (click)="openPaysDetails(country)">
-                        <mat-icon>remove_red_eye</mat-icon>
-                    </button>
-                        <button mat-mini-fab color="accent" matTooltip="Edit" (click)="openDialog(country.id)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-mini-fab color="primary" matTooltip="Delete" (click)="remove(country)">
-                          <mat-icon>delete</mat-icon>
-                      </button>                        <mat-slide-toggle [color]="country.etat ? 'primary' : 'warn'" [checked]="country.etat" (change)="setStatus(country.id, $event)">
-                            {{ country.etat ? 'Activée' : 'Désactivée' }}
-                        </mat-slide-toggle>
-                    </div>
-                </div>
-            </div>
-        </div>
+<ng-template #addCountry>
+  <h1 mat-dialog-title>Ajouter un pays ici</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" autocomplete="off">
+      <div mat-dialog-content>
         <div fxLayout="row wrap">
-            <div fxFlex="100">
-                <mat-card class="text-center">
-                    <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
-                </mat-card>
-            </div>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nom du pays</mat-label>
+            <input matInput formControlName="nom">
+            <mat-error *ngIf="form.controls.nom.errors?.required">Donne le du pays</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Indicatif du pays</mat-label>
+            <input matInput type="number" formControlName="indicatif">
+            <mat-error *ngIf="form.controls.indicatif.errors?.required">Donne l'indicatif</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" cols="30" rows="3"></textarea>
+          </mat-form-field>
         </div>
-    </mat-card>
+      </div>
+      <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
+          <button mat-raised-button class="bleu" type="submit">Ajouter</button>
+        </div>
+      </div>
+    </form>
   </div>
-  
-  <ng-template #addCountry>
-    <h1 mat-dialog-title>Ajouter un pays ici</h1>
-    <div mat-dialog-content>
-    
-        <form [formGroup]="form" (ngSubmit)="submitForm()" autocomplete="off">
-            <div mat-dialog-content>
-              <div fxLayout="row wrap">
-    
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Nom du pays</mat-label>
-                    <input matInput formControlName="nom">
-                    <mat-error *ngIf="form.controls.nom.errors?.required">Donne le du pays</mat-error>
-                </mat-form-field>
+</ng-template>
 
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Indicatif du pays</mat-label>
-                    <input matInput type="number" formControlName="indicatif">
-                    <mat-error *ngIf="form.controls.indicatif.errors?.required">Donne l'indicatif</mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Description</mat-label>
-                  <textarea matInput formControlName="description" cols="30" rows="3"></textarea>
-                </mat-form-field>
-                
-                
-
-
-              </div>
-            </div>
-            <div mat-dialog-actions>
-              <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
-                <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
-    
-                <button mat-raised-button color="primary" class="bleu" type="submit">Ajouter</button>
-              </div>
-            </div>
-          </form>
-
-    </div>
-  </ng-template>
-
-
-
-  <ng-template #addRegions>
-    <h1 mat-dialog-title>Ajouter une région ici</h1>
-    <div mat-dialog-content>
-    
-        <form [formGroup]="formRegion" (ngSubmit)="submitRegionForm()" autocomplete="off">
-            <div mat-dialog-content>
-              <div fxLayout="row wrap">
-    
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Nom de la région</mat-label>
-                    <input matInput formControlName="nom">
-                    <mat-error *ngIf="formRegion.controls.nom.errors?.required">Donne le nom de la région</mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Pays</mat-label>
-                    <mat-select formControlName="pays">
-                      <mat-option *ngFor="let country of allCountries" [value]="country.id">{{country.nom}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="formRegion.controls.pays.errors?.required">Donne le pays</mat-error>
-                </mat-form-field>
-
-                <div class="w-100 mb-3">
-                  <label class="mb-2">Est-ce la capitale ?</label>
-                  <mat-radio-group formControlName="capitale" class="d-flex gap-3">
-                    <mat-radio-button [value]=true>Oui</mat-radio-button>
-                    <mat-radio-button [value]=false>Non</mat-radio-button>
-                  </mat-radio-group>
-                  <mat-error *ngIf="formRegion.controls.capitale.errors?.required" class="mt-2">Veuillez indiquer si c'est la capitale</mat-error>
-                </div>
-
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Description</mat-label>
-                  <textarea matInput formControlName="description" cols="30" rows="3"></textarea>
-                </mat-form-field>
-                
-              
-              </div>
-            </div>
-            <div mat-dialog-actions>
-              <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
-                <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
-    
-                <button mat-raised-button color="primary" class="bleu" type="submit">Ajouter</button>
-              </div>
-            </div>
-          </form>
-
-    </div>
-  </ng-template>
-
-  <ng-template #paysDetails>
-    <h1 mat-dialog-title>Détails du pays: {{monPays.nom}}</h1>
-    <div mat-dialog-content>
-
-      <div class="indicatifDuPays">
-        <span style="font-weight: bold;"> Indicatif du pays : </span> {{monPays.indicatif}}
-      </div>
-    
-      <div class="listregionForPays">
-        <div *ngFor="let region of allRegions; let i = index">
-          <ng-container *ngIf="editIndex !== i; else editForm">
-            {{i + 1}} - <strong>{{region.nom}}</strong> {{region.capitale ? 'Capitale' : ''}}
-            <button mat-button color="primary" (click)="editRegion(i)">Modifier</button>
-            <button mat-button color="warn" (click)="deleteRegion(i)">Supprimer</button>
-          </ng-container>
-      
-          <ng-template #editForm>
-            <input [(ngModel)]="region.nom" placeholder="Nom de la région" />
-            <mat-checkbox [(ngModel)]="region.capitale">Capitale</mat-checkbox>
-            <button mat-button color="primary" (click)="saveRegion(i)">Enregistrer</button>
-            <button mat-button color="warn" (click)="cancelEdit()">Annuler</button>
-          </ng-template>
+<ng-template #addRegions>
+  <h1 mat-dialog-title>Ajouter une région ici</h1>
+  <div mat-dialog-content>
+    <form [formGroup]="formRegion" (ngSubmit)="submitRegionForm()" autocomplete="off">
+      <div mat-dialog-content>
+        <div fxLayout="row wrap">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Nom de la région</mat-label>
+            <input matInput formControlName="nom">
+            <mat-error *ngIf="formRegion.controls.nom.errors?.required">Donne le nom de la région</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Pays</mat-label>
+            <mat-select formControlName="pays">
+              <mat-option *ngFor="let country of allCountries" [value]="country.id">{{country.nom}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formRegion.controls.pays.errors?.required">Donne le pays</mat-error>
+          </mat-form-field>
+          <div class="w-100 mb-3">
+            <label class="mb-2">Est-ce la capitale ?</label>
+            <mat-radio-group formControlName="capitale" class="d-flex gap-3">
+              <mat-radio-button [value]="true">Oui</mat-radio-button>
+              <mat-radio-button [value]="false">Non</mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="formRegion.controls.capitale.errors?.required" class="mt-2">Veuillez indiquer si c'est la capitale</mat-error>
+          </div>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" cols="30" rows="3"></textarea>
+          </mat-form-field>
         </div>
       </div>
-      
+      <div mat-dialog-actions>
+        <div fxLayout="row" fxLayoutAlign="space-between center" class="w-100">
+          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Annuler</button>
+          <button mat-raised-button class="bleu" type="submit">Ajouter</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
 
+<ng-template #paysDetails>
+  <h1 mat-dialog-title>Détails du pays: {{monPays.nom}}</h1>
+  <div mat-dialog-content>
+    <div class="indicatifDuPays">
+      <span style="font-weight: bold;"> Indicatif du pays : </span> {{monPays.indicatif}}
     </div>
-  </ng-template>
+    <div class="listregionForPays">
+      <div *ngFor="let region of allRegions; let i = index">
+        <ng-container *ngIf="editIndex !== i; else editForm">
+          {{i + 1}} - <strong>{{region.nom}}</strong> {{region.capitale ? 'Capitale' : ''}}
+          <button mat-button color="primary" (click)="editRegion(i)">Modifier</button>
+          <button mat-button color=" #241f48" (click)="deleteRegion(i)">Supprimer</button>
+        </ng-container>
+        <ng-template #editForm>
+          <input [(ngModel)]="region.nom" placeholder="Nom de la région" />
+          <mat-checkbox [(ngModel)]="region.capitale">Capitale</mat-checkbox>
+          <button mat-button color="primary" (click)="saveRegion(i)">Enregistrer</button>
+          <button mat-button color="warn" (click)="cancelEdit()">Annuler</button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-template>

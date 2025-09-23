@@ -1,0 +1,86 @@
+.warn{
+    background-color: #241f48 !important;
+    color: #fff !important;
+}
+.bleu{
+    background-color: #241f48 !important;
+    color: #fff !important;
+}
+
+/* Styles pour le tableau et les cellules */
+.mat-mdc-row {
+  .mat-mdc-cell {
+    padding: 8px;
+    vertical-align: middle;
+  }
+}
+
+/* Styles pour le toggle personnalisé */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #6b9990; /* Gris clair quand inactif */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  /* Pouce du toggle */
+  .toggle-thumb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #FFFFFF; /* Cercle blanc */
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+  }
+
+  /* État actif (teal) */
+  &.active {
+    background-color: #6b9990; /* Teal quand activé */
+    .toggle-thumb {
+      transform: translateX(20px); /* Déplace le pouce à droite */
+    }
+  }
+
+  /* État inactif */
+  &.inactive {
+    background-color: #d81b60; /* Gris clair quand inactif */
+    .toggle-thumb {
+      transform: translateX(0); /* Pouce à gauche */
+    }
+  }
+}
+
+/* Alignement des actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacement entre les boutons et le toggle */
+}
+
+/* Styles pour les dialogues */
+.indicatifDuPays, .listregionForPays {
+  margin-bottom: 16px;
+}
+
+.listregionForPays div {
+  margin: 8px 0;
+}
+
+/* Ajustements responsives */
+@media (max-width: 600px) {
+  .toggle-switch {
+    width: 34px;
+    height: 16px;
+    .toggle-thumb {
+      width: 16px;
+      height: 16px;
+    }
+    &.active .toggle-thumb {
+      transform: translateX(18px); /* Ajustement pour petite taille */
+    }
+  }
+}

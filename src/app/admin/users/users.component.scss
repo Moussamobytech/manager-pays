@@ -2,6 +2,10 @@
     padding: 0 12px;
     font-weight: 400;
 }
+.warn {
+  background-color: #241f48 !important;
+  color: #fff !important;
+}
 .user-content{
     padding: 10px;
     .user-img{
@@ -43,7 +47,7 @@
     overflow: hidden;
     transition: 0.3s;
     .mat-mdc-form-field{
-        width: 100% !important;
+        width: 50% !important;
         text-align: center !important;
         .mat-mdc-form-field-infix {
             min-height: 36px;
@@ -134,5 +138,60 @@
 .fixed-width {
   min-width: 130px;
 }
+/* Styles pour le toggle personnalisé */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #6b9990; /* Gris clair quand inactif */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
+  /* Pouce du toggle */
+  .toggle-thumb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #FFFFFF; /* Cercle blanc */
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+  }
+
+  /* État actif (teal) */
+  &.active {
+    background-color: #6b9990; /* Teal quand activé */
+    .toggle-thumb {
+      transform: translateX(20px); /* Déplace le pouce à droite */
+    }
+  }
+
+  /* État inactif */
+  &.inactive {
+    background-color: #d81b60; /* Gris clair quand inactif */
+    .toggle-thumb {
+      transform: translateX(0); /* Pouce à gauche */
+    }
+  }
+}
+
+/* Ajustements responsives */
+@media (max-width: 600px) {
+  .toggle-switch {
+    width: 34px;
+    height: 16px;
+    .toggle-thumb {
+      width: 16px;
+      height: 16px;
+    }
+    &.active .toggle-thumb {
+      transform: translateX(18px); /* Ajustement pour petite taille */
+    }
+  }
+  .admin-table .fixed-width {
+    width: 100px;
+  }
+}
 

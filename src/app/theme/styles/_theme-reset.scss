@@ -8,11 +8,16 @@
     $warn:          map.get($color-config, 'warn');
     $foreground:    map.get($color-config, 'foreground');
     $background:    map.get($color-config, 'background');
-    $fid_amber: #feb930;
+    $fid_amber: #fbb03b;
     $fid_green: #548580;
 
     .bg-primary {
         background: #25224a !important;
+        // color: #c54896;
+        color: mat.get-color-from-palette($primary, default-contrast) ;
+    }
+        .bg-maro {
+        background: #548580 !important;
         // color: #c54896;
         color: mat.get-color-from-palette($primary, default-contrast) ;
     }
@@ -197,8 +202,8 @@
     }
 
     .active-link{
-        background-color: mat.get-color-from-palette($primary);
-        color: mat.get-color-from-palette($warn);
+        background-color: #241f48;
+        color: #fff;
     }
     .horizontal-active-link,
     .app-dropdown .mat-mdc-menu-item.horizontal-active-link{
@@ -216,9 +221,8 @@
         margin-bottom: 0;
         padding: 14px 10px;
         .current {
-            background: mat.get-color-from-palette($primary);
-            color: mat.get-color-from-palette($warn);
-            // color: mat.get-color-from-palette($primary, default-contrast);
+           background-color: #241f48 !important;
+  color: #fff !important;
         }
         a:hover, button:hover{
             background: rgba(mat.get-color-from-palette($primary), 0.2);
@@ -333,7 +337,7 @@
     }
 
     .active-link{
-        background-color: mat.get-color-from-palette($primary);
+        background-color: #241f48;
         color: #fff;
     }
     .horizontal-active-link,

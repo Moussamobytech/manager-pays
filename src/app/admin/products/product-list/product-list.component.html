@@ -1,118 +1,119 @@
-<!-- <div fxLayout="row wrap">
-    <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" fxFlex="100" [fxFlex.gt-sm]="viewCol" fxFlex.sm="50" class="p-2">
-        <mat-card class="product-item text-center">
-            <mat-chip-listbox *ngIf="product.discount">
-                <mat-chip-option color="warn" highlighted selectable="false">{{product.discount}}% OFF</mat-chip-option>
-            </mat-chip-listbox>
-            <img [src]="product.image1[0].medium" alt="">
-            <h4 class="category text-muted"> {{ ( appService.Data.categories | filterById : product.categorie)?.nom }}</h4>
-            <div class="title text-truncate">
-                {{product.nom}}
-            </div>
-            <div fxLayout="row" fxLayoutAlign="space-between center" class="prices">
-                <div fxLayout="column" fxLayoutAlign="center start">
-                    <p class="old-price text-muted"><span *ngIf="product.oldPrice">${{product.oldPrice | number : '1.2-2'}}</span></p>
-                    <p class="new-price">${{product.newPrice | number : '1.2-2'}}</p>
-                </div>
-                <app-rating [ratingsCount]="product.ratingsCount" [rate]="product.rate" [direction]="'column'"></app-rating>
-            </div>
-            <div class="divider mt-2"></div>
-            <div class="icons">
-                <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="primary" matTooltip="Edit"><mat-icon>edit</mat-icon></a>
-                <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="primary" matTooltip="View" class="mx-2"><mat-icon>remove_red_eye</mat-icon></a>
-                <button mat-mini-fab color="warn" matTooltip="Remove" (click)="remove(product)"><mat-icon>delete</mat-icon></button>
-            </div>
-        </mat-card>
+<!-- <div class="p-2">
+  <mat-card>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+      <h2>{{"PRODUCTS.PAGE_TITLE" | translate}}</h2>
+      <button mat-raised-button class="warn" (click)="openVendeurSelectDialog()">
+        Désactiver les produits d’un vendeur
+      </button>
+      <button mat-raised-button class="warn" (click)="openToggleAllDialog()">
+        <mat-icon>power_settings_new</mat-icon>
+        {{ allProductsDeactivated ? 'Activer tous' : 'Désactiver tous' }}
+      </button>
     </div>
-</div> -->
-
-<div class="p-2">
-    <mat-card>
-        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
-            <h2>{{"PRODUCTS.PAGE_TITLE" | translate}}</h2>
-
-            <button mat-raised-button color="warn" (click)="openVendeurSelectDialog()">
-                Désactiver les produits d’un vendeur
-            </button>
-
-
-            <button mat-raised-button color="warn" (click)="openToggleAllDialog()">
-                <mat-icon>power_settings_new</mat-icon>
-                {{ allProductsDeactivated ? 'Activer tous' : 'Désactiver tous' }}
-            </button>
-
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <div class="mat-mdc-table admin-table">
+      <div class="mat-mdc-header-row mat-toolbar mat-primary">
+        <div class="mat-mdc-header-cell image">{{ 'PRODUCTS.IMAGE' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.LIBELLE' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CATEGORY' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.PRICE' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.USER' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CREATED' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.STATE' | translate }}</div>
+        <div class="mat-mdc-header-cell"></div>
+      </div>
+      <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+        <div class="mat-mdc-cell image">
+          <img [src]="product.image1" alt="" width="50">
         </div>
-
-        <mat-divider></mat-divider>
-        <mat-divider></mat-divider>
-        <div class="mat-mdc-table admin-table">
-            <div class="mat-mdc-header-row mat-toolbar mat-primary">
-                <div class="mat-mdc-header-cell image">{{ 'PRODUCTS.IMAGE' | translate }}</div>
-                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.LIBELLE' | translate }}</div>
-                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CATEGORY' | translate }}</div>
-                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.PRICE' | translate }}</div>
-                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.USER' | translate }}</div>
-                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CREATED' | translate }}</div>
-                <div class="mat-mdc-header-cell">{{ 'PRODUCTS.STATE' | translate }}</div>
-
-                <div class="mat-mdc-header-cell"></div>
-            </div>
-            <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }"
-                class="mat-mdc-row">
-                <div class="mat-mdc-cell image">
-                    <img [src]="product.image1" alt="" width="50">
-                </div>
-                <div class="mat-mdc-cell">{{product.nom}}</div>
-                <div class="mat-mdc-cell">{{product.categorieNom}}</div>
-                <div class="mat-mdc-cell">{{product.priceBasic}}</div>
-                <div class="mat-mdc-cell">{{product.userNom}}</div>
-                <div class="mat-mdc-cell">{{product.createdAt | date}}</div>
-                <div class="mat-mdc-cell">{{etat(product.etat)}}</div>
-                <div class="mat-mdc-cell">
-                    <div class="icons">
-                        <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent"
-                            matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
-                        <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent"
-                            matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
-                        <button mat-mini-fab color="warn" matTooltip="Remove"
-                            (click)="remove(product)"><mat-icon>delete</mat-icon></button>
-
+        <div class="mat-mdc-cell">{{product.nom}}</div>
+        <div class="mat-mdc-cell">{{product.categorieNom}}</div>
+        <div class="mat-mdc-cell">{{product.priceBasic}}</div>
+        <div class="mat-mdc-cell">{{product.userNom}}</div>
+        <div class="mat-mdc-cell">{{product.createdAt | date}}</div>
+        <div class="mat-mdc-cell">{{etat(product.etat)}}</div>
+        <div class="mat-mdc-cell">
+          <div class="icons">
+            <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent" matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
+            <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent" matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
+            <button mat-mini-fab class="warn" matTooltip="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(product)"><mat-icon>delete</mat-icon></button>
                         <mat-slide-toggle [color]="product.etat == 'ACTIF' ? 'primary' : 'warn'"
                             [checked]="product.etat == 'ACTIF'" (change)="setStatus(product.id,username, $event)">
                         </mat-slide-toggle>
-                    </div>
-
-                    <!-- <div class="p-2 actions">
-                      <button mat-mini-fab color="primary" matTooltip="View">
-                        <mat-icon>remove_red_eye</mat-icon>
-                      </button>
-                      <button mat-mini-fab color="info" matTooltip="Modifier" (click)="edit(product.id)">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button *ngIf="product.etat == 'INACTIF' || product.etat == 'PENDING'" mat-mini-fab color="warn" matTooltip="" class="mx-1" (click)="remove(product)">
-                          <mat-icon>refresh</mat-icon>
-                      </button>
-                    </div> -->
-                </div>
-            </div>
-
+          </div>
         </div>
-    </mat-card>
-
-    <div *ngIf="products.length > 0" fxLayout="row wrap">
-        <div fxFlex="100">
-            <mat-card class="text-center">
-                <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5"
-                    (pageChange)="onPageChanged($event)"></pagination-controls>
-            </mat-card>
-        </div>
+      </div>
     </div>
-</div>
+  </mat-card>
 
-<!-- <div *ngIf="products.length > 0" fxLayout="row wrap">
-    <div fxFlex="100" class="p-2">
-        <mat-card class="text-center">
-            <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
-        </mat-card>
+  <div *ngIf="products.length > 0" fxLayout="row wrap">
+    <div fxFlex="100">
+      <mat-card class="text-center">
+        <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+      </mat-card>
     </div>
+  </div>
 </div> -->
+
+
+<div class="p-2">
+  <mat-card>
+    <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="w-100 p-3">
+      <h2>{{"PRODUCTS.PAGE_TITLE" | translate}}</h2>
+      <button mat-raised-button class="warn" (click)="openVendeurSelectDialog()">
+        Désactiver les produits d’un vendeur
+      </button>
+      <button mat-raised-button class="warn" (click)="openToggleAllDialog()">
+        <mat-icon>power_settings_new</mat-icon>
+        {{ allProductsDeactivated ? 'Activer tous' : 'Désactiver tous' }}
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
+    <div class="mat-mdc-table admin-table">
+      <div class="mat-mdc-header-row mat-toolbar mat-primary">
+        <div class="mat-mdc-header-cell image">{{ 'PRODUCTS.IMAGE' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.LIBELLE' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CATEGORY' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.PRICE' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.USER' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.CREATED' | translate }}</div>
+        <div class="mat-mdc-header-cell">{{ 'PRODUCTS.STATE' | translate }}</div>
+        <div class="mat-mdc-header-cell"></div>
+      </div>
+      <div *ngFor="let product of products | paginate: { itemsPerPage: count, currentPage: page }" class="mat-mdc-row">
+        <div class="mat-mdc-cell image">
+          <img [src]="product.image1" alt="" width="50">
+        </div>
+        <div class="mat-mdc-cell">{{product.nom}}</div>
+        <div class="mat-mdc-cell">{{product.categorieNom}}</div>
+        <div class="mat-mdc-cell">{{product.priceBasic}}</div>
+        <div class="mat-mdc-cell">{{product.userNom}}</div>
+        <div class="mat-mdc-cell">{{product.createdAt | date}}</div>
+        <div class="mat-mdc-cell">{{etat(product.etat)}}</div>
+        <div class="mat-mdc-cell">
+          <div class="icons">
+            <a [routerLink]="['/admin/products/add-product', product.id]" mat-mini-fab color="accent" matTooltip="Modifier"><mat-icon>edit</mat-icon></a>
+            <a [routerLink]="['/admin/products/product-detail', product.id]" mat-mini-fab color="accent" matTooltip="Afficher" class="mx-2 view"><mat-icon>remove_red_eye</mat-icon></a>
+            <button mat-mini-fab color=" #241f48" matTooltip="'BTN.REMOVE'|translate" class="mx-1" (click)="remove(product)"><mat-icon>delete</mat-icon></button>
+            <div class="toggle-switch"
+                 [class.active]="product.etat === 'ACTIF'"
+                 [class.inactive]="product.etat !== 'ACTIF'"
+                 (click)="toggleProductState(product)">
+              <div class="toggle-thumb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <div *ngIf="products.length > 0" fxLayout="row wrap">
+    <div fxFlex="100">
+      <mat-card class="text-center">
+        <pagination-controls class="product-pagination" [autoHide]="true" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+      </mat-card>
+    </div>
+  </div>
+</div>

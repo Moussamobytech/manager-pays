@@ -1,0 +1,122 @@
+<mat-card class="vendor-form-card">
+  <h2>Nouveau Vendeur</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <!-- Step 1: basic info -->
+    <div *ngIf="currentStep === 1">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Prénom</mat-label>
+          <input matInput formControlName="firstName" placeholder="Prénom" />
+          <mat-error *ngIf="form.get('firstName')?.invalid">Prénom requis</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="lastName" placeholder="Nom" />
+          <mat-error *ngIf="form.get('lastName')?.invalid">Nom requis</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row two-columns">
+        <mat-form-field appearance="outline" class="col country-col">
+          <mat-label>Pays</mat-label>
+          <mat-select formControlName="country" placeholder="Pays">
+            <mat-option *ngFor="let c of countries" [value]="c">{{ c }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('country')?.invalid">Pays requis</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col phone-col">
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="phone" placeholder="Téléphone" />
+          <mat-error *ngIf="form.get('phone')?.invalid">Téléphone requis</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <label class="muted">Avez-vous une boutique ou un magasin physique ?</label>
+        <mat-radio-group formControlName="hasShop" class="shop-radio">
+          <mat-radio-button [value]="true">Oui</mat-radio-button>
+          <mat-radio-button [value]="false">Non</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div class="form-row" *ngIf="form.get('hasShop')?.value">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom de la boutique</mat-label>
+          <input matInput formControlName="shopName" placeholder="Nom de la boutique" />
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <label class="muted">Quel type de vendeur êtes-vous ?</label>
+        <div class="vendor-types">
+          <mat-checkbox *ngFor="let type of vendorTypeOptions" (change)="onVendorTypeChange($event, type)" [checked]="hasVendorType(type)">
+            {{ type }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="form-row file-row">
+        <label class="muted">Logo (optionnel)</label>
+        <div class="file-upload">
+          <input #logoInput id="logoInput" type="file" accept="image/*" (change)="onLogoSelected($event)" hidden />
+          <button mat-stroked-button type="button" (click)="triggerLogoInput()"> <mat-icon>file_upload</mat-icon> Telecharger</button>
+          <span class="file-name" *ngIf="form.get('logo')?.value">{{ form.get('logo')?.value.name }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: account/password and address -->
+    <div *ngIf="currentStep === 2">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ville</mat-label>
+          <input matInput formControlName="city" placeholder="Ville" />
+          <mat-error *ngIf="form.get('city')?.invalid">Ville requise</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Adresse</mat-label>
+          <input matInput formControlName="address" placeholder="Adresse" />
+          <mat-error *ngIf="form.get('address')?.invalid">Adresse requise</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Mot de passe" />
+          <button mat-icon-button matSuffix type="button" aria-label="Afficher/masquer mot de passe" (click)="toggleShowPassword(); $event.preventDefault()">
+            <mat-icon>{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')?.invalid">Mot de passe requis (min 6)</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mot de passe de confirmation</mat-label>
+          <input matInput [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Mot de passe de confirmation" />
+          <button mat-icon-button matSuffix type="button" aria-label="Afficher/masquer mot de passe" (click)="toggleShowConfirmPassword(); $event.preventDefault()">
+            <mat-icon>{{ showConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.hasError('passwordsMismatch')">Les mots de passe ne correspondent pas</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-actions" fxLayout="row" fxLayoutAlign="space-between center">
+      <button mat-stroked-button type="button" (click)="previousStep()"><mat-icon>arrow_back</mat-icon> Retour</button>
+     <button mat-raised-button class="btn-custom" type="submit">
+  {{ currentStep === 1 ? 'Suivant' : 'Terminer' }}
+  <mat-icon>{{ currentStep === 1 ? 'arrow_forward' : 'check' }}</mat-icon>
+</button>
+
+    </div>
+  </form>
+</mat-card>

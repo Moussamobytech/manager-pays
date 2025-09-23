@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>Ajouter un produit</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="save()" autocomplete="off">
+    <div class="mt-2">
+      <p class="mt-1"><span class="uppercase fw-500">Images depuis l'appareil</span><span class="text-muted px-1">(max 5)</span></p>
+      <input-file formControlName="images" [fileLimit]="fileLimitNum" fileAccept="image/*"></input-file>
+    </div>
+    <div class="row two-cols">
+      <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="name" required placeholder="Nom" title="Nom du produit" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Catégorie</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let c of categories" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row two-cols">
+      <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Sous Catégorie</mat-label>
+        <mat-select formControlName="subCategory">
+          <mat-option *ngFor="let sc of subCategories" [value]="sc">{{ sc }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Prix de base</mat-label>
+        <input matInput type="number" formControlName="price" required placeholder="Prix en FCFA" title="Prix de base" />
+      </mat-form-field>
+    </div>
+
+    <div class="row two-cols">
+      <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Prix promotion (Optionnel)</mat-label>
+        <input matInput type="number" formControlName="oldPrice" placeholder="Ancien prix" title="Prix promotionnel (optionnel)" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Stock</mat-label>
+        <input matInput type="number" formControlName="stock" required placeholder="Quantité en stock" title="Stock disponible" />
+      </mat-form-field>
+    </div>
+
+    <div class="row three-cols">
+      <mat-form-field appearance="outline" class="w-33">
+        <mat-label>Couleur</mat-label>
+        <mat-select formControlName="color">
+          <mat-option *ngFor="let col of colors" [value]="col">{{ col }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-33">
+        <mat-label>Poids</mat-label>
+        <input matInput formControlName="weight" placeholder="Poids (kg)" title="Poids" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-33">
+        <mat-label>Tailles disponibles</mat-label>
+        <mat-select formControlName="sizes" multiple>
+          <mat-option *ngFor="let s of sizesOptions" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="4" formControlName="description" placeholder="Description" title="Description"></textarea>
+      </mat-form-field>
+    </div>
+
+  </form>
+</div>
+<div mat-dialog-actions align="end" fxLayoutGap="10px">
+  <!-- Bouton Annuler -->
+  <button mat-stroked-button class="btn-cancel" (click)="close()">
+    <mat-icon>close</mat-icon>
+    Annuler
+  </button>
+
+  <!-- Bouton Ajouter -->
+  <button mat-raised-button class="btn-custom" (click)="save()" [disabled]="form.invalid">
+    <mat-icon>add</mat-icon>
+    Ajouter
+  </button>
+</div>
+
+
+
+

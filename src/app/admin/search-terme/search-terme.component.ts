@@ -7,42 +7,29 @@ import { AppService } from 'src/app/app.service';
   templateUrl: './search-terme.component.html',
   styleUrl: './search-terme.component.scss'
 })
-export class SearchTermeComponent implements OnInit{
+export class SearchTermeComponent implements OnInit {
   sortedCountries: any[];
-openPaysDetails(_t35: any) {
-throw new Error('Method not implemented.');
-}
-setStatus(arg0: any,$event: MatSlideToggleChange) {
-throw new Error('Method not implemented.');
-}
-remove(_t35: any) {
-throw new Error('Method not implemented.');
-}
+  mesMots: any;
+  count = 5;
+  page = 1;
 
-
-  mesMots:any
-  count:5
-  page = 1
-constructor(  public appService : AppService){
-
-}
+  constructor(public appService: AppService) {}
 
   ngOnInit(): void {
     this.getAllTermOfSearch();
-    //throw new Error('Method not implemented.');
   }
 
-  getAllTermOfSearch(){
-    this.appService.getAllSearchNotFoundTerme().subscribe(datas =>{
-      console.log("MES MOTS VAUTS ",JSON.stringify(datas));
+  getAllTermOfSearch() {
+    this.appService.getAllSearchNotFoundTerme().subscribe(datas => {
+      console.log("MES MOTS VAUTS ", JSON.stringify(datas));
       this.mesMots = datas;
-    })
+    });
   }
-  sortCountry(keyWord: string) {
 
+  sortCountry(keyWord: string) {
     const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
     if (this[ascKey] === undefined) {
-      this[ascKey] = true; // Initialize to ascending on the first sort
+      this[ascKey] = true;
     }
 
     const isAscending = this[ascKey];
@@ -53,7 +40,6 @@ constructor(  public appService : AppService){
       const valueB = this.getSortValue(b, keyWord);
 
       if (typeof valueA === "string" && typeof valueB === "string") {
-        // This sorting way allows us to account every french characters even accentuated ones
         return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
       }
 
@@ -62,27 +48,45 @@ constructor(  public appService : AppService){
       return 0;
     });
 
-    // Toggle the direction for the next sort dynamically
     this[ascKey] = !isAscending;
   }
-  // function to get the sortable value based on 'keyWord'
-  getSortValue(country: any, keyWord: string): any {
 
+  getSortValue(country: any, keyWord: string): any {
     switch (keyWord) {
       case "termeRecherche":
         return country.termeRecherche?.trim().toLowerCase() || '';
       case "nombreTentatives":
-        return country.nombreTentatives.toLowerCase() || '';
+        return country.nombreTentatives || 0;
       case "createdAt":
         return new Date(country.createdAt).getTime() || 0;
       default:
         return '';
     }
   }
-openRegionDialog(arg0: null) {
-throw new Error('Method not implemented.');
-}
-openDialog(arg0: null) {
-throw new Error('Method not implemented.');
-}
+
+  // Bascule l'état du toggle et met à jour si nécessaire
+  toggleStatus(id: any, newStatus: boolean) {
+    const item = this.mesMots.find((mot: any) => mot.id === id);
+    if (item) {
+      item.etat = newStatus;
+      console.log(`Mise à jour du statut pour l'ID ${id} à ${newStatus}`);
+      // Exemple : this.appService.updateSearchTermStatus(id, newStatus).subscribe(...);
+    }
+  }
+
+  remove(_t35: any) {
+    console.log(`Suppression de l'élément : ${_t35}`);
+  }
+
+  openPaysDetails(_t35: any) {
+    console.log(`Ouverture des détails pour : ${_t35}`);
+  }
+
+  openDialog(id: any) {
+    console.log(`Ouverture de la boîte de dialogue pour l'ID : ${id}`);
+  }
+
+  openRegionDialog(arg0: null) {
+    throw new Error('Méthode non implémentée.');
+  }
 }

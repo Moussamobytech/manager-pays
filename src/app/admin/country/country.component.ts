@@ -18,17 +18,11 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
   styleUrl: './country.component.scss'
 })
 export class CountryComponent implements OnInit {
-
   allRegions: any;
- 
 
   @ViewChild('addCountry') addCountry: TemplateRef<any>;
   @ViewChild('addRegions') addRegions: TemplateRef<any>;
   @ViewChild('paysDetails') paysDetails: TemplateRef<any>;
-
-
-
-
 
   public form: UntypedFormGroup;
   public formRegion: UntypedFormGroup;
@@ -49,17 +43,19 @@ export class CountryComponent implements OnInit {
     public formBuilder: UntypedFormBuilder,
     private commonService: CommonMessageService,
     private countryService: CountryService,
-    public appService: AppService, public fb: FormBuilder,
+    public appService: AppService,
+    public fb: FormBuilder,
     public domHandlerService: DomHandlerService,
     private activatedRoute: ActivatedRoute,
-    public dialog: MatDialog, public appSettings: AppSettings) {
+    public dialog: MatDialog,
+    public appSettings: AppSettings
+  ) {
     this.settings = this.appSettings.settings;
-
   }
+
   ngOnInit(): void {
     this.getBrands();
     this.getAllPays();
-
 
     this.form = this.formBuilder.group({
       'nom': [null, Validators.required],
@@ -81,18 +77,20 @@ export class CountryComponent implements OnInit {
       }
     });
   }
+
   getAllCountries() {
     this.countryService.getAllCountries().subscribe(datas => {
       this.allCountries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    })
+    });
   }
+
   public onPageChanged(event) {
     this.page = event;
     this.domHandlerService.winScroll(0, 0);
   }
+
   public getBrands() {
     this.appService.getBrands().subscribe((data) => {
-
       this.brand = data;
     });
   }
@@ -108,64 +106,36 @@ export class CountryComponent implements OnInit {
       direction: (this.settings.rtl) ? 'rtl' : 'ltr'
     });
     dialogRef.afterClosed().subscribe(brands => {
-      this.getBrands()
-      // if (brands) {
-      //   const index: number = this.brand.findIndex(x => x.id === brands.id);
-      //   if (index !== -1) {
-      //     // Si le brand existe déjà, mettez à jour ses données
-      //     this.brand[index] = brands;
-      //   } else {
-      //     // Si le brand n'existe pas, ajoutez-la à la liste
-      //     const lastBrand = this.brand[this.brand.length - 1];
-      //     brands.id = lastBrand.id + 1;
-      //     this.brand.push(brands);
-      //   }
-      // }
+      this.getBrands();
     });
   }
 
   public setEtatBrand(id: string, event: MatSlideToggleChange): void {
-    // Trouver le brand correspondant dans la liste
     const brand = this.brand.find(c => c.id === id);
     if (brand) {
-      // Mettre à jour l'état du brand
       brand.etat = event.checked;
-      // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
       this.appService.setEtatBrand(id, event.checked).subscribe(
-        () => {
-       //   console.log(`Etat du brand ${id} modifié avec succès à ${event.checked}.`);
-          // Mettre à jour l'état du brand dans votre application si nécessaire
-        },
+        () => {},
         error => {
-          console.error("Erreur lors du réglage d'etat du brand:", error);
-          // Traiter les erreurs éventuelles lors de la modification d'etat du brand
+          console.error("Erreur lors du réglage d'état du brand:", error);
         }
       );
     }
   }
 
-
   submitForm() {
     if (this.id != null) {
       this.Modifier(this.id);
-    }
-    else {
-    this.AddPays();
+    } else {
+      this.AddPays();
     }
   }
+
   submitRegionForm() {
     this.addRegion();
-   /*#addCountry if (this.id != null) {
-      this.Modifier(this.id);
-    }
-    else {
-      this.addRegion()
-    }*/
   }
 
-  
   AddPays() {
-
     try {
       if (this.form.valid) {
         const data = {
@@ -176,43 +146,38 @@ export class CountryComponent implements OnInit {
 
         this.countryService.addCountries(data).subscribe({
           next: (datas) => {
-            if (datas.message = "Pays ajouté avec succès") {
+            if (datas.message === "Pays ajouté avec succès") {
               this.commonService.successToast(datas.message);
               this.dialog.closeAll();
-              this.getAllPays()
+              this.getAllPays();
               this.router.navigate(["/admin/country"]);
-
             }
           },
           error: (err) => {
-            if (err && err.statusCode == "BAD_REQUEST") {
+            if (err && err.statusCode === "BAD_REQUEST") {
               this.commonService.errorToast(err.body.message);
-            }
-            if (err.status == "400") {
+            } else if (err.status === "400") {
               this.commonService.errorToast(err.message);
-            }
-            else {
+            } else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
           }
         });
-
       } else {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
     } catch (error) {
-     // console.log(error);
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
-
   }
+
   addRegion() {
     if (this.formRegion.valid) {
       const data = {
         nom: this.formRegion.value.nom,
         idCountrie: this.formRegion.value.pays,
         description: this.formRegion.value.description,
-        capitale: this.formRegion.value.capitale 
+        capitale: this.formRegion.value.capitale
       };
       this.countryService.addRegion(data).subscribe({
         next: (datas) => {
@@ -225,78 +190,73 @@ export class CountryComponent implements OnInit {
           this.commonService.errorToast(err.message);
         }
       });
-    }
-    else {
+    } else {
       this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
     }
   }
 
   Modifier(id: any) {
-
     try {
       if (this.form.valid) {
         const data = {
           nom: this.form.value.nom,
           indicatif: this.form.value.indicatif,
           description: this.form.value.description
-
         };
 
         this.countryService.updateCountries(id, data).subscribe({
           next: (datas) => {
-            if (datas.message = "Pays modifier avec succès") {
+            if (datas.message === "Pays modifier avec succès") {
               this.commonService.successToast(datas.message);
               this.dialog.closeAll();
-              this.getAllPays()
-              this.router.navigate(["/admin/country"]); 
+              this.getAllPays();
+              this.router.navigate(["/admin/country"]);
               this.id = null;
-
             }
           },
           error: (err) => {
-            if (err && err.statusCode == "BAD_REQUEST") {
+            if (err && err.statusCode === "BAD_REQUEST") {
               this.commonService.errorToast(err.body.message);
-            }
-            if (err.status == "400") {
+            } else if (err.status === "400") {
               this.commonService.errorToast(err.message);
-
-            }
-
-            else {
+            } else {
               this.commonService.errorToast("Une erreur interne est survenue, merci de réessayer !");
             }
           }
         });
-
       } else {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
     } catch (error) {
-    //  console.log(error);
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
-
   }
-
 
   getAllPays() {
     this.countryService.getAllCountries().subscribe(datas => {
       this.allCountries = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    })
+    });
   }
 
   getAllRegions() {
     this.countryService.getAllRegions().subscribe(datas => {
       this.allRegions = datas.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    })
+    });
   }
 
-  setStatus(id: string, event: MatSlideToggleChange): void {
-    this.updateState(id, event.checked ? 'true' : 'false')
+  // Nouvelle méthode pour basculer l'état du toggle
+  toggleStatus(id: any, newStatus: boolean) {
+    const country = this.allCountries.find((c: any) => c.id === id);
+    if (country) {
+      country.etat = newStatus;
+      this.updateState(id, newStatus ? 'true' : 'false');
+    }
   }
-  public updateState(id, state) {
+
+  public updateState(id: any, state: string) {
     this.countryService.updateState(id, state).then((data: any) => {
-    })
+      // Gérer la réponse si nécessaire
+    });
   }
 
   public remove(country: any) {
@@ -304,29 +264,25 @@ export class CountryComponent implements OnInit {
       maxWidth: "400px",
       data: {
         title: "Confirm Action",
-        message: "Vous etes sur de supprimer ce pays ?"
+        message: "Vous êtes sûr de supprimer ce pays ?"
       }
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
         this.countryService.delete(country.id).subscribe(
           () => {
-            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
             const index: number = this.allCountries.findIndex((us: any) => us.id === country.id);
             if (index !== -1) {
               this.allCountries.splice(index, 1);
             }
-           // console.log("Pays successfully deleted.");
           },
           (error) => {
             console.error("Error deleting produit:", error);
-            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
           }
         );
       }
     });
   }
-
 
   openDialog(id: any): void {
     const dialogRef = this.dialog.open(this.addCountry, {
@@ -335,40 +291,35 @@ export class CountryComponent implements OnInit {
     if (id != null) {
       this.id = id;
       this.countryService.getById(id).subscribe(datas => {
-        this.form.patchValue(datas)
+        this.form.patchValue(datas);
       });
     }
 
     dialogRef.afterClosed().subscribe(result => {
-      // Reset form fields after the dialog is closed
       this.form.reset({
         nom: '',
         indicatif: '',
         description: ''
       });
-
-      // Navigate to the desired route
       this.router.navigate(['/admin/country']);
     });
   }
+
   openRegionDialog(id: any): void {
     const dialogRef = this.dialog.open(this.addRegions, {
       width: '400px',
     });
-  } 
-
+  }
 
   openPaysDetails(pays: any) {
-        const dialogRef = this.dialog.open(this.paysDetails, {
+    const dialogRef = this.dialog.open(this.paysDetails, {
       width: '400px',
     });
     this.monPays = pays;
-    this.countryService.getAllRegionsByCountrie(pays.id).subscribe( datas =>{
-    //  console.log("My Regions List ",datas);
+    this.countryService.getAllRegionsByCountrie(pays.id).subscribe(datas => {
       this.allRegions = datas;
-    //  dialogRef.componentInstance.allRegions = datas;
-    })
-    }
+    });
+  }
 
   onNoClick(): void {
     this.dialog.closeAll();
@@ -380,11 +331,8 @@ export class CountryComponent implements OnInit {
 
   saveRegion(index: number) {
     const region = this.allRegions[index];
-    console.log("Region to save: ", region);
-    // Call your service to update the region here
-    this.countryService.updateRegion(region.id,region).subscribe(() => {
+    this.countryService.updateRegion(region.id, region).subscribe(() => {
       this.editIndex = null;
-      // Optionally refresh the list or handle UI update
     });
   }
 
@@ -394,24 +342,19 @@ export class CountryComponent implements OnInit {
     if (confirmDelete) {
       this.countryService.deleteR(region.id).subscribe(() => {
         this.editIndex = null;
-        // Optionally refresh the list or handle UI update
       });
       this.allRegions.splice(index, 1);
     }
   }
-  
 
   cancelEdit() {
     this.editIndex = null;
-    // Optionally reload the region data if needed
   }
 
-
   sortCountry(keyWord: string) {
-
     const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
     if (this[ascKey] === undefined) {
-      this[ascKey] = true; // Initialize to ascending on the first sort
+      this[ascKey] = true;
     }
 
     const isAscending = this[ascKey];
@@ -422,7 +365,6 @@ export class CountryComponent implements OnInit {
       const valueB = this.getSortValue(b, keyWord);
 
       if (typeof valueA === "string" && typeof valueB === "string") {
-        // This sorting way allows us to account every french characters even accentuated ones
         return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
       }
 
@@ -431,19 +373,17 @@ export class CountryComponent implements OnInit {
       return 0;
     });
 
-    // Toggle the direction for the next sort dynamically
     this[ascKey] = !isAscending;
   }
-  // function to get the sortable value based on 'keyWord'
-  getSortValue(country: any, keyWord: string): any {
 
+  getSortValue(country: any, keyWord: string): any {
     switch (keyWord) {
       case "nom":
         return country.nom?.trim().toLowerCase() || '';
       case "description":
         return country.description?.trim().toLowerCase() || '';
       case "indicatif":
-        return country.indicatif.toLowerCase() || '';
+        return country.indicatif?.toLowerCase() || '';
       case "createdAt":
         return new Date(country.createdAt).getTime() || 0;
       default:
@@ -456,9 +396,10 @@ export class CountryComponent implements OnInit {
     if (description.length <= limit) return description;
     return description.substring(0, limit) + '...';
   }
+
   limitIndicatif(indicatif: string, limit: number = 10): string {
     if (!indicatif) return '';
     if (indicatif.length <= limit) return indicatif;
     return indicatif.substring(0, limit) + '...';
-}
+  }
 }

@@ -14,7 +14,20 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 export const routes: Routes = [
   { path: '', component: UsersComponent, pathMatch: 'full' }
 ];
-
+export interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  username: string;
+  email: string;
+  phoneNumber?: string;
+  adresse?: string;
+  ville?: string;
+  pays?: string;
+  enabled: boolean;
+  createdAt: Date;
+  profiles?: { name: string }[];
+}
 @NgModule({
   imports: [
     CommonModule,

@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-// import { Campagne, Product } from 'src/app/app.models';
 import { AppService } from 'src/app/app.service';
 import { AppSettings, Settings } from 'src/app/app.settings';
 import { DomHandlerService } from 'src/app/dom-handler.service';
@@ -8,12 +7,9 @@ import { CategoryDialogComponent } from '../../products/categories/category-dial
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { CampagneDialogComponent } from '../campagne-dialog/campagne-dialog.component';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { CampagneService } from 'src/app/services/campagne.service';
 import { Campagne } from 'src/app/app.models';
 import { Product } from 'src/app/models/product.models';
-import { state } from '@angular/animations';
-import { id } from '@swimlane/ngx-charts';
 import { Router } from '@angular/router';
 import { CommonMessageService } from 'src/app/services/common-message.service';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -24,13 +20,11 @@ import { AuthenticationService } from 'src/app/services/auth.service';
   templateUrl: './campagne-list.component.html',
   styleUrl: './campagne-list.component.scss'
 })
-
 export class CampagneListComponent implements OnInit {
   @ViewChild('generateCodeTemplate') generateCodeTemplate: TemplateRef<any>;
   @ViewChild('codeGenerer') codeGenerer: TemplateRef<any>;
   @ViewChild('detailsCampagne') detailsCampagne: TemplateRef<any>;
   @ViewChild('allCodeGenerer') allCodeGenerer: TemplateRef<any>;
-
 
   public viewCol: number = 25;
   public campagne: Array<Campagne> = [];
@@ -44,14 +38,19 @@ export class CampagneListComponent implements OnInit {
   sellerInfo: any = JSON.parse(sessionStorage.getItem('currentUser')!);
   shopLink: string = window.location.origin + '/#/sellers/' + this.sellerInfo.username;
   public username: string;
-  monCode: any = ''
-  activeCampagne: any
-
-
+  monCode: any = '';
+  activeCampagne: any;
 
   public form: UntypedFormGroup;
   currentUser: any;
   sortedCampagne: any[];
+
+  // Variables pour le tri
+  public ascNom: boolean = true;
+  public ascTypePromo: boolean = true;
+  public ascUsername: boolean = true;
+  public ascDateDebut: boolean = true;
+  public ascDateFin: boolean = true;
 
   constructor(
     private clipboard: Clipboard,
@@ -62,109 +61,98 @@ export class CampagneListComponent implements OnInit {
     public fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     public domHandlerService: DomHandlerService,
-    private router: Router, public dialog: MatDialog,
-    public appSettings: AppSettings) {
+    private router: Router,
+    public dialog: MatDialog,
+    public appSettings: AppSettings
+  ) {
     this.settings = this.appSettings.settings;
-
-
   }
 
   ngOnInit(): void {
-    this.currentUser = this.auth.currentUser()
+    this.currentUser = this.auth.currentUser();
     this.username = this.currentUser.username;
     this.form = this.fb.group({
       campagne: ['', Validators.required],
-
     });
 
     if (this.domHandlerService.window?.innerWidth < 1280) {
       this.viewCol = 33.3;
-    };
+    }
     this.getCampagne();
-
   }
 
   @HostListener('window:resize')
   public onWindowResize(): void {
     (this.domHandlerService.window?.innerWidth < 1280) ? this.viewCol = 33.3 : this.viewCol = 25;
   }
+
   public onPageChanged(event) {
     this.page = event;
     this.domHandlerService.winScroll(0, 0);
   }
+
   openDialog(): void {
     const dialogRef = this.dialog.open(this.generateCodeTemplate, {
       width: '400px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // Reset form fields after the dialog is closed
       this.form.reset({
         campagne: '',
         typePromo: ''
       });
-
-      // Navigate to the desired route
       this.router.navigate(['/admin/campagne/campagne-list']);
     });
   }
+
   public getCampagne() {
     this.campagneService.getAllCampagne().subscribe(data => {
       this.campagne = data;
       this.activeCampagne = data
         .filter(campagne => campagne.active)
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-      this.activeCampagne = [...this.activeCampagne]; // Nouvelle référence pour détecter les changements
-      this.cdr.detectChanges(); // Force la détection des changements
+      this.activeCampagne = [...this.activeCampagne];
+      this.cdr.detectChanges();
     });
   }
 
   public getAllProducts() {
     this.appService.getAllProducts().subscribe(data => {
       this.products = data;
-      //for show more product
-      // for (var index = 0; index < 3; index++) {
-      //   this.products = this.products.concat(this.products);
-      // }
     });
   }
+
   public openCampagneDialog(id: any) {
-
-    this.router.navigate(["/admin/campagne/add-campagne/" + id])
+    this.router.navigate(["/admin/campagne/add-campagne/" + id]);
   }
-  public addCampagne() {
-    this.router.navigate(["/admin/campagne/add-campagne"])
 
+  public addCampagne() {
+    this.router.navigate(["/admin/campagne/add-campagne"]);
   }
 
   public promo(key) {
-    let res = ""
+    let res = "";
     switch (key) {
       case "PROMOTION":
-        res = "Promotion"
+        res = "Promotion";
         break;
-
       case "OFFRE_BIENVENUE":
-        res = "Offre bienvenue"
+        res = "Offre bienvenue";
         break;
-
       case "LIVRAISON_GRATUITE":
-        res = "Livraison gratuite"
+        res = "Livraison gratuite";
         break;
-
       case "PARRAINAGE":
-        res = "Parrainage"
+        res = "Parrainage";
         break;
-
       default:
-        res = "N/A"
+        res = "N/A";
         break;
     }
-    return res
+    return res;
   }
-  openCampagneAllCode(id: any): void {
 
+  openCampagneAllCode(id: any): void {
     this.campagneService.getAllCodeByCampagne(id).subscribe({
       next: (datas) => {
         this.allCodesCampagne = datas;
@@ -183,7 +171,7 @@ export class CampagneListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.allCodesCampagne = null; // Réinitialiser après fermeture
+      this.allCodesCampagne = null;
     });
   }
 
@@ -198,19 +186,17 @@ export class CampagneListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
-        // Si l'utilisateur confirme la suppression dans la boîte de dialogue
         this.appService.supprimerCampagne(campagne.id).subscribe(
           () => {
-            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
             const index: number = this.campagne.findIndex((cat: any) => cat.id === campagne.id);
             if (index !== -1) {
               this.campagne.splice(index, 1);
             }
-            console.log("Category successfully deleted.");
+            this.commonService.successToast("Campagne supprimée avec succès");
           },
           (error) => {
             console.error("Error deleting category:", error);
-            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+            this.commonService.errorToast("Erreur lors de la suppression de la campagne");
           }
         );
       }
@@ -218,15 +204,16 @@ export class CampagneListComponent implements OnInit {
   }
 
   openCampagneDetail(campagne: any): void {
-    this.detailsCampagneData = campagne; // Stocker l'objet sélectionné
+    this.detailsCampagneData = campagne;
     const dialogRef = this.dialog.open(this.detailsCampagne, {
       width: '800px',
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.detailsCampagneData = null; // Réinitialiser après fermeture
+      this.detailsCampagneData = null;
     });
   }
+
   copyCodeToClipboard2(monCode) {
     if (monCode) {
       this.clipboard.copy(this.shopLink + '/' + monCode);
@@ -235,6 +222,7 @@ export class CampagneListComponent implements OnInit {
       this.commonService.warnToast('Aucun code à copier.');
     }
   }
+
   public removeCode(code: any) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: "400px",
@@ -247,24 +235,25 @@ export class CampagneListComponent implements OnInit {
       if (dialogResult) {
         this.campagneService.supprimerCode(code.id).subscribe(
           () => {
-            // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
             const index: number = this.allCodesCampagne.findIndex((us: any) => us.id === code.id);
             if (index !== -1) {
               this.allCodesCampagne.splice(index, 1);
             }
-            console.log("Campagne successfully deleted.");
+            this.commonService.successToast("Code supprimé avec succès");
           },
           (error) => {
             console.error("Error deleting produit:", error);
-            // Traiter les erreurs éventuelles lors de la suppression de la catégorie
+            this.commonService.errorToast("Erreur lors de la suppression du code");
           }
         );
       }
     });
   }
+
   onNoClick(): void {
     this.dialog.closeAll();
   }
+
   generate() {
     try {
       if (this.form.valid) {
@@ -275,16 +264,13 @@ export class CampagneListComponent implements OnInit {
 
         this.campagneService.generateCode(data).subscribe({
           next: (datas) => {
-
-            this.monCode = datas.message
-
-            this.dialog.closeAll()
+            this.monCode = datas.message;
+            this.dialog.closeAll();
             if (this.monCode != '') {
               this.openMyCode();
             }
             this.commonService.successToast(datas.message);
             this.router.navigate(["/admin/campagne/campagne-list"]);
-
           },
           error: (err) => {
             if (err && err.statusCode == "BAD_REQUEST") {
@@ -294,7 +280,6 @@ export class CampagneListComponent implements OnInit {
             }
           }
         });
-
       } else {
         this.commonService.warnToast("Merci de vérifier si tous les champs sont remplis");
       }
@@ -303,16 +288,17 @@ export class CampagneListComponent implements OnInit {
       this.commonService.errorToast("Erreur inattendue, merci de réessayer !");
     }
   }
+
   openMyCode(): void {
     const dialogRef = this.dialog.open(this.codeGenerer, {
       width: '400px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigate(["/admin/campagne/campagne-list"])
-
+      this.router.navigate(["/admin/campagne/campagne-list"]);
     });
   }
+
   copyCodeToClipboard() {
     if (this.monCode) {
       this.clipboard.copy(this.shopLink + '/' + this.monCode);
@@ -322,102 +308,59 @@ export class CampagneListComponent implements OnInit {
     }
   }
 
+  // Nouvelle méthode pour le toggle
+  toggleCampagneState(campagne: Campagne) {
+    const previousState = campagne.active;
+    
+    // Inverser l'état immédiatement pour un feedback visuel rapide
+    campagne.active = !campagne.active;
+    
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: {
+        title: "Confirmer la modification",
+        message: `Êtes-vous sûr de vouloir ${campagne.active ? 'activer' : 'désactiver'} la campagne "${campagne.nom}" ?`
+      }
+    });
 
-
-  // public setStatusCampagne(id: string, etat: boolean): void {
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //     maxWidth: "400px",
-  //     data: {
-  //       title: "Confirm Action",
-  //       message: `Are you sure you want to set the status of this etat to ${etat}?`
-  //     }
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(dialogResult => {
-  //     if (dialogResult) {
-  //       // Si l'utilisateur confirme dans la boîte de dialogue
-  //       this.appService.setStatusCampagne(id, etat).subscribe(
-  //         () => {
-  //           console.log(`Status of campagne successfully set to ${etat}.`);
-  //           // Mettre à jour l'état de la catégorie dans votre application si nécessaire
-  //         },
-  //         error => {
-  //           console.error("Error setting campagne etat:", error);
-  //           // Traiter les erreurs éventuelles lors de la modification du statut de la catégorie
-  //         }
-  //       );
-  //     }
-  //   });
-
-
-  // public setStatusCampagne(ID: string): void {
-  //   let status = this.form.value;
-  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //     maxWidth: "400px",
-  //     data: {
-  //       title: "Confirm Action",
-  //       message: `Are you sure you want to set the status of this campagne to ${ID}?`
-  //     }
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(dialogResult => {
-  //     if (dialogResult) {
-  //       // Si l'utilisateur confirme dans la boîte de dialogue
-
-  //       this.appService.setStatusCampagne(ID, status.etat).subscribe(
-  //         () => {
-  //           console.log(`Status of campagne successfully set to ${ID}.`);
-  //           // Mettre à jour l'état de la campagne dans votre application si nécessaire
-  //         },
-  //         error => {
-  //           console.error("Error setting campagne etat:", error);
-  //           // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
-  //         }
-  //       );
-  //     }
-  //   });
-  // }
-
-
-  setStatus(id: string, event: MatSlideToggleChange): void {
-    this.updateState(id, event.checked ? 'true' : 'false')
-  }
-  public updateState(id, state) {
-    this.campagneService.updateState(id, state).then((data: any) => {
-    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        // Confirmation - mettre à jour via l'API
+        this.updateState(campagne.id, campagne.active ? 'true' : 'false');
+      } else {
+        // Annulation - revenir à l'état précédent
+        campagne.active = previousState;
+        this.cdr.detectChanges(); // Forcer la mise à jour de la vue
+      }
+    });
   }
 
-  setStatusCampagne(id: string, event: MatSlideToggleChange): void {
-    // Trouver la campagne correspondante dans la liste
-    const campagne = this.campagne.find(c => c.id === id);
-    if (campagne) {
-      // Mettre à jour l'état de la campagne
-      campagne.etat = event.checked;
-      // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
-      this.appService.setStatusCampagne(id, event.checked).subscribe(
-        () => {
-          console.log(`Statut de la campagne ${id} modifié avec succès à ${event.checked}.`);
-          // Mettre à jour l'état de la campagne dans votre application si nécessaire
-        },
-        error => {
-          console.error("Erreur lors du réglage du statut de la campagne:", error);
-          // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
-        }
-      );
-    }
+  public updateState(id: string, state: string) {
+    this.campagneService.updateState(id, state)
+      .then((data: any) => {
+        this.commonService.successToast(`Campagne ${state === 'true' ? 'activée' : 'désactivée'} avec succès`);
+        // Recharger les données pour s'assurer de la cohérence
+        this.getCampagne();
+      })
+      .catch((error) => {
+        console.error('Error updating campagne state:', error);
+        this.commonService.errorToast('Erreur lors de la modification de l\'état');
+        // Recharger les données pour revenir à l'état correct
+        this.getCampagne();
+      });
   }
-
-
-
 
   sortCampagne(keyWord: string) {
-
-    const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
-    if (this[ascKey] === undefined) {
-      this[ascKey] = true; // Initialise en ordre croissant
+    // Déterminer la direction du tri
+    let isAscending = true;
+    switch (keyWord) {
+      case "nom": isAscending = this.ascNom = !this.ascNom; break;
+      case "typePromo": isAscending = this.ascTypePromo = !this.ascTypePromo; break;
+      case "username": isAscending = this.ascUsername = !this.ascUsername; break;
+      case "dateDebut": isAscending = this.ascDateDebut = !this.ascDateDebut; break;
+      case "dateFin": isAscending = this.ascDateFin = !this.ascDateFin; break;
     }
 
-    const isAscending = this[ascKey];
     const sortOrder = isAscending ? 1 : -1;
 
     this.sortedCampagne = [...this.campagne].sort((a, b) => {
@@ -432,11 +375,10 @@ export class CampagneListComponent implements OnInit {
       if (valueA > valueB) return sortOrder;
       return 0;
     });
-    this[ascKey] = !isAscending;
-    this.cdr.detectChanges(); // 🔥 Force l'actualisation du template !
+
+    this.cdr.detectChanges();
   }
 
-  // function to get the sortable value based on 'keyWord'
   getSortValue(campagne: any, keyWord: string): any {
     switch (keyWord) {
       case "nom":
@@ -447,12 +389,10 @@ export class CampagneListComponent implements OnInit {
         return campagne.typePromo ? campagne.typePromo.trim().toLowerCase() : '';
       case "dateDebut":
         return campagne.dateDebut ? new Date(campagne.dateDebut).getTime() : 0;
-        case "dateFin":
+      case "dateFin":
         return campagne.dateFin ? new Date(campagne.dateFin).getTime() : 0;
       default:
         return '';
     }
   }
-
-
 }

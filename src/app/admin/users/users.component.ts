@@ -1,346 +1,235 @@
-import { Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AppSettings, Settings } from '../../app.settings';
-import { UsersService } from './users.service';
-import { UserDialogComponent } from './user-dialog/user-dialog.component';
-import { DomHandlerService } from 'src/app/dom-handler.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthenticationService } from 'src/app/services/auth.service';
-import { Observable, catchError, map } from 'rxjs';
-import { User } from 'src/app/models/user.models';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { UserAddForm, UserEditForm } from 'src/app/models/userForm.model';
-import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { map, Observable } from 'rxjs';
+import { UserDialogComponent } from './user-dialog/user-dialog.component';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { CommonMessageService } from 'src/app/services/common-message.service';
+
+export interface User {
+  id: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  email?: string;
+  phoneNumber?: string;
+  adresse?: string;
+  ville?: string;
+  pays?: string;
+  enabled: boolean;
+  createdAt: Date;
+  profiles: { name: string }[];
+}
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [ UsersService ]
 })
 export class UsersComponent implements OnInit {
-    public users: User[];
-      public sortedUsers: User[]=null;
-    public searchText: string;
-    public page:any;
-    public settings: Settings;
-    domHandlerService = inject(DomHandlerService);
-    isAboveSmSize$: Observable<boolean>;
-    isAboveMdSize$: Observable<boolean>;
-    ascFirstname: boolean = true;
-    ascLastname: boolean = true;
-    ascType: boolean = true;
-    ascMember: boolean = true;
+  public users: User[] = [];
+  public filteredUsers: User[] = []; // liste filtrée
+  public sortedUsers: User[] | null = null;
+  public searchText: string = '';
+  public page: number = 1;
 
-    constructor(
-      public appSettings: AppSettings,
-      public dialog: MatDialog, private commonService: CommonMessageService,
-      private authService:AuthenticationService,
-      public usersService: UsersService,
-      private breakpointObserver:BreakpointObserver,
-      private ngxSpinnerService: NgxSpinnerService,
-      private auth: AuthenticationService,
-    ){
-        this.settings = this.appSettings.settings;
+  selectedCountry: string = '';
+  countries: string[] = [];
+
+  isAboveSmSize$: Observable<boolean>;
+  isAboveMdSize$: Observable<boolean>;
+
+  ascFirstname = true;
+  ascLastname = true;
+  ascType = true;
+  ascMember = true;
+
+  constructor(
+    public dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
+  ) {}
+
+  ngOnInit() {
+    this.isAboveSmSize$ = this.breakpointObserver
+      .observe([Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .pipe(map(result => result.matches));
+
+    this.isAboveMdSize$ = this.breakpointObserver
+      .observe([Breakpoints.Large, Breakpoints.XLarge])
+      .pipe(map(result => result.matches));
+
+    this.getUsers();
+  }
+
+  // Données mock
+  public getUsers(): void {
+    this.users = [
+      {
+        id: '1',
+        firstname: 'Jean',
+        lastname: 'Dupont',
+        username: 'jdupont',
+        email: 'jean.dupont@example.com',
+        phoneNumber: '+22370000001',
+        adresse: 'Rue 123',
+        ville: 'Bamako',
+        pays: 'Mali',
+        enabled: true,
+        createdAt: new Date('2022-01-15'),
+        profiles: [{ name: 'admin' }]
+      },
+      {
+        id: '2',
+        firstname: 'Awa',
+        lastname: 'Traoré',
+        username: 'atraore',
+        email: 'awa.traore@example.com',
+        phoneNumber: '+22370000002',
+        adresse: 'Quartier Médina',
+        ville: 'Sikasso',
+        pays: 'Mali',
+        enabled: false,
+        createdAt: new Date('2023-03-22'),
+        profiles: [{ name: 'user' }]
+      },
+      {
+        id: '3',
+        firstname: 'Moussa',
+        lastname: 'Konaté',
+        username: 'mkonate',
+        email: 'moussa.konate@example.com',
+        phoneNumber: '+22370000003',
+        adresse: 'Avenue Kankou Moussa',
+        ville: 'Kayes',
+        pays: 'Sénégal',
+        enabled: true,
+        createdAt: new Date('2021-11-10'),
+        profiles: [{ name: 'editor' }]
+      }
+    ];
+
+    // initialiser pays et liste filtrée
+    this.countries = [...new Set(this.users.map(u => u.pays).filter(Boolean))];
+    this.filteredUsers = [...this.users];
+  }
+
+  // Filtrer par pays
+  filterByCountry(): void {
+    if (!this.selectedCountry) {
+      this.filteredUsers = [...this.users];
+    } else {
+      this.filteredUsers = this.users.filter(u => u.pays === this.selectedCountry);
     }
+  }
 
-    ngOnInit() {
-        // request a size event in order to get availble screen size | Check Small size
-        this.isAboveSmSize$ = this.breakpointObserver.observe([Breakpoints.Small,Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-        .pipe(
-          map(result => result.matches)
-        );
-        // request a size event in order to get availble screen size | Check Medium size
-        this.isAboveMdSize$ = this.breakpointObserver.observe([Breakpoints.Large, Breakpoints.XLarge])
-        .pipe(
-          map(result => result.matches)
-        );
+  // Supprimer un utilisateur
+  public deleteUser(id: string) {
+    this.users = this.users.filter(u => u.id !== id);
+    this.filterByCountry();
+  }
 
-        // fetch all the users from the server
-        this.getUsers();
-    }
+  // Réinitialiser mot de passe
+  public reset(username: string) {
+    alert(`Mot de passe de ${username} réinitialisé (mock).`);
+  }
 
-    public async getUsers(){
-      await this.auth.getAllUsers().pipe(
-        map((user: any) => {
-          // As user.enabled comes out form server in a string format, we need to convert it into boolean
-          user.enabled = (user.enabled === 'true') ? true : false;
-          return user;
-        }),
-        catchError((error: any) => {
-          console.log("Erreur lors de la transformation des données users: " + error);
-          throw error;
-        })
-      ).subscribe(
-        (data: any) => {
-          // store the result in the local varibale 'users'
-          this.users = data;
-          // Stop the Spinner (Loader)
-          this.ngxSpinnerService.hide();
+  // Ajouter / Modifier
+  public openUserDialog(user: User | null, action: string) {
+    this.dialog.open(UserDialogComponent, {
+      width: '600px',
+      data: { user, action }
+    }).afterClosed().subscribe((result) => {
+      if (!result) return;
+
+      if (action === 'add') {
+        const newUser: User = {
+          id: (this.users.length + 1).toString(),
+          firstname: result.firstname,
+          lastname: result.lastname,
+          username: result.username,
+          email: result.email,
+          phoneNumber: result.phoneNumber,
+          adresse: result.adresse,
+          ville: result.ville,
+          pays: result.pays,
+          enabled: true,
+          createdAt: new Date(),
+          profiles: [{ name: result.profiles?.[0]?.name || 'user' }]
+        };
+        this.users.push(newUser);
+      } else if (action === 'update' && user) {
+        const index = this.users.findIndex(u => u.id === user.id);
+        if (index > -1) {
+          this.users[index] = { ...this.users[index], ...result };
         }
-      );
-    }
-
-
-    // public getUsers(): void {
-    //     this.users = null; //for show spinner each time
-    //     this.usersService.getUsers().subscribe({
-    //         next: (users) => {
-    //             this.users = users
-    //         },
-    //         error: () => {
-    //             this.users = [];
-    //             this.ngxSpinnerService.hide()
-    //         }
-    //     });
-    // }
-
-
-    public addUser(userFormData:UserAddForm){
-      let userInfo:any = {
-        role:[userFormData.type.name],
-        username    : (userFormData.contacts.email || userFormData.contacts.phoneNumber),
-        firstname   : userFormData.firstname,
-        lastname    : userFormData.lastname,
-        email       : userFormData.contacts.email,
-        phoneNumber : userFormData.contacts.phoneNumber,
-        adresse     : userFormData.contacts.address,
-        password    : userFormData.auth.password2,
-        typeofUser  : (userFormData.contacts.email)? 'email'  : 'tel'
       }
-      console.log(userInfo);
-      return this.authService.signup(userInfo).subscribe((user:any) => {
-        this.getUsers();
-      });
-    }
-
-    public async updateUser(id:string,userFormData:UserEditForm){
-      let userInfo:any = {
-        type        : (userFormData.type.name),
-        role:[userFormData.type.name],
-        // username    : (userFormData.username),
-        firstname   : (userFormData.firstname),
-        lastname    : (userFormData.lastname),
-        email       : (userFormData.contacts.email)||null,
-        phoneNumber : (userFormData.contacts.phoneNumber),
-        adresse     : (userFormData.contacts.address)||null,
-        // password    : (userFormData.auth.password2)||null,
-      };
-      console.log("userInfo ::::: ",userInfo);
-
-      return await this.authService.updateUser(id,userInfo).then(user =>{
-        this.getUsers();
-      });
-    }
-    // public deleteUser(id:any){
-    //   console.log(id)
-    //    this.authService.supprimerUser(id).subscribe(user => this.getUsers());
-    // }
-
-    public async deleteUser(username : any){
-      try {
-        console.log("::::::::::",username)
-          let res : any = await this.authService.delete(username).toPromise()
-          console.log("::::::RESSSSSSSSSSSS::::",res)
-
-          this.commonService.successToast(`${res.data.message || 'Utilisateur supprimer avec succès'}.`)
-
-          this.getUsers()
-          return res
-      } catch (error : any) {
-          console.log(error);
-          return "KO"
-      }
-    }
-
-    public async reset(username : any){
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        maxWidth: "400px",
-        data: {
-          title: "Reinitialisation",
-          message: "Vous etes sur de vouloir reinitialiser le mot de passe de cet utilisateur : "+username+" ?"
-        }
-      });
-
-      dialogRef.afterClosed().subscribe(async dialogResult => {
-        if (dialogResult) {
-          console.log("reset ::::")
-
-          try {
-            console.log("::::::::::",username)
-              let res : any = await this.authService.reset(username).toPromise()
-              console.log("::::::RESSSSSSSSSSSS::::",res)
-              this.commonService.successToast(`${res.message}.`)
-              let link = this.createWhatsAppLink(username, res.message)
-              alert(res.message)
-
-              return res
-          } catch (error : any) {
-              console.log(error);
-              return "KO"
-          }
-        }
-      });
-    }
-
-    createWhatsAppLink(phone: string, password: string): string {
-      const link = `https://wa.me/${phone}?text=Your%20new%20password%20is:%20${encodeURIComponent(password)}`;
-      console.log('WhatsApp Link:', link);  // Affichez le lien dans la console pour le débogage
-      console.log(`Sending WhatsApp message to ${phone}: ${password}`);
-      return link;
-    }
-
-    public remove(user: any) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      maxWidth: "400px",
-      data: {
-        title: "Suppression",
-        message: "Vous etes sur de supprimer cet utilisateur : "+user.username+" ?"
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult) {
-        console.log("verify ::::")
-        this.deleteUser(user.username)
-        // Si l'utilisateur confirme la suppression dans la boîte de dialogue
-        // this.authService.supprimerUser(user.id).subscribe(
-        //   () => {
-        //     // Supprimer la catégorie localement après avoir été supprimée avec succès sur le serveur
-        //     const index: number = this.users.findIndex((us: any) => us.id === user.id);
-        //     if (index !== -1) {
-        //       this.users.splice(index, 1);
-        //     }
-        //     console.log("Category successfully deleted.");
-        //   },
-        //   (error) => {
-        //     console.error("Error deleting category:", error);
-        //     // Traiter les erreurs éventuelles lors de la suppression de la catégorie
-        //   }
-        // );
-      }
+      this.filterByCountry();
     });
   }
-    public onPageChanged(event){
-        this.page = event;
-        this.getUsers();
-        this.domHandlerService.winScroll(0, 0);
+
+  // Activer/Désactiver
+  toggleStatus(id: string, newStatus: boolean): void {
+    const user = this.users.find(u => u.id === id);
+    if (user) {
+      user.enabled = newStatus;
     }
-
-    public openUserDialog(user: User,action:string){
-      if(action == "add"){
-        let dialogRef = this.dialog.open(UserDialogComponent, {
-          data:{
-            action: action
-          }
-        });
-        dialogRef.afterClosed().subscribe(async (user: UserAddForm) => {
-          if (user) {
-            await this.addUser(user);
-          }
-        });
-      }else if(action == "update"){
-        let dialogRef = this.dialog.open(UserDialogComponent, {
-          data:{
-            user   : user,
-            action : action
-          }
-        });
-        dialogRef.afterClosed().subscribe( (data: any) => {
-            if (data) {
-              this.updateUser(data[0].id,data[0].user);
-            }
-        });
-      }else if(action == "delete"){
-        let dialogRef = this.dialog.open(UserDialogComponent, {
-          data:{
-            user   : user,
-            action : action
-          }
-        });
-        dialogRef.afterClosed().subscribe( (id: any) => {
-            if (id) {
-              this.deleteUser(id);
-            }
-        });
-      }
-    }
-
-    setStatus(id: string, event: MatSlideToggleChange): void {
-      // Trouver la campagne correspondante dans la liste
-      const user = this.users.find(c => c.id === id);
-      if (user) {
-        // Mettre à jour l'état de la campagne
-        user.enabled = event.checked;
-        // Appeler le service ou effectuer d'autres actions nécessaires pour sauvegarder les modifications
-        this.auth.setStatus(id, event.checked ? 'actif' : 'inactif').subscribe(
-          () => {
-            console.log(`Le statut de la user ${id} modifié avec succès à ${event.checked}.`);
-            this.commonService.successToast(`L'utilisateur "${user.firstname} ${user.lastname}" a été ${(event.checked)?'activé':'desactivé'}.`)
-            // Mettre à jour l'état de la campagne dans votre application si nécessaire
-          },
-          error => {
-            console.error("Erreur lors du réglage du statut de user:", error);
-            this.commonService.errorToast("Merci de vérifier si les champs sont toutes remplis")
-            // Traiter les erreurs éventuelles lors de la modification du statut de la campagne
-          }
-        );
-      }
-    }
-
-    // the sorting method
-    sortUsers(keyWord: string) {
-
-      /* For you to understand this, just asume that the const ascKey and the this[ascKey] are different:
-         - ascKey exists just to help with accessing the correct keyWord to sort on (like this["ascFirstname"])
-         - this[ascKey] is the actual dynamic sort direction, and it is object property which stores boolean state for each entry of the keyWord
-      */
-      const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
-      if (this[ascKey] === undefined) {
-        this[ascKey] = true; // Initialize to ascending on the first sort
-      }
-
-      const isAscending = this[ascKey];
-      const sortOrder = isAscending ? 1 : -1;
-
-      this.sortedUsers = [...this.users].sort((a, b) => {
-        const valueA = this.getSortValue(a, keyWord);
-        const valueB = this.getSortValue(b, keyWord);
-
-        if (typeof valueA === "string" && typeof valueB === "string") {
-          // This sorting way allows us to account every french characters even accentuated ones
-          return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
-        }
-
-        if (valueA < valueB) return -sortOrder;
-        if (valueA > valueB) return sortOrder;
-        return 0;
-      });
-
-      // Toggle the direction for the next sort dynamically
-      this[ascKey] = !isAscending;
-    }
-
-// function to get the sortable value based on 'keyWord'
-getSortValue(user: User, keyWord: string): any {
-  switch (keyWord) {
-    case "firstname":
-      return user.firstname?.trim().toLowerCase() || '';
-    case "lastname":
-      return user.lastname?.trim().toLowerCase() || '';
-    case "type":
-      return user.profiles[0]?.name.toLowerCase() || '';
-    case "member_since":
-      return new Date(user.createdAt).getTime() || 0;
-    default:
-      return '';
   }
-}
 
+  // Tri (adapté pour filteredUsers)
+  sortUsers(keyWord: string) {
+    const ascKey = `asc${keyWord.charAt(0).toUpperCase() + keyWord.slice(1)}`;
+    if (this[ascKey] === undefined) {
+      this[ascKey] = true;
+    }
+    const isAscending = this[ascKey];
+    const sortOrder = isAscending ? 1 : -1;
 
+    this.sortedUsers = [...this.filteredUsers].sort((a, b) => {
+      const valueA = this.getSortValue(a, keyWord);
+      const valueB = this.getSortValue(b, keyWord);
 
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return valueA.localeCompare(valueB, 'fr', { sensitivity: 'base' }) * sortOrder;
+      }
 
+      if (valueA < valueB) return -sortOrder;
+      if (valueA > valueB) return sortOrder;
+      return 0;
+    });
+
+    this[ascKey] = !isAscending;
+  }
+
+  getSortValue(user: User, keyWord: string): any {
+    switch (keyWord) {
+      case 'firstname':
+        return user.firstname?.trim().toLowerCase() || '';
+      case 'lastname':
+        return user.lastname?.trim().toLowerCase() || '';
+      case 'type':
+        return user.profiles[0]?.name.toLowerCase() || '';
+      case 'member_since':
+        return new Date(user.createdAt).getTime() || 0;
+      case 'téléphone':
+        return user.phoneNumber?.trim().toLowerCase() || '';
+      case 'ville':
+        return user.ville?.trim().toLowerCase() || '';
+      case 'pays':
+        return user.pays?.trim().toLowerCase() || '';
+      case 'adress':
+        return user.adresse?.trim().toLowerCase() || '';
+      default:
+        return '';
+    }
+  }
+
+  // Gestion de la pagination
+  onPageChanged(event: number) {
+    this.page = event;
+  }
+
+  // Méthode remove
+  remove(user: User) {
+    this.deleteUser(user.id);
+  }
 }

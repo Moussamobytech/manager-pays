@@ -1,0 +1,141 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="p-2">
+    <div fxLayout="row">
+        <mat-button-toggle-group #controls="matButtonToggleGroup" appearance="legacy">
+            <mat-button-toggle value="search" [title]="'BTN.SEARCH'|translate">
+                <mat-icon>search</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <form class="user-search"    [class.show]="controls.value == 'search'">
+        <mat-form-field class="user-search-input">
+            <input matInput [placeholder]="'BTN.SEARCH'|translate" [(ngModel)]="searchText" (keyup)="search()" name="search">
+        </mat-form-field>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-button-toggle-group #viewType="matButtonToggleGroup" appearance="legacy" value="table">
+
+            <mat-button-toggle *ngIf="isAboveSmSize$|async" value="table">
+                <mat-icon>view_headline</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>
+
+<div class="users-list">
+
+
+
+  <div class="table-list" *ngIf="isAboveSmSize$ | async">
+    <div *ngIf="viewType.value == 'table'" fxLayout="row wrap">
+      <div fxFlex="100" class="p-2">
+        <div class="table-scroll-wrapper">
+          <div class="admin-table">
+            <!-- Header Row -->
+            <div class="header-row">
+
+                <div class="header-cell filter-cell fixed-width">
+                    {{ "Commande" | translate }}
+                    <a (click)="sortPaiements('commande')"><mat-icon>swap_vert</mat-icon></a>
+                  </div>
+
+              <div class="header-cell filter-cell fixed-width">
+                {{ "Client" | translate }}
+                <a (click)="sortPaiements('client')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width">
+                {{ "Montant" | translate }}
+                <a (click)="sortPaiements('amount')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              
+              <!--<div class="header-cell filter-cell fixed-width">
+                Payeur
+                <a (click)="sortPaiements('payeur')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              -->
+              <div class="header-cell filter-cell fixed-width">
+                Devise
+                <a (click)="sortPaiements('currency')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+
+              <div class="header-cell filter-cell fixed-width">
+                Status
+                <a (click)="sortPaiements('status')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+
+              <div class="header-cell filter-cell fixed-width">
+                Date
+                <a (click)="sortPaiements('date')"><mat-icon>swap_vert</mat-icon></a>
+              </div>
+              <div class="header-cell filter-cell fixed-width center">
+                {{ "Actions" | translate }}
+                <a><mat-icon>swap_vert</mat-icon></a>
+
+              </div>
+
+
+
+
+    
+ 
+
+            
+            </div>
+
+            <!-- Data Rows -->
+<div *ngFor="let paiement of (sortPaiement || filteredPaiements) | paginate: { itemsPerPage: 8, currentPage: page }" class="data-row">
+              <div class="data-cell fixed-width"> <a [routerLink]="['/admin/commande/commande-details', paiement.idC, commandeCodes[paiement.commandeId]]" > {{ commandeCodes[paiement.commandeId] || '...' }}</a></div>
+              <div class="data-cell fixed-width"> {{ paiement.client }} </div>
+              <div class="data-cell fixed-width"> {{ paiement.amount }} </div>
+
+              <!--<div class="data-cell fixed-width"> {{ paiement.payeur || 'N/A'}} </div> -->
+              <div class="data-cell fixed-width"> {{ paiement.currency || 'N/A'}} </div>
+             
+              <div class="data-cell fixed-width"
+              [ngClass]="{
+                'status-pending': paiement.status === 'PENDING',
+                'status-failed': paiement.status === 'FAILED',
+                'status-success': paiement.status === 'SUCCESS'
+              }">
+           {{ paiement.status || 'N/A' }}
+         </div>
+         
+
+
+              <div class="data-cell fixed-width"> {{ paiement.date | date: "dd-MM-yyyy à HH:mm" }} </div>
+              <div class="data-cell fixed-width center">
+                <div class="actions">
+                  <button 
+                  [routerLink]="['/admin/commande/commande-details', paiement.idC, commandeCodes[paiement.commandeId]]" 
+                  mat-mini-fab 
+                  color="accent" 
+                  [matTooltip]="'BTN.VIEW' | translate">
+                  <mat-icon>remove_red_eye</mat-icon>
+                </button>
+                
+                  <button mat-mini-fab color=" #241f48" [matTooltip]="'BTN.REMOVE' | translate" (click)="deletePaiement(paiement)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                 <!-- <mat-slide-toggle [color]="commande.enabled ? 'primary' : 'warn'" [checked]="commande.enabled" >
+                  </mat-slide-toggle> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div *ngIf="paiements" fxLayout="row wrap">
+    <div fxFlex="100" class="vv">
+        <mat-card class="text-center">
+            <pagination-controls class="product-pagination" [autoHide]="true" [previousLabel]="'PAGINATION.PREV_PAGE'|translate" [nextLabel]="'PAGINATION.NEXT_PAGE'|translate" [maxSize]="5" (pageChange)="onPageChanged($event)"></pagination-controls>
+        </mat-card>
+    </div>
+</div>
+
+<div *ngIf="!paiements" fxLayout="column" fxLayoutAlign="center center" class="user-spinner">
+    <mat-spinner color="primary"></mat-spinner>
+</div>
+

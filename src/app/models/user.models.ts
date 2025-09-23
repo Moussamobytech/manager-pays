@@ -18,6 +18,9 @@ export class User {
   bg3:any;
   createdAt?: string;
   updatedAt?: string;
+pays: any;
+ville: any;
+  country: any;
 }
 
 export class Profile {
